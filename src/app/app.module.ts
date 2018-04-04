@@ -4,7 +4,7 @@ import { HotTableModule } from '@handsontable/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app.component';
 
 
 @NgModule({
