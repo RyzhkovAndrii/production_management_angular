@@ -5,16 +5,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { AppComponent } from './components/app.component';
+import { AppRoutingModule } from './app-routing/app-routing.module';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
-    HotTableModule
+    HotTableModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
