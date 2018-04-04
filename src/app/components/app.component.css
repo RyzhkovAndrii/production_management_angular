@@ -1,0 +1,9 @@
+.navbar {
+    background-color: rgb(48, 51, 58);
+}
+
+.logo {
+    background-color: rgb(37, 111, 175);
+    border-radius: 5px;
+    padding: 0.2em;
+}
