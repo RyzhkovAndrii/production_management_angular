@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HotTableModule } from '@handsontable/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -19,7 +18,6 @@ import { RollsPageComponent } from './components/rolls-page/rolls-page.component
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
-    HotTableModule,
     AppRoutingModule
   ],
   providers: [],
