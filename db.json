@@ -1,0 +1,92 @@
+{
+    "rollType": [
+        {
+            "id": 1,
+            "name": "жовте",
+            "weight": 50,
+            "colorCode": "#3191E5",
+            "thikness": 2.7
+        },
+        {
+            "id": 2,
+            "name": "чорне",
+            "weight": 55,
+            "colorCode": "black",
+            "thikness": 3.0
+        },
+        {
+            "id": 3,
+            "name": "оранж",
+            "weight": 45,
+            "colorCode": "#f27100",
+            "thikness": 3.0
+        }
+    ],
+
+    "roll-batch": [
+        {
+            "id": 1,
+            "dateManufactured": "2018-04-06",
+            "rollTypeId": 1,
+            "manufacturedAmount": 250,
+            "usedAmount": 40,
+            "leftAmount": 210
+        },
+        {
+            "id": 2,
+            "dateManufactured": "2018-04-01",
+            "rollTypeId": 2,
+            "manufacturedAmount": 500,
+            "usedAmount": 290,
+            "leftAmount": 210
+        },
+        {
+            "id": 3,
+            "dateManufactured": "2018-03-25",
+            "rollTypeId": 3,
+            "manufacturedAmount": 100,
+            "usedAmount": 80,
+            "leftAmount": 20
+        }
+    ],
+    "roll-leftover": [
+        {
+            "id": 1,
+            "date": "2018-04-08",
+            "rollTypeId": 1,
+            "amount": 260
+        },
+        {
+            "id": 1,
+            "date": "2018-03-09",
+            "rollTypeId": 1,
+            "amount": 50
+        },
+
+        {
+            "id": 2,
+            "date": "2018-04-08",
+            "rollTypeId": 1,
+            "amount": 260
+        },
+        {
+            "id": 2,
+            "date": "2018-03-09",
+            "rollTypeId": 1,
+            "amount": 40
+        },
+
+        {
+            "id": 3,
+            "date": "2018-04-08",
+            "rollTypeId": 1,
+            "amount": 22
+        },
+        {
+            "id": 3,
+            "date": "2018-03-09",
+            "rollTypeId": 1,
+            "amount": 2
+        }
+    ]
+}
