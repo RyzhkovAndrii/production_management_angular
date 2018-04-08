@@ -1,3 +1,20 @@
-<p>
-  roll-page works!
-</p>
+<div class="container-fluid">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" class="row-name">Наименование</th>
+            <th scope="col">Цвет</th>
+            <th scope="col">Остаток</th>
+            <th scope="col" *ngFor="let day of dateHeader">
+              {{day}}
+            </th>
+            <th scope="col">Всего</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
