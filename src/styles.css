@@ -1,7 +1,13 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/material-icons/iconfont/material-icons.css';
+
 table {
   text-align: center;
   color: rgb(48, 51, 58);
+}
+
+.material-icons {
+  vertical-align: middle;
 }
 
 table.table-bordered>thead>tr>th,
