@@ -46,10 +46,10 @@ export class RollsService {
     return <Observable<RollInfo[]>> this.http.get('http://localhost:3000/rollsInfo');
   }
 
-  getRollBatchesByDateRange(id: number, from: Date, to: Date) {
+  getRollBatchesByDateRange(rollTypeId: number, from: Date, to: Date) {
     const params = new HttpParams({
       fromObject: {
-        id: String(id),
+        id: String(rollTypeId),
         from: formatDate(from),
         to: formatDate(to)
       }
@@ -59,10 +59,10 @@ export class RollsService {
     });
   }
 
-  getRollLeftoverByRollIdAndDate(id: number, date: Date) {
+  getRollLeftoverByRollIdAndDate(rollTypeId: number, date: Date) {
     const params = new HttpParams({
       fromObject: {
-        id: String(id),
+        id: String(rollTypeId),
         date: formatDate(date)
       }
     });

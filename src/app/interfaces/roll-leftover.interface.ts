@@ -1,5 +1,4 @@
-interface RollLeftover {    
-    id: number;
+interface RollLeftover {
     date: string;
     rollTypeId: number;
     amount: number;

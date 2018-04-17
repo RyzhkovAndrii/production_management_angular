@@ -8,7 +8,6 @@
         "thikness": 2.7
       },
       "rollBatches": [{
-          "id": 1,
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -16,7 +15,6 @@
           "leftAmount": 50
         },
         {
-          "id": 2,
           "dateManufactured": "2018-04-06",
           "rollTypeId": 1,
           "manufacturedAmount": 250,
@@ -25,13 +23,11 @@
         }
       ],
       "restRollLeftover": {
-        "id": 1,
         "date": "2018-03-17",
         "rollTypeId": 1,
         "amount": 34
       },
       "totalRollLeftover": {
-        "id": 2,
         "date": "2018-04-17",
         "rollTypeId": 1,
         "amount": 294
@@ -46,7 +42,6 @@
         "thikness": 2.7
       },
       "rollBatches": [{
-          "id": 3,
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -54,7 +49,6 @@
           "leftAmount": 67
         },
         {
-          "id": 4,
           "dateManufactured": "2018-04-10",
           "rollTypeId": 2,
           "manufacturedAmount": 25,
@@ -63,13 +57,11 @@
         }
       ],
       "restRollLeftover": {
-        "id": 3,
         "date": "2018-03-17",
         "rollTypeId": 2,
         "amount": 2
       },
       "totalRollLeftover": {
-        "id": 4,
         "date": "2018-04-17",
         "rollTypeId": 2,
         "amount": 89
@@ -84,7 +76,6 @@
         "thikness": 2.7
       },
       "rollBatches": [{
-          "id": 5,
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -92,7 +83,6 @@
           "leftAmount": 530
         },
         {
-          "id": 6,
           "dateManufactured": "2018-03-30",
           "rollTypeId": 3,
           "manufacturedAmount": 320,
@@ -100,7 +90,6 @@
           "leftAmount": 320
         },
         {
-          "id": 7,
           "dateManufactured": "2018-04-16",
           "rollTypeId": 3,
           "manufacturedAmount": 180,
@@ -109,13 +98,11 @@
         }
       ],
       "restRollLeftover": {
-        "id": 5,
         "date": "2018-03-17",
         "rollTypeId": 3,
         "amount": 0
       },
       "totalRollLeftover": {
-        "id": 6,
         "date": "2018-04-17",
         "rollTypeId": 3,
         "amount": 1030
