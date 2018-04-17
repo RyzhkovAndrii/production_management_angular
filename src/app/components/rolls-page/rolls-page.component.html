@@ -7,15 +7,14 @@
           <th scope="col">Цвет</th>
           <th scope="col">Остаток</th>
           <th scope="col" *ngFor="let day of dateHeader">
-            {{day.getDate()}}
+            {{ day.getDate() }}
           </th>
           <th scope="col">Всего</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="
-        let rollInfo of rollsInfo"
-        >
+        let rollInfo of rollsInfo">
           <th scope="row" class="row-name">
             {{ rollInfo.rollType.name }}
           </th>
