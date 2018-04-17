@@ -26,18 +26,6 @@ th {
   border-width: 0.05rem;
 }
 
-.yellow-circle {
-  background-color: yellow;
-}
-
-.green-circle {
-  background-color: green;
-}
-
-.blue-circle {
-  background-color: blue;
-}
-
 .table-header {
   background-color: rgba(225, 225, 225, 1);
 }

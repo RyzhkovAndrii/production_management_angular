@@ -4,16 +4,34 @@
       <thead>
         <tr class="table-header">
           <th scope="col" class="row-name">Наименование</th>
-            <th scope="col">Цвет</th>
-            <th scope="col">Остаток</th>
-            <th scope="col" *ngFor="let day of dateHeader">
-              {{day}}
-            </th>
-            <th scope="col">Всего</th>
+          <th scope="col">Цвет</th>
+          <th scope="col">Остаток</th>
+          <th scope="col" *ngFor="let day of dateHeader">
+            {{day.getDate()}}
+          </th>
+          <th scope="col">Всего</th>
         </tr>
       </thead>
       <tbody>
-        
+        <tr *ngFor="
+        let rollInfo of rollsInfo"
+        >
+          <th scope="row" class="row-name">
+            {{ rollInfo.rollType.name }}
+          </th>
+          <td>
+            <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
+          </td>
+          <td>
+            {{ rollInfo.restRollLeftover.amount }}
+          </td>
+          <td *ngFor="let batch of getBatches(rollInfo.rollBatches)">
+            {{ getBatch(batch) }}
+          </td>
+          <td>
+            {{ rollInfo.totalRollLeftover.amount }}
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
