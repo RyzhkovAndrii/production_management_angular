@@ -12,6 +12,7 @@ import {
 import {
   RollsService
 } from '../../services/rolls.service';
+import { compareColors } from '../../app-utils/app-comparators.module';
 
 @Component({
   selector: 'app-rolls-page',
@@ -48,5 +49,9 @@ export class RollsPageComponent implements OnInit {
     const result = new Array(this.daysInTable);
     rollBatches.forEach(item => result[getIndex(midnightDate(item.dateManufactured), result.length, (24*60*60*1000), this.toDate)] = item);
     return result;
+  }
+
+  sortByColor(rollsInfo: RollInfo[]): RollInfo[] {
+    return rollsInfo.sort((a, b) => compareColors(a.rollType.colorCode, b.rollType.colorCode));
   }
 }

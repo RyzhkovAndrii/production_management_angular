@@ -1,3 +1,7 @@
 .container-fluid {
-    padding-top: 1%;
+    margin-top: 0.5rem;
 }
+
+button {
+    margin-bottom: 0.5rem;
+  }

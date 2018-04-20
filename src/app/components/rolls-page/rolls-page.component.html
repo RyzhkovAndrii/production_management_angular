@@ -1,4 +1,8 @@
 <div class="container-fluid">
+    <button type="button" class="btn btn-outline-dark btn-sm">
+      <span class="material-icons">arrow_back</span>
+      Предыдущий период
+    </button>
   <div class="table-responsive">
     <table class="table table-bordered table-striped table-sm">
       <thead>
@@ -14,7 +18,7 @@
       </thead>
       <tbody>
         <tr *ngFor="
-        let rollInfo of rollsInfo">
+        let rollInfo of sortByColor(rollsInfo)">
           <th scope="row" class="row-name">
             {{ rollInfo.rollType.name }}
           </th>
