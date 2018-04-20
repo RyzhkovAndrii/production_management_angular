@@ -13,6 +13,8 @@ import {
   RollsService
 } from '../../services/rolls.service';
 import { compareColors } from '../../app-utils/app-comparators.module';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddRollTypeModalComponent } from './add-roll-type-modal/add-roll-type-modal.component';
 
 @Component({
   selector: 'app-rolls-page',
@@ -26,7 +28,7 @@ export class RollsPageComponent implements OnInit {
   restDate = substructDays(midnightDate(), this.daysInTable + 1);
   toDate = midnightDate();
   
-  constructor(private rollsService: RollsService) {}
+  constructor(private rollsService: RollsService, private modalService: NgbModal) {}
 
   ngOnInit() {
     const date = substructDays(midnightDate(), this.daysInTable);
@@ -53,5 +55,9 @@ export class RollsPageComponent implements OnInit {
 
   sortByColor(rollsInfo: RollInfo[]): RollInfo[] {
     return rollsInfo.sort((a, b) => compareColors(a.rollType.colorCode, b.rollType.colorCode));
+  }
+
+  openAddRollTypeModal() {
+    const modalRef = this.modalService.open(AddRollTypeModalComponent);
   }
 }
