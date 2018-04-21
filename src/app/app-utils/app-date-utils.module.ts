@@ -1,4 +1,5 @@
 /**
+import { midnightDate } from './app-date-utils.module';
  * @description immutable function
  * @returns new Date object with substructed days
  * @param date Date to substruct days
@@ -51,5 +52,10 @@ export function formatDate(date: Date): string {
 export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {
   const max = midnightDate(endingDate).getTime();
   const result = length - ((max - midnightDate(date).getTime()) / period + 1);
+  return Math.round(result);
+}
+
+export function getDifferenceInDays(dateA: Date, dateB: Date) {
+  const result = (midnightDate(dateA).getTime() - midnightDate(dateB).getTime()) / (24*60*60*1000);
   return Math.round(result);
 }

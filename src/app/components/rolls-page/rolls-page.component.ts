@@ -7,7 +7,8 @@ import {
   midnightDate,
   addDays,
   formatDate,
-  getIndex
+  getIndex,
+  getDifferenceInDays
 } from '../../app-utils/app-date-utils.module';
 import {
   RollsService
@@ -34,6 +35,8 @@ export class RollsPageComponent implements OnInit {
   daysInTable = 30;
   restDate = substructDays(midnightDate(), this.daysInTable + 1);
   toDate = midnightDate();
+
+  private readonly DAYS_TO_READY = 15;
 
   constructor(private rollsService: RollsService, private modalService: NgbModal) {}
 
@@ -83,7 +86,7 @@ export class RollsPageComponent implements OnInit {
       }, reason => {});
   }
 
-  openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
+  openCreateRollOperationModal (batch: RollBatch, index: number, rollTypeId: number) {
     const date = this.dateHeader[index];
     const modalRef = this.modalService.open(RollOperationModalComponent);
     modalRef.componentInstance.batch = batch;
@@ -94,5 +97,10 @@ export class RollsPageComponent implements OnInit {
         console.log(data);
         this.fetchTableData();
       }, reason => {});
+  }
+
+  isReady (batch: RollBatch) {
+    if(!batch) return false;
+    return getDifferenceInDays(new Date(), new Date(batch.dateManufactured)) >= this.DAYS_TO_READY;
   }
 }

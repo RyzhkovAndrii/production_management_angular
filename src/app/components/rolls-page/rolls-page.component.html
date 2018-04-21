@@ -1,11 +1,11 @@
 <div class="container-fluid">
-    <button type="button" class="btn btn-outline-dark btn-sm">
-      <span class="material-icons">arrow_back</span>
-      Предыдущий период
-    </button>
-    <button class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
-      <span class="material-icons">add</span>
-    </button>
+  <button type="button" class="btn btn-outline-dark btn-sm">
+    <span class="material-icons">arrow_back</span>
+    Предыдущий период
+  </button>
+  <button class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
+    <span class="material-icons">add</span>
+  </button>
   <div class="table-responsive">
     <table class="table table-bordered table-striped table-sm">
       <thead>
@@ -32,7 +32,9 @@
             {{ rollInfo.restRollLeftover.amount }}
           </td>
           <td *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)">
-            {{ getBatch(batch) }}
+            <div [ngClass]="{'roll-ready': isReady(batch)}">
+              {{ getBatch(batch) }}
+            </div>
           </td>
           <td>
             {{ rollInfo.totalRollLeftover.amount }}
