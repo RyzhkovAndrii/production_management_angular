@@ -67,7 +67,23 @@ export class RollsPageComponent implements OnInit {
     const modalRef = this.modalService.open(AddRollTypeModalComponent);
     modalRef.result
       .then(data => {
-        this.rollsService.postRollType(data);
+        this.rollsService.postRollType(data)
+          .subscribe(createdRollType => {
+            this.rollsInfo.push({
+              rollType: createdRollType,
+              rollBatches: new Array(this.daysInTable),
+              restRollLeftover: {
+                date: formatDate(this.restDate), 
+                rollTypeId: createdRollType.id, 
+                amount: 0
+              },
+              totalRollLeftover: {
+                date: formatDate(this.toDate), 
+                rollTypeId: createdRollType.id, 
+                amount: 0
+              }
+            });
+          });
       }, reason => {});
   }
 }

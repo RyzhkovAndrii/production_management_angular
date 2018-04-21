@@ -21,9 +21,9 @@
       <div class="col-md-2">
         <label for="roll-color" class="col-form-label">Цвет:</label>
         <input type="button" class="form-control" id="roll-color" formControlName="colorCode" 
-        [(colorPicker)]="color" [value]="color"
-          [style.background]="color" [style.color]="color" [cpOutputFormat]="'hex'" 
-          [cpPosition]="'left'">
+        [(colorPicker)]="form.get('colorCode').value" [value]="form.get('colorCode').value"
+          [style.background]="form.get('colorCode').value" [style.color]="form.get('colorCode').value" [cpOutputFormat]="'hex'" 
+          [cpPosition]="'left'" [cpOKButton]="true" [cpCancelButton]="true">
       </div>
     </div>
     <div class="row">

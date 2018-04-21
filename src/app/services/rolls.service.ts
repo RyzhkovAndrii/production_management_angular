@@ -46,8 +46,15 @@ export class RollsService {
     return <Observable<RollInfo[]>> this.http.get('http://localhost:3000/rollsInfo');
   }
 
-  postRollType(rollType: RollTypeDTO) {
-    
+  postRollType(rollType: RollTypeDTO): Observable<RollType> {
+    // return <Observable<RollType>> this.http.post(this.urls.rollTypesUrl, rollType);
+    return of({
+      id: (Math.random() + Math.random() + Math.random())*100,
+      name: rollType.name,
+      colorCode: rollType.colorCode,
+      thickness: rollType.thickness,
+      weight: rollType.weight
+    })
   }
 
   getRollBatchesByDateRange(rollTypeId: number, from: Date, to: Date) {
@@ -74,5 +81,4 @@ export class RollsService {
       params
     });
   }
-
 }
