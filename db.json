@@ -5,7 +5,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -39,7 +39,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -73,7 +73,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -114,7 +114,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -148,7 +148,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -182,7 +182,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -223,7 +223,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -257,7 +257,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -291,7 +291,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -332,7 +332,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -366,7 +366,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -400,7 +400,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -441,7 +441,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -475,7 +475,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -509,7 +509,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -550,7 +550,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -584,7 +584,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -618,7 +618,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -659,7 +659,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -693,7 +693,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -727,7 +727,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -768,7 +768,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -802,7 +802,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -836,7 +836,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",
@@ -877,7 +877,7 @@
         "name": "жовте",
         "weight": 50,
         "colorCode": "#fff354",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-15",
@@ -911,7 +911,7 @@
         "name": "зеленый",
         "weight": 50,
         "colorCode": "#008000",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-04-01",
@@ -945,7 +945,7 @@
         "name": "фиолетовый",
         "weight": 50,
         "colorCode": "#5A009D",
-        "thikness": 2.7
+        "thickness": 2.7
       },
       "rollBatches": [{
           "dateManufactured": "2018-03-21",

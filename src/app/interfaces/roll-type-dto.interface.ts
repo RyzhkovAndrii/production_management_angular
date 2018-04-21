@@ -1,5 +1,4 @@
-interface RollType {
-    id: number;
+interface RollTypeDTO {
     name: string; 
     weight: number;
     colorCode: string;

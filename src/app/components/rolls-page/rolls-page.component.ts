@@ -12,9 +12,15 @@ import {
 import {
   RollsService
 } from '../../services/rolls.service';
-import { compareColors } from '../../app-utils/app-comparators.module';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddRollTypeModalComponent } from './add-roll-type-modal/add-roll-type-modal.component';
+import {
+  compareColors
+} from '../../app-utils/app-comparators.module';
+import {
+  NgbModal
+} from '@ng-bootstrap/ng-bootstrap';
+import {
+  AddRollTypeModalComponent
+} from './add-roll-type-modal/add-roll-type-modal.component';
 
 @Component({
   selector: 'app-rolls-page',
@@ -27,7 +33,7 @@ export class RollsPageComponent implements OnInit {
   daysInTable = 30;
   restDate = substructDays(midnightDate(), this.daysInTable + 1);
   toDate = midnightDate();
-  
+
   constructor(private rollsService: RollsService, private modalService: NgbModal) {}
 
   ngOnInit() {
@@ -43,13 +49,13 @@ export class RollsPageComponent implements OnInit {
   }
 
   getBatch(rollBatch: RollBatch): number | string {
-     if (rollBatch) return rollBatch.leftAmount;
-     else return '';
+    if (rollBatch) return rollBatch.leftAmount;
+    else return '';
   }
 
   getBatches(rollBatches: RollBatch[]) {
     const result = new Array(this.daysInTable);
-    rollBatches.forEach(item => result[getIndex(midnightDate(item.dateManufactured), result.length, (24*60*60*1000), this.toDate)] = item);
+    rollBatches.forEach(item => result[getIndex(midnightDate(item.dateManufactured), result.length, (24 * 60 * 60 * 1000), this.toDate)] = item);
     return result;
   }
 
@@ -59,5 +65,9 @@ export class RollsPageComponent implements OnInit {
 
   openAddRollTypeModal() {
     const modalRef = this.modalService.open(AddRollTypeModalComponent);
+    modalRef.result
+      .then(data => {
+        this.rollsService.postRollType(data);
+      }, reason => {});
   }
 }

@@ -12,6 +12,7 @@ import { UrlService } from './services/url.service';
 import { RollsService } from './services/rolls.service';
 import { AddRollTypeModalComponent } from './components/rolls-page/add-roll-type-modal/add-roll-type-modal.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     NgbModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    ColorPickerModule
+    ColorPickerModule,
+    ReactiveFormsModule
   ],
   providers: [
     UrlService,
