@@ -31,7 +31,7 @@
           <td>
             {{ rollInfo.restRollLeftover.amount }}
           </td>
-          <td *ngFor="let batch of getBatches(rollInfo.rollBatches)">
+          <td *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)">
             {{ getBatch(batch) }}
           </td>
           <td>

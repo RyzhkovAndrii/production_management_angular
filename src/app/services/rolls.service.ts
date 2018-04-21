@@ -16,15 +16,19 @@ import {
 } from 'rxjs/observable/from';
 import { of
 } from 'rxjs/observable/of';
-import { Observable } from 'rxjs/Observable';
-import { formatDate } from '../app-utils/app-date-utils.module';
+import {
+  Observable
+} from 'rxjs/Observable';
+import {
+  formatDate
+} from '../app-utils/app-date-utils.module';
 
 @Injectable()
 export class RollsService {
 
   constructor(private urls: UrlService, private http: HttpClient) {}
 
-  getRollsInfo(restDate: Date, totalDate: Date): Observable<RollInfo[]> {
+  getRollsInfo(restDate: Date, totalDate: Date): Observable < RollInfo[] > {
     // return this.http.get(this.urls.rollTypesUrl).flatMap(
     //   (data: RollType[]) => from(data)
     //   .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, restDate, totalDate)
@@ -43,17 +47,32 @@ export class RollsService {
     //     )
     //   )
     // ).toArray();
-    return <Observable<RollInfo[]>> this.http.get('http://localhost:3000/rollsInfo');
+    return <Observable < RollInfo[] >> this.http.get('http://localhost:3000/rollsInfo');
   }
 
-  postRollType(rollType: RollTypeDTO): Observable<RollType> {
+  postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     // return <Observable<RollType>> this.http.post(this.urls.rollTypesUrl, rollType);
     return of({
-      id: (Math.random() + Math.random() + Math.random())*100,
+      id: (Math.random() + Math.random() + Math.random()) * 100,
       name: rollType.name,
       colorCode: rollType.colorCode,
       thickness: rollType.thickness,
       weight: rollType.weight
+    }).map(createdRollType => {
+      return {
+        rollType: createdRollType,
+        rollBatches: new Array(daysInTable),
+        restRollLeftover: {
+          date: formatDate(restDate),
+          rollTypeId: createdRollType.id,
+          amount: 0
+        },
+        totalRollLeftover: {
+          date: formatDate(toDate),
+          rollTypeId: createdRollType.id,
+          amount: 0
+        }
+      }
     })
   }
 

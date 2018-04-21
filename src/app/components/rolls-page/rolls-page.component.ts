@@ -21,6 +21,7 @@ import {
 import {
   AddRollTypeModalComponent
 } from './add-roll-type-modal/add-roll-type-modal.component';
+import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
 
 @Component({
   selector: 'app-rolls-page',
@@ -37,15 +38,23 @@ export class RollsPageComponent implements OnInit {
   constructor(private rollsService: RollsService, private modalService: NgbModal) {}
 
   ngOnInit() {
+    this.initTableHeader();
+    this.fetchTableData();
+  }
+
+  private fetchTableData() {
+    this.rollsService.getRollsInfo(this.restDate, this.toDate)
+      .subscribe(data => {
+        this.rollsInfo = data;
+      });
+  }
+
+  private initTableHeader() {
     const date = substructDays(midnightDate(), this.daysInTable);
     for (let i = 1; i <= this.daysInTable; i++) {
       const substructedDate = addDays(date, i);
       this.dateHeader.push(substructedDate);
     }
-    this.rollsService.getRollsInfo(this.restDate, this.toDate)
-      .subscribe(data => {
-        this.rollsInfo = data;
-      });
   }
 
   getBatch(rollBatch: RollBatch): number | string {
@@ -67,23 +76,23 @@ export class RollsPageComponent implements OnInit {
     const modalRef = this.modalService.open(AddRollTypeModalComponent);
     modalRef.result
       .then(data => {
-        this.rollsService.postRollType(data)
-          .subscribe(createdRollType => {
-            this.rollsInfo.push({
-              rollType: createdRollType,
-              rollBatches: new Array(this.daysInTable),
-              restRollLeftover: {
-                date: formatDate(this.restDate), 
-                rollTypeId: createdRollType.id, 
-                amount: 0
-              },
-              totalRollLeftover: {
-                date: formatDate(this.toDate), 
-                rollTypeId: createdRollType.id, 
-                amount: 0
-              }
-            });
+        this.rollsService.postRollType(data, this.daysInTable, this.restDate, this.toDate)
+          .subscribe(rollInfo => {
+            this.rollsInfo.push(rollInfo);
           });
+      }, reason => {});
+  }
+
+  openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
+    const date = this.dateHeader[index];
+    const modalRef = this.modalService.open(RollOperationModalComponent);
+    modalRef.componentInstance.batch = batch;
+    modalRef.componentInstance.manufacturedDate = date;
+    modalRef.componentInstance.rollTypeId = rollTypeId;
+    modalRef.result
+      .then(data => {
+        console.log(data);
+        this.fetchTableData();
       }, reason => {});
   }
 }

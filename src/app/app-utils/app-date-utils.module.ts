@@ -5,7 +5,7 @@
  * @param days numeric value of days to substruct
  */
 export function substructDays(date: Date, days: number): Date {
-  const result: Date = this.midnightDate();
+  const result: Date = midnightDate();
   result.setTime(date.getTime() - (24*60*60*1000)*days);
   return result;
 }
@@ -16,7 +16,7 @@ export function substructDays(date: Date, days: number): Date {
  * @param days numeric value of days to add
  */
 export function addDays(date: Date, days: number): Date {
-  const result: Date = this.midnightDate();
+  const result: Date = midnightDate();
   result.setTime(date.getTime() + (24*60*60*1000)*days);
   return result;
 }
@@ -38,7 +38,7 @@ export function midnightDate(date?: string | Date): Date {
  * @returns string value of date in format YYYY-MM-DD
  */
 export function formatDate(date: Date): string {
-  return date.toISOString().substring(0, 10);
+  return addDays(date, 1).toISOString().substring(0, 10);
 }
 /**
  * @description immutable function
