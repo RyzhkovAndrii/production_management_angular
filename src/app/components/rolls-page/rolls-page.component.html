@@ -12,6 +12,8 @@
         <tr class="table-header">
           <th scope="col" class="row-name">Наименование</th>
           <th scope="col">Цвет</th>
+          <th scope="col">Толщина</th>
+          <th scope="col">Вес</th>
           <th scope="col">Остаток</th>
           <th scope="col" *ngFor="let day of dateHeader">
             {{ day.getDate() }}
@@ -27,6 +29,12 @@
           </th>
           <td>
             <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
+          </td>
+          <td>
+            {{ rollInfo.rollType.thickness }}
+          </td>
+          <td>
+            {{ rollInfo.rollType.weight }}
           </td>
           <td>
             {{ rollInfo.restRollLeftover.amount }}
