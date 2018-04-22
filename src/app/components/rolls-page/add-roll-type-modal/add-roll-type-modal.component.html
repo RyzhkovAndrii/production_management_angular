@@ -23,7 +23,8 @@
         <input type="button" class="form-control" id="roll-color" formControlName="colorCode" 
         [(colorPicker)]="form.get('colorCode').value" [value]="form.get('colorCode').value"
           [style.background]="form.get('colorCode').value" [style.color]="form.get('colorCode').value" [cpOutputFormat]="'hex'" 
-          [cpPosition]="'left'" [cpOKButton]="true" [cpCancelButton]="true">
+          [cpPosition]="'left'" [cpOKButton]="true" [cpCancelButton]="true"
+          [cpPresetColors]="presetColors">
       </div>
     </div>
     <div class="row">
