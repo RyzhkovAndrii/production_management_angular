@@ -24,7 +24,7 @@
       <tbody>
         <tr *ngFor="
         let rollInfo of sortByColor(rollsInfo)">
-          <th scope="row" class="row-name">
+          <th scope="row" class="row-name" (click)="openEditRollTypeModal(rollInfo.rollType)">
             {{ rollInfo.rollType.name }}
           </th>
           <td>

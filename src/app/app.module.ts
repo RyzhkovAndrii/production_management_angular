@@ -31,8 +31,8 @@ import {
   RollsService
 } from './services/rolls.service';
 import {
-  AddRollTypeModalComponent
-} from './components/rolls-page/add-roll-type-modal/add-roll-type-modal.component';
+  RollTypeModalComponent
+} from './components/rolls-page/roll-type-modal/roll-type-modal.component';
 import {
   ColorPickerModule
 } from 'ngx-color-picker';
@@ -49,7 +49,7 @@ import {
     AppComponent,
     HomePageComponent,
     RollsPageComponent,
-    AddRollTypeModalComponent,
+    RollTypeModalComponent,
     RollOperationModalComponent
   ],
   imports: [
@@ -65,7 +65,7 @@ import {
     RollsService
   ],
   entryComponents: [
-    AddRollTypeModalComponent,
+    RollTypeModalComponent,
     RollOperationModalComponent
   ],
   bootstrap: [AppComponent]

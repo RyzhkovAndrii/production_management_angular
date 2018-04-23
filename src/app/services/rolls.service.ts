@@ -26,6 +26,9 @@ import {
 @Injectable()
 export class RollsService {
 
+  putRollType(rollType: RollType): Observable<RollType> {
+    return of(rollType);
+  }
   constructor(private urls: UrlService, private http: HttpClient) {}
 
   getRollsInfo(restDate: Date, totalDate: Date): Observable < RollInfo[] > {

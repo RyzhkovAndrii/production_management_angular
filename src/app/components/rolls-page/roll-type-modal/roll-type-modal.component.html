@@ -55,5 +55,5 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.dismiss('cancel')">Отмена</button>
-  <button type="button" class="btn btn-outline-dark" (click)="createRollType()" [disabled]="form.invalid">Создать</button>
+  <button type="button" class="btn btn-outline-dark" (click)="onSubmit()" [disabled]="form.invalid">Сохранить</button>
 </div>

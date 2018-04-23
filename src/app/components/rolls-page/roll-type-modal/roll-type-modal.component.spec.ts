@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddRollTypeModalComponent } from './add-roll-type-modal.component';
+import { RollTypeModalComponent } from './roll-type-modal.component';
 
 describe('AddRollTypeModalComponent', () => {
-  let component: AddRollTypeModalComponent;
-  let fixture: ComponentFixture<AddRollTypeModalComponent>;
+  let component: RollTypeModalComponent;
+  let fixture: ComponentFixture<RollTypeModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddRollTypeModalComponent ]
+      declarations: [ RollTypeModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddRollTypeModalComponent);
+    fixture = TestBed.createComponent(RollTypeModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

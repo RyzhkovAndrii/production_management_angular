@@ -20,8 +20,8 @@ import {
   NgbModal
 } from '@ng-bootstrap/ng-bootstrap';
 import {
-  AddRollTypeModalComponent
-} from './add-roll-type-modal/add-roll-type-modal.component';
+  RollTypeModalComponent
+} from './roll-type-modal/roll-type-modal.component';
 import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
 
 @Component({
@@ -76,13 +76,29 @@ export class RollsPageComponent implements OnInit {
   }
 
   openAddRollTypeModal() {
-    const modalRef = this.modalService.open(AddRollTypeModalComponent);
+    const modalRef = this.modalService.open(RollTypeModalComponent);
     modalRef.result
-      .then(data => {
+      .then((data: RollType) => {
         this.rollsService.postRollType(data, this.daysInTable, this.restDate, this.toDate)
           .subscribe(rollInfo => {
             this.rollsInfo.push(rollInfo);
           });
+      }, reason => {});
+  }
+
+  openEditRollTypeModal(rollType: RollType) {
+    const modalRef = this.modalService.open(RollTypeModalComponent);
+    modalRef.componentInstance.rollType = rollType;
+    modalRef.result
+      .then((data: RollType) => {
+        this.rollsService.putRollType(data)
+          .subscribe(x => {
+            rollType.id = x.id;
+            rollType.name = x.name;
+            rollType.colorCode = x.colorCode;
+            rollType.thickness = x.thickness;
+            rollType.weight = x.weight;
+          })
       }, reason => {});
   }
 
