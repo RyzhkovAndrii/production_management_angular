@@ -33,7 +33,7 @@ export class RollsPageComponent implements OnInit {
   dateHeader: Date[] = [];
   rollsInfo: RollInfo[] = [];
   daysInTable = 30;
-  restDate = substructDays(midnightDate(), this.daysInTable + 1);
+  restDate;
   toDate = midnightDate();
 
   private readonly DAYS_TO_READY = 15;
@@ -41,8 +41,7 @@ export class RollsPageComponent implements OnInit {
   constructor(private rollsService: RollsService, private modalService: NgbModal) {}
 
   ngOnInit() {
-    this.initTableHeader();
-    this.fetchTableData();
+    this.showCurrentPeriod();
   }
 
   private fetchTableData() {
@@ -52,12 +51,38 @@ export class RollsPageComponent implements OnInit {
       });
   }
 
-  private initTableHeader() {
+  private initTableHeader(dateTo: Date) {
+    this.toDate = dateTo;
+    this.restDate = substructDays(dateTo, this.daysInTable + 1);
     const date = substructDays(midnightDate(), this.daysInTable);
+    this.dateHeader = [];
     for (let i = 1; i <= this.daysInTable; i++) {
       const substructedDate = addDays(date, i);
       this.dateHeader.push(substructedDate);
     }
+  }
+
+  showPreviousPeriod() {
+    this.initTableHeader(substructDays(this.toDate, this.daysInTable));
+    this.fetchTableData();
+  }
+
+  showNextPeriod() {
+    this.initTableHeader(addDays(this.toDate, this.daysInTable));
+    this.fetchTableData();
+  }
+
+  isPreviousPeriod() {
+    return this.toDate.getTime() < midnightDate().getTime();
+  }
+
+  isBeforePreviousPeriod() {
+    return this.toDate.getTime() < substructDays(midnightDate(), this.daysInTable).getTime();
+  }
+
+  showCurrentPeriod() {
+    this.initTableHeader(midnightDate());
+    this.fetchTableData();
   }
 
   getBatch(rollBatch: RollBatch): number | string {

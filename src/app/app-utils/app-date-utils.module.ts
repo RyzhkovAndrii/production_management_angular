@@ -52,6 +52,7 @@ export function formatDate(date: Date): string {
 export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {
   const max = midnightDate(endingDate).getTime();
   const result = length - ((max - midnightDate(date).getTime()) / period + 1);
+  if(result > length) return -1;  
   return Math.round(result);
 }
 
