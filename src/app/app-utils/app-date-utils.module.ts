@@ -1,14 +1,13 @@
+import * as moment from 'moment';
+
 /**
-import { midnightDate } from './app-date-utils.module';
  * @description immutable function
  * @returns new Date object with substructed days
  * @param date Date to substruct days
  * @param days numeric value of days to substruct
  */
 export function substructDays(date: Date, days: number): Date {
-  const result: Date = midnightDate();
-  result.setTime(date.getTime() - (24*60*60*1000)*days);
-  return result;
+  return moment(date).subtract(days, 'days').toDate();
 }
 /**
  * @description immutable function
@@ -17,9 +16,7 @@ export function substructDays(date: Date, days: number): Date {
  * @param days numeric value of days to add
  */
 export function addDays(date: Date, days: number): Date {
-  const result: Date = midnightDate();
-  result.setTime(date.getTime() + (24*60*60*1000)*days);
-  return result;
+  return moment(date).add(days, 'days').toDate();
 }
 /**
  * @description immutable function
@@ -29,17 +26,27 @@ export function addDays(date: Date, days: number): Date {
  */
 export function midnightDate(date?: string | Date): Date {
   let result: Date;
-  if (date) result = new Date(date.toString())
+  if (date) result = getDate(date);
   else result = new Date();
   result.setHours(0, 0, 0, 0);
   return result;
 }
+
 /**
  * @description immutable function
- * @returns string value of date in format YYYY-MM-DD
+ * @returns date object
+ * @param date date in format DD-MM-YYYY
+ */
+export function getDate(date: string | Date): Date {
+  return moment(date, 'DD-MM-YYYY').toDate();
+}
+
+/**
+ * @description immutable function
+ * @returns string value of date in format dd-MM-YYYY
  */
 export function formatDate(date: Date): string {
-  return addDays(date, 1).toISOString().substring(0, 10);
+  return moment(date).format('DD-MM-YYYY');
 }
 /**
  * @description immutable function
@@ -49,10 +56,12 @@ export function formatDate(date: Date): string {
  * @param period a numeric value in milliseconds for constant period between elements
  * @param endingDate date of last element in array
  */
-export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {
+export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {  
   const max = midnightDate(endingDate).getTime();
   const result = length - ((max - midnightDate(date).getTime()) / period + 1);
-  if(result > length) return -1;  
+  if(result > length) {
+    return -1;
+  }  
   return Math.round(result);
 }
 

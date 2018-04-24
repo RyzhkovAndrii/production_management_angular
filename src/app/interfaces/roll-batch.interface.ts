@@ -3,5 +3,5 @@ interface RollBatch {
     rollTypeId: number;
     manufacturedAmount: number;
     usedAmount: number;
-    leftAmount: number;
+    leftOverAmount: number;
 }

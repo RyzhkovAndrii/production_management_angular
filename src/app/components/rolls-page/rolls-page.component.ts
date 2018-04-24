@@ -8,7 +8,8 @@ import {
   addDays,
   formatDate,
   getIndex,
-  getDifferenceInDays
+  getDifferenceInDays,
+  getDate
 } from '../../app-utils/app-date-utils.module';
 import {
   RollsService
@@ -36,7 +37,8 @@ export class RollsPageComponent implements OnInit {
   monthYearMap: Map<string, number>;
   rollsInfo: RollInfo[] = [];
   daysInTable = 30;
-  restDate;
+  restDate: Date;
+  fromDate: Date;
   toDate = midnightDate();
 
   private readonly DAYS_TO_READY = 15;
@@ -48,21 +50,20 @@ export class RollsPageComponent implements OnInit {
   }
 
   private fetchTableData() {
-    this.rollsService.getRollsInfo(this.restDate, this.toDate)
+    this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
       .subscribe(data => {
-        this.rollsInfo = data;
+        this.rollsInfo = data;        
       });
   }
 
   private initTableHeader(dateTo: Date) {
     this.toDate = dateTo;
-    this.restDate = substructDays(dateTo, this.daysInTable + 1);
-    const date = substructDays(dateTo, this.daysInTable);
+    this.restDate = substructDays(dateTo, this.daysInTable);
+    this.fromDate = substructDays(dateTo, this.daysInTable - 1);
     this.daysHeader = [];
     this.monthYearMap = new Map();
-    const options = { year: 'numeric', month: 'short' }
-    for (let i = 1; i <= this.daysInTable; i++) {
-      const substructedDate = addDays(date, i);
+    for (let i = 0; i < this.daysInTable; i++) {
+      const substructedDate = addDays(this.fromDate, i);
       this.daysHeader.push(substructedDate);
       const monthYear: string = moment(substructedDate).format('MMM YY');
       this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear)? this.monthYearMap.get(monthYear) + 1 : 1);
@@ -94,8 +95,8 @@ export class RollsPageComponent implements OnInit {
     this.fetchTableData();
   }
 
-  getBatch(rollBatch: RollBatch): number | string {
-    if (rollBatch) return rollBatch.leftAmount;
+  getBatch(rollBatch: RollBatch): number | string {    
+    if (rollBatch) return rollBatch.leftOverAmount;
     else return '';
   }
 
@@ -125,6 +126,7 @@ export class RollsPageComponent implements OnInit {
     modalRef.componentInstance.rollType = rollType;
     modalRef.result
       .then((data: RollType) => {
+        data.id = rollType.id;
         this.rollsService.putRollType(data)
           .subscribe(x => {
             rollType.id = x.id;
@@ -143,14 +145,16 @@ export class RollsPageComponent implements OnInit {
     modalRef.componentInstance.manufacturedDate = date;
     modalRef.componentInstance.rollTypeId = rollTypeId;
     modalRef.result
-      .then(data => {
-        console.log(data);
+      .then((data: RollOperation) => {
+        this.rollsService.postRollOperation(data).subscribe(data => {
+          console.log(data);
+        });
         this.fetchTableData();
       }, reason => {});
   }
 
   isReady (batch: RollBatch) {
     if(!batch) return false;
-    return getDifferenceInDays(new Date(), new Date(batch.dateManufactured)) >= this.DAYS_TO_READY;
+    return getDifferenceInDays(new Date(), getDate(batch.dateManufactured)) >= this.DAYS_TO_READY;
   }
 }

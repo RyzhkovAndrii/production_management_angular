@@ -59,7 +59,7 @@ export class RollOperationModalComponent implements OnInit {
   }
 
   validateAmount(control: FormControl) {
-    if (this.batch && control.value > this.batch.leftAmount) {
+    if (this.batch && control.value > this.batch.leftOverAmount) {
       if (this.form.value.operationType == RollOperationType.USE) {
         return {
           'greaterThanLeftError': true
