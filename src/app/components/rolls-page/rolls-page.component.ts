@@ -23,6 +23,7 @@ import {
   RollTypeModalComponent
 } from './roll-type-modal/roll-type-modal.component';
 import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-rolls-page',
@@ -30,7 +31,9 @@ import { RollOperationModalComponent } from './roll-operation-modal/roll-operati
   styleUrls: ['./rolls-page.component.css']
 })
 export class RollsPageComponent implements OnInit {
-  dateHeader: Date[] = [];
+  daysHeader: Date[];
+  dateHeader: string[];
+  monthYearMap: Map<string, number>;
   rollsInfo: RollInfo[] = [];
   daysInTable = 30;
   restDate;
@@ -54,12 +57,18 @@ export class RollsPageComponent implements OnInit {
   private initTableHeader(dateTo: Date) {
     this.toDate = dateTo;
     this.restDate = substructDays(dateTo, this.daysInTable + 1);
-    const date = substructDays(midnightDate(), this.daysInTable);
-    this.dateHeader = [];
+    const date = substructDays(dateTo, this.daysInTable);
+    this.daysHeader = [];
+    this.monthYearMap = new Map();
+    const options = { year: 'numeric', month: 'short' }
     for (let i = 1; i <= this.daysInTable; i++) {
       const substructedDate = addDays(date, i);
-      this.dateHeader.push(substructedDate);
+      this.daysHeader.push(substructedDate);
+      const monthYear: string = moment(substructedDate).format('MMM YY');
+      this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear)? this.monthYearMap.get(monthYear) + 1 : 1);
     }
+    this.dateHeader = Array.from(this.monthYearMap.keys());
+      
   }
 
   showPreviousPeriod() {
@@ -128,7 +137,7 @@ export class RollsPageComponent implements OnInit {
   }
 
   openCreateRollOperationModal (batch: RollBatch, index: number, rollTypeId: number) {
-    const date = this.dateHeader[index];
+    const date = this.daysHeader[index];
     const modalRef = this.modalService.open(RollOperationModalComponent);
     modalRef.componentInstance.batch = batch;
     modalRef.componentInstance.manufacturedDate = date;

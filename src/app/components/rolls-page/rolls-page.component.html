@@ -18,12 +18,16 @@
     <table class="table table-bordered table-striped table-sm">
       <thead>
         <tr class="table-header">
+          <th scope="col" colspan="4"></th>
+          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
+        </tr>
+        <tr class="table-header">
           <th scope="col" class="row-name">Наименование</th>
           <th scope="col">Цвет</th>
           <th scope="col">Толщина</th>
           <th scope="col">Вес</th>
           <th scope="col">Остаток</th>
-          <th scope="col" *ngFor="let day of dateHeader">
+          <th scope="col" *ngFor="let day of daysHeader">
             {{ day.getDate() }}
           </th>
           <th scope="col">Всего</th>
