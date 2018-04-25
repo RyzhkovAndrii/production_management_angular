@@ -33,7 +33,7 @@ export class RollOperationModalComponent implements OnInit {
   form: FormGroup;
   operationType = RollOperationType.MANUFACTURE;
 
-  private readonly MIN_ROLL_AMOUNT = 1;
+  readonly MIN_ROLL_AMOUNT = 1;
 
   constructor(public activeModal: NgbActiveModal) {}
 

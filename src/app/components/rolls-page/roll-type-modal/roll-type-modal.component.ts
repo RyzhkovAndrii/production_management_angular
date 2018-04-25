@@ -22,8 +22,8 @@ export class RollTypeModalComponent implements OnInit {
   form: FormGroup;
   presetColors = ['#ffffff', '#000000', '#ff9d14', '#008a17', '#f1e972', '#edf100'];
 
-  private readonly MIN_WEIGHT = 0.1;
-  private readonly MIN_THICKNESS = 0.1;
+  readonly MIN_WEIGHT = 0.1;
+  readonly MIN_THICKNESS = 0.1;
   @Input() rollType: RollType;
 
   constructor(public activeModal: NgbActiveModal) {}
