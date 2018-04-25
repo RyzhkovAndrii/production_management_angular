@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 
+const host = 'http://localhost:8080';
+
 @Injectable()
 export class UrlService {
-  rollTypesUrl = 'http://localhost:8080/roll-types';
-  rollBatchUrl = 'http://localhost:8080/roll-batches';
-  rollLeftoverUrl = 'http://localhost:8080/roll-leftovers';
-  rollOperationUrl = 'http://localhost:8080/roll-operations';
+  rollTypesUrl = `${host}/roll-types`;
+  rollBatchUrl = `${host}/roll-batches`;
+  rollLeftoverUrl = `${host}/roll-leftovers`;
+  rollOperationUrl = `${host}/roll-operations`;
 }
