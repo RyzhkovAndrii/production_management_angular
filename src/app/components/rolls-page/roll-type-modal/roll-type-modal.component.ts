@@ -25,14 +25,16 @@ export class RollTypeModalComponent implements OnInit {
   readonly MIN_WEIGHT = 0.1;
   readonly MIN_THICKNESS = 0.1;
   @Input() rollType: RollType;
+  colorCode;
 
   constructor(public activeModal: NgbActiveModal) {}
 
   ngOnInit() {
+    this.colorCode = this.rollType ? this.rollType.colorCode : '#ffffff';
 
     this.form = new FormGroup({
       name: new FormControl(this.rollType ? this.rollType.name : '', Validators.required),
-      colorCode: new FormControl(this.rollType ? this.rollType.colorCode : '#ffffff'),
+      colorCode: new FormControl(this.colorCode),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, 
         [Validators.required, Validators.min(this.MIN_THICKNESS)]),
       weight: new FormControl(this.rollType ? this.rollType.weight : undefined, 
@@ -44,7 +46,7 @@ export class RollTypeModalComponent implements OnInit {
     const type: RollType = {
       id: undefined,
       name: this.form.value.name,
-      colorCode: this.form.get('colorCode').value,
+      colorCode: this.colorCode,
       thickness: this.form.value.thickness,
       weight: this.form.value.weight
     }    
