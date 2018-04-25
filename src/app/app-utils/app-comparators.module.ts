@@ -6,8 +6,6 @@
  * @param c2 color code only in hexademical format of the second element
  */
 export function compareColors (c1: string, c2: string): number {
-    console.log(c1, c2);
-    
     const a1 = c1.substr(1, c1.length);
     const a2 = c2.substr(1, c2.length);
     const base = 16;
