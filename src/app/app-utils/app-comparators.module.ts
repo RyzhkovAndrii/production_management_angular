@@ -6,6 +6,8 @@
  * @param c2 color code only in hexademical format of the second element
  */
 export function compareColors (c1: string, c2: string): number {
+    console.log(c1, c2);
+    
     const a1 = c1.substr(1, c1.length);
     const a2 = c2.substr(1, c2.length);
     const base = 16;
@@ -15,8 +17,10 @@ export function compareColors (c1: string, c2: string): number {
     const r2 = parseInt(a2.substr(0, 2), base);
     const g2 = parseInt(a2.substr(2, 2), base);
     const b2 = parseInt(a2.substr(4, 2), base);
-    const result = this.rgbToHsl(r1, g1, b1)[0]
-      - this.rgbToHsl(r2, g2, b2)[0];
+    const hsl1 = this.rgbToHsl(r1, g1, b1);
+    const hsl2 = this.rgbToHsl(r2, g2, b2);
+    const result = (hsl1[0] + hsl1[1] + hsl1[2])
+      - (hsl2[0] + hsl2[1] + hsl2[2]);
     return result;
   }
 
