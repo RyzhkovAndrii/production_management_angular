@@ -10,13 +10,13 @@ import {
   getIndex,
   getDifferenceInDays,
   getDate
-} from '../../app-utils/app-date-utils.module';
+} from '../../app-utils/app-date-utils';
 import {
   RollsService
 } from '../../services/rolls.service';
 import {
   compareColors
-} from '../../app-utils/app-comparators.module';
+} from '../../app-utils/app-comparators';
 import {
   NgbModal
 } from '@ng-bootstrap/ng-bootstrap';

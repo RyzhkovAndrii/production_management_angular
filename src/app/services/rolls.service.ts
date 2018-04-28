@@ -22,8 +22,8 @@ import {
 } from 'rxjs/Observable';
 import {
   formatDate
-} from '../app-utils/app-date-utils.module';
-import { httpErrorHandle } from '../app-utils/app-http-error-handler.module';
+} from '../app-utils/app-date-utils';
+import { httpErrorHandle } from '../app-utils/app-http-error-handler';
 
 @Injectable()
 export class RollsService {
