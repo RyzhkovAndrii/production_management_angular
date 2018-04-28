@@ -25,6 +25,7 @@ import {
 } from './roll-type-modal/roll-type-modal.component';
 import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
 import * as moment from 'moment';
+import { HttpErrorModalComponent } from '../http-error-modal/http-error-modal.component';
 
 @Component({
   selector: 'app-rolls-page',
@@ -68,7 +69,7 @@ export class RollsPageComponent implements OnInit {
     this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
       .subscribe(data => {
         this.rollsInfo = data;        
-      });
+      }, error => this.openHttpErrorModal(error));
   }
 
 
@@ -118,7 +119,7 @@ export class RollsPageComponent implements OnInit {
         this.rollsService.postRollType(data, this.daysInTable, this.restDate, this.toDate)
           .subscribe(rollInfo => {
             this.rollsInfo.push(rollInfo);
-          });
+          }, error => this.openHttpErrorModal(error));
       }, reason => {});
   }
 
@@ -136,7 +137,7 @@ export class RollsPageComponent implements OnInit {
             rollType.colorCode = x.colorCode;
             rollType.thickness = x.thickness;
             rollType.weight = x.weight;
-          })
+          }, error => this.openHttpErrorModal(error))
       }, reason => {});
   }
 
@@ -150,12 +151,17 @@ export class RollsPageComponent implements OnInit {
       .then((data: RollOperation) => {
         this.rollsService.postRollOperation(data).subscribe(data => {
           this.fetchTableData();
-        });
+        }, error => this.openHttpErrorModal(error));
       }, reason => {});
   }
 
   isReady (batch: RollBatch) {
     if(!batch) return false;
     return getDifferenceInDays(new Date(), getDate(batch.dateManufactured)) >= this.DAYS_TO_READY;
+  }
+
+  openHttpErrorModal(messages: string[]) {
+    const modalRef = this.modalService.open(HttpErrorModalComponent, {size: 'lg'});
+    modalRef.componentInstance.messages = messages;
   }
 }

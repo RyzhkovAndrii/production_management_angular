@@ -42,6 +42,9 @@ import {
 import {
   RollOperationModalComponent
 } from './components/rolls-page/roll-operation-modal/roll-operation-modal.component';
+import {
+  HttpErrorModalComponent
+} from './components/http-error-modal/http-error-modal.component';
 
 
 @NgModule({
@@ -50,7 +53,8 @@ import {
     HomePageComponent,
     RollsPageComponent,
     RollTypeModalComponent,
-    RollOperationModalComponent
+    RollOperationModalComponent,
+    HttpErrorModalComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +70,8 @@ import {
   ],
   entryComponents: [
     RollTypeModalComponent,
-    RollOperationModalComponent
+    RollOperationModalComponent,
+    HttpErrorModalComponent
   ],
   bootstrap: [AppComponent]
 })

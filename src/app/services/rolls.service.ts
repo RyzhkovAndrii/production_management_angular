@@ -7,8 +7,7 @@ import {
 import {
   HttpClient,
   HttpParams,
-  HttpHeaders,
-  HttpErrorResponse
+  HttpHeaders
 } from '@angular/common/http';
 import {
   flatMap
@@ -24,15 +23,17 @@ import {
 import {
   formatDate
 } from '../app-utils/app-date-utils.module';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { httpErrorHandle } from '../app-utils/app-http-error-handler.module';
 
 @Injectable()
 export class RollsService {
 
   headers = new HttpHeaders();
 
+  constructor(private urls: UrlService, private http: HttpClient) {}
+
   postRollOperation(rollOperation: RollOperation) {
-    return this.http.post(this.urls.rollOperationUrl, rollOperation);    
+    return this.http.post(this.urls.rollOperationUrl, rollOperation).catch(httpErrorHandle);    
   }
 
   putRollType(rollType: RollType): Observable<RollType> {
@@ -43,9 +44,8 @@ export class RollsService {
       thickness: rollType.thickness,
       weight: rollType.weight
     }
-    return <Observable<RollType>>this.http.put(requestUrl, dto);
+    return <Observable<RollType>>this.http.put(requestUrl, dto).catch(httpErrorHandle);
   }
-  constructor(private urls: UrlService, private http: HttpClient) {}
 
   getRollsInfo(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
     return this.http.get(this.urls.rollTypesUrl, {headers: this.headers}).flatMap(
@@ -65,7 +65,7 @@ export class RollsService {
           )
         )
       )
-    ).toArray();
+    ).toArray().catch(httpErrorHandle);
   }
 
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
@@ -84,7 +84,7 @@ export class RollsService {
           amount: 0
         }
       }
-    });
+    }).catch(httpErrorHandle);
   }
 
   getRollBatchesByDateRange(rollTypeId: number, from: Date, to: Date) {
@@ -98,7 +98,7 @@ export class RollsService {
     return this.http.get(this.urls.rollBatchUrl, {
       params,
       headers: this.headers
-    }).catch(this.handleError);
+    }).catch(httpErrorHandle);
   }
 
   getRollLeftoverByRollIdAndDate(rollTypeId: number, date: Date) {
@@ -111,21 +111,6 @@ export class RollsService {
     return this.http.get(this.urls.rollLeftoverUrl, {
       params,
       headers: this.headers
-    });
+    }).catch(httpErrorHandle);
   }
-  handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an ErrorObservable with a user-facing error message
-    return new ErrorObservable(
-      'Something bad happened; please try again later.');
-  };
 }
