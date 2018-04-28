@@ -1,10 +1,10 @@
 <div class="container-fluid">
+  <button class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
+    <span class="material-icons">add</span>
+  </button>
   <button type="button" class="btn btn-outline-dark btn-sm" (click)="showPreviousPeriod()">
     <span class="material-icons">arrow_back</span>
     Предыдущий период
-  </button>
-  <button class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
-    <span class="material-icons">add</span>
   </button>
   <button *ngIf="isBeforePreviousPeriod()" class="btn btn-outline-dark btn-sm" (click)="showNextPeriod()">
     Следующий период
