@@ -112,6 +112,7 @@ export class RollsPageComponent implements OnInit {
 
   openAddRollTypeModal() {
     const modalRef = this.modalService.open(RollTypeModalComponent);
+    modalRef.componentInstance.title = 'Новый рулон';
     modalRef.result
       .then((data: RollType) => {
         this.rollsService.postRollType(data, this.daysInTable, this.restDate, this.toDate)
@@ -124,6 +125,7 @@ export class RollsPageComponent implements OnInit {
   openEditRollTypeModal(rollType: RollType) {
     const modalRef = this.modalService.open(RollTypeModalComponent);
     modalRef.componentInstance.rollType = rollType;
+    modalRef.componentInstance.title = 'Редактирование рулона';
     modalRef.result
       .then((data: RollType) => {
         data.id = rollType.id;

@@ -25,6 +25,7 @@ export class RollTypeModalComponent implements OnInit {
   readonly MIN_WEIGHT = 0.1;
   readonly MIN_THICKNESS = 0.1;
   @Input() rollType: RollType;
+  @Input() title: string;
   colorCode;
 
   constructor(public activeModal: NgbActiveModal) {}
