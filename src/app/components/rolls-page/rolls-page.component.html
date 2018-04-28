@@ -22,10 +22,10 @@
           <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
         </tr>
         <tr class="table-header">
-          <th scope="col" class="row-name">Наименование</th>
-          <th scope="col">Цвет</th>
+          <th scope="col" class="row-name">Примечание</th>
           <th scope="col">Толщина</th>
           <th scope="col">Вес</th>
+          <th scope="col">Цвет</th>
           <th scope="col">Остаток</th>
           <th scope="col" *ngFor="let day of daysHeader">
             {{ day.getDate() }}
@@ -39,15 +39,15 @@
           <th scope="row" class="row-name" (click)="openEditRollTypeModal(rollInfo.rollType)">
             {{ rollInfo.rollType.name }}
           </th>
-          <td>
-            <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
-          </td>
-          <td>
+          <th scope="row" class="row-name">
             {{ rollInfo.rollType.thickness }}
-          </td>
-          <td>
+          </th>
+          <th scope="row" class="row-name">
             {{ rollInfo.rollType.weight }}
-          </td>
+          </th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
+          </th>
           <td>
             {{ rollInfo.restRollLeftover.amount }}
           </td>
