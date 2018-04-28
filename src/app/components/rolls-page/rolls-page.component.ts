@@ -65,7 +65,7 @@ export class RollsPageComponent implements OnInit {
     for (let i = 0; i < this.daysInTable; i++) {
       const substructedDate = addDays(this.fromDate, i);
       this.daysHeader.push(substructedDate);
-      const monthYear: string = moment(substructedDate).format('MMM YY');
+      const monthYear: string = moment(substructedDate).locale('ru').format('MMM YY');
       this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear)? this.monthYearMap.get(monthYear) + 1 : 1);
     }
     this.dateHeader = Array.from(this.monthYearMap.keys());
