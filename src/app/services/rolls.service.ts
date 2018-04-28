@@ -32,7 +32,6 @@ export class RollsService {
   headers = new HttpHeaders();
 
   postRollOperation(rollOperation: RollOperation) {
-    console.log(rollOperation);
     return this.http.post(this.urls.rollOperationUrl, rollOperation);    
   }
 

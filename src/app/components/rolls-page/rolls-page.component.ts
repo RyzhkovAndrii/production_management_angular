@@ -149,7 +149,6 @@ export class RollsPageComponent implements OnInit {
     modalRef.result
       .then((data: RollOperation) => {
         this.rollsService.postRollOperation(data).subscribe(data => {
-          console.log(data);
           this.fetchTableData();
         });
       }, reason => {});
