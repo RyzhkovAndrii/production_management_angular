@@ -25,7 +25,7 @@ import {
 } from './roll-type-modal/roll-type-modal.component';
 import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
 import * as moment from 'moment';
-import { HttpErrorModalComponent } from '../http-error-modal/http-error-modal.component';
+import { HttpErrorModalComponent } from '../../components/http-error-modal/http-error-modal.component';
 
 @Component({
   selector: 'app-rolls-page',

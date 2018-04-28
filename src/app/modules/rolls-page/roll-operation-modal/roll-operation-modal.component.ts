@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 import {
   RollOperationType
-} from '../../enums/roll-operation-type.enum';
+} from '../enums/roll-operation-type.enum';
 import {
   integerValidator
 } from '../../../app-utils/app-validators.module';

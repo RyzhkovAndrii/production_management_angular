@@ -17,13 +17,10 @@ import {
 } from './components/app.component';
 import {
   AppRoutingModule
-} from './app-routing/app-routing.module';
+} from './modules/app-routing/app-routing.module';
 import {
   HomePageComponent
 } from './components/home-page/home-page.component';
-import {
-  RollsPageComponent
-} from './components/rolls-page/rolls-page.component';
 import {
   UrlService
 } from './services/url.service';
@@ -31,46 +28,26 @@ import {
   RollsService
 } from './services/rolls.service';
 import {
-  RollTypeModalComponent
-} from './components/rolls-page/roll-type-modal/roll-type-modal.component';
-import {
-  ColorPickerModule
-} from 'ngx-color-picker';
-import {
-  ReactiveFormsModule
-} from '@angular/forms';
-import {
-  RollOperationModalComponent
-} from './components/rolls-page/roll-operation-modal/roll-operation-modal.component';
-import {
   HttpErrorModalComponent
 } from './components/http-error-modal/http-error-modal.component';
-
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
-    RollsPageComponent,
-    RollTypeModalComponent,
-    RollOperationModalComponent,
     HttpErrorModalComponent
   ],
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
-    ColorPickerModule,
-    ReactiveFormsModule
+    HttpClientModule
   ],
   providers: [
     UrlService,
     RollsService
   ],
   entryComponents: [
-    RollTypeModalComponent,
-    RollOperationModalComponent,
     HttpErrorModalComponent
   ],
   bootstrap: [AppComponent]
