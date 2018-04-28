@@ -150,8 +150,8 @@ export class RollsPageComponent implements OnInit {
       .then((data: RollOperation) => {
         this.rollsService.postRollOperation(data).subscribe(data => {
           console.log(data);
+          this.fetchTableData();
         });
-        this.fetchTableData();
       }, reason => {});
   }
 
