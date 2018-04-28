@@ -49,13 +49,6 @@ export class RollsPageComponent implements OnInit {
     this.showCurrentPeriod();
   }
 
-  private fetchTableData() {
-    this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
-      .subscribe(data => {
-        this.rollsInfo = data;        
-      });
-  }
-
   private initTableHeader(dateTo: Date) {
     this.toDate = dateTo;
     this.restDate = substructDays(dateTo, this.daysInTable);
@@ -69,8 +62,15 @@ export class RollsPageComponent implements OnInit {
       this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear)? this.monthYearMap.get(monthYear) + 1 : 1);
     }
     this.dateHeader = Array.from(this.monthYearMap.keys());
-      
   }
+
+  private fetchTableData() {
+    this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
+      .subscribe(data => {
+        this.rollsInfo = data;        
+      });
+  }
+
 
   showPreviousPeriod() {
     this.initTableHeader(substructDays(this.toDate, this.daysInTable));
