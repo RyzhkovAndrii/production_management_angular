@@ -133,7 +133,7 @@ export class RollsPageComponent implements OnInit {
         this.rollsService.putRollType(data)
           .subscribe(x => {
             rollType.id = x.id;
-            rollType.name = x.name;
+            rollType.note = x.note;
             rollType.colorCode = x.colorCode;
             rollType.thickness = x.thickness;
             rollType.weight = x.weight;

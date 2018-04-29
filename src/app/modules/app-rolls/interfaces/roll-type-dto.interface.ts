@@ -1,5 +1,5 @@
 interface RollTypeDTO {
-    name: string; 
+    note: string; 
     weight: number;
     colorCode: string;
     thickness: number;

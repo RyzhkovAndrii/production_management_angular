@@ -27,6 +27,7 @@ export class RollTypeModalComponent implements OnInit {
   @Input() rollType: RollType;
   @Input() title: string;
   colorCode;
+  readonly MAX_NOTE_LENGTH = 20;
 
   constructor(public activeModal: NgbActiveModal) {}
 
@@ -34,7 +35,7 @@ export class RollTypeModalComponent implements OnInit {
     this.colorCode = this.rollType ? this.rollType.colorCode : '#ffffff';
 
     this.form = new FormGroup({
-      name: new FormControl(this.rollType ? this.rollType.name : '', Validators.required),
+      note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
       colorCode: new FormControl(this.colorCode),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, 
         [Validators.required, Validators.min(this.MIN_THICKNESS)]),
@@ -46,7 +47,7 @@ export class RollTypeModalComponent implements OnInit {
   onSubmit() {
     const type: RollType = {
       id: undefined,
-      name: this.form.value.name,
+      note: this.form.value.note,
       colorCode: this.colorCode,
       thickness: this.form.value.thickness,
       weight: this.form.value.weight

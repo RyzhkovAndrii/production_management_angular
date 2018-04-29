@@ -1,6 +1,6 @@
 interface RollType {
     id: number;
-    name: string; 
+    note: string; 
     weight: number;
     colorCode: string;
     thickness: number;

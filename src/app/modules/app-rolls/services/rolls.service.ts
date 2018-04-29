@@ -41,7 +41,7 @@ export class RollsService {
   putRollType(rollType: RollType): Observable < RollType > {
     const requestUrl = `${this.urls.rollTypesUrl}/${String(rollType.id)}`;
     const dto: RollTypeDTO = {
-      name: rollType.name,
+      note: rollType.note,
       colorCode: rollType.colorCode,
       thickness: rollType.thickness,
       weight: rollType.weight

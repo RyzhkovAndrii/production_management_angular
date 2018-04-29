@@ -8,14 +8,14 @@
   <form [formGroup]="form">
     <div class="row">
       <div class="col-md-10">
-        <label for="roll-name" class="col-form-label">Название:</label>
-        <input type="text" class="form-control" id="roll-name" formControlName="name"
+        <label for="roll-name" class="col-form-label">Примечание:</label>
+        <input type="text" [maxlength]="MAX_NOTE_LENGTH" class="form-control" id="roll-name" formControlName="note"
         [ngClass]="{
-          'is-invalid': form.get('name').invalid && form.get('name').touched,
-          'is-valid': form.get('name').valid && form.get('name').touched
+          'is-invalid': form.get('note').invalid && form.get('note').touched,
+          'is-valid': form.get('note').valid && form.get('note').touched
         }">
         <div class="invalid-feedback">
-          Название не может быть пустым!
+          Максимальная длина {{ MAX_NOTE_LENGTH }}
         </div>
       </div>
       <div class="col-md-2">
