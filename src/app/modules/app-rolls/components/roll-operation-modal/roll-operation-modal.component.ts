@@ -13,11 +13,11 @@ import {
 } from '@angular/forms';
 import {
   RollOperationType
-} from '../enums/roll-operation-type.enum';
+} from '../../enums/roll-operation-type.enum';
 import {
   integerValidator
-} from '../../../app-utils/app-validators';
-import { midnightDate, formatDate } from '../../../app-utils/app-date-utils';
+} from '../../../../app-utils/app-validators';
+import { midnightDate, formatDate } from '../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-roll-operation-modal',

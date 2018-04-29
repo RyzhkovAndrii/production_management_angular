@@ -13,13 +13,13 @@ import {
 
 import {
   RollsPageComponent
-} from "./rolls-page.component";
+} from "./components/rolls-page/rolls-page.component";
 import {
   RollTypeModalComponent
-} from "./roll-type-modal/roll-type-modal.component";
+} from "./components/roll-type-modal/roll-type-modal.component";
 import {
   RollOperationModalComponent
-} from "./roll-operation-modal/roll-operation-modal.component";
+} from "./components/roll-operation-modal/roll-operation-modal.component";
 import {
   RollsRouting
 } from "./rolls-routing.module";

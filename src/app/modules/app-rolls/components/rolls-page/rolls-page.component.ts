@@ -10,22 +10,22 @@ import {
   getIndex,
   getDifferenceInDays,
   getDate
-} from '../../app-utils/app-date-utils';
+} from '../../../../app-utils/app-date-utils';
 import {
   RollsService
 } from '../../services/rolls.service';
 import {
   compareColors
-} from '../../app-utils/app-comparators';
+} from '../../../../app-utils/app-comparators';
 import {
   NgbModal
 } from '@ng-bootstrap/ng-bootstrap';
 import {
   RollTypeModalComponent
-} from './roll-type-modal/roll-type-modal.component';
-import { RollOperationModalComponent } from './roll-operation-modal/roll-operation-modal.component';
+} from '../roll-type-modal/roll-type-modal.component';
+import { RollOperationModalComponent } from '../roll-operation-modal/roll-operation-modal.component';
 import * as moment from 'moment';
-import { HttpErrorModalComponent } from '../../components/http-error-modal/http-error-modal.component';
+import { HttpErrorModalComponent } from '../../../../components/http-error-modal/http-error-modal.component';
 
 @Component({
   selector: 'app-rolls-page',

@@ -7,7 +7,7 @@ import {
 } from '@angular/router';
 import {
   RollsPageComponent
-} from './rolls-page.component';
+} from './components/rolls-page/rolls-page.component';
 
 const rollsRoutes: Routes = [{
   path: '',

@@ -16,7 +16,7 @@ const appRoutes: Routes = [{
   },
   {
     path: 'rolls',
-    loadChildren: '../rolls-page/rolls.module#RollsModule'
+    loadChildren: '../app-rolls/rolls.module#RollsModule'
   }
 ];
 

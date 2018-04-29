@@ -26,7 +26,7 @@ import {
 } from './services/url.service';
 import {
   RollsService
-} from './services/rolls.service';
+} from './modules/app-rolls/services/rolls.service';
 import {
   HttpErrorModalComponent
 } from './components/http-error-modal/http-error-modal.component';

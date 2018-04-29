@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {
   UrlService
-} from './url.service';
+} from '../../../services/url.service';
 import {
   HttpClient,
   HttpParams,
@@ -22,8 +22,8 @@ import {
 } from 'rxjs/Observable';
 import {
   formatDate
-} from '../app-utils/app-date-utils';
-import { httpErrorHandle } from '../app-utils/app-http-error-handler';
+} from '../../../app-utils/app-date-utils';
+import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 
 @Injectable()
 export class RollsService {
