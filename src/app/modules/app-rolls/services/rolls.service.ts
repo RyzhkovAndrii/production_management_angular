@@ -2,8 +2,8 @@ import {
   Injectable
 } from '@angular/core';
 import {
-  UrlService
-} from '../../../services/url.service';
+  RollsUrlService
+} from './rolls-url.service';
 import {
   HttpClient,
   HttpParams,
@@ -23,20 +23,22 @@ import {
 import {
   formatDate
 } from '../../../app-utils/app-date-utils';
-import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+import {
+  httpErrorHandle
+} from '../../../app-utils/app-http-error-handler';
 
 @Injectable()
 export class RollsService {
 
   headers = new HttpHeaders();
 
-  constructor(private urls: UrlService, private http: HttpClient) {}
+  constructor(private urls: RollsUrlService, private http: HttpClient) {}
 
   postRollOperation(rollOperation: RollOperation) {
-    return this.http.post(this.urls.rollOperationUrl, rollOperation).catch(httpErrorHandle);    
+    return this.http.post(this.urls.rollOperationUrl, rollOperation).catch(httpErrorHandle);
   }
 
-  putRollType(rollType: RollType): Observable<RollType> {
+  putRollType(rollType: RollType): Observable < RollType > {
     const requestUrl = `${this.urls.rollTypesUrl}/${String(rollType.id)}`;
     const dto: RollTypeDTO = {
       name: rollType.name,
@@ -44,11 +46,13 @@ export class RollsService {
       thickness: rollType.thickness,
       weight: rollType.weight
     }
-    return <Observable<RollType>>this.http.put(requestUrl, dto).catch(httpErrorHandle);
+    return <Observable < RollType >> this.http.put(requestUrl, dto).catch(httpErrorHandle);
   }
 
   getRollsInfo(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
-    return this.http.get(this.urls.rollTypesUrl, {headers: this.headers}).flatMap(
+    return this.http.get(this.urls.rollTypesUrl, {
+      headers: this.headers
+    }).flatMap(
       (data: RollType[]) => from(data)
       .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
         .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
@@ -69,7 +73,9 @@ export class RollsService {
   }
 
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
-    return this.http.post(this.urls.rollTypesUrl, rollType, {headers: this.headers}).map((createdRollType: RollType) => {
+    return this.http.post(this.urls.rollTypesUrl, rollType, {
+      headers: this.headers
+    }).map((createdRollType: RollType) => {
       return {
         rollType: createdRollType,
         rollBatches: new Array(daysInTable),

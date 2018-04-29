@@ -22,14 +22,11 @@ import {
   HomePageComponent
 } from './components/home-page/home-page.component';
 import {
-  UrlService
-} from './services/url.service';
-import {
-  RollsService
-} from './modules/app-rolls/services/rolls.service';
-import {
   HttpErrorModalComponent
 } from './components/http-error-modal/http-error-modal.component';
+import {
+  RestDetailsService
+} from './services/rest-details-service';
 
 @NgModule({
   declarations: [
@@ -44,8 +41,7 @@ import {
     HttpClientModule
   ],
   providers: [
-    UrlService,
-    RollsService
+    RestDetailsService
   ],
   entryComponents: [
     HttpErrorModalComponent

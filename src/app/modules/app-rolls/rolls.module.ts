@@ -10,6 +10,9 @@ import {
 import {
   ColorPickerModule
 } from 'ngx-color-picker';
+import {
+  NgbModule
+} from "@ng-bootstrap/ng-bootstrap";
 
 import {
   RollsPageComponent
@@ -23,7 +26,12 @@ import {
 import {
   RollsRouting
 } from "./rolls-routing.module";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import {
+  RollsService
+} from "./services/rolls.service";
+import {
+  RollsUrlService
+} from "./services/rolls-url.service";
 
 @NgModule({
   declarations: [RollsPageComponent,
@@ -40,6 +48,10 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
   entryComponents: [
     RollTypeModalComponent,
     RollOperationModalComponent
+  ],
+  providers: [
+    RollsService,
+    RollsUrlService
   ]
 })
 
