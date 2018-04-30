@@ -112,6 +112,10 @@ export class RollsPageComponent implements OnInit {
     return result;
   }
 
+  getWeight(rollType: RollType): string | number {
+    return rollType.minWeight == rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
+  }
+
   sortByColor(rollsInfo: RollInfo[]): RollInfo[] {
     return rollsInfo.sort((a, b) => compareColors(a.rollType.colorCode, b.rollType.colorCode));
   }

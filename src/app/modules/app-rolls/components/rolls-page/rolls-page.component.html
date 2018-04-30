@@ -43,7 +43,7 @@
             {{ rollInfo.rollType.thickness }}
           </th>
           <th scope="row" class="row-name">
-            {{ rollInfo.rollType.minWeight }}–{{ rollInfo.rollType.maxWeight }}
+            {{ getWeight(rollInfo.rollType) }}
           </th>
           <th scope="row" class="row-name">
             <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
