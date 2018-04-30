@@ -44,7 +44,8 @@ export class RollsService {
       note: rollType.note,
       colorCode: rollType.colorCode,
       thickness: rollType.thickness,
-      weight: rollType.weight
+      minWeight: rollType.minWeight,
+      maxWeight: rollType.maxWeight
     }
     return <Observable < RollType >> this.http.put(requestUrl, dto).catch(httpErrorHandle);
   }

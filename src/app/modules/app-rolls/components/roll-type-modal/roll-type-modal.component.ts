@@ -37,10 +37,9 @@ export class RollTypeModalComponent implements OnInit {
     this.form = new FormGroup({
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
       colorCode: new FormControl(this.colorCode),
-      thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, 
-        [Validators.required, Validators.min(this.MIN_THICKNESS)]),
-      weight: new FormControl(this.rollType ? this.rollType.weight : undefined, 
-        [Validators.required, Validators.min(this.MIN_WEIGHT)])
+      thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, [Validators.required, Validators.min(this.MIN_THICKNESS)]),
+      minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this)]),
+      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)])
     });
   }
 
@@ -50,8 +49,39 @@ export class RollTypeModalComponent implements OnInit {
       note: this.form.value.note,
       colorCode: this.colorCode,
       thickness: this.form.value.thickness,
-      weight: this.form.value.weight
-    }    
+      minWeight: this.form.value.minWeight,
+      maxWeight: this.form.value.maxWeight
+    }
     this.activeModal.close(type);
+  }
+
+  validateMinWeight(control: FormControl) {
+    if(control.value && this.form) {
+      if (control.value > this.form.get('maxWeight').value) {
+        return {
+          'greaterThenMax': true
+        };
+      }
+    }
+    return null;
+  }
+
+  validateMaxWeight(control: FormControl) {
+    if (control.value && this.form) {
+      if (control.value < this.form.get('minWeight').value) {
+        return {
+          'smallerThenMin': true
+        };
+      }
+    }
+    return null;
+  }
+
+  revalidateMinWeight() {
+    this.form.get('minWeight').updateValueAndValidity();
+  }
+
+  revalidateMaxWeight() {
+    this.form.get('maxWeight').updateValueAndValidity();
   }
 }

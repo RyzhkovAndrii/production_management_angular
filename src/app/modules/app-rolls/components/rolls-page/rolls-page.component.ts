@@ -23,9 +23,13 @@ import {
 import {
   RollTypeModalComponent
 } from '../roll-type-modal/roll-type-modal.component';
-import { RollOperationModalComponent } from '../roll-operation-modal/roll-operation-modal.component';
+import {
+  RollOperationModalComponent
+} from '../roll-operation-modal/roll-operation-modal.component';
 import * as moment from 'moment';
-import { HttpErrorModalComponent } from '../../../../components/http-error-modal/http-error-modal.component';
+import {
+  HttpErrorModalComponent
+} from '../../../../components/http-error-modal/http-error-modal.component';
 
 @Component({
   selector: 'app-rolls-page',
@@ -35,7 +39,8 @@ import { HttpErrorModalComponent } from '../../../../components/http-error-modal
 export class RollsPageComponent implements OnInit {
   daysHeader: Date[];
   dateHeader: string[];
-  monthYearMap: Map<string, number>;
+  monthYearMap: Map < string,
+  number > ;
   rollsInfo: RollInfo[] = [];
   daysInTable = 30;
   restDate: Date;
@@ -60,7 +65,7 @@ export class RollsPageComponent implements OnInit {
       const substructedDate = addDays(this.fromDate, i);
       this.daysHeader.push(substructedDate);
       const monthYear: string = moment(substructedDate).locale('ru').format('MMM YY');
-      this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear)? this.monthYearMap.get(monthYear) + 1 : 1);
+      this.monthYearMap.set(monthYear, this.monthYearMap.has(monthYear) ? this.monthYearMap.get(monthYear) + 1 : 1);
     }
     this.dateHeader = Array.from(this.monthYearMap.keys());
   }
@@ -68,7 +73,7 @@ export class RollsPageComponent implements OnInit {
   private fetchTableData() {
     this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
       .subscribe(data => {
-        this.rollsInfo = data;        
+        this.rollsInfo = data;
       }, error => this.openHttpErrorModal(error));
   }
 
@@ -96,7 +101,7 @@ export class RollsPageComponent implements OnInit {
     this.fetchTableData();
   }
 
-  getBatch(rollBatch: RollBatch): number | string {    
+  getBatch(rollBatch: RollBatch): number | string {
     if (rollBatch) return rollBatch.leftOverAmount;
     else return '';
   }
@@ -136,12 +141,13 @@ export class RollsPageComponent implements OnInit {
             rollType.note = x.note;
             rollType.colorCode = x.colorCode;
             rollType.thickness = x.thickness;
-            rollType.weight = x.weight;
+            rollType.minWeight = x.minWeight;
+            rollType.maxWeight = x.maxWeight;
           }, error => this.openHttpErrorModal(error))
       }, reason => {});
   }
 
-  openCreateRollOperationModal (batch: RollBatch, index: number, rollTypeId: number) {
+  openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
     const date = this.daysHeader[index];
     const modalRef = this.modalService.open(RollOperationModalComponent);
     modalRef.componentInstance.batch = batch;
@@ -155,13 +161,15 @@ export class RollsPageComponent implements OnInit {
       }, reason => {});
   }
 
-  isReady (batch: RollBatch) {
-    if(!batch) return false;
+  isReady(batch: RollBatch) {
+    if (!batch) return false;
     return getDifferenceInDays(new Date(), getDate(batch.dateManufactured)) >= this.DAYS_TO_READY;
   }
 
   openHttpErrorModal(messages: string[]) {
-    const modalRef = this.modalService.open(HttpErrorModalComponent, {size: 'lg'});
+    const modalRef = this.modalService.open(HttpErrorModalComponent, {
+      size: 'lg'
+    });
     modalRef.componentInstance.messages = messages;
   }
 }

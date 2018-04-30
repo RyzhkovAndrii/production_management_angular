@@ -1,6 +1,7 @@
 interface RollTypeDTO {
     note: string; 
-    weight: number;
+    minWeight: number;
+    maxWeight: number;
     colorCode: string;
     thickness: number;
 }
