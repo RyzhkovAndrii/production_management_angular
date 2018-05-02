@@ -41,8 +41,8 @@
       </thead>
       <tbody>
         <tr *ngFor="
-        let rollInfo of sortByColor(rollsInfo)">
-          <th scope="row" class="row-name" (click)="openEditRollTypeModal(rollInfo.rollType)">
+        let rollInfo of sortByColor(rollsInfo)" [contextMenu]="rollsMenu" [contextMenuSubject]="rollInfo.rollType">
+          <th scope="row" class="row-name">
             {{ rollInfo.rollType.note }}
           </th>
           <th scope="row" class="row-name">
@@ -73,3 +73,13 @@
     </table>
   </div>
 </div>
+
+<context-menu #rollsMenu>  
+ <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">  
+  Редактировать рулон
+ </ng-template>  
+ <ng-template contextMenuItem divider="true"></ng-template>  
+ <ng-template contextMenuItem let-item (execute)="showMessage($event.item)">  
+  Список операций
+ </ng-template>
+</context-menu>  

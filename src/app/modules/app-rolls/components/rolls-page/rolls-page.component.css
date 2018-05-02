@@ -24,3 +24,8 @@ app-roll-check {
 table {
   margin-bottom: 10%;
 }
+
+::ng-deep .dropdown-item {
+  font-size: 0.9rem;
+  padding: .1rem 1rem;
+}

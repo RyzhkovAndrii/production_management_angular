@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import {
   substructDays,
@@ -33,6 +34,9 @@ import {
 import {
   CheckStatus
 } from '../../enums/check-status.enum';
+import {
+  ContextMenuComponent
+} from 'ngx-contextmenu';
 
 @Component({
   selector: 'app-rolls-page',
@@ -51,6 +55,8 @@ export class RollsPageComponent implements OnInit {
   toDate = midnightDate();
   rollChecks = new Map < number,
   RollCheck > ();
+
+  @ViewChild(ContextMenuComponent) public rollsMenu: ContextMenuComponent;
 
   private readonly DAYS_TO_READY = 15;
 
@@ -76,16 +82,16 @@ export class RollsPageComponent implements OnInit {
   }
 
   private fetchTableData() {
-    if(this.isPreviousPeriod()) {
+    if (this.isPreviousPeriod()) {
       this.rollsService.getRollsInfoWithoutCheck(this.restDate, this.fromDate, this.toDate)
-      .subscribe(data => {
-        this.rollsInfo = data;
-      }, error => this.openHttpErrorModal(error));
+        .subscribe(data => {
+          this.rollsInfo = data;
+        }, error => this.openHttpErrorModal(error));
     } else {
-    this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
-      .subscribe(data => {
-        this.rollsInfo = data;
-      }, error => this.openHttpErrorModal(error));
+      this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
+        .subscribe(data => {
+          this.rollsInfo = data;
+        }, error => this.openHttpErrorModal(error));
     }
   }
 
@@ -198,10 +204,14 @@ export class RollsPageComponent implements OnInit {
   submitRollChecks() {
     this.rollsService.putRollChecks(Array.from(this.rollChecks.values()))
       .subscribe(data => {
-        if(data.length != 0){
+        if (data.length != 0) {
           this.fetchTableData();
           this.rollChecks.clear();
         }
       }, error => this.openHttpErrorModal(error));
+  }
+
+  showMessage(value) {
+    console.log(value);
   }
 }

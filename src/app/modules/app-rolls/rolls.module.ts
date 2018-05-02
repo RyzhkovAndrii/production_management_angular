@@ -17,6 +17,9 @@ import {
 import {
   NgSelectModule
 } from "@ng-select/ng-select";
+import {
+  ContextMenuModule
+} from "ngx-contextmenu";
 
 import {
   RollsPageComponent
@@ -53,7 +56,10 @@ import {
     ColorPickerModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    ContextMenuModule.forRoot({
+      useBootstrap4: true
+    })
   ],
   entryComponents: [
     RollTypeModalComponent,
