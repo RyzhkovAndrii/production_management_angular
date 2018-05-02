@@ -18,3 +18,7 @@
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:hover {
     background-color: rgb(220, 239, 255);
 }
+
+::ng-deep .ng-dropdown-panel {
+    display: flex;
+}
