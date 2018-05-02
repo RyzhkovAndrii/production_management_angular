@@ -85,7 +85,11 @@ export class RollsService {
       .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
         .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
           .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
-            .flatMap((totalOver: RollLeftover) => of(<RollCheck>{})
+            .flatMap((totalOver: RollLeftover) => of(<RollCheck>{
+              id: undefined,
+              rollTypeId: undefined,
+              rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
+            })
               .flatMap((rollCheck: RollCheck) => {
                 const rollInfo: RollInfo = {
                   rollType: type,
