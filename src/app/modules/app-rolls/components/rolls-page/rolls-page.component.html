@@ -20,7 +20,7 @@
         <tr class="table-header">
           <th scope="col" colspan="4"></th>
           <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
-          <th scope="col">
+          <th scope="col" *ngIf="!isPreviousPeriod()">
             <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
               <span class="material-icons">save</span>
             </button>
@@ -36,7 +36,7 @@
             {{ day.getDate() }}
           </th>
           <th scope="col">Всего</th>
-          <th scope="col">Проверка</th>
+          <th scope="col" *ngIf="!isPreviousPeriod()">Проверка</th>
         </tr>
       </thead>
       <tbody>
@@ -65,7 +65,7 @@
           <td>
             {{ rollInfo.totalRollLeftover.amount }}
           </td>
-          <td>
+          <td *ngIf="!isPreviousPeriod()">
             <app-roll-check [rollCheck]="rollInfo.rollCheck" (changeCheckStatus)="onChangeRollCheck($event)"></app-roll-check>
           </td>
         </tr>

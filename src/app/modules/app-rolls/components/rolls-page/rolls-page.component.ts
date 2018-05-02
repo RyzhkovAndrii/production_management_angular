@@ -76,10 +76,17 @@ export class RollsPageComponent implements OnInit {
   }
 
   private fetchTableData() {
+    if(this.isPreviousPeriod()) {
+      this.rollsService.getRollsInfoWithoutCheck(this.restDate, this.fromDate, this.toDate)
+      .subscribe(data => {
+        this.rollsInfo = data;
+      }, error => this.openHttpErrorModal(error));
+    } else {
     this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
       .subscribe(data => {
         this.rollsInfo = data;
       }, error => this.openHttpErrorModal(error));
+    }
   }
 
 
@@ -94,11 +101,13 @@ export class RollsPageComponent implements OnInit {
   }
 
   isPreviousPeriod() {
-    return this.toDate.getTime() < midnightDate().getTime();
+    const accuracy = 10000;
+    return this.toDate.getTime() + accuracy < midnightDate().getTime();
   }
 
   isBeforePreviousPeriod() {
-    return this.toDate.getTime() < substructDays(midnightDate(), this.daysInTable).getTime();
+    const accuracy = 10000;
+    return this.toDate.getTime() + accuracy < substructDays(midnightDate(), this.daysInTable).getTime();
   }
 
   showCurrentPeriod() {

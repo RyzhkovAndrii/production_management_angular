@@ -77,6 +77,32 @@ export class RollsService {
     ).toArray().catch(httpErrorHandle);
   }
 
+  getRollsInfoWithoutCheck(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
+    return this.http.get(this.urls.rollTypesUrl, {
+      headers: this.headers
+    }).flatMap(
+      (data: RollType[]) => from(data)
+      .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
+        .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
+          .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
+            .flatMap((totalOver: RollLeftover) => of(<RollCheck>{})
+              .flatMap((rollCheck: RollCheck) => {
+                const rollInfo: RollInfo = {
+                  rollType: type,
+                  rollBatches: batches,
+                  restRollLeftover: restOver,
+                  totalRollLeftover: totalOver,
+                  rollCheck
+                };
+                return of(rollInfo);
+              })
+            )
+          )
+        )
+      )
+    ).toArray().catch(httpErrorHandle);
+  }
+
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
       headers: this.headers
