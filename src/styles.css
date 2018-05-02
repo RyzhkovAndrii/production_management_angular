@@ -50,3 +50,9 @@ td:hover,
 .table-striped>tbody>tr:nth-child(even)>td:hover {
   background-color: #f2f2f2;
 }
+
+@media screen and (max-width: 1400px) {
+  table {
+    font-size: 0.9rem !important;
+  }
+}
