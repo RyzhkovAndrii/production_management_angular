@@ -1,4 +1,4 @@
-<ng-select [(ngModel)]="selectedModel" [items]="items" class="table-select" [searchable]="false" [clearable]="false" bindLabel="label"
+<ng-select [(ngModel)]="selectedModel" [items]="items" [searchable]="false" [clearable]="false" bindLabel="label"
   appendTo="ng-select" (change)="changeRollCheck($event)">
   <ng-template ng-label-tmp let-item="item">
     <span class="material-icons" [ngClass]="item.clazz">{{ item.label }}</span>
