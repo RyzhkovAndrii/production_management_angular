@@ -189,8 +189,10 @@ export class RollsPageComponent implements OnInit {
   submitRollChecks() {
     this.rollsService.putRollChecks(Array.from(this.rollChecks.values()))
       .subscribe(data => {
-        this.fetchTableData();
-        this.rollChecks.clear();
+        if(data.length != 0){
+          this.fetchTableData();
+          this.rollChecks.clear();
+        }
       }, error => this.openHttpErrorModal(error));
   }
 }
