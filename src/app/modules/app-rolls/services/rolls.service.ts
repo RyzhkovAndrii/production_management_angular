@@ -26,6 +26,7 @@ import {
 import {
   httpErrorHandle
 } from '../../../app-utils/app-http-error-handler';
+import { CheckStatus } from '../enums/check-status.enum';
 
 @Injectable()
 export class RollsService {
@@ -58,15 +59,18 @@ export class RollsService {
       .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
         .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
           .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
-            .flatMap((totalOver: RollLeftover) => {
-              const rollInfo: RollInfo = {
-                rollType: type,
-                rollBatches: batches,
-                restRollLeftover: restOver,
-                totalRollLeftover: totalOver,
-              };
-              return of(rollInfo);
-            })
+            .flatMap((totalOver: RollLeftover) => this.getRollCheck(type.id)
+              .flatMap((rollCheck: RollCheck) => {
+                const rollInfo: RollInfo = {
+                  rollType: type,
+                  rollBatches: batches,
+                  restRollLeftover: restOver,
+                  totalRollLeftover: totalOver,
+                  rollCheck
+                };
+                return of(rollInfo);
+              })
+            )
           )
         )
       )
@@ -77,7 +81,7 @@ export class RollsService {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
       headers: this.headers
     }).map((createdRollType: RollType) => {
-      return {
+      const info: RollInfo = {
         rollType: createdRollType,
         rollBatches: new Array(daysInTable),
         restRollLeftover: {
@@ -89,8 +93,14 @@ export class RollsService {
           date: formatDate(toDate),
           rollTypeId: createdRollType.id,
           amount: 0
+        },
+        rollCheck: {
+          id: createdRollType.id,
+          rollTypeId: createdRollType.id,
+          rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
         }
-      }
+      };
+      return info
     }).catch(httpErrorHandle);
   }
 
@@ -108,6 +118,15 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
+  getRollCheck(rollTypeId: number) {
+    const params = new HttpParams()
+      .append('roll_type_id', String(rollTypeId));
+    return this.http.get(this.urls.rollChecksUrl, {
+      params,
+      headers: this.headers
+    }).catch(httpErrorHandle);
+  }
+
   getRollLeftoverByRollIdAndDate(rollTypeId: number, date: Date) {
     const params = new HttpParams({
       fromObject: {
@@ -119,5 +138,17 @@ export class RollsService {
       params,
       headers: this.headers
     }).catch(httpErrorHandle);
+  }
+
+  putRollChecks(rollChecks: RollCheck[]): Observable<RollCheck[]> {
+    return from(rollChecks).flatMap((value) => this.putRollChek(value)).toArray();
+  }
+
+  putRollChek(rollCheck: RollCheck): Observable<RollCheck> {
+    const url = `${this.urls.rollChecksUrl}/${rollCheck.id}`;
+    const body: RollCheckRequest = {
+      rollLeftOverCheckStatus: rollCheck.rollLeftOverCheckStatus
+    };
+    return this.http.put(url, body).catch(httpErrorHandle);
   }
 }

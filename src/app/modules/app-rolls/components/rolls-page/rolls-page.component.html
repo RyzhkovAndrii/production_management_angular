@@ -14,12 +14,17 @@
     Текущий период
     <span class="material-icons">timelapse</span>
   </button>
-  <div class="table-responsive">
+  <div class="table-responsive rolls-table">
     <table class="table table-bordered table-striped table-sm">
       <thead>
         <tr class="table-header">
           <th scope="col" colspan="4"></th>
           <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
+          <th scope="col">
+            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
+              <span class="material-icons">save</span>
+            </button>
+          </th>
         </tr>
         <tr class="table-header">
           <th scope="col" class="row-name">Примечание</th>
@@ -31,6 +36,7 @@
             {{ day.getDate() }}
           </th>
           <th scope="col">Всего</th>
+          <th scope="col">Проверка</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +64,9 @@
           </td>
           <td>
             {{ rollInfo.totalRollLeftover.amount }}
+          </td>
+          <td>
+            <app-roll-check [rollCheck]="rollInfo.rollCheck" (changeCheckStatus)="onChangeRollCheck($event)"></app-roll-check>
           </td>
         </tr>
       </tbody>

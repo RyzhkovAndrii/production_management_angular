@@ -15,3 +15,12 @@ button {
 th, td {
   white-space: nowrap;
 }
+
+app-roll-check {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  margin-bottom: 10%;
+}

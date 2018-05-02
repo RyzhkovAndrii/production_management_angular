@@ -13,6 +13,7 @@ export class RollsUrlService {
   rollBatchUrl = `${this.host}/roll-batches`;
   rollLeftoverUrl = `${this.host}/roll-leftovers`;
   rollOperationUrl = `${this.host}/roll-operations`;
-  
+  rollChecksUrl = `${this.host}/roll-checks`;
+
   constructor(private restDetails: RestDetailsService) {}
 }

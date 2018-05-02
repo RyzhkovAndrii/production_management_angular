@@ -3,4 +3,5 @@ interface RollInfo {
     rollBatches: RollBatch[],
     restRollLeftover: RollLeftover,
     totalRollLeftover: RollLeftover 
+    rollCheck: RollCheck;
 }

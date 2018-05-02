@@ -30,6 +30,9 @@ import * as moment from 'moment';
 import {
   HttpErrorModalComponent
 } from '../../../../components/http-error-modal/http-error-modal.component';
+import {
+  CheckStatus
+} from '../../enums/check-status.enum';
 
 @Component({
   selector: 'app-rolls-page',
@@ -46,6 +49,8 @@ export class RollsPageComponent implements OnInit {
   restDate: Date;
   fromDate: Date;
   toDate = midnightDate();
+  rollChecks = new Map < number,
+  RollCheck > ();
 
   private readonly DAYS_TO_READY = 15;
 
@@ -175,5 +180,17 @@ export class RollsPageComponent implements OnInit {
       size: 'lg'
     });
     modalRef.componentInstance.messages = messages;
+  }
+
+  onChangeRollCheck(rollCheck: RollCheck) {
+    this.rollChecks.set(rollCheck.id, rollCheck);
+  }
+
+  submitRollChecks() {
+    this.rollsService.putRollChecks(Array.from(this.rollChecks.values()))
+      .subscribe(data => {
+        this.fetchTableData();
+        this.rollChecks.clear();
+      }, error => this.openHttpErrorModal(error));
   }
 }

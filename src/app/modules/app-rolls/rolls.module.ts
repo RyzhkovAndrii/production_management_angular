@@ -5,7 +5,8 @@ import {
   CommonModule
 } from "@angular/common";
 import {
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  FormsModule
 } from "@angular/forms";
 import {
   ColorPickerModule
@@ -13,6 +14,9 @@ import {
 import {
   NgbModule
 } from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgSelectModule
+} from "@ng-select/ng-select";
 
 import {
   RollsPageComponent
@@ -32,18 +36,24 @@ import {
 import {
   RollsUrlService
 } from "./services/rolls-url.service";
+import {
+  RollCheckComponent
+} from './components/roll-check/roll-check.component';
 
 @NgModule({
   declarations: [RollsPageComponent,
     RollTypeModalComponent,
-    RollOperationModalComponent
+    RollOperationModalComponent,
+    RollCheckComponent
   ],
   imports: [
     CommonModule,
     NgbModule.forRoot(),
     RollsRouting,
     ColorPickerModule,
-    ReactiveFormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule
   ],
   entryComponents: [
     RollTypeModalComponent,
