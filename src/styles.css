@@ -53,6 +53,9 @@ td:hover,
 
 @media screen and (max-width: 1400px) {
   table {
-    font-size: 0.9rem !important;
+    font-size: 0.8rem !important;
+  }
+  .filled-circle {
+    padding: 0.1rem 0.65rem;
   }
 }
