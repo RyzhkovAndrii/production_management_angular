@@ -41,7 +41,7 @@
       </thead>
       <tbody>
         <tr *ngFor="
-        let rollInfo of sortByColor(rollsInfo)" [contextMenu]="rollsMenu" [contextMenuSubject]="rollInfo.rollType">
+        let rollInfo of sortByColorAndRollTypeId(rollsInfo)" [contextMenu]="rollsMenu" [contextMenuSubject]="rollInfo.rollType">
           <th scope="row" class="row-name">
             {{ rollInfo.rollType.note }}
           </th>

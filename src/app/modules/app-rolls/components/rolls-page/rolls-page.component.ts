@@ -142,8 +142,11 @@ export class RollsPageComponent implements OnInit {
     return rollType.minWeight == rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
   }
 
-  sortByColor(rollsInfo: RollInfo[]): RollInfo[] {
-    return rollsInfo.sort((a, b) => compareColors(a.rollType.colorCode, b.rollType.colorCode));
+  sortByColorAndRollTypeId(rollsInfo: RollInfo[]): RollInfo[] {
+    return rollsInfo.sort((a, b) => {
+      const colorSortValue = compareColors(a.rollType.colorCode, b.rollType.colorCode);
+      return colorSortValue != 0 ? colorSortValue : a.rollType.id - b.rollType.id;
+    });
   }
 
   openAddRollTypeModal() {
