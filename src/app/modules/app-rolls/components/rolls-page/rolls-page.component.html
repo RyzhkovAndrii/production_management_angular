@@ -58,7 +58,10 @@
             {{ rollInfo.restRollLeftover.amount }}
           </td>
           <td *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)">
-            <div [ngClass]="{'roll-ready': isReady(batch)}">
+            <div [ngClass]="{
+              'roll-ready': isReady(batch),
+              'roll-not-ready': !isReady(batch)
+            }">
               {{ getBatch(batch) }}
             </div>
           </td>
