@@ -22,17 +22,13 @@ import {
   HomePageComponent
 } from './components/home-page/home-page.component';
 import {
-  HttpErrorModalComponent
-} from './components/http-error-modal/http-error-modal.component';
-import {
   RestDetailsService
 } from './services/rest-details-service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
-    HttpErrorModalComponent
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
@@ -42,9 +38,6 @@ import {
   ],
   providers: [
     RestDetailsService
-  ],
-  entryComponents: [
-    HttpErrorModalComponent
   ],
   bootstrap: [AppComponent]
 })

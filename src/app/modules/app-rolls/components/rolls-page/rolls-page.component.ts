@@ -1,7 +1,8 @@
 import {
   Component,
   OnInit,
-  ViewChild
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import {
   substructDays,
@@ -22,21 +23,26 @@ import {
   NgbModal
 } from '@ng-bootstrap/ng-bootstrap';
 import {
+  ContextMenuComponent
+} from 'ngx-contextmenu';
+import {
+  ModalDialogService,
+  IModalDialogOptions
+} from 'ngx-modal-dialog';
+import * as moment from 'moment';
+
+import {
   RollTypeModalComponent
 } from '../roll-type-modal/roll-type-modal.component';
 import {
   RollOperationModalComponent
 } from '../roll-operation-modal/roll-operation-modal.component';
-import * as moment from 'moment';
 import {
   HttpErrorModalComponent
-} from '../../../../components/http-error-modal/http-error-modal.component';
+} from '../../../app-shared/components/http-error-modal/http-error-modal.component';
 import {
   CheckStatus
 } from '../../enums/check-status.enum';
-import {
-  ContextMenuComponent
-} from 'ngx-contextmenu';
 
 @Component({
   selector: 'app-rolls-page',
@@ -60,7 +66,7 @@ export class RollsPageComponent implements OnInit {
 
   private readonly DAYS_TO_READY = 15;
 
-  constructor(private rollsService: RollsService, private modalService: NgbModal) {}
+  constructor(private rollsService: RollsService, private ngxModalService: ModalDialogService, private viewRef: ViewContainerRef) {}
 
   ngOnInit() {
     this.showCurrentPeriod();
@@ -141,48 +147,73 @@ export class RollsPageComponent implements OnInit {
   }
 
   openAddRollTypeModal() {
-    const modalRef = this.modalService.open(RollTypeModalComponent);
-    modalRef.componentInstance.title = 'Новый рулон';
-    modalRef.result
-      .then((data: RollType) => {
-        this.rollsService.postRollType(data, this.daysInTable, this.restDate, this.toDate)
-          .subscribe(rollInfo => {
-            this.rollsInfo.push(rollInfo);
-          }, error => this.openHttpErrorModal(error));
-      }, reason => {});
+    const operation = (result: Promise < RollType > ) => {
+      result
+        .then((resolve: RollType) => {
+          this.rollsService.postRollType(resolve, this.daysInTable, this.restDate, this.toDate)
+            .subscribe(rollInfo => {
+              this.rollsInfo.push(rollInfo);
+            }, error => this.openHttpErrorModal(error));
+        }, reject => {});
+    };
+    const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
+      title: 'Новый рулон',
+      childComponent: RollTypeModalComponent,
+      data: {
+        operation: operation.bind(this)
+      }
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 
   openEditRollTypeModal(rollType: RollType) {
-    const modalRef = this.modalService.open(RollTypeModalComponent);
-    modalRef.componentInstance.rollType = rollType;
-    modalRef.componentInstance.title = 'Редактирование рулона';
-    modalRef.result
-      .then((data: RollType) => {
-        data.id = rollType.id;
-        this.rollsService.putRollType(data)
-          .subscribe(x => {
-            rollType.id = x.id;
-            rollType.note = x.note;
-            rollType.colorCode = x.colorCode;
-            rollType.thickness = x.thickness;
-            rollType.minWeight = x.minWeight;
-            rollType.maxWeight = x.maxWeight;
-          }, error => this.openHttpErrorModal(error))
-      }, reason => {});
+    const operation = (result: Promise < RollType > ) => {
+      result
+        .then((resolve: RollType) => {
+          resolve.id = rollType.id;
+          this.rollsService.putRollType(resolve)
+            .subscribe(x => {
+              rollType.id = x.id;
+              rollType.note = x.note;
+              rollType.colorCode = x.colorCode;
+              rollType.thickness = x.thickness;
+              rollType.minWeight = x.minWeight;
+              rollType.maxWeight = x.maxWeight;
+            }, error => this.openHttpErrorModal(error))
+        }, reject => {});
+    };
+    const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
+      title: 'Редактирование рулона',
+      childComponent: RollTypeModalComponent,
+      data: {
+        rollType: rollType,
+        operation: operation.bind(this)
+      }
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 
   openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
-    const date = this.daysHeader[index];
-    const modalRef = this.modalService.open(RollOperationModalComponent);
-    modalRef.componentInstance.batch = batch;
-    modalRef.componentInstance.manufacturedDate = date;
-    modalRef.componentInstance.rollTypeId = rollTypeId;
-    modalRef.result
-      .then((data: RollOperation) => {
-        this.rollsService.postRollOperation(data).subscribe(data => {
-          this.fetchTableData();
-        }, error => this.openHttpErrorModal(error));
-      }, reason => {});
+    const operation = (result: Promise < RollOperation > ) => {
+      result
+        .then((resolve: RollOperation) => {
+          this.rollsService.postRollOperation(resolve).subscribe(data => {
+            this.fetchTableData();
+          }, error => this.openHttpErrorModal(error));
+        }, reject => {});
+    }
+
+    const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
+      title: 'Операция над рулонами',
+      childComponent: RollOperationModalComponent,
+      data: {
+        batch,
+        rollTypeId,
+        manufacturedDate: this.daysHeader[index],
+        operation: operation.bind(this)
+      }
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 
   isReady(batch: RollBatch) {
@@ -191,10 +222,12 @@ export class RollsPageComponent implements OnInit {
   }
 
   openHttpErrorModal(messages: string[]) {
-    const modalRef = this.modalService.open(HttpErrorModalComponent, {
-      size: 'lg'
-    });
-    modalRef.componentInstance.messages = messages;
+    const modalOptions: Partial < IModalDialogOptions < string[] >> = {
+      title: 'Ошибка',
+      childComponent: HttpErrorModalComponent,
+      data: messages
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions)
   }
 
   onChangeRollCheck(rollCheck: RollCheck) {

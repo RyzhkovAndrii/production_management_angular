@@ -20,6 +20,9 @@ import {
 import {
   ContextMenuModule
 } from "ngx-contextmenu";
+import {
+  ModalDialogModule
+} from "ngx-modal-dialog";
 
 import {
   RollsPageComponent
@@ -42,6 +45,9 @@ import {
 import {
   RollCheckComponent
 } from './components/roll-check/roll-check.component';
+import {
+  AppSharedModule
+} from "../app-shared/app-shared.module";
 
 @NgModule({
   declarations: [RollsPageComponent,
@@ -59,7 +65,9 @@ import {
     NgSelectModule,
     ContextMenuModule.forRoot({
       useBootstrap4: true
-    })
+    }),
+    ModalDialogModule.forRoot(),
+    AppSharedModule
   ],
   entryComponents: [
     RollTypeModalComponent,

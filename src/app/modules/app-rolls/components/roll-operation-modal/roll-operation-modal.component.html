@@ -1,48 +1,36 @@
-<div class="modal-header">
-  <h4 class="modal-title">Операция над рулонами</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div *ngIf="batch">
+  <h6>
+    Текущий остаток: {{ batch.leftOverAmount }}
+  </h6>
+  <hr>
 </div>
-<div class="modal-body">
-  <div *ngIf="batch">
-    <h6>
-      Текущий остаток: {{ batch.leftOverAmount }}
-    </h6>
-    <hr>
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="operation-type">Тип операции:</label>
+    <select class="form-control" id="operation-type" formControlName="operationType" (change)="revalidateAmount()">
+      <option value="MANUFACTURE" selected>Производство</option>
+      <option value="USE">Использование</option>
+    </select>
   </div>
-  <form [formGroup]="form">
-    <div class="form-group">
-      <label for="operation-type">Тип операции:</label>
-      <select class="form-control" id="operation-type" formControlName="operationType" (change)="revalidateAmount()">
-        <option value="MANUFACTURE" selected>Производство</option>
-        <option value="USE">Использование</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="roll-amount">Количество рулонов:</label>
-      <input type="number" min="0" step="1" class="form-control" id="roll-amount" formControlName="rollAmount" [ngClass]="{
-        'is-invalid': form.get('rollAmount').invalid && form.get('rollAmount').touched,
-        'is-valid': form.get('rollAmount').valid && form.get('rollAmount').touched
+  <div class="form-group">
+    <label for="roll-amount">Количество рулонов:</label>
+    <input type="number" min="0" step="1" class="form-control" id="roll-amount" formControlName="rollAmount" [ngClass]="{
+        'is-invalid': form.get('rollAmount').invalid && isTouched('rollAmount'),
+        'is-valid': form.get('rollAmount').valid && isTouched('rollAmount')
       }">
-      <div class="invalid-feedback" *ngIf="form.get('rollAmount').invalid && form.get('rollAmount').touched">
-        <span *ngIf="form.get('rollAmount').errors['required']">
-          Количество рулонов не может быть пустым!
-        </span>
-        <span *ngIf="form.get('rollAmount').errors['min']">
-          Минимальное количество рулонов для операции: {{ MIN_ROLL_AMOUNT }}
-        </span>
-        <span *ngIf="form.get('rollAmount').errors['greaterThanLeftError']">
-          При использовании количество рулонов не может быть больше чем текущий остаток: {{ batch.leftAmount }}
-        </span>
-        <span *ngIf="form.get('rollAmount').errors['notIntegerError']">
-          Количество рулонов должно быть целым числом!
-        </span>
-      </div>
+    <div class="invalid-feedback" *ngIf="form.get('rollAmount').invalid && isTouched('rollAmount')">
+      <span *ngIf="form.get('rollAmount').errors['required']">
+        Количество рулонов не может быть пустым!
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['min']">
+        Минимальное количество рулонов для операции: {{ MIN_ROLL_AMOUNT }}
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['greaterThanLeftError']">
+        При использовании количество рулонов не может быть больше чем текущий остаток: {{ batch.leftAmount }}
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['notIntegerError']">
+        Количество рулонов должно быть целым числом!
+      </span>
     </div>
-  </form>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" (click)="activeModal.dismiss('cancel')">Отмена</button>
-  <button type="button" class="btn btn-outline-dark" (click)="onSubmit()" [disabled]="form.invalid">Произвести операцию</button>
-</div>
+  </div>
+</form>
