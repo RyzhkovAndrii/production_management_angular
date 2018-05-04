@@ -48,12 +48,16 @@ import {
 import {
   AppSharedModule
 } from "../app-shared/app-shared.module";
+import {
+  RollOperationsPageComponent
+} from './components/roll-operations-page/roll-operations-page.component';
 
 @NgModule({
   declarations: [RollsPageComponent,
     RollTypeModalComponent,
     RollOperationModalComponent,
-    RollCheckComponent
+    RollCheckComponent,
+    RollOperationsPageComponent
   ],
   imports: [
     CommonModule,

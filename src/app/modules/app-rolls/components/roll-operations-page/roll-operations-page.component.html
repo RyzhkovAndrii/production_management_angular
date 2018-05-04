@@ -1,0 +1,28 @@
+<div class="container-fluid mt-4">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped" *ngIf="showOperations()">
+      <thead>
+        <tr class="table-header">
+          <th scope="col">Тип операции</th>
+          <th scope="col">Дата операции</th>
+          <th scope="col">Дата производства</th>
+          <th scope="col">Количество</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let operation of rollOperations">
+          <td>{{ getOperationType(operation.operationType) }}</td>
+          <td>{{ operation.operationDate }}</td>
+          <td>{{ operation.manufacturedDate }}</td>
+          <td>{{ operation.rollAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="!showOperations()">
+  <hr>
+  <h2 class="d-flex justify-content-center">
+    За данный период нет операций
+  </h2>
+</div>

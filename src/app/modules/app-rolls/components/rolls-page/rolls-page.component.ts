@@ -5,6 +5,22 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
+  Router,
+  ActivatedRoute
+} from '@angular/router';
+import {
+  NgbModal
+} from '@ng-bootstrap/ng-bootstrap';
+import {
+  ContextMenuComponent
+} from 'ngx-contextmenu';
+import {
+  ModalDialogService,
+  IModalDialogOptions
+} from 'ngx-modal-dialog';
+import * as moment from 'moment';
+
+import {
   substructDays,
   midnightDate,
   addDays,
@@ -20,18 +36,6 @@ import {
   compareColors
 } from '../../../../app-utils/app-comparators';
 import {
-  NgbModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
-  ContextMenuComponent
-} from 'ngx-contextmenu';
-import {
-  ModalDialogService,
-  IModalDialogOptions
-} from 'ngx-modal-dialog';
-import * as moment from 'moment';
-
-import {
   RollTypeModalComponent
 } from '../roll-type-modal/roll-type-modal.component';
 import {
@@ -43,6 +47,7 @@ import {
 import {
   CheckStatus
 } from '../../enums/check-status.enum';
+
 
 @Component({
   selector: 'app-rolls-page',
@@ -66,7 +71,12 @@ export class RollsPageComponent implements OnInit {
 
   private readonly DAYS_TO_READY = 15;
 
-  constructor(private rollsService: RollsService, private ngxModalService: ModalDialogService, private viewRef: ViewContainerRef) {}
+  constructor(
+    private rollsService: RollsService,
+    private ngxModalService: ModalDialogService,
+    private viewRef: ViewContainerRef,
+    private router: Router,
+    private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.showCurrentPeriod();
@@ -249,5 +259,16 @@ export class RollsPageComponent implements OnInit {
 
   showMessage(value) {
     console.log(value);
+  }
+
+  openRollOperationsPage(item: RollType) {
+    this.router.navigate(['operations'], {
+      relativeTo: this.route,
+      queryParams: {
+        'roll_type_id': item.id,
+        'from': formatDate(this.fromDate),
+        'to': formatDate(this.toDate)
+      }
+    });
   }
 }
