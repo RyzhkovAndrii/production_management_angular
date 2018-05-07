@@ -4,4 +4,5 @@ interface RollBatch {
     manufacturedAmount: number;
     usedAmount: number;
     leftOverAmount: number;
+    readyToUse: boolean;
 }

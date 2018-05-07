@@ -68,9 +68,7 @@ export class RollsPageComponent implements OnInit {
   RollCheck > ();
 
   @ViewChild(ContextMenuComponent) public rollsMenu: ContextMenuComponent;
-
-  private readonly DAYS_TO_READY = 15;
-
+  
   constructor(
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
@@ -233,7 +231,7 @@ export class RollsPageComponent implements OnInit {
 
   isReady(batch: RollBatch) {
     if (!batch) return false;
-    return getDifferenceInDays(new Date(), getDate(batch.dateManufactured)) >= this.DAYS_TO_READY;
+    return batch.readyToUse;
   }
 
   openHttpErrorModal(messages: string[]) {
