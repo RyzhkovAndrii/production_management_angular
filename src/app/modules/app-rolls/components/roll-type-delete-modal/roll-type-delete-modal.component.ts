@@ -38,6 +38,10 @@ export class RollTypeDeleteModalComponent implements OnInit, IModalDialog {
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
     this.options = options;
+    options.settings = {
+      bodyClass: 'modal-body p-0',
+      footerClass: 'modal-footer border-top-0'
+    };
   };
 
   onDelete() {
