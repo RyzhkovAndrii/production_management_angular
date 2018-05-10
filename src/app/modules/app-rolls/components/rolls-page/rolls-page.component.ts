@@ -280,7 +280,7 @@ export class RollsPageComponent implements OnInit {
       result.then((resolve: RollType) => {
         this.rollsService.deleteRollType(resolve.id)
           .subscribe(data => {
-            this.fetchTableData();
+            this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != resolve.id);
           }, error => this.openHttpErrorModal(error));
       }, reject => {});
     }
