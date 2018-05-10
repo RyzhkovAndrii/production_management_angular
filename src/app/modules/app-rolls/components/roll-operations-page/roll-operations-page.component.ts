@@ -22,6 +22,9 @@ import {
 import {
   HttpErrorModalComponent
 } from '../../../app-shared/components/http-error-modal/http-error-modal.component';
+import {
+  AppModalService
+} from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -35,25 +38,27 @@ export class RollOperationsPageComponent implements OnInit {
   fromDateValue: string;
   toDateValue: string;
 
+  queryParams;
+
   constructor(
     private route: ActivatedRoute,
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
-    private viewRef: ViewContainerRef) {}
+    private viewRef: ViewContainerRef,
+    private appModalService: AppModalService) {
+    this.queryParams = this.route.snapshot.queryParams;
+    this.rollTypeId = this.queryParams['roll_type_id'];
+    this.fromDateValue = this.queryParams['from'];
+    this.toDateValue = this.queryParams['to'];
+  }
 
   ngOnInit() {
-    this.route.queryParams
-      .flatMap((params: Params) => {
-        this.rollTypeId = params['roll_type_id'];
-        this.fromDateValue = params['from'];
-        this.toDateValue = params['to'];
-        return this.rollsService.getRollOperations(this.rollTypeId, this.fromDateValue, this.toDateValue)
-      })
+    this.rollsService.getRollOperations(this.rollTypeId, this.fromDateValue, this.toDateValue)
       .subscribe((data: RollOperation[]) => {
         this.rollOperations = data;
       }, error => {
         this.rollOperations = undefined;
-        this.openHttpErrorModal(error)
+        this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error);
       });
   }
   getOperationType(operationType: RollOperationType) {
@@ -63,14 +68,5 @@ export class RollOperationsPageComponent implements OnInit {
   showOperations(): boolean {
     if (!this.rollOperations) return true;
     return this.rollOperations.length != 0;
-  }
-
-  openHttpErrorModal(messages: string[]) {
-    const modalOptions: Partial < IModalDialogOptions < string[] >> = {
-      title: 'Ошибка',
-      childComponent: HttpErrorModalComponent,
-      data: messages
-    };
-    this.ngxModalService.openDialog(this.viewRef, modalOptions)
   }
 }

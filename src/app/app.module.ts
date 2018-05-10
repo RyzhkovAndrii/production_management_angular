@@ -24,6 +24,9 @@ import {
 import {
   RestDetailsService
 } from './services/rest-details-service';
+import {
+  AppModalService
+} from './modules/app-shared/services/app-modal.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,8 @@ import {
     HttpClientModule
   ],
   providers: [
-    RestDetailsService
+    RestDetailsService,
+    AppModalService
   ],
   bootstrap: [AppComponent]
 })

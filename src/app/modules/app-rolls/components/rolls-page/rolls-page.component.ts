@@ -50,6 +50,9 @@ import {
 import {
   RollTypeDeleteModalComponent
 } from '../roll-type-delete-modal/roll-type-delete-modal.component';
+import {
+  AppModalService
+} from '../../../app-shared/services/app-modal.service';
 
 
 @Component({
@@ -77,7 +80,8 @@ export class RollsPageComponent implements OnInit {
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private router: Router,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private appModalService: AppModalService) {}
 
   ngOnInit() {
     this.showCurrentPeriod();
@@ -103,12 +107,12 @@ export class RollsPageComponent implements OnInit {
       this.rollsService.getRollsInfoWithoutCheck(this.restDate, this.fromDate, this.toDate)
         .subscribe(data => {
           this.rollsInfo = data;
-        }, error => this.openHttpErrorModal(error));
+        }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
     } else {
       this.rollsService.getRollsInfo(this.restDate, this.fromDate, this.toDate)
         .subscribe(data => {
           this.rollsInfo = data;
-        }, error => this.openHttpErrorModal(error));
+        }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
     }
   }
 
@@ -169,7 +173,7 @@ export class RollsPageComponent implements OnInit {
           this.rollsService.postRollType(resolve, this.daysInTable, this.restDate, this.toDate)
             .subscribe(rollInfo => {
               this.rollsInfo.push(rollInfo);
-            }, error => this.openHttpErrorModal(error));
+            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
     };
     const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
@@ -195,7 +199,7 @@ export class RollsPageComponent implements OnInit {
               rollType.thickness = x.thickness;
               rollType.minWeight = x.minWeight;
               rollType.maxWeight = x.maxWeight;
-            }, error => this.openHttpErrorModal(error))
+            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
         }, reject => {});
     };
     const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
@@ -215,7 +219,7 @@ export class RollsPageComponent implements OnInit {
         .then((resolve: RollOperation) => {
           this.rollsService.postRollOperation(resolve).subscribe(data => {
             this.fetchTableData();
-          }, error => this.openHttpErrorModal(error));
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
     }
 
@@ -237,15 +241,6 @@ export class RollsPageComponent implements OnInit {
     return batch.readyToUse;
   }
 
-  openHttpErrorModal(messages: string[]) {
-    const modalOptions: Partial < IModalDialogOptions < string[] >> = {
-      title: 'Ошибка',
-      childComponent: HttpErrorModalComponent,
-      data: messages
-    };
-    this.ngxModalService.openDialog(this.viewRef, modalOptions)
-  }
-
   onChangeRollCheck(rollCheck: RollCheck) {
     this.rollChecks.set(rollCheck.id, rollCheck);
   }
@@ -257,7 +252,7 @@ export class RollsPageComponent implements OnInit {
           this.fetchTableData();
           this.rollChecks.clear();
         }
-      }, error => this.openHttpErrorModal(error));
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   showMessage(value) {
@@ -281,7 +276,7 @@ export class RollsPageComponent implements OnInit {
         this.rollsService.deleteRollType(resolve.id)
           .subscribe(data => {
             this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != resolve.id);
-          }, error => this.openHttpErrorModal(error));
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, reject => {});
     }
     const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
