@@ -19,7 +19,9 @@
       <thead>
         <tr class="table-header">
           <th scope="col" colspan="4"></th>
-          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
+          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length">
+            <small>{{ monthYear }}</small>
+          </th>
           <th scope="col" *ngIf="!isPreviousPeriod()">
             <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
               <span class="material-icons">save</span>
@@ -77,12 +79,16 @@
   </div>
 </div>
 
-<context-menu #rollsMenu>  
- <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">  
-  Редактировать рулон
- </ng-template>  
- <ng-template contextMenuItem divider="true"></ng-template>  
- <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">  
-  Список операций
- </ng-template>
-</context-menu>  
+<context-menu #rollsMenu>
+  <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">
+    Редактировать рулон
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">
+    Список операций
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
+    Удалить рулон
+  </ng-template>
+</context-menu>

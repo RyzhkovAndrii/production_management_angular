@@ -51,13 +51,17 @@ import {
 import {
   RollOperationsPageComponent
 } from './components/roll-operations-page/roll-operations-page.component';
+import {
+  RollTypeDeleteModalComponent
+} from './components/roll-type-delete-modal/roll-type-delete-modal.component';
 
 @NgModule({
   declarations: [RollsPageComponent,
     RollTypeModalComponent,
     RollOperationModalComponent,
     RollCheckComponent,
-    RollOperationsPageComponent
+    RollOperationsPageComponent,
+    RollTypeDeleteModalComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +79,8 @@ import {
   ],
   entryComponents: [
     RollTypeModalComponent,
-    RollOperationModalComponent
+    RollOperationModalComponent,
+    RollTypeDeleteModalComponent
   ],
   providers: [
     RollsService,

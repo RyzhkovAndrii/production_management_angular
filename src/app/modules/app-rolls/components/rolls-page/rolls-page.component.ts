@@ -47,6 +47,9 @@ import {
 import {
   CheckStatus
 } from '../../enums/check-status.enum';
+import {
+  RollTypeDeleteModalComponent
+} from '../roll-type-delete-modal/roll-type-delete-modal.component';
 
 
 @Component({
@@ -68,7 +71,7 @@ export class RollsPageComponent implements OnInit {
   RollCheck > ();
 
   @ViewChild(ContextMenuComponent) public rollsMenu: ContextMenuComponent;
-  
+
   constructor(
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
@@ -270,5 +273,25 @@ export class RollsPageComponent implements OnInit {
         'to': formatDate(this.toDate)
       }
     });
+  }
+
+  openDeleteRollTypeModal(item: RollType) {
+    const operation = (result: Promise < RollType > ) => {
+      result.then((resolve: RollType) => {
+        this.rollsService.deleteRollType(resolve.id)
+          .subscribe(data => {
+            this.fetchTableData();
+          }, error => this.openHttpErrorModal(error));
+      }, reject => {});
+    }
+    const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
+      title: 'Вы уверены что хотите удалить рулон?',
+      childComponent: RollTypeDeleteModalComponent,
+      data: {
+        rollType: item,
+        operation
+      }
+    }
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 }

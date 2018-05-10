@@ -194,4 +194,10 @@ export class RollsService {
       headers: this.headers
     }).catch(httpErrorHandle);
   }
+
+  deleteRollType(rollTypeId: number) {
+    const url = `${this.urls.rollTypesUrl}/${rollTypeId}`;
+    return this.http.delete(url)
+      .catch(httpErrorHandle);
+  }
 }
