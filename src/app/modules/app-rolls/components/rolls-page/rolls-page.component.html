@@ -80,12 +80,12 @@
 </div>
 
 <context-menu #rollsMenu>
-  <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">
-    Редактировать рулон
-  </ng-template>
-  <ng-template contextMenuItem divider="true"></ng-template>
   <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">
     Список операций
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">
+    Редактировать рулон
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
   <ng-template contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
