@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 /**
  * @returns numeric value of the resulting comparation
  * @description compares two hexademical color codes in format #ff11aa
@@ -64,4 +66,11 @@ export function rgbToHsl(r: number, g: number, b: number): number[] {
   }
 
   return [(h * 100 + 0.5) | 0, ((s * 100 + 0.5) | 0), ((l * 100 + 0.5) | 0)];
+}
+
+export function compareDates(d1: string, d2: string, format: string = 'DD-MM-YYYY') {
+  const m1 = moment(d1, format);
+  const m2 = moment(d2, format);
+  const result = m1.diff(m2, 'days');
+  return result;
 }

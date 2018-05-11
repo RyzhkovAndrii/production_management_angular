@@ -12,6 +12,7 @@
           }">
           <div class="invalid-feedback" *ngIf="form.get('fromDate').invalid">
             <span *ngIf="form.get('fromDate').errors['required']">Не может быть пустым!</span>
+            <span *ngIf="form.get('fromDate').errors['biggerThenToDate']">Дата начала должна быть меньше даты конца!</span>
           </div>
         </div>
       </div>
@@ -26,6 +27,7 @@
           }">
           <div class="invalid-feedback" *ngIf="form.get('toDate').invalid">
             <span *ngIf="form.get('toDate').errors['required']">Не может быть пустым!</span>
+            <span *ngIf="form.get('toDate').errors['smallerThenFromDate']">Дата конца должна быть больше даты начала!</span>
           </div>
         </div>
       </div>
