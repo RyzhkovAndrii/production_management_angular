@@ -11,7 +11,8 @@ import {
 } from '@angular/router';
 import {
   FormGroup,
-  FormControl
+  FormControl,
+  Validators
 } from '@angular/forms';
 import {
   IModalDialogOptions,
@@ -65,9 +66,9 @@ export class RollOperationsPageComponent implements OnInit {
   ngOnInit() {
     this.fetchData();
     this.form = new FormGroup({
-      fromDate: new FormControl(formatDateServerToBrowser(this.fromDateValue)),
-      toDate: new FormControl(formatDateServerToBrowser(this.toDateValue))
-    })
+      fromDate: new FormControl(formatDateServerToBrowser(this.fromDateValue), [Validators.required]),
+      toDate: new FormControl(formatDateServerToBrowser(this.toDateValue), [Validators.required])
+    });
   }
   private fetchData() {
     this.fromDateValue = this.queryParams['from'];
@@ -96,7 +97,8 @@ export class RollOperationsPageComponent implements OnInit {
     this.queryParams['to'] = formatDateBrowserToServer(this.form.value.toDate);
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: this.queryParams
+      queryParams: this.queryParams,
+      replaceUrl: true
     });
     this.fetchData()
   }
