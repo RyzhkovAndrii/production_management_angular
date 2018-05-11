@@ -6,8 +6,13 @@ import {
 } from '@angular/core';
 import {
   ActivatedRoute,
-  Params
+  Params,
+  Router
 } from '@angular/router';
+import {
+  FormGroup,
+  FormControl
+} from '@angular/forms';
 import {
   IModalDialogOptions,
   ModalDialogService
@@ -25,6 +30,10 @@ import {
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
+import {
+  formatDateServerToBrowser,
+  formatDateBrowserToServer
+} from '../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -40,19 +49,29 @@ export class RollOperationsPageComponent implements OnInit {
 
   queryParams;
 
+  form: FormGroup;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private appModalService: AppModalService) {
-    this.queryParams = this.route.snapshot.queryParams;
+    this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.rollTypeId = this.queryParams['roll_type_id'];
-    this.fromDateValue = this.queryParams['from'];
-    this.toDateValue = this.queryParams['to'];
   }
 
   ngOnInit() {
+    this.fetchData();
+    this.form = new FormGroup({
+      fromDate: new FormControl(formatDateServerToBrowser(this.fromDateValue)),
+      toDate: new FormControl(formatDateServerToBrowser(this.toDateValue))
+    })
+  }
+  private fetchData() {
+    this.fromDateValue = this.queryParams['from'];
+    this.toDateValue = this.queryParams['to'];
     this.rollsService.getRollOperations(this.rollTypeId, this.fromDateValue, this.toDateValue)
       .subscribe((data: RollOperation[]) => {
         this.rollOperations = data;
@@ -61,6 +80,7 @@ export class RollOperationsPageComponent implements OnInit {
         this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error);
       });
   }
+
   getOperationType(operationType: RollOperationType) {
     return operationType == RollOperationType.USE ? 'Списание' : 'Производство';
   }
@@ -68,5 +88,16 @@ export class RollOperationsPageComponent implements OnInit {
   showOperations(): boolean {
     if (!this.rollOperations) return true;
     return this.rollOperations.length != 0;
+  }
+
+  onSubmit() {
+    console.log(this.form);
+    this.queryParams['from'] = formatDateBrowserToServer(this.form.value.fromDate);
+    this.queryParams['to'] = formatDateBrowserToServer(this.form.value.toDate);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.queryParams
+    });
+    this.fetchData()
   }
 }
