@@ -1,7 +1,7 @@
-<div class="d-flex justify-content-center mt-2">
+<div class="container-fluid mt-2">
   <form [formGroup]="form">
     <div class="form-row">
-      <div class="col-sm-5 pl-2 pr-2 pt-1 pb-1 pt-sm-0 pb-sm-0">
+      <div class="col-md-3 offset-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">от</div>
@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-5 pl-2 pr-2 pt-1 pb-1 pt-sm-0 pb-sm-0">
+      <div class="col-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">до</div>
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="col-sm-2 pl-2 pr-2 pt-1 pb-1 pt-sm-0 pb-sm-0">
+      <div class="col-md-1 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
         <button type="submit" class="btn btn-outline-dark" [disabled]="form.invalid" (click)="onSubmit()">Показать</button>
       </div>
     </div>
