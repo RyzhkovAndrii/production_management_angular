@@ -46,6 +46,10 @@ td:hover,
   background-color: rgba(232, 232, 232, 1);
 }
 
+.row-name {
+  background-clip: padding-box;
+}
+
 [scope=row]:hover,
 .table-striped>tbody>tr:nth-child(even)>td:hover {
   background-color: #f2f2f2;
