@@ -19,7 +19,9 @@
       <thead>
         <tr class="table-header">
           <th scope="col" colspan="4"></th>
-          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length"><small>{{ monthYear }}</small></th>
+          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length">
+            <small>{{ monthYear }}</small>
+          </th>
           <th scope="col" *ngIf="!isPreviousPeriod()">
             <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
               <span class="material-icons">save</span>
@@ -41,8 +43,8 @@
       </thead>
       <tbody>
         <tr *ngFor="
-        let rollInfo of sortByColor(rollsInfo)">
-          <th scope="row" class="row-name" (click)="openEditRollTypeModal(rollInfo.rollType)">
+        let rollInfo of sortByColorThicknessRollId(rollsInfo)" [contextMenu]="rollsMenu" [contextMenuSubject]="rollInfo.rollType">
+          <th scope="row" class="row-name">
             {{ rollInfo.rollType.note }}
           </th>
           <th scope="row" class="row-name">
@@ -58,7 +60,10 @@
             {{ rollInfo.restRollLeftover.amount }}
           </td>
           <td *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)">
-            <div [ngClass]="{'roll-ready': isReady(batch)}">
+            <div [ngClass]="{
+              'roll-ready': isReady(batch),
+              'roll-not-ready': !isReady(batch)
+            }">
               {{ getBatch(batch) }}
             </div>
           </td>
@@ -73,3 +78,17 @@
     </table>
   </div>
 </div>
+
+<context-menu #rollsMenu>
+  <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">
+    Список операций
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">
+    Редактировать рулон
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
+    Удалить рулон
+  </ng-template>
+</context-menu>

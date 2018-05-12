@@ -24,7 +24,7 @@ export function addDays(date: Date, days: number): Date {
  * @param date optional date value to get new Date from its value with resetted time to midnight,
  * if ommited returns current midnight date
  */
-export function midnightDate(date?: string | Date): Date {
+export function midnightDate(date ? : string | Date): Date {
   let result: Date;
   if (date) result = getDate(date);
   else result = new Date();
@@ -48,6 +48,24 @@ export function getDate(date: string | Date): Date {
 export function formatDate(date: Date): string {
   return moment(date).format('DD-MM-YYYY');
 }
+
+/**
+ * @description immutable function
+ * @param date date string in format YYYY-MM-DD
+ * @returns string value of date in format DD-MM-YYYY
+ */
+export function formatDateBrowserToServer(date: string): string {
+  return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY').toString();
+}
+
+/**
+ * @description immutable function
+ * @param date string in format DD-MM-YYYY
+ * @returns string value of date in format YYYY-MM-DD
+ */
+export function formatDateServerToBrowser(date: string): string {
+  return moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD').toString();
+}
 /**
  * @description immutable function
  * @returns an index of element by date in array with constant difference in milliseconds of array's elements
@@ -56,16 +74,16 @@ export function formatDate(date: Date): string {
  * @param period a numeric value in milliseconds for constant period between elements
  * @param endingDate date of last element in array
  */
-export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {  
+export function getIndex(date: Date, length: number, period: number, endingDate: Date): number {
   const max = midnightDate(endingDate).getTime();
   const result = length - ((max - midnightDate(date).getTime()) / period + 1);
-  if(result > length) {
+  if (result > length) {
     return -1;
-  }  
+  }
   return Math.round(result);
 }
 
 export function getDifferenceInDays(dateA: Date, dateB: Date) {
-  const result = (midnightDate(dateA).getTime() - midnightDate(dateB).getTime()) / (24*60*60*1000);
+  const result = (midnightDate(dateA).getTime() - midnightDate(dateB).getTime()) / (24 * 60 * 60 * 1000);
   return Math.round(result);
 }

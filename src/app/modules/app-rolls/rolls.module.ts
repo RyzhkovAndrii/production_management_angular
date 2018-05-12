@@ -17,6 +17,12 @@ import {
 import {
   NgSelectModule
 } from "@ng-select/ng-select";
+import {
+  ContextMenuModule
+} from "ngx-contextmenu";
+import {
+  ModalDialogModule
+} from "ngx-modal-dialog";
 
 import {
   RollsPageComponent
@@ -39,12 +45,23 @@ import {
 import {
   RollCheckComponent
 } from './components/roll-check/roll-check.component';
+import {
+  AppSharedModule
+} from "../app-shared/app-shared.module";
+import {
+  RollOperationsPageComponent
+} from './components/roll-operations-page/roll-operations-page.component';
+import {
+  RollTypeDeleteModalComponent
+} from './components/roll-type-delete-modal/roll-type-delete-modal.component';
 
 @NgModule({
   declarations: [RollsPageComponent,
     RollTypeModalComponent,
     RollOperationModalComponent,
-    RollCheckComponent
+    RollCheckComponent,
+    RollOperationsPageComponent,
+    RollTypeDeleteModalComponent
   ],
   imports: [
     CommonModule,
@@ -53,11 +70,17 @@ import {
     ColorPickerModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    ContextMenuModule.forRoot({
+      useBootstrap4: true
+    }),
+    ModalDialogModule.forRoot(),
+    AppSharedModule
   ],
   entryComponents: [
     RollTypeModalComponent,
-    RollOperationModalComponent
+    RollOperationModalComponent,
+    RollTypeDeleteModalComponent
   ],
   providers: [
     RollsService,

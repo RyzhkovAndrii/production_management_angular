@@ -1,41 +1,68 @@
 import {
   Component,
   OnInit,
-  Input
+  ComponentRef
 } from '@angular/core';
 import {
   NgbActiveModal
 } from '@ng-bootstrap/ng-bootstrap';
 import {
+  IModalDialog,
+  IModalDialogOptions,
+  IModalDialogButton
+} from 'ngx-modal-dialog';
+import {
   FormGroup,
   FormControl,
   Validators
 } from '@angular/forms';
+
 import {
   RollOperationType
 } from '../../enums/roll-operation-type.enum';
 import {
   integerValidator
 } from '../../../../app-utils/app-validators';
-import { midnightDate, formatDate } from '../../../../app-utils/app-date-utils';
+import {
+  midnightDate,
+  formatDate
+} from '../../../../app-utils/app-date-utils';
+
 
 @Component({
   selector: 'app-roll-operation-modal',
   templateUrl: './roll-operation-modal.component.html',
   styleUrls: ['./roll-operation-modal.component.css']
 })
-export class RollOperationModalComponent implements OnInit {
+export class RollOperationModalComponent implements OnInit, IModalDialog {
 
-  @Input() batch: RollBatch;
-  @Input() manufacturedDate: Date;
-  @Input() rollTypeId;
+  actionButtons: IModalDialogButton[];
+  options: Partial < IModalDialogOptions < RollOperationModalData >> ;
+  batch: RollBatch;
+  rollTypeId: number;
+  manufacturedDate: Date;
 
   form: FormGroup;
   operationType = RollOperationType.MANUFACTURE;
 
   readonly MIN_ROLL_AMOUNT = 1;
+  
+  private btnClass = 'btn btn-outline-dark';
+  submitPressed = false;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor() {
+    this.actionButtons = [{
+        text: 'Отмена',
+        buttonClass: this.btnClass,
+        onAction: () => true
+      },
+      {
+        text: 'Произвести операцию',
+        buttonClass: this.btnClass,
+        onAction: this.onSubmit.bind(this)
+      }
+    ];
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -47,15 +74,31 @@ export class RollOperationModalComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    let rollOperation: RollOperation = {
+  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < RollOperationModalData >> ) {
+    this.options = options;
+    this.batch = options.data.batch;
+    this.rollTypeId = options.data.rollTypeId;
+    this.manufacturedDate = options.data.manufacturedDate;
+  }
+
+  onSubmit(): Promise < RollOperation > {
+    if (this.form.invalid) {
+      this.submitPressed = true;
+      const reject = Promise.reject('invalid');
+      this.options.data.operation(reject);
+      return reject;
+    }
+
+    const rollOperation: RollOperation = {
       operationDate: formatDate(midnightDate()),
       operationType: this.form.get('operationType').value,
       manufacturedDate: formatDate(this.manufacturedDate),
       rollTypeId: this.rollTypeId,
       rollAmount: this.form.get('rollAmount').value
     }
-    this.activeModal.close(rollOperation);
+    const resolve = Promise.resolve(rollOperation);
+    this.options.data.operation(resolve);
+    return resolve;
   }
 
   validateAmount(control: FormControl) {
@@ -71,5 +114,9 @@ export class RollOperationModalComponent implements OnInit {
 
   revalidateAmount() {
     this.form.get('rollAmount').updateValueAndValidity();
+  }
+
+  isTouched(controlName: string) {
+    return this.form.get(controlName).touched || this.submitPressed;
   }
 }

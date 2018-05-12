@@ -8,11 +8,19 @@ import {
 import {
   RollsPageComponent
 } from './components/rolls-page/rolls-page.component';
+import {
+  RollOperationsPageComponent
+} from './components/roll-operations-page/roll-operations-page.component'
 
 const rollsRoutes: Routes = [{
-  path: '',
-  component: RollsPageComponent
-}]
+    path: '',
+    component: RollsPageComponent
+  },
+  {
+    path: 'operations',
+    component: RollOperationsPageComponent
+  }
+]
 
 @NgModule({
   imports: [RouterModule.forChild(rollsRoutes)],

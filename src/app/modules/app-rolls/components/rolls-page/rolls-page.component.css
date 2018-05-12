@@ -7,9 +7,11 @@ button {
 }
 
 .roll-ready {
-    border: 1px solid rgba(48, 51, 58, 0.2);
-    border-radius: 4px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(14, 22, 29, 0.2);
+    color: #3c39cc;
+}
+
+.roll-not-ready {
+  color: #6d6d6d;
 }
 
 th, td {
@@ -23,4 +25,9 @@ app-roll-check {
 
 table {
   margin-bottom: 10%;
+}
+
+::ng-deep .dropdown-item {
+  font-size: 0.9rem;
+  padding: .1rem 1rem;
 }

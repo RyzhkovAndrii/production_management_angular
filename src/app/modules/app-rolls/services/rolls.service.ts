@@ -26,7 +26,9 @@ import {
 import {
   httpErrorHandle
 } from '../../../app-utils/app-http-error-handler';
-import { CheckStatus } from '../enums/check-status.enum';
+import {
+  CheckStatus
+} from '../enums/check-status.enum';
 
 @Injectable()
 export class RollsService {
@@ -85,11 +87,11 @@ export class RollsService {
       .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
         .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
           .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
-            .flatMap((totalOver: RollLeftover) => of(<RollCheck>{
-              id: undefined,
-              rollTypeId: undefined,
-              rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
-            })
+            .flatMap((totalOver: RollLeftover) => of ( < RollCheck > {
+                id: undefined,
+                rollTypeId: undefined,
+                rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
+              })
               .flatMap((rollCheck: RollCheck) => {
                 const rollInfo: RollInfo = {
                   rollType: type,
@@ -170,15 +172,32 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
-  putRollChecks(rollChecks: RollCheck[]): Observable<RollCheck[]> {
+  putRollChecks(rollChecks: RollCheck[]): Observable < RollCheck[] > {
     return from(rollChecks).flatMap((value) => this.putRollChek(value)).toArray();
   }
 
-  putRollChek(rollCheck: RollCheck): Observable<RollCheck> {
+  putRollChek(rollCheck: RollCheck): Observable < RollCheck > {
     const url = `${this.urls.rollChecksUrl}/${rollCheck.id}`;
     const body: RollCheckRequest = {
       rollLeftOverCheckStatus: rollCheck.rollLeftOverCheckStatus
     };
     return this.http.put(url, body).catch(httpErrorHandle);
+  }
+
+  getRollOperations(rollTypeId: number, from: string, to: string) {
+    const params = new HttpParams()
+      .set('roll_type_id', String(rollTypeId))
+      .set('from_manuf', from)
+      .set('to_manuf', to);
+    return this.http.get(this.urls.rollOperationUrl, {
+      params,
+      headers: this.headers
+    }).catch(httpErrorHandle);
+  }
+
+  deleteRollType(rollTypeId: number) {
+    const url = `${this.urls.rollTypesUrl}/${rollTypeId}`;
+    return this.http.delete(url)
+      .catch(httpErrorHandle);
   }
 }

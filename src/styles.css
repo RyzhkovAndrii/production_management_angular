@@ -46,6 +46,10 @@ td:hover,
   background-color: rgba(232, 232, 232, 1);
 }
 
+.row-name {
+  background-clip: padding-box;
+}
+
 [scope=row]:hover,
 .table-striped>tbody>tr:nth-child(even)>td:hover {
   background-color: #f2f2f2;
@@ -53,6 +57,9 @@ td:hover,
 
 @media screen and (max-width: 1400px) {
   table {
-    font-size: 0.9rem !important;
+    font-size: 0.8rem !important;
+  }
+  .filled-circle {
+    padding: 0.1rem 0.65rem;
   }
 }
