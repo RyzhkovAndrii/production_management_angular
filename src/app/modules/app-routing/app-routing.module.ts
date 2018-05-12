@@ -17,6 +17,10 @@ const appRoutes: Routes = [{
   {
     path: 'rolls',
     loadChildren: '../app-rolls/rolls.module#RollsModule'
+  },
+  {
+    path: 'products',
+    loadChildren: '../app-products/products.module#ProductsModule'
   }
 ];
 
