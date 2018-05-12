@@ -1,0 +1,33 @@
+.container-fluid {
+  margin-top: 0.5rem;
+}
+
+button {
+  margin-bottom: 0.5rem;
+}
+
+.roll-ready {
+    color: #3c39cc;
+}
+
+.roll-not-ready {
+  color: #6d6d6d;
+}
+
+th, td {
+  white-space: nowrap;
+}
+
+app-roll-check {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  margin-bottom: 10%;
+}
+
+::ng-deep .dropdown-item {
+  font-size: 0.9rem;
+  padding: .1rem 1rem;
+}

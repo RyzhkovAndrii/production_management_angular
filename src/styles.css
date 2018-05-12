@@ -1,2 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/material-icons/iconfont/material-icons.css';
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+table {
+  text-align: center;
+  color: rgb(48, 51, 58);
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+table.table-bordered>thead>tr>th,
+table.table-bordered>tbody>tr>th {
+  border: 1px solid #cfcfcf;
+  position: relative;
+}
+
+td:not(.row-name) {
+  width: 3%;
+}
+
+th {
+  text-align: center;
+}
+
+.filled-circle {
+  padding: 0.1rem 0.75rem;
+  border-radius: 100%;
+  border: solid;
+  border-color: rgb(48, 51, 58);
+  border-width: 0.05rem;
+}
+
+.table-header {
+  background-color: rgba(225, 225, 225, 1);
+}
+
+[scope=row] {
+  background-color: rgba(233, 233, 233, 1);
+}
+
+td:hover,
+.table-striped>tbody>tr:nth-child(even)>td {
+  background-color: rgba(232, 232, 232, 1);
+}
+
+.row-name {
+  background-clip: padding-box;
+}
+
+[scope=row]:hover,
+.table-striped>tbody>tr:nth-child(even)>td:hover {
+  background-color: #f2f2f2;
+}
+
+@media screen and (max-width: 1400px) {
+  table {
+    font-size: 0.8rem !important;
+  }
+  .filled-circle {
+    padding: 0.1rem 0.65rem;
+  }
+}

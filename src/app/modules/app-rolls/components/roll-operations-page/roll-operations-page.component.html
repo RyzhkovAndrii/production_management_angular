@@ -1,0 +1,68 @@
+<div class="container-fluid mt-2">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="col-md-3 offset-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">от</div>
+          </div>
+          <input type="date" class="form-control" id="fromDate" formControlName="fromDate" [ngClass]="{
+            'is-invalid': form.get('fromDate').invalid,
+            'is-valid': form.get('fromDate').valid && form.get('fromDate').touched
+          }">
+          <div class="invalid-feedback" *ngIf="form.get('fromDate').invalid">
+            <span *ngIf="form.get('fromDate').errors['required']">Не может быть пустым!</span>
+            <span *ngIf="form.get('fromDate').errors['biggerThenToDate']">Дата начала должна быть меньше даты конца!</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">до</div>
+          </div>
+          <input type="date" class="form-control" id="toDate" formControlName="toDate" [ngClass]="{
+            'is-invalid': form.get('toDate').invalid,
+            'is-valid': form.get('toDate').valid && form.get('toDate').touched
+          }">
+          <div class="invalid-feedback" *ngIf="form.get('toDate').invalid">
+            <span *ngIf="form.get('toDate').errors['required']">Не может быть пустым!</span>
+            <span *ngIf="form.get('toDate').errors['smallerThenFromDate']">Дата конца должна быть больше даты начала!</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-1 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="form.invalid" (click)="onSubmit()">Показать</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped" *ngIf="showOperations()">
+      <thead>
+        <tr class="table-header">
+          <th scope="col">Тип операции</th>
+          <th scope="col">Дата операции</th>
+          <th scope="col">Дата производства</th>
+          <th scope="col">Количество</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let operation of rollOperations">
+          <td>{{ getOperationType(operation.operationType) }}</td>
+          <td>{{ operation.operationDate }}</td>
+          <td>{{ operation.manufacturedDate }}</td>
+          <td>{{ operation.rollAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="!showOperations()">
+  <hr>
+  <h2 class="d-flex justify-content-center">
+    За данный период нет операций
+  </h2>
+</div>

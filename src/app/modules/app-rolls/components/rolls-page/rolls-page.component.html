@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <button class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
+    <span class="material-icons">add</span>
+  </button>
+  <button type="button" class="btn btn-outline-dark btn-sm" (click)="showPreviousPeriod()">
+    <span class="material-icons">arrow_back</span>
+    Предыдущий период
+  </button>
+  <button *ngIf="isBeforePreviousPeriod()" class="btn btn-outline-dark btn-sm" (click)="showNextPeriod()">
+    Следующий период
+    <span class="material-icons">arrow_forward</span>
+  </button>
+  <button *ngIf="isPreviousPeriod()" class="btn btn-outline-dark btn-sm" (click)="showCurrentPeriod()">
+    Текущий период
+    <span class="material-icons">timelapse</span>
+  </button>
+  <div class="table-responsive rolls-table">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" colspan="4"></th>
+          <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length">
+            <small>{{ monthYear }}</small>
+          </th>
+          <th scope="col" *ngIf="!isPreviousPeriod()">
+            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
+              <span class="material-icons">save</span>
+            </button>
+          </th>
+        </tr>
+        <tr class="table-header">
+          <th scope="col" class="row-name">Примечание</th>
+          <th scope="col">Толщина</th>
+          <th scope="col">Вес</th>
+          <th scope="col">Цвет</th>
+          <th scope="col">Остаток</th>
+          <th scope="col" *ngFor="let day of daysHeader">
+            {{ day.getDate() }}
+          </th>
+          <th scope="col">Всего</th>
+          <th scope="col" *ngIf="!isPreviousPeriod()">Проверка</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+        let rollInfo of sortByColorThicknessRollId(rollsInfo)" [contextMenu]="rollsMenu" [contextMenuSubject]="rollInfo.rollType">
+          <th scope="row" class="row-name">
+            {{ rollInfo.rollType.note }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ rollInfo.rollType.thickness }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ getWeight(rollInfo.rollType) }}
+          </th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
+          </th>
+          <td>
+            {{ rollInfo.restRollLeftover.amount }}
+          </td>
+          <td *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)">
+            <div [ngClass]="{
+              'roll-ready': isReady(batch),
+              'roll-not-ready': !isReady(batch)
+            }">
+              {{ getBatch(batch) }}
+            </div>
+          </td>
+          <td>
+            {{ rollInfo.totalRollLeftover.amount }}
+          </td>
+          <td *ngIf="!isPreviousPeriod()">
+            <app-roll-check [rollCheck]="rollInfo.rollCheck" (changeCheckStatus)="onChangeRollCheck($event)"></app-roll-check>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<context-menu #rollsMenu>
+  <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">
+    Список операций
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openEditRollTypeModal($event.item)">
+    Редактировать рулон
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
+    Удалить рулон
+  </ng-template>
+</context-menu>
