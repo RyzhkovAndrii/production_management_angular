@@ -13,6 +13,9 @@ import {
 import {
   ProductsUrlsService
 } from './services/products-urls.service';
+import {
+  ProductsService
+} from './services/products.service';
 
 @NgModule({
   imports: [
@@ -21,7 +24,8 @@ import {
   ],
   declarations: [ProductsPageComponent],
   providers: [
-    ProductsUrlsService
+    ProductsUrlsService,
+    ProductsService
   ]
 })
 export class ProductsModule {}
