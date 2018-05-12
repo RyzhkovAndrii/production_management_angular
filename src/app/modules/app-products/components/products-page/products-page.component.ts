@@ -2,6 +2,9 @@ import {
   Component,
   OnInit
 } from '@angular/core';
+import {
+  ProductsService
+} from '../../services/products.service';
 
 @Component({
   selector: 'app-products-page',
@@ -12,8 +15,13 @@ export class ProductsPageComponent implements OnInit {
 
   productsInfo: ProductInfo[] = []
 
-  constructor() {}
+  constructor(private productsService: ProductsService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.fetchData();
+  }
 
+  fetchData() {
+
+  }
 }

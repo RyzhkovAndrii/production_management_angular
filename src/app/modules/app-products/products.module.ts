@@ -5,6 +5,26 @@ import {
   CommonModule
 } from '@angular/common';
 import {
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+import {
+  ColorPickerModule
+} from 'ngx-color-picker';
+import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+import {
+  ContextMenuModule
+} from 'ngx-contextmenu';
+import {
+  ModalDialogModule
+} from 'ngx-modal-dialog';
+
+import {
+  AppSharedModule
+} from '../app-shared/app-shared.module';
+import {
   ProductsPageComponent
 } from './components/products-page/products-page.component';
 import {
@@ -17,10 +37,20 @@ import {
   ProductsService
 } from './services/products.service';
 
+
 @NgModule({
   imports: [
     CommonModule,
-    ProductsRoutingModule
+    ProductsRoutingModule,
+    ColorPickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    ContextMenuModule.forRoot({
+      useBootstrap4: true
+    }),
+    ModalDialogModule.forRoot(),
+    AppSharedModule
   ],
   declarations: [ProductsPageComponent],
   providers: [
