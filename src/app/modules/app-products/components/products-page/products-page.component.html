@@ -1,3 +1,49 @@
-<p>
-  products-page works!
-</p>
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" rowspan="2" class="align-middle">Наименование</th>
+          <th scope="col" rowspan="2" class="align-middle">Остаток на начало месяца, тыс.шт.</th>
+          <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
+          <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
+          <th scope="col" rowspan="2" class="align-middle">Текущий период, тыс.шт.</th>
+        </tr>
+        <tr class="table-header">
+          <th scope="col">за сутки</th>
+          <th scope="col">за месяц</th>
+          <th scope="col">за сутки</th>
+          <th scope="col">за месяц</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let productInfo of productsInfo">
+          <th scope="row" class="row-name">
+            {{ productInfo.type.name }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ productInfo.type.weight }}
+          </th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
+          </th>
+          <td>
+            {{ productInfo.dayBatch.manufacturedAmount }}
+          </td>
+          <td>
+            {{ productInfo.monthBatch.manufacturedAmount }}
+          </td>
+          <td>
+            {{ productInfo.dayBatch.soldAmount }}
+          </td>
+          <td>
+            {{ productInfo.monthBatch.soldAmount }}
+          </td>
+          <td>
+            {{ productInfo.currentLeftover.amount }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -10,6 +10,8 @@ import {
 })
 export class ProductsPageComponent implements OnInit {
 
+  productsInfo: ProductInfo[] = []
+
   constructor() {}
 
   ngOnInit() {}
