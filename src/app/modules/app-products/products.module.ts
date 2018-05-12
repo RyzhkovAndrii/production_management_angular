@@ -10,12 +10,18 @@ import {
 import {
   ProductsRoutingModule
 } from './products-routing.module';
+import {
+  ProductsUrlsService
+} from './services/products-urls.service';
 
 @NgModule({
   imports: [
     CommonModule,
     ProductsRoutingModule
   ],
-  declarations: [ProductsPageComponent]
+  declarations: [ProductsPageComponent],
+  providers: [
+    ProductsUrlsService
+  ]
 })
 export class ProductsModule {}
