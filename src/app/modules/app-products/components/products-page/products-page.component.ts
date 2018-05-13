@@ -1,7 +1,12 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ViewContainerRef
 } from '@angular/core';
+import {
+  ModalDialogService
+} from 'ngx-modal-dialog';
+
 import {
   ProductsService
 } from '../../services/products.service';
@@ -9,6 +14,9 @@ import {
   getDateFirstDayOfMonth,
   midnightDate
 } from '../../../../app-utils/app-date-utils';
+import {
+  AppModalService
+} from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-products-page',
@@ -22,7 +30,10 @@ export class ProductsPageComponent implements OnInit {
   toDate: Date;
   fromDate: Date;
 
-  constructor(private productsService: ProductsService) {
+  constructor(private productsService: ProductsService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService) {
     this.daylyDate = midnightDate();
     this.toDate = midnightDate();
     this.fromDate = getDateFirstDayOfMonth(this.daylyDate);
@@ -34,6 +45,9 @@ export class ProductsPageComponent implements OnInit {
 
   fetchData() {
     this.productsService.getProductsInfo(this.daylyDate, this.fromDate, this.toDate)
-      .subscribe(data => this.productsInfo = data, error => {});
+      .subscribe(data => this.productsInfo = data, error => {
+        console.log(error);
+        this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
+      });
   }
 }

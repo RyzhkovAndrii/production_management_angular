@@ -53,8 +53,8 @@ export class ProductsService {
                 )
               )
             )
-          )
-      }).toArray().catch(httpErrorHandle);
+          ).catch(httpErrorHandle)
+      }).toArray();
   }
 
   getProductTypes(): Observable < ProductTypeResponse[] > {
