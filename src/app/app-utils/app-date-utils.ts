@@ -87,3 +87,7 @@ export function getDifferenceInDays(dateA: Date, dateB: Date) {
   const result = (midnightDate(dateA).getTime() - midnightDate(dateB).getTime()) / (24 * 60 * 60 * 1000);
   return Math.round(result);
 }
+
+export function getDateFirstDayOfMonth(date: Date) {
+  return moment(date).date(1).toDate();
+}
