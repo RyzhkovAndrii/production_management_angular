@@ -46,7 +46,6 @@ export class ProductsPageComponent implements OnInit {
   fetchData() {
     this.productsService.getProductsInfo(this.daylyDate, this.fromDate, this.toDate)
       .subscribe(data => this.productsInfo = data, error => {
-        console.log(error);
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });
   }
