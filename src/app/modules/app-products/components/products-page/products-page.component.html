@@ -7,6 +7,8 @@
       <thead>
         <tr class="table-header">
           <th scope="col" rowspan="2" class="align-middle">Наименование</th>
+          <th scope="col" rowspan="2" class="align-middle">Вес</th>
+          <th scope="col" rowspan="2"  class="align-middle">Цвет</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на начало месяца, тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
@@ -30,6 +32,9 @@
           <th scope="row" class="row-name">
             <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
           </th>
+          <td>
+            {{ productInfo.restLeftover.amount }}
+          </td>
           <td>
             {{ productInfo.dayBatch.manufacturedAmount }}
           </td>
