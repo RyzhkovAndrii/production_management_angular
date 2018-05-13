@@ -8,6 +8,11 @@ import {
 import {
   Observable
 } from 'rxjs/Observable';
+import {
+  from
+} from 'rxjs/observable/from';
+import { of
+} from 'rxjs/observable/of';
 
 import {
   ProductsUrlsService
@@ -23,6 +28,34 @@ import {
 export class ProductsService {
 
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
+
+  getProductsInfo(restDate: Date, daylyDate: Date, fromDate: Date, currentDate: Date): Observable < ProductInfo[] > {
+    return this.getProductTypes()
+      .flatMap(types => {
+        return from(types)
+          .flatMap(type => this.getProductLeftover(type.id, restDate)
+            .flatMap(restLeftover => this.getDaylyBatch(type.id, daylyDate)
+              .flatMap(dayBatch => this.getMonthlyBatch(type.id, fromDate, currentDate)
+                .flatMap(monthBatch => this.getProductLeftover(type.id, currentDate)
+                  .flatMap(currentLeftover => this.getProductCheck(type.id)
+                    .flatMap(productCheck => {
+                      const info: ProductInfo = {
+                        type,
+                        restLeftover,
+                        dayBatch,
+                        monthBatch,
+                        currentLeftover,
+                        productCheck
+                      }
+                      return of(info);
+                    })
+                  )
+                )
+              )
+            )
+          )
+      }).toArray().catch(httpErrorHandle);
+  }
 
   getProductTypes(): Observable < ProductTypeResponse[] > {
     return this.http.get(this.urls.productTypesUrl).catch(httpErrorHandle);
