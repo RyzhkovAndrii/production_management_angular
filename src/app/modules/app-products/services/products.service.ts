@@ -29,14 +29,14 @@ export class ProductsService {
 
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
 
-  getProductsInfo(restDate: Date, daylyDate: Date, fromDate: Date, currentDate: Date): Observable < ProductInfo[] > {
+  getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[] > {
     return this.getProductTypes()
       .flatMap(types => {
         return from(types)
-          .flatMap(type => this.getProductLeftover(type.id, restDate)
+          .flatMap(type => this.getProductLeftover(type.id, fromDate)
             .flatMap(restLeftover => this.getDaylyBatch(type.id, daylyDate)
-              .flatMap(dayBatch => this.getMonthlyBatch(type.id, fromDate, currentDate)
-                .flatMap(monthBatch => this.getProductLeftover(type.id, currentDate)
+              .flatMap(dayBatch => this.getMonthlyBatch(type.id, fromDate, toDate)
+                .flatMap(monthBatch => this.getProductLeftover(type.id, toDate)
                   .flatMap(currentLeftover => this.getProductCheck(type.id)
                     .flatMap(productCheck => {
                       const info: ProductInfo = {
