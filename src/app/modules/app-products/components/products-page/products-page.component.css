@@ -1,3 +1,9 @@
 td {
     width: 12%;
 }
+
+.empty-row, .empty-row:hover {
+    height: 1%;
+    background-color: white;
+    border: none;
+}

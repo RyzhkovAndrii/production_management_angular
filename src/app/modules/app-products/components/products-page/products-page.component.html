@@ -57,13 +57,16 @@
             {{ total }}
           </td>
         </tr>
+        <td class="empty-row"></td>
       </tbody>
-      <tr *ngIf="productsInfo.length != 0">
-        <th scope="row" class="row-name" colspan="3">Всего</th>
-        <td *ngFor="let total of getTotals()">
-          {{ total }}
-        </td>
-      </tr>
+      <tbody *ngIf="productsInfo.length != 0">
+        <tr>
+          <th scope="row" class="row-name" colspan="3">Всего</th>
+          <td *ngFor="let total of getTotals()">
+            {{ total }}
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>
