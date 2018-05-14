@@ -102,7 +102,26 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openEditProductTypeModal(productType: ProductTypeResponse) {
-    console.log(productType);
+    const operation = (result: Promise < ProductTypeRequest > ) => {
+      result
+        .then((resolve: ProductTypeRequest) => {
+          this.productsService.putProductType(productType.id, resolve)
+            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+        }, reject => {});
+    };
+    const modalOptions: Partial < IModalDialogOptions < ProductTypeModalData >> = {
+      title: 'Редактирование продукции',
+      childComponent: ProductTypeModalComponent,
+      data: {
+        productType: {
+          name: productType.name,
+          weight: productType.weight,
+          colorCode: productType.colorCode
+        },
+        operation: operation.bind(this)
+      }
+    };
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 
   openDeleteProductTypeModal(productType: ProductTypeResponse) {
