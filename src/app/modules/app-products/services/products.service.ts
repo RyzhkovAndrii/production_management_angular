@@ -54,8 +54,8 @@ export class ProductsService {
                     return info;
                   })
                 ).reduce((acc, value, index) => {
-                  if (acc.has(value.type.colorCode)) acc.get(value.type.colorCode).push(value);
-                  else acc.set(value.type.colorCode, [value]);
+                  if (acc.has(value.type.colorCode.toLowerCase())) acc.get(value.type.colorCode.toLocaleLowerCase()).push(value);
+                  else acc.set(value.type.colorCode.toLocaleLowerCase(), [value]);
                   return acc;
                 }, new Map < string, ProductInfo[] > ())
                 .flatMap(infoMap => Array.from(infoMap.values())))
