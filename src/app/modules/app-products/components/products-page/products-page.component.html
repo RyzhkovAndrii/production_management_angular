@@ -1,14 +1,14 @@
 <div class="container-fluid mt-2">
-    <button class="btn btn-outline-dark btn-sm">
-        <span class="material-icons">add</span>
-      </button>
+  <button class="btn btn-outline-dark btn-sm">
+    <span class="material-icons">add</span>
+  </button>
   <div class="table-responsive mt-2">
     <table class="table table-bordered table-striped table-sm">
       <thead>
         <tr class="table-header">
           <th scope="col" rowspan="2" class="align-middle">Наименование</th>
           <th scope="col" rowspan="2" class="align-middle">Вес</th>
-          <th scope="col" rowspan="2"  class="align-middle">Цвет</th>
+          <th scope="col" rowspan="2" class="align-middle">Цвет</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на начало месяца, тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
@@ -58,11 +58,11 @@
           </td>
         </tr>
       </tbody>
-      <tr>
-          <th scope="row" class="row-name" colspan="3">Всего</th>
-          <td *ngFor="let total of getTotals()">
-            {{ total }}
-          </td>
+      <tr *ngIf="productsInfo.length != 0">
+        <th scope="row" class="row-name" colspan="3">Всего</th>
+        <td *ngFor="let total of getTotals()">
+          {{ total }}
+        </td>
       </tr>
     </table>
   </div>
