@@ -45,11 +45,11 @@ export class ProductsService {
                   .map(type => {
                     const info: ProductInfo = {
                       type,
-                      restLeftover: restOversMap.get(type.id) || <ProductLeftoverResponse>{},
-                      dayBatch: dayBatchesMap.get(type.id) || <ProductBatchResponse>{},
-                      monthBatch: monthBatchesMap.get(type.id) || <ProductBatchResponse>{},
-                      currentLeftover: currentOversMap.get(type.id) || <ProductLeftoverResponse>{},
-                      productCheck: checksMap.get(type.id) || <ProductCheckResponse>{}
+                      restLeftover: restOversMap.get(type.id) || < ProductLeftoverResponse > {},
+                      dayBatch: dayBatchesMap.get(type.id) || < ProductBatchResponse > {},
+                      monthBatch: monthBatchesMap.get(type.id) || < ProductBatchResponse > {},
+                      currentLeftover: currentOversMap.get(type.id) || < ProductLeftoverResponse > {},
+                      productCheck: checksMap.get(type.id) || < ProductCheckResponse > {}
                     }
                     return info;
                   })
