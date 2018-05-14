@@ -13,7 +13,8 @@ import {
 } from '../../services/products.service';
 import {
   getDateFirstDayOfMonth,
-  midnightDate
+  midnightDate,
+  formatDate
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -24,6 +25,9 @@ import {
 import {
   SimpleConfirmModalComponent
 } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  ProductOperationModalComponent
+} from '../product-operation-modal/product-operation-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -131,6 +135,30 @@ export class ProductsPageComponent implements OnInit {
     this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 
+  openAddProductOperation(productTypeId: number, operationType: string) {
+    const func = (result: Promise < ProductOperationRequest > ) => {
+      result
+        .then((resolve: ProductOperationRequest) => {
+          this.productsService.postProductOperation(resolve)
+            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+        }, reject => {});
+    }
+    const modalOptions: Partial < IModalDialogOptions < ProductOperationModalData >> = {
+      title: 'Операция над продукцией',
+      childComponent: ProductOperationModalComponent,
+      data: {
+        productOperationRequest: {
+          operationDate: formatDate(this.daylyDate),
+          productTypeId,
+          operationType,
+          amount: undefined
+        },
+        func
+      }
+    };
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+  }
+
   openDeleteProductTypeModal(productType: ProductTypeResponse) {
     const buttonClass = 'btn btn-outline-dark';
     const modalOptions: Partial < IModalDialogOptions < any >> = {
@@ -154,9 +182,5 @@ export class ProductsPageComponent implements OnInit {
       ]
     };
     this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
-  }
-
-  openAddProductOperation(productTypeId: number, operationType: string) {
-    console.log(arguments);
   }
 }

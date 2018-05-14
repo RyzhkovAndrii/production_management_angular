@@ -85,8 +85,9 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
     }
     const resolve = Promise.resolve(productOperation);
     this.options.data.func(resolve);
+    return resolve;
   }
-  
+
   isTouched(controlName: string) {
     return this.form.get(controlName).touched || this.submitPressed;
   }
