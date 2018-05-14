@@ -61,7 +61,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   }
 
   ngOnInit() {
-    this.colorCode = this.rollType ? this.rollType.colorCode : '#ffffff';
+    this.colorCode = this.rollType ? this.rollType.colorCode : appPresetColors[0];
 
     this.form = new FormGroup({
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
