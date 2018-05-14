@@ -21,6 +21,7 @@ import {
 import {
   ProductTypeModalComponent
 } from '../product-type-modal/product-type-modal.component';
+import { SimpleConfirmModalComponent } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -33,6 +34,8 @@ export class ProductsPageComponent implements OnInit {
   daylyDate: Date;
   toDate: Date;
   fromDate: Date;
+
+  private readonly COLLATOR = new Intl.Collator([], { sensitivity: "base" });
 
   constructor(private productsService: ProductsService,
     private viewRef: ViewContainerRef,
@@ -59,7 +62,7 @@ export class ProductsPageComponent implements OnInit {
 
   sortByNameAndWeight(array: ProductInfo[]): ProductInfo[] {
     return array.sort((a, b) => {
-      const byName = a.type.name.localeCompare(b.type.name);
+      const byName = this.COLLATOR.compare(a.type.name, b.type.name);
       return byName != 0 ? byName : a.type.weight - b.type.weight;
     });
   }
@@ -125,6 +128,28 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openDeleteProductTypeModal(productType: ProductTypeResponse) {
-    console.log(productType);
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any >> = {
+      title: 'Подтвердите удаление продукции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [
+        {
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.productsService.deleteProductType(productType.id).subscribe(data => this.fetchData(), error => {
+              this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+            });
+            return true;
+          }
+        }
+      ]
+    };
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 }

@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-4">
       <label for="product-weight" class="col-form-label">Вес:</label>
-      <input type="number" class="form-control" id="product-weight" formControlName="weight" [ngClass]="{
+      <input type="number" class="form-control" id="product-weight" [step]="MIN_WEIGHT" formControlName="weight" [min]="MIN_WEIGHT" [ngClass]="{
           'is-invalid': form.get('weight').invalid && isTouched('weight'),
           'is-valid': form.get('weight').valid && isTouched('weight')
         }">
