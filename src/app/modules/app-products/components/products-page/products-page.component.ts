@@ -17,11 +17,6 @@ import {
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
-import { of
-} from 'rxjs/observable/of';
-import {
-  Observable
-} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-products-page',
