@@ -255,10 +255,6 @@ export class RollsPageComponent implements OnInit {
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
-  showMessage(value) {
-    console.log(value);
-  }
-
   openRollOperationsPage(item: RollType) {
     this.router.navigate(['operations'], {
       relativeTo: this.route,
