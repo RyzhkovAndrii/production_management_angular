@@ -155,4 +155,8 @@ export class ProductsPageComponent implements OnInit {
     };
     this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
+
+  openAddProductOperation(productTypeId: number, operationType: string) {
+    console.log(arguments);
+  }
 }

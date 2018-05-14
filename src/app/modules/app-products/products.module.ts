@@ -39,6 +39,9 @@ import {
 import {
   ProductTypeModalComponent
 } from './components/product-type-modal/product-type-modal.component';
+import {
+  ProductOperationModalComponent
+} from './components/product-operation-modal/product-operation-modal.component';
 
 
 @NgModule({
@@ -55,13 +58,16 @@ import {
     ModalDialogModule.forRoot(),
     AppSharedModule
   ],
-  declarations: [ProductsPageComponent, ProductTypeModalComponent],
+  declarations: [
+    ProductsPageComponent, ProductTypeModalComponent, ProductOperationModalComponent
+  ],
   providers: [
     ProductsUrlsService,
     ProductsService
   ],
   entryComponents: [
-    ProductTypeModalComponent
+    ProductTypeModalComponent,
+    ProductOperationModalComponent
   ]
 })
 export class ProductsModule {}

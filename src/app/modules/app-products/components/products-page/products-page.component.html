@@ -35,13 +35,13 @@
           <td>
             {{ productInfo.restLeftover.amount || 0 }}
           </td>
-          <td>
+          <td (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
             {{ productInfo.dayBatch.manufacturedAmount || 0 }}
           </td>
           <td>
             {{ productInfo.monthBatch.manufacturedAmount || 0 }}
           </td>
-          <td>
+          <td (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
             {{ productInfo.dayBatch.soldAmount || 0 }}
           </td>
           <td>

@@ -1,0 +1,27 @@
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="operation-type">Тип операции:</label>
+    <select class="form-control" id="operation-type" formControlName="operationType">
+      <option value="MANUFACTURED">Производство</option>
+      <option value="SOLD">Реализация</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="product-amount">Количество продуктов:</label>
+    <input type="number" min="0" step="1" class="form-control" id="product-amount" formControlName="amount" [ngClass]="{
+        'is-invalid': form.get('amount').invalid && isTouched('amount'),
+        'is-valid': form.get('amount').valid && isTouched('amount')
+      }">
+    <div class="invalid-feedback" *ngIf="form.get('amount').invalid && isTouched('amount')">
+      <span *ngIf="form.get('amount').errors['required']">
+        Обязательное поле!
+      </span>
+      <span *ngIf="form.get('amount').errors['min']">
+        Минимальное количество продукции для операции: {{ MIN_PRODUCT_AMOUNT }}
+      </span>
+      <span *ngIf="form.get('amount').errors['notIntegerError']">
+        Количество продукции должно быть целым числом!
+      </span>
+    </div>
+  </div>
+</form>
