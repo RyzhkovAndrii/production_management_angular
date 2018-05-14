@@ -89,7 +89,9 @@ export class ProductsService {
   getDaylyBatches(date: Date): Observable < ProductBatchResponse[] > {
     const params = new HttpParams()
       .set('date', formatDate(date));
-    return of([]);
+    return this.http.get(this.urls.productBatchUrl, {
+      params
+    }).catch(httpErrorHandle);
   }
 
   getDaylyBatch(productTypeId: number, date: Date): Observable < ProductBatchResponse > {
@@ -105,7 +107,9 @@ export class ProductsService {
     const params = new HttpParams()
       .set('from', formatDate(fromDate))
       .set('to', formatDate(toDate));
-    return of([]);
+    return this.http.get(this.urls.productBatchUrl, {
+      params
+    }).catch(httpErrorHandle);
   }
 
   getMonthlyBatch(productTypeId: number, fromDate: Date, toDate: Date): Observable < ProductBatchResponse > {
