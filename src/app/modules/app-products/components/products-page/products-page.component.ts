@@ -17,6 +17,11 @@ import {
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
+import { of
+} from 'rxjs/observable/of';
+import {
+  Observable
+} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-products-page',
@@ -25,7 +30,7 @@ import {
 })
 export class ProductsPageComponent implements OnInit {
 
-  productsInfo: ProductInfo[] = [];
+  productsInfo: ProductInfo[][] = [];
   daylyDate: Date;
   toDate: Date;
   fromDate: Date;
@@ -51,5 +56,24 @@ export class ProductsPageComponent implements OnInit {
       }, error => {
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });
+  }
+
+  getSectionTotals(values: ProductInfo[]): number[] {
+    return values.reduce((previousValue, currentValue, currentIndex, array) => {
+      previousValue[0] += currentValue.restLeftover.amount;
+      previousValue[1] += currentValue.dayBatch.manufacturedAmount || 0;
+      previousValue[2] += currentValue.monthBatch.manufacturedAmount || 0;
+      previousValue[3] += currentValue.dayBatch.soldAmount || 0;
+      previousValue[4] += currentValue.monthBatch.soldAmount || 0;
+      previousValue[5] += currentValue.currentLeftover.amount;
+      return previousValue;
+    }, new Array(6).fill(0, 0));
+  }
+
+  getTotals(): number[] {
+    return this.productsInfo.reduce((previousValue, currentValue, currentIndex, array) => {
+      const sectionTotals = this.getSectionTotals(currentValue);
+      return previousValue.map((value, index, array) => array[index] += sectionTotals[index]);
+    }, new Array(6).fill(0, 0));
   }
 }

@@ -21,8 +21,8 @@
           <th scope="col">за месяц</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let productInfo of productsInfo">
+      <tbody *ngFor="let infoArray of productsInfo">
+        <tr *ngFor="let productInfo of infoArray">
           <th scope="row" class="row-name">
             {{ productInfo.type.name }}
           </th>
@@ -51,7 +51,19 @@
             {{ productInfo.currentLeftover.amount || 0 }}
           </td>
         </tr>
+        <tr>
+          <th scope="row" class="row-name" colspan="3">Итого</th>
+          <td *ngFor="let total of getSectionTotals(infoArray)">
+            {{ total }}
+          </td>
+        </tr>
       </tbody>
+      <tr>
+          <th scope="row" class="row-name" colspan="3">Всего</th>
+          <td *ngFor="let total of getTotals()">
+            {{ total }}
+          </td>
+      </tr>
     </table>
   </div>
 </div>

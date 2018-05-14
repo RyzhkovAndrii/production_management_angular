@@ -29,7 +29,7 @@ export class ProductsService {
 
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
 
-  getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[] > {
+  getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[][] > {
     return this.getProductsLeftovers(fromDate)
       .map(restOvers => new Map(restOvers.map(x => [x.productTypeId, x] as[number, ProductLeftoverResponse])))
       .flatMap(restOversMap => this.getDaylyBatches(daylyDate)
@@ -53,8 +53,12 @@ export class ProductsService {
                     }
                     return info;
                   })
-                )
-              )
+                ).reduce((acc, value, index) => {
+                  if (acc.has(value.type.colorCode)) acc.get(value.type.colorCode).push(value);
+                  else acc.set(value.type.colorCode, [value]);
+                  return acc;
+                }, new Map < string, ProductInfo[] > ())
+                .flatMap(infoMap => Array.from(infoMap.values())))
             )
           )
         )
