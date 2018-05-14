@@ -21,7 +21,9 @@ import {
 import {
   ProductTypeModalComponent
 } from '../product-type-modal/product-type-modal.component';
-import { SimpleConfirmModalComponent } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -35,7 +37,9 @@ export class ProductsPageComponent implements OnInit {
   toDate: Date;
   fromDate: Date;
 
-  private readonly COLLATOR = new Intl.Collator([], { sensitivity: "base" });
+  private readonly COLLATOR = new Intl.Collator([], {
+    sensitivity: "base"
+  });
 
   constructor(private productsService: ProductsService,
     private viewRef: ViewContainerRef,
@@ -132,8 +136,7 @@ export class ProductsPageComponent implements OnInit {
     const modalOptions: Partial < IModalDialogOptions < any >> = {
       title: 'Подтвердите удаление продукции',
       childComponent: SimpleConfirmModalComponent,
-      actionButtons: [
-        {
+      actionButtons: [{
           text: 'Отменить',
           buttonClass,
           onAction: () => true
