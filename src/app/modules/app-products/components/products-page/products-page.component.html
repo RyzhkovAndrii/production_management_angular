@@ -33,22 +33,22 @@
             <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
           </th>
           <td>
-            {{ productInfo.restLeftover.amount }}
+            {{ productInfo.restLeftover.amount || 0 }}
           </td>
           <td>
-            {{ productInfo.dayBatch.manufacturedAmount }}
+            {{ productInfo.dayBatch.manufacturedAmount || 0 }}
           </td>
           <td>
-            {{ productInfo.monthBatch.manufacturedAmount }}
+            {{ productInfo.monthBatch.manufacturedAmount || 0 }}
           </td>
           <td>
-            {{ productInfo.dayBatch.soldAmount }}
+            {{ productInfo.dayBatch.soldAmount || 0 }}
           </td>
           <td>
-            {{ productInfo.monthBatch.soldAmount }}
+            {{ productInfo.monthBatch.soldAmount || 0 }}
           </td>
           <td>
-            {{ productInfo.currentLeftover.amount }}
+            {{ productInfo.currentLeftover.amount || 0 }}
           </td>
         </tr>
       </tbody>
