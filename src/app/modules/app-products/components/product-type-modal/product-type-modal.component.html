@@ -1,0 +1,31 @@
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col-md-6">
+      <label for="roll-name" class="col-form-label">Наименование:</label>
+      <input type="text" class="form-control" id="roll-name" formControlName="name" [ngClass]="{
+            'is-invalid': form.get('name').invalid && isTouched('name'),
+            'is-valid': form.get('name').valid && isTouched('name')
+          }">
+      <div class="invalid-feedback" *ngIf="form.get('name').invalid && isTouched('name')">
+        <span *ngIf="form.get('name').errors['required']">Обязательное поле!</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="product-weight" class="col-form-label">Вес:</label>
+      <input type="number" class="form-control" id="product-weight" formControlName="weight" [ngClass]="{
+          'is-invalid': form.get('weight').invalid && isTouched('weight'),
+          'is-valid': form.get('weight').valid && isTouched('weight')
+        }">
+      <div class="invalid-feedback" *ngIf="form.get('weight').invalid && isTouched('weight')">
+        <span *ngIf="form.get('weight').errors['required']">Обязательное поле!</span>
+        <span *ngIf="form.get('weight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <label for="product-color" class="col-form-label">Цвет:</label>
+      <input type="button" class="form-control" id="product-color" formControlName="colorCode" [(colorPicker)]="colorCode" [value]="colorCode"
+        [style.background]="colorCode" [style.color]="colorCode" [cpOutputFormat]="'hex'" [cpPosition]="'left'" [cpOKButton]="true"
+        [cpCancelButton]="true" [cpPresetColors]="presetColors">
+    </div>
+  </div>
+</form>

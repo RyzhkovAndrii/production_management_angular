@@ -4,7 +4,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  ModalDialogService
+  ModalDialogService,
+  IModalDialogOptions
 } from 'ngx-modal-dialog';
 
 import {
@@ -17,6 +18,9 @@ import {
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
+import {
+  ProductTypeModalComponent
+} from '../product-type-modal/product-type-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -77,5 +81,23 @@ export class ProductsPageComponent implements OnInit {
       const sectionTotals = this.getSectionTotals(currentValue);
       return previousValue.map((value, index, array) => array[index] += sectionTotals[index]);
     }, new Array(6).fill(0, 0));
+  }
+
+  openAddProductTypeModal() {
+    const operation = (result: Promise < ProductTypeRequest > ) => {
+      result
+        .then((resolve: ProductTypeRequest) => {
+          this.productsService.postProductType(resolve)
+            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+        }, reject => {});
+    };
+    const modalOptions: Partial < IModalDialogOptions < ProductTypeModalData >> = {
+      title: 'Новая продукция',
+      childComponent: ProductTypeModalComponent,
+      data: {
+        operation: operation.bind(this)
+      }
+    };
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 }
