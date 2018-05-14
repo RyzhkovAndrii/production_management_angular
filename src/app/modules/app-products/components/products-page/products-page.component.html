@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody *ngFor="let infoArray of productsInfo">
-        <tr *ngFor="let productInfo of sortByNameAndWeight(infoArray)">
+        <tr *ngFor="let productInfo of sortByNameAndWeight(infoArray)" [contextMenu]="productsMenu" [contextMenuSubject]="productInfo.type">
           <th scope="row" class="row-name">
             {{ productInfo.type.name }}
           </th>
@@ -70,3 +70,13 @@
     </table>
   </div>
 </div>
+
+<context-menu #productsMenu>
+  <ng-template contextMenuItem let-item (execute)="openEditProductTypeModal($event.item)">
+    Редактировать продукцию
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteProductTypeModal($event.item)">
+    Удалить продукцию
+  </ng-template>
+</context-menu>

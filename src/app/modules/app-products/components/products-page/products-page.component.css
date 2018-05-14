@@ -7,3 +7,8 @@ td {
     background-color: white;
     border: none;
 }
+
+::ng-deep .dropdown-item {
+    font-size: 0.9rem;
+    padding: .1rem 1rem;
+  }

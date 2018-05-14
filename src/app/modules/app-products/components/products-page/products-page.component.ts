@@ -100,4 +100,12 @@ export class ProductsPageComponent implements OnInit {
     };
     this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
+
+  openEditProductTypeModal(productType: ProductTypeResponse) {
+    console.log(productType);
+  }
+
+  openDeleteProductTypeModal(productType: ProductTypeResponse) {
+    console.log(productType);
+  }
 }
