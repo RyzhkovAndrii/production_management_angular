@@ -10,19 +10,25 @@ import {
 import {
   AppModalService
 } from './services/app-modal.service';
+import {
+  SimpleConfirmModalComponent
+} from './components/simple-confirm-modal/simple-confirm-modal.component';
 
 @NgModule({
   declarations: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent
   ],
   entryComponents: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent
   ]
 })
 export class AppSharedModule {}
