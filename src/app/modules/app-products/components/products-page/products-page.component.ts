@@ -53,6 +53,13 @@ export class ProductsPageComponent implements OnInit {
       });
   }
 
+  sortByNameAndWeight(array: ProductInfo[]): ProductInfo[] {
+    return array.sort((a, b) => {
+      const byName = a.type.name.localeCompare(b.type.name);
+      return byName != 0 ? byName : a.type.weight - b.type.weight;
+    });
+  }
+
   getSectionTotals(values: ProductInfo[]): number[] {
     return values.reduce((previousValue, currentValue, currentIndex, array) => {
       previousValue[0] += currentValue.restLeftover.amount;
