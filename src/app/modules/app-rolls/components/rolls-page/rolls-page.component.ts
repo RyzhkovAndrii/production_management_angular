@@ -48,11 +48,11 @@ import {
   CheckStatus
 } from '../../enums/check-status.enum';
 import {
-  RollTypeDeleteModalComponent
-} from '../roll-type-delete-modal/roll-type-delete-modal.component';
-import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 
 @Component({
@@ -267,22 +267,28 @@ export class RollsPageComponent implements OnInit {
   }
 
   openDeleteRollTypeModal(item: RollType) {
-    const operation = (result: Promise < RollType > ) => {
-      result.then((resolve: RollType) => {
-        this.rollsService.deleteRollType(resolve.id)
-          .subscribe(data => {
-            this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != resolve.id);
-          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
-      }, reject => {});
-    }
-    const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
-      title: 'Вы уверены что хотите удалить рулон?',
-      childComponent: RollTypeDeleteModalComponent,
-      data: {
-        rollType: item,
-        operation
-      }
-    }
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any >> = {
+      title: 'Подтвердите удаление рулона',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.rollsService.deleteRollType(item.id)
+              .subscribe(data => {
+                this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != item.id);
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    };
     this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 }
