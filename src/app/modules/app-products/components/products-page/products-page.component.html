@@ -33,28 +33,28 @@
             <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
           </th>
           <td>
-            {{ productInfo.restLeftover.amount || 0 }}
+            {{ (productInfo.restLeftover.amount) | exponent }}
           </td>
           <td (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
-            {{ productInfo.dayBatch.manufacturedAmount || 0 }}
+            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
           </td>
           <td>
-            {{ productInfo.monthBatch.manufacturedAmount || 0 }}
+            {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
           </td>
           <td (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
-            {{ productInfo.dayBatch.soldAmount || 0 }}
+            {{ productInfo.dayBatch.soldAmount | empty | exponent }}
           </td>
           <td>
-            {{ productInfo.monthBatch.soldAmount || 0 }}
+            {{ productInfo.monthBatch.soldAmount | empty | exponent }}
           </td>
           <td>
-            {{ productInfo.currentLeftover.amount || 0 }}
+            {{ productInfo.currentLeftover.amount | exponent }}
           </td>
         </tr>
         <tr>
           <th scope="row" class="row-name" colspan="3">Итого</th>
           <td *ngFor="let total of getSectionTotals(infoArray)">
-            {{ total }}
+            {{ total | exponent }}
           </td>
         </tr>
         <td class="empty-row"></td>
@@ -63,7 +63,7 @@
         <tr>
           <th scope="row" class="row-name" colspan="3">Всего</th>
           <td *ngFor="let total of getTotals()">
-            {{ total }}
+            {{ total | exponent }}
           </td>
         </tr>
       </tbody>
