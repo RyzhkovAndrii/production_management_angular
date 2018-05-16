@@ -14,6 +14,10 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  Decimal
+} from 'decimal.js'
+
+import {
   ProductOperationType
 } from '../../enums/product-operation-type.enum';
 import {
@@ -33,7 +37,8 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
   productOperation: ProductOperationRequest;
   operationType: ProductOperationType;
 
-  readonly MIN_PRODUCT_AMOUNT = 1;
+  readonly MIN_PRODUCT_AMOUNT = 0.001;
+  readonly DECIMAL_PLACES = 3;
 
   private btnClass = 'btn btn-outline-dark';
   submitPressed = false;
@@ -65,7 +70,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
         value: this.operationType,
         disabled: true
       }),
-      amount: new FormControl(undefined, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), integerValidator])
+      amount: new FormControl(undefined, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), this.validateDecimalPlaces.bind(this)])
     });
   }
 
@@ -81,7 +86,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
       operationDate: this.productOperation.operationDate,
       productTypeId: this.productOperation.productTypeId,
       operationType: this.operationType,
-      amount: this.form.value.amount
+      amount: new Decimal(this.form.value.amount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber()
     }
     const resolve = Promise.resolve(productOperation);
     this.options.data.func(resolve);
@@ -90,5 +95,14 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
 
   isTouched(controlName: string) {
     return this.form.get(controlName).touched || this.submitPressed;
+  }
+
+  validateDecimalPlaces(control: FormControl) {
+    if (control.value && !new Decimal(control.value).times(Math.pow(10, this.DECIMAL_PLACES)).isInteger()) {
+      return {
+        'decimalPlacesError': true
+      };
+    }
+    return null;
   }
 }

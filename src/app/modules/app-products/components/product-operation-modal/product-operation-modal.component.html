@@ -19,8 +19,8 @@
       <span *ngIf="form.get('amount').errors['min']">
         Минимальное количество продукции для операции: {{ MIN_PRODUCT_AMOUNT }}
       </span>
-      <span *ngIf="form.get('amount').errors['notIntegerError']">
-        Количество продукции должно быть целым числом!
+      <span *ngIf="form.get('amount').errors['decimalPlacesError']">
+        Максимальное количество знаков после запятой: {{ DECIMAL_PLACES }}
       </span>
     </div>
   </div>
