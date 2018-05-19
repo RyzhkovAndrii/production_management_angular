@@ -4,7 +4,9 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  FormGroup, FormControl, Validators
+  FormGroup,
+  FormControl,
+  Validators
 } from '@angular/forms';
 import {
   ModalDialogService,
@@ -19,7 +21,9 @@ import {
   midnightDate,
   formatDate,
   formatDateServerToBrowser,
-  getDate
+  getDate,
+  getDateLastDayOfMotth,
+  isSameMonthYear
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -58,17 +62,28 @@ export class ProductsPageComponent implements OnInit {
   constructor(private productsService: ProductsService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService) {
-    this.daylyDate = midnightDate();
-    this.toDate = midnightDate();
-    this.fromDate = getDateFirstDayOfMonth(this.daylyDate);
-  }
+    private appModalService: AppModalService) {}
 
   ngOnInit() {
     this.form = new FormGroup({
-      daylyDate: new FormControl(formatDateServerToBrowser(formatDate(this.daylyDate)), Validators.required)
+      daylyDate: new FormControl(formatDateServerToBrowser(formatDate(midnightDate())), Validators.required)
     });
+    this.loadTable();
+  }
+
+  loadTable() {
+    this.initDates();
     this.fetchData();
+  }
+
+  initDates() {
+    this.daylyDate = getDate(this.form.value.daylyDate, 'YYYY-MM-DD');
+    this.fromDate = getDateFirstDayOfMonth(this.daylyDate);
+    if (isSameMonthYear(this.daylyDate, midnightDate())) {
+      this.toDate = midnightDate();
+    } else {
+      this.toDate = getDateLastDayOfMotth(this.daylyDate);
+    }
   }
 
   fetchData() {
@@ -79,11 +94,6 @@ export class ProductsPageComponent implements OnInit {
       }, error => {
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });
-  }
-
-  changeDateAndFetch() {
-    console.log(this.form);
-    this.daylyDate = getDate(this.form.value.daylyDate, 'YYYY-MM-DD')
   }
 
   sortByColor(array: ProductInfo[][]): ProductInfo[][] {

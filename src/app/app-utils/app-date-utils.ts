@@ -91,3 +91,14 @@ export function getDifferenceInDays(dateA: Date, dateB: Date) {
 export function getDateFirstDayOfMonth(date: Date) {
   return moment(date).date(1).toDate();
 }
+
+export function getDateLastDayOfMotth(date: Date) {
+  const temp = moment(date);
+  return temp.date(temp.daysInMonth()).toDate();
+}
+
+export function isSameMonthYear(a: Date, b: Date): boolean {
+  const aMoment = moment(a);
+  const bMoment = moment(b);
+  return aMoment.isSame(bMoment, 'months') && aMoment.isSame(bMoment, 'year');
+}
