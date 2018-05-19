@@ -37,8 +37,8 @@ export function midnightDate(date ? : string | Date): Date {
  * @returns date object
  * @param date date in format DD-MM-YYYY
  */
-export function getDate(date: string | Date): Date {
-  return moment(date, 'DD-MM-YYYY').toDate();
+export function getDate(date: string | Date, format = 'DD-MM-YYYY'): Date {
+  return moment(date, format).toDate();
 }
 
 /**

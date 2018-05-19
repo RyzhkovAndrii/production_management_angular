@@ -36,16 +36,16 @@
           <th scope="col" rowspan="2" class="align-middle">Наименование</th>
           <th scope="col" rowspan="2" class="align-middle">Вес</th>
           <th scope="col" rowspan="2" class="align-middle">Цвет</th>
-          <th scope="col" rowspan="2" class="align-middle">Остаток на начало месяца, тыс.шт.</th>
+          <th scope="col" rowspan="2" class="align-middle">Остаток на {{ fromDate | moment:'DD MMMM' }}, тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
-          <th scope="col" rowspan="2" class="align-middle">Текущий период, тыс.шт.</th>
+          <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
         </tr>
         <tr class="table-header">
-          <th scope="col">за сутки</th>
-          <th scope="col">за месяц</th>
-          <th scope="col">за сутки</th>
-          <th scope="col">за месяц</th>
+          <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
         </tr>
       </thead>
       <tbody *ngFor="let infoArray of sortByColor(productsInfo)">

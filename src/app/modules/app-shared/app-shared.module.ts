@@ -19,13 +19,17 @@ import {
 import {
   EmptyPipe
 } from './pipes/empty.pipe';
+import {
+  MomentPipe
+} from './pipes/moment.pipe';
 
 @NgModule({
   declarations: [
     HttpErrorModalComponent,
     SimpleConfirmModalComponent,
     ExponentPipe,
-    EmptyPipe
+    EmptyPipe,
+    MomentPipe
   ],
   imports: [
     CommonModule
@@ -34,7 +38,8 @@ import {
     HttpErrorModalComponent,
     SimpleConfirmModalComponent,
     ExponentPipe,
-    EmptyPipe
+    EmptyPipe,
+    MomentPipe
   ],
   entryComponents: [
     HttpErrorModalComponent,

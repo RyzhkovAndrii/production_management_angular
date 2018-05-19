@@ -18,7 +18,8 @@ import {
   getDateFirstDayOfMonth,
   midnightDate,
   formatDate,
-  formatDateServerToBrowser
+  formatDateServerToBrowser,
+  getDate
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -82,6 +83,7 @@ export class ProductsPageComponent implements OnInit {
 
   changeDateAndFetch() {
     console.log(this.form);
+    this.daylyDate = getDate(this.form.value.daylyDate, 'YYYY-MM-DD')
   }
 
   sortByColor(array: ProductInfo[][]): ProductInfo[][] {
