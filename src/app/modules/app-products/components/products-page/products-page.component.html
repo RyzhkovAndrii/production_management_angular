@@ -21,7 +21,7 @@
           <th scope="col">за месяц</th>
         </tr>
       </thead>
-      <tbody *ngFor="let infoArray of productsInfo">
+      <tbody *ngFor="let infoArray of sortByColor(productsInfo)">
         <tr *ngFor="let productInfo of sortByNameAndWeight(infoArray)" [contextMenu]="productsMenu" [contextMenuSubject]="productInfo.type">
           <th scope="row" class="row-name">
             {{ productInfo.type.name }}

@@ -28,6 +28,9 @@ import {
 import {
   ProductOperationModalComponent
 } from '../product-operation-modal/product-operation-modal.component';
+import {
+  compareColors
+} from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-products-page',
@@ -66,6 +69,13 @@ export class ProductsPageComponent implements OnInit {
       }, error => {
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });
+  }
+
+  sortByColor(array: ProductInfo[][]): ProductInfo[][] {
+    return array.sort((a, b) => {
+      const byColor = compareColors(a[0].type.colorCode, b[0].type.colorCode);
+      return byColor != 0 ? byColor : 1;
+    });
   }
 
   sortByNameAndWeight(array: ProductInfo[]): ProductInfo[] {
