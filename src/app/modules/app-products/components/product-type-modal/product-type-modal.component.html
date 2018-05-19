@@ -25,7 +25,7 @@
       <label for="product-color" class="col-form-label">Цвет:</label>
       <input type="button" class="form-control" id="product-color" formControlName="colorCode" [(colorPicker)]="colorCode" [value]="colorCode"
         [style.background]="colorCode" [style.color]="colorCode" [cpOutputFormat]="'hex'" [cpPosition]="'left'" [cpOKButton]="true"
-        [cpCancelButton]="true" [cpPresetColors]="presetColors">
+        [cpCancelButton]="true" [cpPresetColors]="presetColors" [cpWidth]="300" [cpPositionOffset]="-500">
     </div>
   </div>
 </form>
