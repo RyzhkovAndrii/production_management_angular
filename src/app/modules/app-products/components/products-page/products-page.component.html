@@ -1,7 +1,34 @@
 <div class="container-fluid mt-2">
-  <button class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
-    <span class="material-icons">add</span>
-  </button>
+  <div class="row">
+    <div class="col-md-1">
+      <button class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
+        <span class="material-icons">add</span>
+      </button>
+    </div>
+
+    <div class="col-md-3 offset-md-4">
+      <form [formGroup]="form">
+        <div class="form-row">
+          <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+            <div class="input-group">
+              <input type="date" class="form-control form-control-sm" id="daylyDate" formControlName="daylyDate" [ngClass]="{
+  'is-invalid': form.get('daylyDate').invalid,
+  'is-valid': form.get('daylyDate').valid && form.get('daylyDate').touched
+  }">
+              <div class="invalid-feedback" *ngIf="form.get('daylyDate').invalid">
+                <span *ngIf="form.get('daylyDate').errors['required']">Не может быть пустым!</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+            <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="form.invalid" (click)="changeDateAndFetch()">Сменить дату</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="table-responsive mt-2">
     <table class="table table-bordered table-striped table-sm">
       <thead>

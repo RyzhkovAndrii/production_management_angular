@@ -4,6 +4,9 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
+  FormGroup, FormControl, Validators
+} from '@angular/forms';
+import {
   ModalDialogService,
   IModalDialogOptions
 } from 'ngx-modal-dialog';
@@ -14,7 +17,8 @@ import {
 import {
   getDateFirstDayOfMonth,
   midnightDate,
-  formatDate
+  formatDate,
+  formatDateServerToBrowser
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -44,6 +48,8 @@ export class ProductsPageComponent implements OnInit {
   toDate: Date;
   fromDate: Date;
 
+  form: FormGroup;
+
   private readonly COLLATOR = new Intl.Collator([], {
     sensitivity: "base"
   });
@@ -58,6 +64,9 @@ export class ProductsPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      daylyDate: new FormControl(formatDateServerToBrowser(formatDate(this.daylyDate)), Validators.required)
+    });
     this.fetchData();
   }
 
@@ -69,6 +78,10 @@ export class ProductsPageComponent implements OnInit {
       }, error => {
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });
+  }
+
+  changeDateAndFetch() {
+    console.log(this.form);
   }
 
   sortByColor(array: ProductInfo[][]): ProductInfo[][] {
