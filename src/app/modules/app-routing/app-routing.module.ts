@@ -21,6 +21,10 @@ const appRoutes: Routes = [{
   {
     path: 'products',
     loadChildren: '../app-products/products.module#ProductsModule'
+  },
+  {
+    path: 'orders',
+    loadChildren: '../app-orders/orders.module#OrdersModule'
   }
 ];
 
