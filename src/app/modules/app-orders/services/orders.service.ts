@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 import { ClientsService } from './client.service';
-import { from } from 'rxjs/observable/from';
+import { OrderItemService } from './order-item.service';
 
 @Injectable()
 export class OrdersService {
 
-  constructor(private http: HttpClient, private clietnsService: ClientsService) { }
+  constructor(private http: HttpClient,
+    private clietnsService: ClientsService,
+    private orderItemService: OrderItemService) { }
 
   ordersUrl = 'http://localhost:3004/orders/';
 
@@ -32,7 +34,9 @@ export class OrdersService {
     orderDetails.isDelivered = response.isDelivered;
     orderDetails.isOverdue = response.isOverdue;
     this.clietnsService.getClientResponse(response.clientId)
-      .subscribe((client: ClientResponse) => {orderDetails.client = client});
+      .subscribe((client: ClientResponse) => { orderDetails.client = client });
+    this.orderItemService.getOrderItemResponseList(response.id)
+      .subscribe((orderItemList: OrderItemResponse[]) => { orderDetails.orderItemList = orderItemList });
     return orderDetails;
   }
 

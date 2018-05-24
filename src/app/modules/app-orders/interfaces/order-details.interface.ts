@@ -7,4 +7,5 @@ interface OrderDetails {
     isImportant: boolean;
     isDelivered: boolean;
     isOverdue: boolean;
+    orderItemList: OrderItemResponse[];
 }
