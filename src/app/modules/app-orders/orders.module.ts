@@ -8,6 +8,9 @@ import { ModalDialogModule } from "ngx-modal-dialog";
 import { AppSharedModule } from "../app-shared/app-shared.module";
 import { OrdersRoutingModule } from "./orders-routing.module";
 import { OrdersPageComponent } from "./components/orders-page/orders-page.component";
+import { OrdersService } from "./services/orders.service";
+import { ClientsService } from "./services/client.service";
+import { OrderComponent } from './components/order/order.component';
 
 @NgModule({
     imports: [
@@ -24,9 +27,13 @@ import { OrdersPageComponent } from "./components/orders-page/orders-page.compon
         AppSharedModule
     ],
     declarations: [
-        OrdersPageComponent
+        OrdersPageComponent,
+        OrderComponent
     ],
-    providers: [],
+    providers: [
+        OrdersService,
+        ClientsService
+    ],
     entryComponents: []
 })
 export class OrdersModule { }
