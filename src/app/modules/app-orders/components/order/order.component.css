@@ -1,0 +1,33 @@
+table {
+    empty-cells: show;
+}
+
+table td {
+    max-width: 5rem;
+}
+
+table tr {    
+    height: 1.5rem;
+}
+
+div.overflow-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+div.overflow-text:hover {
+    overflow: visible;
+}
+
+i.icon-overdue {
+    color: red;
+}
+
+i.icon-delivered {
+    color: green;
+}
+
+.material-icons {
+    font-size: 18px;
+}

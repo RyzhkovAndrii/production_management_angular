@@ -1,0 +1,26 @@
+<table class="table-bordered">
+  <tr>
+    <td>
+      <div class="overflow-text">
+        <span>{{order.client?.name}}</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="overflow-text">
+        <span>{{order.city}}</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>{{order.deliveryDate | moment:'DD.MM.YYYY'}}</td>
+  </tr>
+  <tr>
+    <td>
+      <i *ngIf="order.isImportant" class="material-icons">warning</i>
+      <i *ngIf="order.isOverdue" class="material-icons icon-overdue">error_outline</i>
+      <i *ngIf="order.isDelivered" class="material-icons icon-delivered">check_circle</i>
+    </td>
+  </tr>
+</table>
