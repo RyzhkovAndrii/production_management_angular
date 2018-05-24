@@ -7,19 +7,27 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-2" style="padding-right: 0px;">
-      <table class="header-table table-bordered">
+    <div class="col-2" style="padding-right: 0.1rem;">
+      <table class="header-table table-bordered table-striped">
         <tr>
-          <th class="align-middle table-header">Клиент</th>
+          <th colspan="3" class="table-header">Клиент</th>
         </tr>
         <tr>
-          <th class="align-middle table-header">Город</th>
+          <th colspan="3" class="table-header">Город</th>
         </tr>
         <tr>
-          <th class="align-middle table-header">Дата доставки</th>
+          <th colspan="3" class="table-header">Дата доставки</th>
         </tr>
         <tr>
-          <th class="align-middle table-header">Статус</th>
+          <th colspan="3" class="table-header">Статус</th>
+        </tr>
+        <tr style="height: 0.2rem;"></tr>
+        <tr *ngFor="let productType of productTypes | async">
+          <td>{{productType.name}}</td>
+          <td>{{ productType.weight}}</td>
+          <td>
+            <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+          </td>
         </tr>
       </table>
     </div>
@@ -29,6 +37,6 @@
           <app-order [order]="orderDetails"></app-order>
         </div>
       </div>
-    </div>    
+    </div>
   </div>
 </div>

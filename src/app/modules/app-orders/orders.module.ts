@@ -11,6 +11,9 @@ import { OrdersPageComponent } from "./components/orders-page/orders-page.compon
 import { OrdersService } from "./services/orders.service";
 import { ClientsService } from "./services/client.service";
 import { OrderComponent } from './components/order/order.component';
+import { OrderItemService } from "./services/order-item.service";
+import {ProductsService} from "../app-products/services/products.service";
+import { ProductsUrlsService } from "../app-products/services/products-urls.service";
 
 @NgModule({
     imports: [
@@ -32,7 +35,10 @@ import { OrderComponent } from './components/order/order.component';
     ],
     providers: [
         OrdersService,
-        ClientsService
+        ClientsService,
+        OrderItemService,
+        ProductsService,
+        ProductsUrlsService
     ],
     entryComponents: []
 })
