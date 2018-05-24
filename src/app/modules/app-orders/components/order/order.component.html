@@ -1,26 +1,32 @@
-<table class="table-bordered">
-  <tr>
-    <td>
-      <div class="overflow-text">
-        <span>{{order.client?.name}}</span>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="overflow-text">
-        <span>{{order.city}}</span>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>{{order.deliveryDate | moment:'DD.MM.YYYY'}}</td>
-  </tr>
-  <tr>
-    <td>
-      <i *ngIf="order.isImportant" class="material-icons">warning</i>
-      <i *ngIf="order.isOverdue" class="material-icons icon-overdue">error_outline</i>
-      <i *ngIf="order.isDelivered" class="material-icons icon-delivered">check_circle</i>
-    </td>
+<table class="table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>
+        <div class="overflow-text">
+          <span>{{order.client?.name}}</span>
+        </div>
+      </th>
+    </tr>
+    <tr>
+      <th>
+        <div class="overflow-text">
+          <span>{{order.city}}</span>
+        </div>
+      </th>
+    </tr>
+    <tr>
+      <th>{{order.deliveryDate | moment:'DD.MM.YYYY'}}</th>
+    </tr>
+    <tr>
+      <th>
+        <i *ngIf="order.isImportant" class="material-icons">warning</i>
+        <i *ngIf="order.isOverdue" class="material-icons icon-overdue">error_outline</i>
+        <i *ngIf="order.isDelivered" class="material-icons icon-delivered">check_circle</i>
+      </th>
+    </tr>
+    <tr style="height: 0.2rem;"></tr>
+  </thead>
+  <tr *ngFor="let orderItem of order.orderItemList">
+    <td>{{orderItem.amount | exponent}}</td>
   </tr>
 </table>
