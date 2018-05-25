@@ -134,6 +134,14 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
+  getProductTypesByName(name: string): Observable < ProductTypeResponse[] > {
+    const params = new HttpParams()
+      .set('name', name);
+    return this.http.get(this.urls.productTypesUrl, {
+      params
+    }).catch(httpErrorHandle);
+  }
+
   postProductType(type: ProductTypeRequest): Observable < ProductTypeResponse > {
     return this.http.post(this.urls.productTypesUrl, type).catch(httpErrorHandle);
   }

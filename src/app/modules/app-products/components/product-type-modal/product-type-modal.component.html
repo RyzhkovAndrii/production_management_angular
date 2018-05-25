@@ -1,10 +1,10 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="form-invalid">
   <div class="row">
     <div class="col-md-6">
       <label for="roll-name" class="col-form-label">Наименование:</label>
       <input type="text" class="form-control" id="roll-name" formControlName="name" [ngClass]="{
             'is-invalid': form.get('name').invalid && isTouched('name'),
-            'is-valid': form.get('name').valid && isTouched('name')
+            'is-valid': form.get('name').valid && isTouched('name') && !form.errors
           }">
       <div class="invalid-feedback" *ngIf="form.get('name').invalid && isTouched('name')">
         <span *ngIf="form.get('name').errors['required']">Обязательное поле!</span>
@@ -14,7 +14,7 @@
       <label for="product-weight" class="col-form-label">Вес:</label>
       <input type="number" class="form-control" id="product-weight" [step]="MIN_WEIGHT" formControlName="weight" [min]="MIN_WEIGHT" [ngClass]="{
           'is-invalid': form.get('weight').invalid && isTouched('weight'),
-          'is-valid': form.get('weight').valid && isTouched('weight')
+          'is-valid': form.get('weight').valid && isTouched('weight') && !form.errors
         }">
       <div class="invalid-feedback" *ngIf="form.get('weight').invalid && isTouched('weight')">
         <span *ngIf="form.get('weight').errors['required']">Обязательное поле!</span>
@@ -25,7 +25,10 @@
       <label for="product-color" class="col-form-label">Цвет:</label>
       <input type="button" class="form-control" id="product-color" formControlName="colorCode" [(colorPicker)]="colorCode" [value]="colorCode"
         [style.background]="colorCode" [style.color]="colorCode" [cpOutputFormat]="'hex'" [cpPosition]="'left'" [cpOKButton]="true"
-        [cpCancelButton]="true" [cpPresetColors]="presetColors" [cpWidth]="300" [cpPositionOffset]="-500">
+        [cpCancelButton]="true" [cpPresetColors]="presetColors" [cpWidth]="300" [cpPositionOffset]="-500" (colorPickerChange)="form.get('colorCode').setValue($event)">
     </div>
+  </div>
+  <div class="invalid pt-2" *ngIf="form.errors && (form.touched || submitPressed)">
+    <span *ngIf="form.errors['notUnique']">Такой продукт уже существует!</span>
   </div>
 </form>

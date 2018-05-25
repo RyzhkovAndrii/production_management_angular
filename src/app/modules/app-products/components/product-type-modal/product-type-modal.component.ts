@@ -14,6 +14,9 @@ import {
   Validators
 } from '@angular/forms';
 import appPresetColors from '../../../../app-utils/app-preset-colors';
+import {
+  ProductsService
+} from '../../services/products.service';
 
 @Component({
   selector: 'app-product-type-modal',
@@ -34,7 +37,7 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
 
   readonly MIN_WEIGHT = 0.1;
 
-  constructor() {
+  constructor(private productsService: ProductsService) {
     this.actionButtons = [{
         text: 'Отмена',
         buttonClass: this.btnClass,
@@ -55,7 +58,7 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
       name: new FormControl(this.productType ? this.productType.name : undefined, [Validators.required]),
       weight: new FormControl(this.productType ? this.productType.weight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT)]),
       colorCode: new FormControl(this.colorCode)
-    });
+    }, [], [this.validateUnique.bind(this)]);
   }
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductTypeModalData >> ) {
@@ -83,5 +86,21 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
 
   isTouched(controlName: string) {
     return this.form.get(controlName).touched || this.submitPressed;
+  }
+
+  validateUnique(form: FormGroup) {
+    console.log(form);
+    return this.productsService.getProductTypesByName(form.value.name).map(data => {
+      if (data.findIndex((value, index, array) => {
+          return value.name === form.value.name &&
+            value.weight === form.value.weight &&
+            value.colorCode.toLowerCase() === form.value.colorCode.toLowerCase();
+        }) >= 0) {
+        return {
+          'notUnique': true
+        }
+      }
+      return null;
+    });
   }
 }
