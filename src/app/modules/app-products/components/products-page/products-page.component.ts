@@ -40,6 +40,9 @@ import {
 import {
   compareColors
 } from '../../../../app-utils/app-comparators';
+import {
+  validateDateNotAfterCurrent
+} from '../../../../app-utils/app-validators';
 
 @Component({
   selector: 'app-products-page',
@@ -66,7 +69,10 @@ export class ProductsPageComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      daylyDate: new FormControl(formatDateServerToBrowser(formatDate(midnightDate())), Validators.required)
+      daylyDate: new FormControl(formatDateServerToBrowser(formatDate(midnightDate())), [
+        Validators.required,
+        validateDateNotAfterCurrent
+      ])
     });
     this.loadTable();
   }

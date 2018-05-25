@@ -55,6 +55,11 @@ td:hover,
   background-color: #f2f2f2;
 }
 
+.invalid {
+  font-size: 80%;
+  color: #dc3545;
+}
+
 @media screen and (max-width: 1400px) {
   table {
     font-size: 0.8rem !important;
