@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RollCheckComponent } from './roll-check.component';
+import { CheckSelectComponent } from './check-select.component';
 
-describe('RollCheckComponent', () => {
-  let component: RollCheckComponent;
-  let fixture: ComponentFixture<RollCheckComponent>;
+describe('CheckSelectComponent', () => {
+  let component: CheckSelectComponent;
+  let fixture: ComponentFixture<CheckSelectComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RollCheckComponent ]
+      declarations: [ CheckSelectComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RollCheckComponent);
+    fixture = TestBed.createComponent(CheckSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

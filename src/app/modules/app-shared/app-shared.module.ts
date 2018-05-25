@@ -22,6 +22,15 @@ import {
 import {
   MomentPipe
 } from './pipes/moment.pipe';
+import {
+  CheckSelectComponent
+} from './components/check-select/check-select.component';
+import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+import {
+  FormsModule
+} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,17 +38,21 @@ import {
     SimpleConfirmModalComponent,
     ExponentPipe,
     EmptyPipe,
-    MomentPipe
+    MomentPipe,
+    CheckSelectComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    NgSelectModule
   ],
   exports: [
     HttpErrorModalComponent,
     SimpleConfirmModalComponent,
     ExponentPipe,
     EmptyPipe,
-    MomentPipe
+    MomentPipe,
+    CheckSelectComponent
   ],
   entryComponents: [
     HttpErrorModalComponent,

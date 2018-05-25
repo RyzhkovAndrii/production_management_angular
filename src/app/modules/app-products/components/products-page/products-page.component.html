@@ -44,12 +44,18 @@
           <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
+          <th scope="col" rowspan="1" *ngIf="true">
+            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0">
+              <span class="material-icons">save</span>
+            </button>
+          </th>
         </tr>
         <tr class="table-header">
           <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
           <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
           <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
           <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
+          <th scope="col" *ngIf="true">Проверка</th>
         </tr>
       </thead>
       <tbody *ngFor="let infoArray of sortByColor(productsInfo)">
@@ -63,28 +69,28 @@
           <th scope="row" class="row-name">
             <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
           </th>
-          <td>
+          <td class="w-12">
             {{ (productInfo.restLeftover.amount) | exponent }}
           </td>
-          <td (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
+          <td class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
             {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
           </td>
-          <td>
+          <td class="w-12">
             {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
           </td>
-          <td (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
+          <td class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
             {{ productInfo.dayBatch.soldAmount | empty | exponent }}
           </td>
-          <td>
+          <td class="w-12">
             {{ productInfo.monthBatch.soldAmount | empty | exponent }}
           </td>
-          <td>
+          <td class="w-12">
             {{ productInfo.currentLeftover.amount | exponent }}
           </td>
         </tr>
         <tr>
           <th scope="row" class="row-name" colspan="3">Итого</th>
-          <td *ngFor="let total of getSectionTotals(infoArray)">
+          <td class="w-12" *ngFor="let total of getSectionTotals(infoArray)">
             {{ total | exponent }}
           </td>
         </tr>
@@ -93,7 +99,7 @@
       <tbody *ngIf="productsInfo.length != 0">
         <tr>
           <th scope="row" class="row-name" colspan="3">Всего</th>
-          <td *ngFor="let total of getTotals()">
+          <td class="w-12" *ngFor="let total of getTotals()">
             {{ total | exponent }}
           </td>
         </tr>

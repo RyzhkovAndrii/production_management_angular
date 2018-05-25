@@ -18,7 +18,7 @@ th, td {
   white-space: nowrap;
 }
 
-app-roll-check {
+check-select {
   display: flex;
   justify-content: center;
 }

@@ -15,9 +15,6 @@ import {
   NgbModule
 } from "@ng-bootstrap/ng-bootstrap";
 import {
-  NgSelectModule
-} from "@ng-select/ng-select";
-import {
   ContextMenuModule
 } from "ngx-contextmenu";
 import {
@@ -43,9 +40,6 @@ import {
   RollsUrlService
 } from "./services/rolls-url.service";
 import {
-  RollCheckComponent
-} from './components/roll-check/roll-check.component';
-import {
   AppSharedModule
 } from "../app-shared/app-shared.module";
 import {
@@ -57,7 +51,6 @@ import {
     RollsPageComponent,
     RollTypeModalComponent,
     RollOperationModalComponent,
-    RollCheckComponent,
     RollOperationsPageComponent
   ],
   imports: [
@@ -67,7 +60,6 @@ import {
     ColorPickerModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule,
     ContextMenuModule.forRoot({
       useBootstrap4: true
     }),

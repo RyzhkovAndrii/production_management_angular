@@ -1,5 +1,5 @@
-td {
-    width: 12%;
+.w-12 {
+    width: 12%!important;
 }
 
 .empty-row, .empty-row:hover {

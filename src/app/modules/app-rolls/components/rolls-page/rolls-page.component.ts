@@ -46,7 +46,7 @@ import {
 } from '../../../app-shared/components/http-error-modal/http-error-modal.component';
 import {
   CheckStatus
-} from '../../enums/check-status.enum';
+} from '../../../app-shared/enums/check-status.enum';
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
@@ -241,7 +241,8 @@ export class RollsPageComponent implements OnInit {
     return batch.readyToUse;
   }
 
-  onChangeRollCheck(rollCheck: RollCheck) {
+  onChangeRollCheck(checkStatus: CheckStatus, rollCheck: RollCheck) {
+    rollCheck.rollLeftOverCheckStatus = checkStatus;
     this.rollChecks.set(rollCheck.id, rollCheck);
   }
 
