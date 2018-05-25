@@ -89,7 +89,6 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
   }
 
   validateUnique(form: FormGroup) {
-    console.log(form);
     return this.productsService.getProductTypesByName(form.value.name).map(data => {
       if (data.findIndex((value, index, array) => {
           return value.name === form.value.name &&
