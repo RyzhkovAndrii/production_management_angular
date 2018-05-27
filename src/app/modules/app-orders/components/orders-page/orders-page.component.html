@@ -1,4 +1,4 @@
-<div class="container-fluid mt-2">
+<div class="container-fluid">
   <div class="row">
     <div class="col-1">
       <button class="btn btn-outline-dark btn-sm">
@@ -7,34 +7,43 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-2" style="padding-right: 0.1rem;">
-      <table class="header-table table-bordered table-striped">
-        <tr>
-          <th colspan="3" class="table-header">Клиент</th>
-        </tr>
-        <tr>
-          <th colspan="3" class="table-header">Город</th>
-        </tr>
-        <tr>
-          <th colspan="3" class="table-header">Дата доставки</th>
-        </tr>
-        <tr>
-          <th colspan="3" class="table-header">Статус</th>
-        </tr>
-        <tr style="height: 0.2rem;"></tr>
-        <tr *ngFor="let productType of productTypes | async">
-          <td>{{productType.name}}</td>
-          <td>{{ productType.weight}}</td>
-          <td>
-            <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="col-10" style="padding-left: 0px;">
-      <div id="data-table-container">
-        <div *ngFor="let orderDetails of orderDetailses | async">
-          <app-order [order]="orderDetails"></app-order>
+    <div class="col-12">
+      <div id="table-container">
+        <div id="product-table-container">
+          <table class="table-bordered">
+            <tr>
+              <th colspan="3" class="table-header">Клиент</th>
+            </tr>
+            <tr>
+              <th colspan="3" class="table-header">Город</th>
+            </tr>
+            <tr>
+              <th colspan="3" class="table-header">Дата доставки</th>
+            </tr>
+            <tr>
+              <th colspan="3" class="table-header">Статус</th>
+            </tr>
+            <tr style="height: 0.2rem;"></tr>
+            <div *ngIf="productTypes"></div>
+            <tr *ngFor="let productType of productTypes">
+              <td>{{productType.name}}</td>
+              <td>{{productType.weight}}</td>
+              <td>
+                <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div *ngIf="productLeftOvers">
+          <app-order-leftover-product [productLeftOverList]="productLeftOvers" [productTypeList]="productTypes"></app-order-leftover-product>
+        </div>
+        <div id="client-table-container">
+          <div *ngFor="let orderResponse of orderResponses">
+            <app-order [orderResponse]="orderResponse" [productTypeList]="productTypes"></app-order>
+          </div>
+        </div>
+        <div *ngIf="productLeftOvers">
+          <app-order-leftover-product [productLeftOverList]="productLeftOvers" [productTypeList]="productTypes"></app-order-leftover-product>
         </div>
       </div>
     </div>

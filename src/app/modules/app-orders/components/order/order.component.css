@@ -1,12 +1,17 @@
 table {
     empty-cells: show;
+    max-width: 6rem;
 }
 
-table td {
+table th {
+    font-weight: normal;
+}
+
+table td, table th {
     max-width: 5rem;
 }
 
-table tr {    
+table tr {
     height: 1.5rem;
 }
 
@@ -20,12 +25,16 @@ div.overflow-text:hover {
     overflow: visible;
 }
 
+/* div.overflow-text:hover {
+    white-space: normal;
+} */
+
 i.icon-overdue {
-    color: red;
+    color: #de3163;
 }
 
-i.icon-delivered {
-    color: green;
+i.icon-impotant {
+    color: #e49b0f;
 }
 
 .material-icons {

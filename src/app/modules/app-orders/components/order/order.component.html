@@ -19,14 +19,15 @@
     </tr>
     <tr>
       <th>
-        <i *ngIf="order.isImportant" class="material-icons">warning</i>
-        <i *ngIf="order.isOverdue" class="material-icons icon-overdue">error_outline</i>
-        <i *ngIf="order.isDelivered" class="material-icons icon-delivered">check_circle</i>
+        <i *ngIf="order.isImportant" class="material-icons icon-impotant">error_outline</i>
+        <i *ngIf="order.isOverdue" class="material-icons icon-overdue">alarm</i>
       </th>
     </tr>
     <tr style="height: 0.2rem;"></tr>
   </thead>
-  <tr *ngFor="let orderItem of order.orderItemList">
-    <td>{{orderItem.amount | exponent}}</td>
-  </tr>
+  <tbody>
+    <tr *ngFor="let orderItem of order.orderItemList">
+      <td>{{orderItem?.amount | exponent}}</td>
+    </tr>
+  </tbody>
 </table>

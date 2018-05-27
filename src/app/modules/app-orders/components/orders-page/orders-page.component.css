@@ -1,18 +1,41 @@
-#data-table-container {
+table {
+    empty-cells: show;
+}
+
+table tr {
+    height: 1.5rem;
+}
+
+table td, table th {
+    white-space: nowrap;
+}
+
+#table-container { 
+    display: flex;
+    position: left;
+    margin-right: 5px;
+}
+
+#product-table-container {    
+    min-width: 10rem;
+    max-width: 15rem;
+    margin-right: 0.2rem;
+}
+
+#client-table-container {
     overflow: auto;
     white-space: nowrap;
-    overflow-y: hidden;
     display: flex;
+    margin: 0 0.2rem;
+    min-width: 5rem;
 }
 
 .row {
     margin-top: 8px;
 }
 
-.header-table {
-    width: 100%;
-}
-
-.header-table tr {
-    height: 1.5rem;
+.filled-circle {
+    padding: 0rem 0.5rem;
+    border-width: 0.04rem;
+    font-size: 12px;
 }
