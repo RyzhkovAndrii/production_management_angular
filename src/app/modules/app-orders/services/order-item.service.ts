@@ -3,16 +3,18 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { PARAMETERS } from "@angular/core/src/util/decorators";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
+import { BehaviorSubject } from "rxjs";
+import { OrderModuleUrlService } from "./order-module-url.service";
 
 @Injectable()
 export class OrderItemService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,
+        private urlService: OrderModuleUrlService) { }
 
-    getOrderItemResponseList(orderId: number): Observable<OrderItemResponse[]> {
-        const orderItemUrl = 'http://localhost:3004/order-items/';
+    getOrderItemList(orderId: number): Observable<OrderItemResponse[]> {
         const params = new HttpParams().set('orderId', String(orderId));
-        return this.http.get(orderItemUrl, {params}).catch(httpErrorHandle);
+        return this.http.get(this.urlService.orderItemUrl, { params }).catch(httpErrorHandle);
     }
 
 }
