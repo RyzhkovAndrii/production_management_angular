@@ -3,6 +3,7 @@ import { OrdersService } from '../../services/orders.service';
 import { Observable } from 'rxjs/Observable';
 import { ClientsService } from '../../services/client.service';
 import { ProductsService } from '../../../app-products/services/products.service';
+import { getDate } from '../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-orders-page',
@@ -11,8 +12,9 @@ import { ProductsService } from '../../../app-products/services/products.service
 })
 export class OrdersPageComponent implements OnInit {
 
-  orderDetailses: Observable<OrderDetails[]>;
-  productTypes: Observable<ProductTypeResponse[]>
+  orderResponses: OrderResponse[];
+  productTypes: ProductTypeResponse[];
+  productLeftOvers: ProductLeftoverResponse[];
 
   constructor(private ordersService: OrdersService,
     private clientsService: ClientsService,
@@ -22,18 +24,13 @@ export class OrdersPageComponent implements OnInit {
     this.fetchData();
   }
 
-  fetchData() {
-    this.orderDetailses = this.ordersService.getOrderDetailsList();
-    this.productTypes = this.sortProductTypesByColorAndWeight(this.productsService.getProductTypes());
-  }
-
-  sortProductTypesByColorAndWeight(productTypeList: Observable<ProductTypeResponse[]>): Observable<ProductTypeResponse[]> {
-    return productTypeList.map((data) => {
-      data.sort((a, b) => {
-        return a.colorCode < b.colorCode ? -1 : 1;
+  private fetchData() {
+    this.productsService.getSortedProductTypes()
+      .subscribe(data => {
+        this.productTypes = data;
+        this.ordersService.getOrderList().subscribe(data => this.orderResponses = data);
+        this.productsService.getProductsLeftovers(getDate("27-05-2018")).subscribe(data => this.productLeftOvers = data);
       });
-      return data;
-    });
   }
 
 }
