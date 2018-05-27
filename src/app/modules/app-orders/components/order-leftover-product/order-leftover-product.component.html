@@ -1,0 +1,16 @@
+<table class="table-bordered table-striped">
+  <thead>
+    <tr>
+      <th rowspan="4">Остаток</th>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr></tr>
+    <tr style="height: 0.2rem;"></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let productLeftOver of sortedProductLeftOverList">
+      <td>{{productLeftOver.amount | exponent}}</td>
+    </tr>
+  </tbody>
+</table>
