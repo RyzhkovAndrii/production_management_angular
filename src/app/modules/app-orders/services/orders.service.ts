@@ -14,34 +14,8 @@ export class OrdersService {
 
   ordersUrl = 'http://localhost:3004/orders/';
 
-  getOrderResponseList(): Observable<OrderResponse[]> {
-    return this.http.get(this.ordersUrl).catch(httpErrorHandle);
-  }
-
-  getOrderDetailsList(): Observable<OrderDetails[]> {
-    return this.getOrderResponseList()
-      .map((response: OrderResponse[]) => this.convertArray(response))
-      .catch(httpErrorHandle);
-  }
-
-  convert(response: OrderResponse): OrderDetails {
-    var orderDetails = {} as OrderDetails;
-    orderDetails.id = response.id;
-    orderDetails.city = response.city;
-    orderDetails.creationDate = response.creationDate;
-    orderDetails.deliveryDate = response.deliveryDate;
-    orderDetails.isImportant = response.isImportant;
-    orderDetails.isDelivered = response.isDelivered;
-    orderDetails.isOverdue = response.isOverdue;
-    this.clietnsService.getClientResponse(response.clientId)
-      .subscribe((client: ClientResponse) => { orderDetails.client = client });
-    this.orderItemService.getOrderItemResponseList(response.id)
-      .subscribe((orderItemList: OrderItemResponse[]) => { orderDetails.orderItemList = orderItemList });
-    return orderDetails;
-  }
-
-  convertArray(response: OrderResponse[]): OrderDetails[] {
-    return response.map((item) => this.convert(item));
+  getOrderList(): Observable<OrderResponse[]> {
+    return this.http.get<OrderResponse[]>(this.ordersUrl);
   }
 
 }
