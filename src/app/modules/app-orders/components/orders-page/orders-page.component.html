@@ -34,17 +34,13 @@
             </tr>
           </table>
         </div>
-        <div *ngIf="productLeftOvers">
-          <app-order-leftover-product [productLeftOverList]="productLeftOvers" [productTypeList]="productTypes"></app-order-leftover-product>
-        </div>
+        <app-order-leftover-product [productTypeList]="productTypes"></app-order-leftover-product>
         <div id="client-table-container">
           <div *ngFor="let orderResponse of orderResponses">
             <app-order [orderResponse]="orderResponse" [productTypeList]="productTypes"></app-order>
           </div>
         </div>
-        <div *ngIf="productLeftOvers">
-          <app-order-leftover-product [productLeftOverList]="productLeftOvers" [productTypeList]="productTypes"></app-order-leftover-product>
-        </div>
+        <app-order-leftover-product [productTypeList]="productTypes"></app-order-leftover-product>
       </div>
     </div>
   </div>

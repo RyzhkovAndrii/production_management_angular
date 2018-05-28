@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ProductsService } from '../../../app-products/services/products.service';
 
 @Component({
   selector: 'app-order-leftover-product',
@@ -8,20 +9,27 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class OrderLeftoverProductComponent implements OnInit {
 
+
+  private productLeftOverList: ProductLeftoverResponse[];
+
   @Input()
   productTypeList: ProductTypeResponse[];
 
-  @Input()
-  productLeftOverList: ProductLeftoverResponse[];
-
   sortedProductLeftOverList: ProductLeftoverResponse[];
 
-  constructor() {
+  date: Date; 
+
+  constructor(private productService: ProductsService) {
     this.sortedProductLeftOverList = [];
   }
 
   ngOnInit() {
-    this.sortProductLeftOverList();
+    this.productService.getProductsLeftovers(new Date('2018-05-28'))
+      .subscribe(data => {
+        this.productLeftOverList = data;
+        this.sortProductLeftOverList();
+      });
+    this.date = new Date('2018-05-28'); // todo choise of date
   }
 
   private sortProductLeftOverList() {
