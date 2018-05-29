@@ -199,6 +199,7 @@ export class RollsPageComponent implements OnInit {
               rollType.thickness = x.thickness;
               rollType.minWeight = x.minWeight;
               rollType.maxWeight = x.maxWeight;
+              rollType.length = x.length;
             }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
         }, reject => {});
     };

@@ -68,7 +68,8 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
       colorCode: new FormControl(this.colorCode),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, [Validators.required, Validators.min(this.MIN_THICKNESS)]),
       minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this)]),
-      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)])
+      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)]),
+      length: new FormControl(this.rollType ? this.rollType.length : undefined, [Validators.required])
     });
   }
 
@@ -91,7 +92,8 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
       colorCode: this.colorCode,
       thickness: this.form.value.thickness,
       minWeight: this.form.value.minWeight,
-      maxWeight: this.form.value.maxWeight
+      maxWeight: this.form.value.maxWeight,
+      length: this.form.value.length
     }
     const resolve = Promise.resolve(type);
     this.options.data.operation(resolve);
