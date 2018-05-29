@@ -18,11 +18,6 @@ th, td {
   white-space: nowrap;
 }
 
-check-select {
-  display: flex;
-  justify-content: center;
-}
-
 table {
   margin-bottom: 10%;
 }

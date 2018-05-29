@@ -22,3 +22,8 @@
 .check-select::ng-deep .ng-dropdown-panel {
     display: flex;
 }
+
+.check-select {
+    display: flex;
+    justify-content: center;
+  }

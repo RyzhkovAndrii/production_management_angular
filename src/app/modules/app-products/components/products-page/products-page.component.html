@@ -14,7 +14,7 @@
               <input type="date" class="form-control form-control-sm" id="daylyDate" formControlName="daylyDate" [ngClass]="{
   'is-invalid': form.get('daylyDate').invalid,
   'is-valid': form.get('daylyDate').valid && form.get('daylyDate').touched
-  }"> 
+  }">
             </div>
           </div>
           <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
@@ -87,12 +87,17 @@
           <td class="w-12">
             {{ productInfo.currentLeftover.amount | exponent }}
           </td>
+          <td>
+            <check-select [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)">
+            </check-select>
+          </td>
         </tr>
         <tr>
           <th scope="row" class="row-name" colspan="3">Итого</th>
           <td class="w-12" *ngFor="let total of getSectionTotals(infoArray)">
             {{ total | exponent }}
           </td>
+          <td></td>
         </tr>
         <td class="empty-row"></td>
       </tbody>
@@ -102,6 +107,7 @@
           <td class="w-12" *ngFor="let total of getTotals()">
             {{ total | exponent }}
           </td>
+          <td></td>
         </tr>
       </tbody>
     </table>

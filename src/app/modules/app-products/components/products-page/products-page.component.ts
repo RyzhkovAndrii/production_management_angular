@@ -43,6 +43,7 @@ import {
 import {
   validateDateNotAfterCurrent
 } from '../../../../app-utils/app-validators';
+import { CheckStatus } from '../../../app-shared/enums/check-status.enum';
 
 @Component({
   selector: 'app-products-page',
@@ -222,5 +223,9 @@ export class ProductsPageComponent implements OnInit {
       ]
     };
     this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+  }
+
+  onChangeProductCheck(checkStatus: CheckStatus, productCheck: ProductCheckResponse) {
+    console.log(checkStatus, productCheck);
   }
 }
