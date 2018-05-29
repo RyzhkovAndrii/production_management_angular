@@ -10,19 +10,53 @@ import {
 import {
   AppModalService
 } from './services/app-modal.service';
+import {
+  SimpleConfirmModalComponent
+} from './components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  ExponentPipe
+} from './pipes/exponent.pipe';
+import {
+  EmptyPipe
+} from './pipes/empty.pipe';
+import {
+  MomentPipe
+} from './pipes/moment.pipe';
+import {
+  CheckSelectComponent
+} from './components/check-select/check-select.component';
+import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+import {
+  FormsModule
+} from '@angular/forms';
 
 @NgModule({
   declarations: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent,
+    ExponentPipe,
+    EmptyPipe,
+    MomentPipe,
+    CheckSelectComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    NgSelectModule
   ],
   exports: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent,
+    ExponentPipe,
+    EmptyPipe,
+    MomentPipe,
+    CheckSelectComponent
   ],
   entryComponents: [
-    HttpErrorModalComponent
+    HttpErrorModalComponent,
+    SimpleConfirmModalComponent
   ]
 })
 export class AppSharedModule {}

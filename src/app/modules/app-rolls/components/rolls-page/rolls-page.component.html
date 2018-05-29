@@ -71,7 +71,7 @@
             {{ rollInfo.totalRollLeftover.amount }}
           </td>
           <td *ngIf="!isPreviousPeriod()">
-            <app-roll-check [rollCheck]="rollInfo.rollCheck" (changeCheckStatus)="onChangeRollCheck($event)"></app-roll-check>
+            <check-select [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
           </td>
         </tr>
       </tbody>

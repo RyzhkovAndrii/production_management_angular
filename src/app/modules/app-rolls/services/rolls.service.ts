@@ -28,7 +28,7 @@ import {
 } from '../../../app-utils/app-http-error-handler';
 import {
   CheckStatus
-} from '../enums/check-status.enum';
+} from '../../app-shared/enums/check-status.enum';
 
 @Injectable()
 export class RollsService {

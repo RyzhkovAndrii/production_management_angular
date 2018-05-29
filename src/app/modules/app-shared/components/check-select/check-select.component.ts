@@ -10,14 +10,14 @@ import {
 } from '../../enums/check-status.enum';
 
 @Component({
-  selector: 'app-roll-check',
-  templateUrl: './roll-check.component.html',
-  styleUrls: ['./roll-check.component.css']
+  selector: 'check-select',
+  templateUrl: './check-select.component.html',
+  styleUrls: ['./check-select.component.css']
 })
-export class RollCheckComponent implements OnInit {
+export class CheckSelectComponent implements OnInit {
 
-  @Input() rollCheck: RollCheck;
-  @Output() changeCheckStatus = new EventEmitter < RollCheck > ();
+  @Input() checkStatus: CheckStatus;
+  @Output() changeCheckStatus = new EventEmitter < CheckStatus > ();
   selectedModel: AppSelect;
   items: AppSelect[] = [{
       label: 'check_box_outline_blank',
@@ -40,13 +40,11 @@ export class RollCheckComponent implements OnInit {
 
   ngOnInit() {
     this.selectedModel = this.items
-      .find((value, index, array) => value.value === this.rollCheck.rollLeftOverCheckStatus);
+      .find((value, index, array) => value.value === this.checkStatus);
   }
 
   changeRollCheck(model: AppSelect) {
-    let result = < RollCheck > {};
-    Object.assign(result, this.rollCheck);
-    result.rollLeftOverCheckStatus = CheckStatus[model.value];
-    this.changeCheckStatus.emit(result);
+    this.checkStatus = CheckStatus[model.value];
+    this.changeCheckStatus.emit(this.checkStatus);
   }
 }

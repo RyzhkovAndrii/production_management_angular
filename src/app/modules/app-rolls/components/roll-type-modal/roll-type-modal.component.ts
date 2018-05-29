@@ -21,6 +21,7 @@ import {
 import {
   from
 } from 'rxjs/observable/from';
+import appPresetColors from '../../../../app-utils/app-preset-colors';
 
 @Component({
   selector: 'app-roll-type-modal',
@@ -33,7 +34,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   options: Partial < IModalDialogOptions < RollTypeModalData >> ;
 
   form: FormGroup;
-  presetColors = ['#ffffff', '#2f2f2f', '#ff9d14', '#008a17', '#f1cd72', '#edf100'];
+  presetColors = appPresetColors;
 
   readonly MIN_WEIGHT = 0.1;
   readonly MIN_THICKNESS = 0.1;
@@ -42,7 +43,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   readonly MAX_NOTE_LENGTH = 20;
 
   submitPressed = false;
-  
+
   private btnClass = 'btn btn-outline-dark';
 
   constructor() {
@@ -60,7 +61,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   }
 
   ngOnInit() {
-    this.colorCode = this.rollType ? this.rollType.colorCode : '#ffffff';
+    this.colorCode = this.rollType ? this.rollType.colorCode : appPresetColors[0];
 
     this.form = new FormGroup({
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),

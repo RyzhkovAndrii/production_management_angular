@@ -1,0 +1,14 @@
+.w-12 {
+    width: 12%!important;
+}
+
+.empty-row, .empty-row:hover {
+    height: 1%;
+    background-color: white;
+    border: none;
+}
+
+::ng-deep .dropdown-item {
+    font-size: 0.9rem;
+    padding: .1rem 1rem;
+  }

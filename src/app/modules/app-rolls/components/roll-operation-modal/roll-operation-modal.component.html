@@ -26,7 +26,7 @@
         Минимальное количество рулонов для операции: {{ MIN_ROLL_AMOUNT }}
       </span>
       <span *ngIf="form.get('rollAmount').errors['greaterThanLeftError']">
-        При использовании количество рулонов не может быть больше чем текущий остаток: {{ batch.leftAmount }}
+        При использовании количество рулонов не может быть больше чем текущий остаток: {{ batch.leftOverAmount }}
       </span>
       <span *ngIf="form.get('rollAmount').errors['notIntegerError']">
         Количество рулонов должно быть целым числом!

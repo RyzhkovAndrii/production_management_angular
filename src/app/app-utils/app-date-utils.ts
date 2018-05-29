@@ -37,8 +37,8 @@ export function midnightDate(date ? : string | Date): Date {
  * @returns date object
  * @param date date in format DD-MM-YYYY
  */
-export function getDate(date: string | Date): Date {
-  return moment(date, 'DD-MM-YYYY').toDate();
+export function getDate(date: string | Date, format = 'DD-MM-YYYY'): Date {
+  return moment(date, format).toDate();
 }
 
 /**
@@ -86,4 +86,19 @@ export function getIndex(date: Date, length: number, period: number, endingDate:
 export function getDifferenceInDays(dateA: Date, dateB: Date) {
   const result = (midnightDate(dateA).getTime() - midnightDate(dateB).getTime()) / (24 * 60 * 60 * 1000);
   return Math.round(result);
+}
+
+export function getDateFirstDayOfMonth(date: Date) {
+  return moment(date).date(1).toDate();
+}
+
+export function getDateLastDayOfMotth(date: Date) {
+  const temp = moment(date);
+  return temp.date(temp.daysInMonth()).toDate();
+}
+
+export function isSameMonthYear(a: Date, b: Date): boolean {
+  const aMoment = moment(a);
+  const bMoment = moment(b);
+  return aMoment.isSame(bMoment, 'months') && aMoment.isSame(bMoment, 'year');
 }

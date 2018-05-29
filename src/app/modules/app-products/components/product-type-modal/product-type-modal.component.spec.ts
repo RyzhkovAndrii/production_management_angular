@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RollCheckComponent } from './roll-check.component';
+import { ProductTypeModalComponent } from './product-type-modal.component';
 
-describe('RollCheckComponent', () => {
-  let component: RollCheckComponent;
-  let fixture: ComponentFixture<RollCheckComponent>;
+describe('ProductTypeModalComponent', () => {
+  let component: ProductTypeModalComponent;
+  let fixture: ComponentFixture<ProductTypeModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RollCheckComponent ]
+      declarations: [ ProductTypeModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RollCheckComponent);
+    fixture = TestBed.createComponent(ProductTypeModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

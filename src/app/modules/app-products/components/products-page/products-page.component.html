@@ -1,0 +1,125 @@
+<div class="container-fluid mt-2">
+  <div class="row">
+    <div class="col-md-1">
+      <button class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
+        <span class="material-icons">add</span>
+      </button>
+    </div>
+
+    <div class="col-md-3 offset-md-4">
+      <form [formGroup]="form">
+        <div class="form-row">
+          <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+            <div class="input-group">
+              <input type="date" class="form-control form-control-sm" id="daylyDate" formControlName="daylyDate" [ngClass]="{
+  'is-invalid': form.get('daylyDate').invalid,
+  'is-valid': form.get('daylyDate').valid && form.get('daylyDate').touched
+  }">
+            </div>
+          </div>
+          <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+            <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="form.invalid" (click)="loadTable()">Сменить дату</button>
+          </div>
+        </div>
+        <div>
+          <div class="form-row">
+            <div class="invalid pl-2 pt-1" *ngIf="form.get('daylyDate').invalid">
+              <span *ngIf="form.get('daylyDate').errors['required']">Не может быть пустым!</span>
+              <span *ngIf="form.get('daylyDate').errors['afterCurrentDateError']">Не может быть позже текущей даты!</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="table-responsive mt-2">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" rowspan="2" class="align-middle">Наименование</th>
+          <th scope="col" rowspan="2" class="align-middle">Вес</th>
+          <th scope="col" rowspan="2" class="align-middle">Цвет</th>
+          <th scope="col" rowspan="2" class="align-middle">Остаток на {{ fromDate | moment:'DD MMMM' }}, тыс.шт.</th>
+          <th scope="col" rowspan="1" colspan="2">Произведено тыс.шт.</th>
+          <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
+          <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
+          <th scope="col" rowspan="1" *ngIf="isCurrentPeriod()">
+            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitProductChecks()">
+              <span class="material-icons">save</span>
+            </button>
+          </th>
+        </tr>
+        <tr class="table-header">
+          <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'DD MMMM' }}</th>
+          <th scope="col">{{ daylyDate | moment:'MMMM' }}</th>
+          <th scope="col" *ngIf="isCurrentPeriod()">Проверка</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let infoArray of sortByColor(productsInfo)">
+        <tr *ngFor="let productInfo of sortByNameAndWeight(infoArray)" [contextMenu]="productsMenu" [contextMenuSubject]="productInfo.type">
+          <th scope="row" class="row-name">
+            {{ productInfo.type.name }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ productInfo.type.weight }}
+          </th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color': productInfo.type.colorCode }"></span>
+          </th>
+          <td class="w-12">
+            {{ (productInfo.restLeftover.amount) | exponent }}
+          </td>
+          <td class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
+            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
+          </td>
+          <td class="w-12">
+            {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
+          </td>
+          <td class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
+            {{ productInfo.dayBatch.soldAmount | empty | exponent }}
+          </td>
+          <td class="w-12">
+            {{ productInfo.monthBatch.soldAmount | empty | exponent }}
+          </td>
+          <td class="w-12">
+            {{ productInfo.currentLeftover.amount | exponent }}
+          </td>
+          <td *ngIf="isCurrentPeriod()">
+            <check-select [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)">
+            </check-select>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" class="row-name" colspan="3">Итого</th>
+          <td class="w-12" *ngFor="let total of getSectionTotals(infoArray)">
+            {{ total | exponent }}
+          </td>
+          <td *ngIf="isCurrentPeriod()"></td>
+        </tr>
+        <td class="empty-row"></td>
+      </tbody>
+      <tbody *ngIf="productsInfo.length != 0">
+        <tr>
+          <th scope="row" class="row-name" colspan="3">Всего</th>
+          <td class="w-12" *ngFor="let total of getTotals()">
+            {{ total | exponent }}
+          </td>
+          <td *ngIf="isCurrentPeriod()"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<context-menu #productsMenu>
+  <ng-template contextMenuItem let-item (execute)="openEditProductTypeModal($event.item)">
+    Редактировать продукцию
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteProductTypeModal($event.item)">
+    Удалить продукцию
+  </ng-template>
+</context-menu>
