@@ -155,9 +155,16 @@ export class ProductsService {
     return this.http.put(url, type).catch(httpErrorHandle);
   }
 
-  putProductCheck(id: number, check: ProductCheckRequest) {
-    const url = `${this.urls.productChecksUrl}/${id}`;
-    return this.http.put(url, check).catch(httpErrorHandle);
+  putProductChecks(productChecks: ProductCheckResponse[]): Observable < ProductCheckResponse[] > {
+    return from(productChecks).flatMap(value => this.putProductCheck(value)).toArray();
+  }
+
+  putProductCheck(check: ProductCheckResponse): Observable < ProductCheckResponse > {
+    const url = `${this.urls.productChecksUrl}/${check.id}`;
+    const body: ProductCheckRequest = {
+      productLeftOverCheckStatus: check.productLeftOverCheckStatus
+    };
+    return this.http.put(url, body).catch(httpErrorHandle);
   }
 
   deleteProductType(id: number) {

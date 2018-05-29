@@ -45,7 +45,7 @@
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
           <th scope="col" rowspan="1" *ngIf="true">
-            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0">
+            <button type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitProductChecks()">
               <span class="material-icons">save</span>
             </button>
           </th>

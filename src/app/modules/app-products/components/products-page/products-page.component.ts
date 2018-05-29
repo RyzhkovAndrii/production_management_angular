@@ -43,7 +43,9 @@ import {
 import {
   validateDateNotAfterCurrent
 } from '../../../../app-utils/app-validators';
-import { CheckStatus } from '../../../app-shared/enums/check-status.enum';
+import {
+  CheckStatus
+} from '../../../app-shared/enums/check-status.enum';
 
 @Component({
   selector: 'app-products-page',
@@ -56,6 +58,8 @@ export class ProductsPageComponent implements OnInit {
   daylyDate: Date;
   toDate: Date;
   fromDate: Date;
+  productChecks: Map < number,
+  ProductCheckResponse > = new Map();
 
   form: FormGroup;
 
@@ -226,6 +230,17 @@ export class ProductsPageComponent implements OnInit {
   }
 
   onChangeProductCheck(checkStatus: CheckStatus, productCheck: ProductCheckResponse) {
-    console.log(checkStatus, productCheck);
+    productCheck.productLeftOverCheckStatus = checkStatus;
+    this.productChecks.set(productCheck.id, productCheck);
+  }
+
+  submitProductChecks() {
+    this.productsService.putProductChecks(Array.from(this.productChecks.values()))
+      .subscribe(data => {
+        if (data.length != 0) {
+          this.fetchData();
+          this.productChecks.clear();
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
   }
 }
