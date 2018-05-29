@@ -90,11 +90,15 @@ export class ProductsPageComponent implements OnInit {
   initDates() {
     this.daylyDate = getDate(this.form.value.daylyDate, 'YYYY-MM-DD');
     this.fromDate = getDateFirstDayOfMonth(this.daylyDate);
-    if (isSameMonthYear(this.daylyDate, midnightDate())) {
+    if (this.isCurrentPeriod()) {
       this.toDate = midnightDate();
     } else {
       this.toDate = getDateLastDayOfMotth(this.daylyDate);
     }
+  }
+
+  isCurrentPeriod() {
+    return isSameMonthYear(this.daylyDate, midnightDate());
   }
 
   fetchData() {
