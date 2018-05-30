@@ -26,19 +26,20 @@
           'is-valid': form.get('thickness').valid && isTouched('thickness')
         }">
         <div class="invalid-feedback" *ngIf="form.get('thickness').invalid && isTouched('thickness')">
-          <span *ngIf="form.get('thickness').errors['min']">Длина должна быть больше {{ MIN_THICKNESS }}</span>
+          <span *ngIf="form.get('thickness').errors['min']">Толщина должна быть больше {{ MIN_THICKNESS }}</span>
           <span *ngIf="form.get('thickness').errors['required']">Обязательное поле!</span>
         </div>
     </div>
     <div class="col-md-6">
       <label for="roll-length" class="col-form-label">Длина:</label>
-      <input type="number" step="0.1" class="form-control" id="roll-length" formControlName="length" [ngClass]="{
+      <input type="number" step="1" class="form-control" id="roll-length" formControlName="length" [ngClass]="{
             'is-invalid': form.get('length').invalid && isTouched('length'),
             'is-valid': form.get('length').valid && isTouched('length')
           }">
       <div class="invalid-feedback" *ngIf="form.get('length').invalid && isTouched('length')">
         <span *ngIf="form.get('length').errors['min']">Длина должна быть больше {{ MIN_LENGTH }}</span>
         <span *ngIf="form.get('length').errors['required']">Обязательное поле!</span>
+        <span *ngIf="form.get('length').errors['notIntegerError']">Должно быть целым числом!</span>
       </div>
     </div>
   </div>
@@ -63,6 +64,7 @@
           <span *ngIf="form.get('minWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
           <span *ngIf="form.get('minWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('minWeight').errors['greaterThenMax']">Минимальное значение должно быть меньше максимального!</span>
+          <span *ngIf="form.get('minWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>
@@ -80,6 +82,7 @@
           <span *ngIf="form.get('maxWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
           <span *ngIf="form.get('maxWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('maxWeight').errors['smallerThenMin']">Максимальное значение должно быть больше минимального!</span>
+          <span *ngIf="form.get('maxWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>
