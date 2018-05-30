@@ -72,6 +72,7 @@ export class RollsPageComponent implements OnInit {
   toDate = midnightDate();
   rollChecks = new Map < number,
   RollCheck > ();
+  totalLeftover: number;
 
   @ViewChild(ContextMenuComponent) public rollsMenu: ContextMenuComponent;
 
@@ -102,7 +103,7 @@ export class RollsPageComponent implements OnInit {
     this.dateHeader = Array.from(this.monthYearMap.keys());
   }
 
-  private fetchTableData() {
+  private fetchData() {
     if (this.isPreviousPeriod()) {
       this.rollsService.getRollsInfoWithoutCheck(this.restDate, this.fromDate, this.toDate)
         .subscribe(data => {
@@ -114,17 +115,19 @@ export class RollsPageComponent implements OnInit {
           this.rollsInfo = data;
         }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
     }
+    this.rollsService.getTotalLeftover(this.toDate)
+      .subscribe(data => this.totalLeftover = data, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
 
   showPreviousPeriod() {
     this.initTableHeader(substructDays(this.toDate, this.daysInTable));
-    this.fetchTableData();
+    this.fetchData();
   }
 
   showNextPeriod() {
     this.initTableHeader(addDays(this.toDate, this.daysInTable));
-    this.fetchTableData();
+    this.fetchData();
   }
 
   isPreviousPeriod() {
@@ -139,7 +142,7 @@ export class RollsPageComponent implements OnInit {
 
   showCurrentPeriod() {
     this.initTableHeader(midnightDate());
-    this.fetchTableData();
+    this.fetchData();
   }
 
   getBatch(rollBatch: RollBatch): number | string {
@@ -219,7 +222,7 @@ export class RollsPageComponent implements OnInit {
       result
         .then((resolve: RollOperation) => {
           this.rollsService.postRollOperation(resolve).subscribe(data => {
-            this.fetchTableData();
+            this.fetchData();
           }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
     }
@@ -251,7 +254,7 @@ export class RollsPageComponent implements OnInit {
     this.rollsService.putRollChecks(Array.from(this.rollChecks.values()))
       .subscribe(data => {
         if (data.length != 0) {
-          this.fetchTableData();
+          this.fetchData();
           this.rollChecks.clear();
         }
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));

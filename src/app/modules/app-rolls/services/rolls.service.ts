@@ -110,6 +110,17 @@ export class RollsService {
     ).toArray().catch(httpErrorHandle);
   }
 
+  getTotalLeftover(date: Date): Observable < number > {
+    const params = new HttpParams()
+      .set('date', formatDate(date))
+      .set('total', undefined);
+    return this.http.get(this.urls.rollLeftoverUrl, {
+        params
+      })
+      .map((value: RollTotalLeftOverResponse) => value.total)
+      .catch(httpErrorHandle);
+  }
+
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
       headers: this.headers

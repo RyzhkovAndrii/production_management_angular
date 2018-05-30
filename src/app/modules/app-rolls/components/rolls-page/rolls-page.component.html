@@ -78,6 +78,16 @@
             <check-select [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
           </td>
         </tr>
+        <tr>
+          <th scope="row" class="row-name" colspan="5">
+            Итого
+          </th>
+          <td [colSpan]="daysHeader.length + 1"></td>
+          <td>
+            {{ totalLeftover }}
+          </td>
+          <td *ngIf="!isPreviousPeriod()"></td>
+        </tr>
       </tbody>
     </table>
   </div>
