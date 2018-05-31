@@ -212,4 +212,10 @@ export class RollsService {
     return this.http.delete(url)
       .catch(httpErrorHandle);
   }
+
+  deleteRollOperation(operationId: number) {
+    const url = `${this.urls.rollOperationUrl}/${operationId}`;
+    return this.http.delete(url)
+      .catch(httpErrorHandle);
+  }
 }

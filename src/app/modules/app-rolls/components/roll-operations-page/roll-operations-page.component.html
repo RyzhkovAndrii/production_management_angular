@@ -50,7 +50,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let operation of rollOperations">
+        <tr *ngFor="let operation of rollOperations" [contextMenu]="operationsMenu" [contextMenuSubject]="operation">
           <td>{{ getOperationType(operation.operationType) }}</td>
           <td>{{ operation.operationDate }}</td>
           <td>{{ operation.manufacturedDate }}</td>
@@ -66,3 +66,13 @@
     За данный период нет операций
   </h2>
 </div>
+
+<context-menu #operationsMenu>
+  <ng-template contextMenuItem (execute)="openEditRollOperationModal($event.item)">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteRollOperationModal($event.item)">
+    Удалить
+  </ng-template>
+</context-menu>
