@@ -218,7 +218,7 @@ export class RollsPageComponent implements OnInit {
   }
 
   openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
-    const operation = (result: Promise < RollOperation > ) => {
+    const func = (result: Promise < RollOperation > ) => {
       result
         .then((resolve: RollOperation) => {
           this.rollsService.postRollOperation(resolve).subscribe(data => {
@@ -234,7 +234,7 @@ export class RollsPageComponent implements OnInit {
         batch,
         rollTypeId,
         manufacturedDate: this.daysHeader[index],
-        operation: operation.bind(this)
+        func: func.bind(this)
       }
     };
     this.ngxModalService.openDialog(this.viewRef, modalOptions);

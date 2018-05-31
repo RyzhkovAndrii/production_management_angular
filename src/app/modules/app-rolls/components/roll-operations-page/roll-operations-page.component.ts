@@ -33,7 +33,8 @@ import {
 } from '../../../app-shared/services/app-modal.service';
 import {
   formatDateServerToBrowser,
-  formatDateBrowserToServer
+  formatDateBrowserToServer,
+  getDate
 } from '../../../../app-utils/app-date-utils';
 import {
   compareDates
@@ -41,6 +42,9 @@ import {
 import {
   SimpleConfirmModalComponent
 } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  RollOperationModalComponent
+} from '../roll-operation-modal/roll-operation-modal.component';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -133,7 +137,30 @@ export class RollOperationsPageComponent implements OnInit {
   }
 
   openEditRollOperationModal(operation: RollOperationResponse) {
-    console.log('edit', operation);
+    this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
+      .subscribe((batch) => {
+        const func = (result: Promise < RollOperation > ) => {
+          result
+            .then((resolve: RollOperation) => {
+              this.rollsService.putOperation(operation.id, resolve).subscribe(data => {
+                this.fetchData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            }, reject => {});
+        }
+
+        const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
+          title: 'Редактирование операции',
+          childComponent: RollOperationModalComponent,
+          data: {
+            batch,
+            operation: operation,
+            rollTypeId: operation.rollTypeId,
+            manufacturedDate: getDate(operation.manufacturedDate),
+            func: func.bind(this)
+          }
+        };
+        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   openDeleteRollOperationModal(operation: RollOperationResponse) {

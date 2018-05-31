@@ -162,6 +162,15 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
+  getRollBatch(rollTypeId: number, date: string): Observable < RollBatch > {
+    const params = new HttpParams()
+      .set('roll_type_id', String(rollTypeId))
+      .set('date', date);
+    return this.http.get(this.urls.rollBatchUrl, {
+      params
+    }).catch(httpErrorHandle);
+  }
+
   getRollCheck(rollTypeId: number) {
     const params = new HttpParams()
       .append('roll_type_id', String(rollTypeId));
@@ -194,6 +203,11 @@ export class RollsService {
       rollLeftOverCheckStatus: rollCheck.rollLeftOverCheckStatus
     };
     return this.http.put(url, body).catch(httpErrorHandle);
+  }
+
+  putOperation(operationId: number, operation: RollOperation) {
+    const url = `${this.urls.rollOperationUrl}/${operationId}`;
+    return this.http.put(url, operation).catch(httpErrorHandle);
   }
 
   getRollOperations(rollTypeId: number, from: string, to: string) {

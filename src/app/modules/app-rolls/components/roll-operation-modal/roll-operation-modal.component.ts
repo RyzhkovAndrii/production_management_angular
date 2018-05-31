@@ -39,6 +39,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   actionButtons: IModalDialogButton[];
   options: Partial < IModalDialogOptions < RollOperationModalData >> ;
   batch: RollBatch;
+  operation: RollOperationResponse;
   rollTypeId: number;
   manufacturedDate: Date;
 
@@ -46,7 +47,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   operationType = RollOperationType.MANUFACTURE;
 
   readonly MIN_ROLL_AMOUNT = 1;
-  
+
   private btnClass = 'btn btn-outline-dark';
   submitPressed = false;
 
@@ -64,28 +65,31 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     ];
   }
 
-  ngOnInit() {
-    this.form = new FormGroup({
-      operationType: new FormControl({
-        value: this.operationType,
-        disabled: !this.batch
-      }),
-      rollAmount: new FormControl(undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator])
-    });
-  }
+  ngOnInit() {}
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < RollOperationModalData >> ) {
     this.options = options;
     this.batch = options.data.batch;
     this.rollTypeId = options.data.rollTypeId;
     this.manufacturedDate = options.data.manufacturedDate;
+    this.operation = options.data.operation;
+    if (this.operation) {
+      this.operationType = RollOperationType[this.operation.operationType];
+    }
+    this.form = new FormGroup({
+      operationType: new FormControl({
+        value: this.operationType,
+        disabled: !this.batch
+      }),
+      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator])
+    });
   }
 
   onSubmit(): Promise < RollOperation > {
     if (this.form.invalid) {
       this.submitPressed = true;
       const reject = Promise.reject('invalid');
-      this.options.data.operation(reject);
+      this.options.data.func(reject);
       return reject;
     }
 
@@ -97,7 +101,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       rollAmount: this.form.get('rollAmount').value
     }
     const resolve = Promise.resolve(rollOperation);
-    this.options.data.operation(resolve);
+    this.options.data.func(resolve);
     return resolve;
   }
 
