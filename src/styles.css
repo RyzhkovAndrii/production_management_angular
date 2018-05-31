@@ -1,7 +1,6 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/material-icons/iconfont/material-icons.css';
 @import "~@ng-select/ng-select/themes/default.theme.css";
-
 table {
   text-align: center;
   color: rgb(48, 51, 58);
@@ -60,11 +59,23 @@ td:hover,
   color: #dc3545;
 }
 
+.ngx-contextmenu a {
+  font-size: 0.9rem;
+}
+
 @media screen and (max-width: 1400px) {
   table {
     font-size: 0.8rem !important;
   }
   .filled-circle {
     padding: 0.1rem 0.65rem;
+  }
+  .ngx-contextmenu a {
+    font-size: 0.8rem;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  .ngx-contextmenu .dropdown-divider {
+    margin: .3rem 0;
   }
 }
