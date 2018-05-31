@@ -132,7 +132,7 @@ export class RollOperationsPageComponent implements OnInit {
     return null;
   }
 
-  openEditRollOperationModal(operation: RollOperation) {
+  openEditRollOperationModal(operation: RollOperationResponse) {
     console.log('edit', operation);
   }
 
