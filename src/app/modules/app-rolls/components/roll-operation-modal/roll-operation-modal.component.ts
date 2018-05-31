@@ -79,7 +79,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.form = new FormGroup({
       operationType: new FormControl({
         value: this.operationType,
-        disabled: !this.batch
+        disabled: !this.batch || this.operation
       }),
       rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator])
     });
