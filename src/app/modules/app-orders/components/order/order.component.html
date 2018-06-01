@@ -1,4 +1,4 @@
-<table class="table-bordered table-striped">
+<table class="table-bordered table-striped" [contextMenu]="orderMenu">
   <thead>
     <tr>
       <th>
@@ -31,3 +31,13 @@
     </tr>
   </tbody>
 </table>
+
+<context-menu #orderMenu>
+  <ng-template contextMenuItem let-item (execute)="openOrderEditForm()">
+    Редактировать заказ
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="deliverOrder()">
+    Заказ доставлен
+  </ng-template>
+</context-menu>
