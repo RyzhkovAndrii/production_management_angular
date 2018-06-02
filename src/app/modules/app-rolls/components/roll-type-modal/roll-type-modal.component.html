@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-10">
       <label for="roll-name" class="col-form-label">Примечание:</label>
       <input type="text" [maxlength]="MAX_NOTE_LENGTH" class="form-control" id="roll-name" formControlName="note" [ngClass]="{
           'is-invalid': form.get('note').invalid && isTouched('note'),
@@ -10,16 +10,6 @@
         Максимальная длина {{ MAX_NOTE_LENGTH }}
       </div>
     </div>
-    <div class="col-md-4">
-      <label for="roll-thickness" class="col-form-label">Толщина:</label>
-      <input type="number" step="0.1" class="form-control" id="roll-thickness" formControlName="thickness" [ngClass]="{
-          'is-invalid': form.get('thickness').invalid && isTouched('thickness'),
-          'is-valid': form.get('thickness').valid && isTouched('thickness')
-        }">
-      <div class="invalid-feedback">
-        Толщина должна быть больше {{ MIN_THICKNESS }}
-      </div>
-    </div>
     <div class="col-md-2">
       <label for="roll-color" class="col-form-label">Цвет:</label>
       <input type="button" class="form-control" id="roll-color" formControlName="colorCode" [(colorPicker)]="colorCode" [value]="colorCode"
@@ -27,6 +17,33 @@
         [cpCancelButton]="true" [cpPresetColors]="presetColors">
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <label for="roll-thickness" class="col-form-label">Толщина:</label>
+      <input type="number" step="0.1" class="form-control" id="roll-thickness" formControlName="thickness" [ngClass]="{
+          'is-invalid': form.get('thickness').invalid && isTouched('thickness'),
+          'is-valid': form.get('thickness').valid && isTouched('thickness')
+        }">
+        <div class="invalid-feedback" *ngIf="form.get('thickness').invalid && isTouched('thickness')">
+          <span *ngIf="form.get('thickness').errors['min']">Толщина должна быть больше {{ MIN_THICKNESS }}</span>
+          <span *ngIf="form.get('thickness').errors['required']">Обязательное поле!</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+      <label for="roll-length" class="col-form-label">Длина:</label>
+      <input type="number" step="1" class="form-control" id="roll-length" formControlName="length" [ngClass]="{
+            'is-invalid': form.get('length').invalid && isTouched('length'),
+            'is-valid': form.get('length').valid && isTouched('length')
+          }">
+      <div class="invalid-feedback" *ngIf="form.get('length').invalid && isTouched('length')">
+        <span *ngIf="form.get('length').errors['min']">Длина должна быть больше {{ MIN_LENGTH }}</span>
+        <span *ngIf="form.get('length').errors['required']">Обязательное поле!</span>
+        <span *ngIf="form.get('length').errors['notIntegerError']">Должно быть целым числом!</span>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <label for="roll-min-weight" class="col-form-label">Вес:</label>
@@ -40,13 +57,14 @@
         </div>
         <input (input)="revalidateMaxWeight()" type="number" step="1" class="form-control" id="roll-min-weight" formControlName="minWeight"
           [ngClass]="{
-        'is-invalid': form.get('minWeight').invalid && isTouched('minWeight'),
-        'is-valid': form.get('minWeight').valid && isTouched('minWeight')
-        }">
+    'is-invalid': form.get('minWeight').invalid && isTouched('minWeight'),
+    'is-valid': form.get('minWeight').valid && isTouched('minWeight')
+    }">
         <div class="invalid-feedback" *ngIf="form.get('minWeight').invalid && isTouched('minWeight')">
           <span *ngIf="form.get('minWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
-          <span *ngIf="form.get('minWeight').errors['required']">Вес не может быть пустым!</span>
+          <span *ngIf="form.get('minWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('minWeight').errors['greaterThenMax']">Минимальное значение должно быть меньше максимального!</span>
+          <span *ngIf="form.get('minWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>
@@ -57,13 +75,14 @@
         </div>
         <input (input)="revalidateMinWeight()" type="number" step="1" class="form-control" id="roll-max-weight" formControlName="maxWeight"
           [ngClass]="{
-        'is-invalid': form.get('maxWeight').invalid && isTouched('maxWeight'),
-        'is-valid': form.get('maxWeight').valid && isTouched('maxWeight')
-        }">
+    'is-invalid': form.get('maxWeight').invalid && isTouched('maxWeight'),
+    'is-valid': form.get('maxWeight').valid && isTouched('maxWeight')
+    }">
         <div class="invalid-feedback" *ngIf="form.get('maxWeight').invalid && isTouched('maxWeight')">
           <span *ngIf="form.get('maxWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
-          <span *ngIf="form.get('maxWeight').errors['required']">Вес не может быть пустым!</span>
+          <span *ngIf="form.get('maxWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('maxWeight').errors['smallerThenMin']">Максимальное значение должно быть больше минимального!</span>
+          <span *ngIf="form.get('maxWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 <div *ngIf="batch">
   <h6>
-    Текущий остаток: {{ batch.leftOverAmount }}
+    <span *ngIf="!operation">Текущий остаток: </span>
+    <span *ngIf="operation">Остаток без текущей операции: </span>{{ batch.leftOverAmount }}
   </h6>
   <hr>
 </div>
@@ -11,6 +12,17 @@
       <option value="MANUFACTURE" selected>Производство</option>
       <option value="USE">Списание</option>
     </select>
+  </div>
+  <div class="form-group">
+    <label for="operation-date">Дата операции:</label>
+    <input type="date" class="form-control" id="operation-date" formControlName="operationDate" [ngClass]="{
+      'is-invalid': form.get('operationDate').invalid && isTouched('operationDate'),
+      'is-valid': form.get('operationDate').valid && isTouched('operationDate')
+    }">
+    <div class="invalid-feedback" *ngIf="form.get('operationDate').invalid && isTouched('operationDate')">
+      <span *ngIf="form.get('operationDate').errors['beforeManufacturedError']">Списание возможно только с {{ batch.dateManufactured | moment }}</span>
+      <span *ngIf="form.get('operationDate').errors['required']">Обязательное поле!</span>
+    </div>
   </div>
   <div class="form-group">
     <label for="roll-amount">Количество рулонов:</label>
@@ -30,6 +42,9 @@
       </span>
       <span *ngIf="form.get('rollAmount').errors['notIntegerError']">
         Количество рулонов должно быть целым числом!
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['negativeLeftoverError']">
+        Остаток после редактирование не может быть отрицательным!
       </span>
     </div>
   </div>

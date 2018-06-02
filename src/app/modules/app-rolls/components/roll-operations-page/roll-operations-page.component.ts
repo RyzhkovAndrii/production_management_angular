@@ -33,9 +33,18 @@ import {
 } from '../../../app-shared/services/app-modal.service';
 import {
   formatDateServerToBrowser,
-  formatDateBrowserToServer
+  formatDateBrowserToServer,
+  getDate
 } from '../../../../app-utils/app-date-utils';
-import { compareDates } from '../../../../app-utils/app-comparators';
+import {
+  compareDates
+} from '../../../../app-utils/app-comparators';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  RollOperationModalComponent
+} from '../roll-operation-modal/roll-operation-modal.component';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -43,7 +52,7 @@ import { compareDates } from '../../../../app-utils/app-comparators';
   styleUrls: ['./roll-operations-page.component.css']
 })
 export class RollOperationsPageComponent implements OnInit {
-  rollOperations: RollOperation[];
+  rollOperations: RollOperationResponse[];
 
   rollTypeId: number;
   fromDateValue: string;
@@ -75,7 +84,7 @@ export class RollOperationsPageComponent implements OnInit {
     this.fromDateValue = this.queryParams['from'];
     this.toDateValue = this.queryParams['to'];
     this.rollsService.getRollOperations(this.rollTypeId, this.fromDateValue, this.toDateValue)
-      .subscribe((data: RollOperation[]) => {
+      .subscribe((data: RollOperationResponse[]) => {
         this.rollOperations = data.sort((a, b) => {
           return compareDates(a.manufacturedDate, b.manufacturedDate);
         });
@@ -108,7 +117,7 @@ export class RollOperationsPageComponent implements OnInit {
 
   fromDateSmallerValidator(control: FormControl) {
     if (control.value && this.form) {
-      if(compareDates(control.value, this.form.get('toDate').value, 'YYYY-MM-DD') > 0) {
+      if (compareDates(control.value, this.form.get('toDate').value, 'YYYY-MM-DD') > 0) {
         return {
           'biggerThenToDate': true
         };
@@ -118,12 +127,99 @@ export class RollOperationsPageComponent implements OnInit {
   }
   toDateBiggerValidator(control: FormControl) {
     if (control.value && this.form) {
-      if(compareDates(control.value, this.form.get('fromDate').value, 'YYYY-MM-DD') < 0) {
+      if (compareDates(control.value, this.form.get('fromDate').value, 'YYYY-MM-DD') < 0) {
         return {
           'smallerThenFromDate': true
         };
       }
     }
     return null;
+  }
+
+  openEditRollOperationModal(operation: RollOperationResponse) {
+    this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
+      .subscribe((batch) => {
+        const func = (result: Promise < RollOperation > ) => {
+          result
+            .then((resolve: RollOperation) => {
+              this.rollsService.putOperation(operation.id, resolve).subscribe(data => {
+                this.fetchData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            }, reject => {});
+        }
+
+        const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
+          title: 'Редактирование операции',
+          childComponent: RollOperationModalComponent,
+          data: {
+            batch,
+            operation: operation,
+            rollTypeId: operation.rollTypeId,
+            manufacturedDate: getDate(operation.manufacturedDate),
+            func: func.bind(this)
+          }
+        };
+        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+  }
+
+  deleteRollOperation(operation: RollOperationResponse) {
+    this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
+      .subscribe(batch => {
+        switch (operation.operationType) {
+          case RollOperationType.MANUFACTURE:
+            batch.leftOverAmount -= operation.rollAmount;
+            break;
+          case RollOperationType.USE:
+            batch.leftOverAmount += operation.rollAmount;
+            break;
+        }
+        if(batch.leftOverAmount >= 0) {
+          this.openDeleteRollOperationModal(operation);
+        } else {
+          this.openUnableDeleteRollOperationModal(batch.leftOverAmount);
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+    this.openDeleteRollOperationModal(operation);
+  }
+
+  private openDeleteRollOperationModal(operation: RollOperationResponse) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial<IModalDialogOptions<any>> = {
+      title: 'Подтвердите удаление операции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+        text: 'Отменить',
+        buttonClass,
+        onAction: () => true
+      },
+      {
+        text: 'Удалить',
+        buttonClass,
+        onAction: () => {
+          this.rollsService.deleteRollOperation(operation.id)
+            .subscribe(data => {
+              this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
+            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+          return true;
+        }
+      }
+      ]
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
+  }
+  openUnableDeleteRollOperationModal(leftOverAmount: number) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial<IModalDialogOptions<any>> = {
+      title: `Невозможно удалить операцию! Остаток будет ${leftOverAmount}`,
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+        text: 'Ok',
+        buttonClass,
+        onAction: () => true
+      }
+      ]
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 }

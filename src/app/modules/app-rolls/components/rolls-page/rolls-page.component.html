@@ -18,7 +18,7 @@
     <table class="table table-bordered table-striped table-sm">
       <thead>
         <tr class="table-header">
-          <th scope="col" colspan="4"></th>
+          <th scope="col" colspan="5"></th>
           <th *ngFor="let monthYear of dateHeader" scope="col" [colSpan]="monthYearMap.get(monthYear) + 2/dateHeader.length">
             <small>{{ monthYear }}</small>
           </th>
@@ -29,9 +29,10 @@
           </th>
         </tr>
         <tr class="table-header">
-          <th scope="col" class="row-name">Примечание</th>
+          <th scope="col">Примечание</th>
           <th scope="col">Толщина</th>
           <th scope="col">Вес</th>
+          <th scope="col">Длина</th>
           <th scope="col">Цвет</th>
           <th scope="col">Остаток</th>
           <th scope="col" *ngFor="let day of daysHeader">
@@ -54,6 +55,9 @@
             {{ getWeight(rollInfo.rollType) }}
           </th>
           <th scope="row" class="row-name">
+            {{ rollInfo.rollType.length }}
+          </th>
+          <th scope="row" class="row-name">
             <span class="filled-circle" [ngStyle]="{ 'background-color': rollInfo.rollType.colorCode}"></span>
           </th>
           <td>
@@ -73,6 +77,16 @@
           <td *ngIf="!isPreviousPeriod()">
             <check-select [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
           </td>
+        </tr>
+        <tr>
+          <th scope="row" class="row-name" colspan="5">
+            Итого
+          </th>
+          <td [colSpan]="daysHeader.length + 1"></td>
+          <td>
+            {{ totalLeftover }}
+          </td>
+          <td *ngIf="!isPreviousPeriod()"></td>
         </tr>
       </tbody>
     </table>

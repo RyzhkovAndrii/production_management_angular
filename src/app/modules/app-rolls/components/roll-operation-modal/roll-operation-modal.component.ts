@@ -25,7 +25,10 @@ import {
 } from '../../../../app-utils/app-validators';
 import {
   midnightDate,
-  formatDate
+  formatDate,
+  formatDateServerToBrowser,
+  formatDateBrowserToServer,
+  isBeforeDate
 } from '../../../../app-utils/app-date-utils';
 
 
@@ -39,6 +42,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   actionButtons: IModalDialogButton[];
   options: Partial < IModalDialogOptions < RollOperationModalData >> ;
   batch: RollBatch;
+  operation: RollOperationResponse;
   rollTypeId: number;
   manufacturedDate: Date;
 
@@ -46,7 +50,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   operationType = RollOperationType.MANUFACTURE;
 
   readonly MIN_ROLL_AMOUNT = 1;
-  
+
   private btnClass = 'btn btn-outline-dark';
   submitPressed = false;
 
@@ -68,9 +72,10 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.form = new FormGroup({
       operationType: new FormControl({
         value: this.operationType,
-        disabled: !this.batch
+        disabled: !this.batch || this.batch.leftOverAmount <= 0
       }),
-      rollAmount: new FormControl(undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator])
+      operationDate: new FormControl(formatDateServerToBrowser(midnightDate()), [this.validateDateUseBeforeManufacture.bind(this), Validators.required]),
+      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)])
     });
   }
 
@@ -79,31 +84,43 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.batch = options.data.batch;
     this.rollTypeId = options.data.rollTypeId;
     this.manufacturedDate = options.data.manufacturedDate;
+    this.operation = options.data.operation;
+    if (this.operation) {
+      switch (this.operation.operationType) {
+        case RollOperationType.MANUFACTURE:
+          this.batch.leftOverAmount -= this.operation.rollAmount;
+          break;
+        case RollOperationType.USE:
+          this.batch.leftOverAmount += this.operation.rollAmount;
+          break;
+      }
+      this.operationType = RollOperationType[this.operation.operationType];
+    }
   }
 
   onSubmit(): Promise < RollOperation > {
     if (this.form.invalid) {
       this.submitPressed = true;
       const reject = Promise.reject('invalid');
-      this.options.data.operation(reject);
+      this.options.data.func(reject);
       return reject;
     }
 
     const rollOperation: RollOperation = {
-      operationDate: formatDate(midnightDate()),
+      operationDate: formatDateBrowserToServer(this.form.value.operationDate),
       operationType: this.form.get('operationType').value,
       manufacturedDate: formatDate(this.manufacturedDate),
       rollTypeId: this.rollTypeId,
       rollAmount: this.form.get('rollAmount').value
     }
     const resolve = Promise.resolve(rollOperation);
-    this.options.data.operation(resolve);
+    this.options.data.func(resolve);
     return resolve;
   }
 
   validateAmount(control: FormControl) {
     if (this.batch && control.value > this.batch.leftOverAmount) {
-      if (this.form.value.operationType == RollOperationType.USE) {
+      if (this.form && this.form.value.operationType == RollOperationType.USE) {
         return {
           'greaterThanLeftError': true
         };
@@ -112,8 +129,33 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     return null;
   }
 
+  validateNegativeAmount(control: FormControl) {
+    if (this.batch && control.value + this.batch.leftOverAmount < 0) {
+      return {
+        'negativeLeftoverError': true
+      };
+    }
+    return null;
+  }
+
+  validateDateUseBeforeManufacture(control: FormControl) {
+    if (this.form && this.batch && this.form.value.operationType == RollOperationType.USE) {
+      if (control && isBeforeDate(control.value, this.batch.dateManufactured)) {
+        return {
+          'beforeManufacturedError': true
+        };
+      }
+    }
+    return null;
+  }
+
   revalidateAmount() {
+    this.revalidateOperationDate();
     this.form.get('rollAmount').updateValueAndValidity();
+  }
+
+  revalidateOperationDate() {
+    this.form.get('operationDate').updateValueAndValidity();
   }
 
   isTouched(controlName: string) {

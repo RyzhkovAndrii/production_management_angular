@@ -48,7 +48,8 @@ export class RollsService {
       colorCode: rollType.colorCode,
       thickness: rollType.thickness,
       minWeight: rollType.minWeight,
-      maxWeight: rollType.maxWeight
+      maxWeight: rollType.maxWeight,
+      length: rollType.length
     }
     return <Observable < RollType >> this.http.put(requestUrl, dto).catch(httpErrorHandle);
   }
@@ -109,6 +110,17 @@ export class RollsService {
     ).toArray().catch(httpErrorHandle);
   }
 
+  getTotalLeftover(date: Date): Observable < number > {
+    const params = new HttpParams()
+      .set('date', formatDate(date))
+      .set('total', undefined);
+    return this.http.get(this.urls.rollLeftoverUrl, {
+        params
+      })
+      .map((value: RollTotalLeftOverResponse) => value.total)
+      .catch(httpErrorHandle);
+  }
+
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
       headers: this.headers
@@ -150,6 +162,15 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
+  getRollBatch(rollTypeId: number, date: string): Observable < RollBatch > {
+    const params = new HttpParams()
+      .set('roll_type_id', String(rollTypeId))
+      .set('date', date);
+    return this.http.get(this.urls.rollBatchUrl, {
+      params
+    }).catch(httpErrorHandle);
+  }
+
   getRollCheck(rollTypeId: number) {
     const params = new HttpParams()
       .append('roll_type_id', String(rollTypeId));
@@ -184,6 +205,11 @@ export class RollsService {
     return this.http.put(url, body).catch(httpErrorHandle);
   }
 
+  putOperation(operationId: number, operation: RollOperation) {
+    const url = `${this.urls.rollOperationUrl}/${operationId}`;
+    return this.http.put(url, operation).catch(httpErrorHandle);
+  }
+
   getRollOperations(rollTypeId: number, from: string, to: string) {
     const params = new HttpParams()
       .set('roll_type_id', String(rollTypeId))
@@ -197,6 +223,12 @@ export class RollsService {
 
   deleteRollType(rollTypeId: number) {
     const url = `${this.urls.rollTypesUrl}/${rollTypeId}`;
+    return this.http.delete(url)
+      .catch(httpErrorHandle);
+  }
+
+  deleteRollOperation(operationId: number) {
+    const url = `${this.urls.rollOperationUrl}/${operationId}`;
     return this.http.delete(url)
       .catch(httpErrorHandle);
   }

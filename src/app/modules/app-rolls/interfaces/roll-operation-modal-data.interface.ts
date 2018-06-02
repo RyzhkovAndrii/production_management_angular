@@ -1,6 +1,7 @@
 interface RollOperationModalData {
   batch: RollBatch;
+  operation?: RollOperationResponse;
   rollTypeId: number;
   manufacturedDate: Date;
-  operation(result: Promise < RollOperation > );
+  func(result: Promise < RollOperation > );
 }

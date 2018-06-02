@@ -2,7 +2,7 @@
   <form [formGroup]="form">
     <div class="form-row">
       <div class="col-md-3 offset-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
-        <div class="input-group">
+        <div class="input-group input-group-sm">
           <div class="input-group-prepend">
             <div class="input-group-text">от</div>
           </div>
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="col-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
-        <div class="input-group">
+        <div class="input-group input-group-sm">
           <div class="input-group-prepend">
             <div class="input-group-text">до</div>
           </div>
@@ -33,14 +33,14 @@
       </div>
 
       <div class="col-md-1 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
-        <button type="submit" class="btn btn-outline-dark" [disabled]="form.invalid" (click)="onSubmit()">Показать</button>
+        <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="form.invalid" (click)="onSubmit()">Показать</button>
       </div>
     </div>
   </form>
 </div>
 <div class="container-fluid mt-2">
   <div class="table-responsive">
-    <table class="table table-bordered table-striped" *ngIf="showOperations()">
+    <table class="table table-bordered table-striped table-sm" *ngIf="showOperations()">
       <thead>
         <tr class="table-header">
           <th scope="col">Тип операции</th>
@@ -50,7 +50,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let operation of rollOperations">
+        <tr *ngFor="let operation of rollOperations" [contextMenu]="operationsMenu" [contextMenuSubject]="operation">
           <td>{{ getOperationType(operation.operationType) }}</td>
           <td>{{ operation.operationDate }}</td>
           <td>{{ operation.manufacturedDate }}</td>
@@ -66,3 +66,13 @@
     За данный период нет операций
   </h2>
 </div>
+
+<context-menu #operationsMenu>
+  <ng-template contextMenuItem (execute)="openEditRollOperationModal($event.item)">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="deleteRollOperation($event.item)">
+    Удалить
+  </ng-template>
+</context-menu>

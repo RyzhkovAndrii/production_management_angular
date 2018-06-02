@@ -9,8 +9,8 @@ import * as moment from 'moment';
 })
 export class MomentPipe implements PipeTransform {
 
-  transform(value: Date, format: string = 'DD MMM YYYY', locale: string = 'ru'): any {
-    return moment(value).locale(locale).format(format);
+  transform(value: Date | string, valueFormat: string = 'DD-MM-YYYY', format: string = 'DD MMM YYYY', locale: string = 'ru'): any {
+    return moment(value, valueFormat).locale(locale).format(format);
   }
 
 }

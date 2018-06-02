@@ -22,6 +22,9 @@ import {
   from
 } from 'rxjs/observable/from';
 import appPresetColors from '../../../../app-utils/app-preset-colors';
+import {
+  integerValidator
+} from '../../../../app-utils/app-validators';
 
 @Component({
   selector: 'app-roll-type-modal',
@@ -38,6 +41,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
 
   readonly MIN_WEIGHT = 0.1;
   readonly MIN_THICKNESS = 0.1;
+  readonly MIN_LENGTH = 1;
   rollType: RollType;
   colorCode;
   readonly MAX_NOTE_LENGTH = 20;
@@ -67,8 +71,9 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
       colorCode: new FormControl(this.colorCode),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, [Validators.required, Validators.min(this.MIN_THICKNESS)]),
-      minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this)]),
-      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)])
+      minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this), integerValidator]),
+      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this), integerValidator]),
+      length: new FormControl(this.rollType ? this.rollType.length : undefined, [Validators.required, Validators.min(this.MIN_LENGTH), integerValidator])
     });
   }
 
@@ -91,7 +96,8 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
       colorCode: this.colorCode,
       thickness: this.form.value.thickness,
       minWeight: this.form.value.minWeight,
-      maxWeight: this.form.value.maxWeight
+      maxWeight: this.form.value.maxWeight,
+      length: this.form.value.length
     }
     const resolve = Promise.resolve(type);
     this.options.data.operation(resolve);
