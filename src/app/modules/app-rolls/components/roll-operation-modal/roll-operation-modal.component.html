@@ -14,6 +14,17 @@
     </select>
   </div>
   <div class="form-group">
+    <label for="operation-date">Дата операции:</label>
+    <input type="date" class="form-control" id="operation-date" formControlName="operationDate" [ngClass]="{
+      'is-invalid': form.get('operationDate').invalid && isTouched('operationDate'),
+      'is-valid': form.get('operationDate').valid && isTouched('operationDate')
+    }">
+    <div class="invalid-feedback" *ngIf="form.get('operationDate').invalid && isTouched('operationDate')">
+      <span *ngIf="form.get('operationDate').errors['beforeManufacturedError']">Списание возможно только с {{ batch.dateManufactured | moment }}</span>
+      <span *ngIf="form.get('operationDate').errors['required']">Обязательное поле!</span>
+    </div>
+  </div>
+  <div class="form-group">
     <label for="roll-amount">Количество рулонов:</label>
     <input type="number" min="0" step="1" class="form-control" id="roll-amount" formControlName="rollAmount" [ngClass]="{
         'is-invalid': form.get('rollAmount').invalid && isTouched('rollAmount'),

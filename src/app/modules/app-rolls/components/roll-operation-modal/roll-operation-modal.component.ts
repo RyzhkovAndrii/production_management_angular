@@ -25,7 +25,10 @@ import {
 } from '../../../../app-utils/app-validators';
 import {
   midnightDate,
-  formatDate
+  formatDate,
+  formatDateServerToBrowser,
+  formatDateBrowserToServer,
+  isBeforeDate
 } from '../../../../app-utils/app-date-utils';
 
 
@@ -71,6 +74,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
         value: this.operationType,
         disabled: !this.batch || this.batch.leftOverAmount <= 0
       }),
+      operationDate: new FormControl(formatDateServerToBrowser(midnightDate()), [this.validateDateUseBeforeManufacture.bind(this), Validators.required]),
       rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)])
     });
   }
@@ -103,7 +107,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     }
 
     const rollOperation: RollOperation = {
-      operationDate: formatDate(midnightDate()),
+      operationDate: formatDateBrowserToServer(this.form.value.operationDate),
       operationType: this.form.get('operationType').value,
       manufacturedDate: formatDate(this.manufacturedDate),
       rollTypeId: this.rollTypeId,
@@ -131,10 +135,27 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
         'negativeLeftoverError': true
       };
     }
+    return null;
+  }
+
+  validateDateUseBeforeManufacture(control: FormControl) {
+    if (this.form && this.batch && this.form.value.operationType == RollOperationType.USE) {
+      if (control && isBeforeDate(control.value, this.batch.dateManufactured)) {
+        return {
+          'beforeManufacturedError': true
+        };
+      }
+    }
+    return null;
   }
 
   revalidateAmount() {
+    this.revalidateOperationDate();
     this.form.get('rollAmount').updateValueAndValidity();
+  }
+
+  revalidateOperationDate() {
+    this.form.get('operationDate').updateValueAndValidity();
   }
 
   isTouched(controlName: string) {

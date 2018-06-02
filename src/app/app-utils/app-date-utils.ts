@@ -54,7 +54,7 @@ export function formatDate(date: Date): string {
  * @param date date string in format YYYY-MM-DD
  * @returns string value of date in format DD-MM-YYYY
  */
-export function formatDateBrowserToServer(date: string): string {
+export function formatDateBrowserToServer(date: string | Date): string {
   return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY').toString();
 }
 
@@ -63,7 +63,7 @@ export function formatDateBrowserToServer(date: string): string {
  * @param date string in format DD-MM-YYYY
  * @returns string value of date in format YYYY-MM-DD
  */
-export function formatDateServerToBrowser(date: string): string {
+export function formatDateServerToBrowser(date: string | Date): string {
   return moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD').toString();
 }
 /**
@@ -101,4 +101,10 @@ export function isSameMonthYear(a: Date, b: Date): boolean {
   const aMoment = moment(a);
   const bMoment = moment(b);
   return aMoment.isSame(bMoment, 'months') && aMoment.isSame(bMoment, 'year');
+}
+
+export function isBeforeDate(value: string, date: string, valueFormat: string = 'YYYY-MM-DD', format: string = 'DD-MM-YYYY') {
+  const aMoment = moment(value, valueFormat);
+  const bMoment = moment(date, format);
+  return aMoment.isBefore(bMoment);
 }
