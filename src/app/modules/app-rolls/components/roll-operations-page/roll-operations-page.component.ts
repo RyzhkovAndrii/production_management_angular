@@ -163,27 +163,61 @@ export class RollOperationsPageComponent implements OnInit {
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
-  openDeleteRollOperationModal(operation: RollOperationResponse) {
+  deleteRollOperation(operation: RollOperationResponse) {
+    this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
+      .subscribe(batch => {
+        switch (operation.operationType) {
+          case RollOperationType.MANUFACTURE:
+            batch.leftOverAmount -= operation.rollAmount;
+            break;
+          case RollOperationType.USE:
+            batch.leftOverAmount += operation.rollAmount;
+            break;
+        }
+        if(batch.leftOverAmount >= 0) {
+          this.openDeleteRollOperationModal(operation);
+        } else {
+          this.openUnableDeleteRollOperationModal(batch.leftOverAmount);
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+    this.openDeleteRollOperationModal(operation);
+  }
+
+  private openDeleteRollOperationModal(operation: RollOperationResponse) {
     const buttonClass = 'btn btn-outline-dark';
-    const modalOptions: Partial < IModalDialogOptions < any >> = {
+    const modalOptions: Partial<IModalDialogOptions<any>> = {
       title: 'Подтвердите удаление операции',
       childComponent: SimpleConfirmModalComponent,
       actionButtons: [{
-          text: 'Отменить',
-          buttonClass,
-          onAction: () => true
-        },
-        {
-          text: 'Удалить',
-          buttonClass,
-          onAction: () => {
-            this.rollsService.deleteRollOperation(operation.id)
-              .subscribe(data => {
-                this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
-              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
-            return true;
-          }
+        text: 'Отменить',
+        buttonClass,
+        onAction: () => true
+      },
+      {
+        text: 'Удалить',
+        buttonClass,
+        onAction: () => {
+          this.rollsService.deleteRollOperation(operation.id)
+            .subscribe(data => {
+              this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
+            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+          return true;
         }
+      }
+      ]
+    };
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
+  }
+  openUnableDeleteRollOperationModal(leftOverAmount: number) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial<IModalDialogOptions<any>> = {
+      title: `Невозможно удалить операцию! Остаток будет ${leftOverAmount}`,
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+        text: 'Ok',
+        buttonClass,
+        onAction: () => true
+      }
       ]
     };
     this.ngxModalService.openDialog(this.viewRef, modalOptions);
