@@ -65,7 +65,15 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     ];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.form = new FormGroup({
+      operationType: new FormControl({
+        value: this.operationType,
+        disabled: !this.batch || this.batch.leftOverAmount <= 0
+      }),
+      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)])
+    });
+  }
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < RollOperationModalData >> ) {
     this.options = options;
@@ -74,15 +82,16 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.manufacturedDate = options.data.manufacturedDate;
     this.operation = options.data.operation;
     if (this.operation) {
+      switch (this.operation.operationType) {
+        case RollOperationType.MANUFACTURE:
+          this.batch.leftOverAmount -= this.operation.rollAmount;
+          break;
+        case RollOperationType.USE:
+          this.batch.leftOverAmount += this.operation.rollAmount;
+          break;
+      }
       this.operationType = RollOperationType[this.operation.operationType];
     }
-    this.form = new FormGroup({
-      operationType: new FormControl({
-        value: this.operationType,
-        disabled: !this.batch || this.operation
-      }),
-      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator])
-    });
   }
 
   onSubmit(): Promise < RollOperation > {
@@ -107,13 +116,21 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
 
   validateAmount(control: FormControl) {
     if (this.batch && control.value > this.batch.leftOverAmount) {
-      if (this.form.value.operationType == RollOperationType.USE) {
+      if (this.form && this.form.value.operationType == RollOperationType.USE) {
         return {
           'greaterThanLeftError': true
         };
       }
     }
     return null;
+  }
+
+  validateNegativeAmount(control: FormControl) {
+    if (this.batch && control.value + this.batch.leftOverAmount < 0) {
+      return {
+        'negativeLeftoverError': true
+      };
+    }
   }
 
   revalidateAmount() {
