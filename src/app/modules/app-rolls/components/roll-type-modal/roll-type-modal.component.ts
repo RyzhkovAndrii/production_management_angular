@@ -71,8 +71,8 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
       colorCode: new FormControl(this.colorCode),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, [Validators.required, Validators.min(this.MIN_THICKNESS)]),
-      minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this), integerValidator]),
-      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this), integerValidator]),
+      minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this)]),
+      maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)]),
       length: new FormControl(this.rollType ? this.rollType.length : undefined, [Validators.required, Validators.min(this.MIN_LENGTH), integerValidator])
     });
   }

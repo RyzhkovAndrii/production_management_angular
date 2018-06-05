@@ -64,7 +64,6 @@
           <span *ngIf="form.get('minWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
           <span *ngIf="form.get('minWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('minWeight').errors['greaterThenMax']">Минимальное значение должно быть меньше максимального!</span>
-          <span *ngIf="form.get('minWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>
@@ -82,7 +81,6 @@
           <span *ngIf="form.get('maxWeight').errors['min']">Вес должен быть больше {{ MIN_WEIGHT }}</span>
           <span *ngIf="form.get('maxWeight').errors['required']">Обязательное поле!</span>
           <span *ngIf="form.get('maxWeight').errors['smallerThenMin']">Максимальное значение должно быть больше минимального!</span>
-          <span *ngIf="form.get('maxWeight').errors['notIntegerError']">Должно быть целым числом!</span>
         </div>
       </div>
     </div>
