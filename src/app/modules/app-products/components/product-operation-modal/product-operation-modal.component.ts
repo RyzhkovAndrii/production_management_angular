@@ -36,6 +36,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
   form: FormGroup;
   productOperation: ProductOperationRequest;
   operationType: ProductOperationType;
+  leftover: ProductLeftoverResponse;
 
   readonly MIN_PRODUCT_AMOUNT = 0.001;
   readonly DECIMAL_PLACES = 3;
@@ -63,6 +64,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductOperationModalData >> ) {
     this.options = options;
+    this.leftover = options.data.productLeftover;
     this.productOperation = options.data.productOperationRequest;
     this.operationType = ProductOperationType[this.productOperation.operationType];
     this.form = new FormGroup({
@@ -70,7 +72,12 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
         value: this.operationType,
         disabled: true
       }),
-      amount: new FormControl(undefined, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), this.validateDecimalPlaces.bind(this)])
+      amount: new FormControl(undefined, [
+        Validators.required,
+        Validators.min(this.MIN_PRODUCT_AMOUNT),
+        this.validateDecimalPlaces.bind(this),
+        this.validateLeftover.bind(this)
+      ])
     });
   }
 
@@ -105,4 +112,21 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
     }
     return null;
   }
+
+  validateLeftover(control: FormControl) {
+    if (control.value && this.isSoldOperation() && this.leftover.amount - this.convertValue(control.value) < 0) {
+      return {
+        'negativeLeftoverError': true
+      };
+    }
+    return null;
+  }
+
+  isSoldOperation() {
+    return this.operationType == ProductOperationType.SOLD;
+  }
+
+  convertValue(value: number): number {
+    return new Decimal(value).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
+  } 
 }

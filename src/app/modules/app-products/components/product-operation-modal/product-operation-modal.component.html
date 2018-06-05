@@ -1,3 +1,7 @@
+<div *ngIf="isSoldOperation()">
+  Текущий остаток: {{ leftover.amount | exponent }}
+  <hr>
+</div>
 <form [formGroup]="form">
   <div class="form-group">
     <label for="operation-type">Тип операции:</label>
@@ -21,6 +25,9 @@
       </span>
       <span *ngIf="form.get('amount').errors['decimalPlacesError']">
         Максимальное количество знаков после запятой: {{ DECIMAL_PLACES }}
+      </span>
+      <span *ngIf="form.get('amount').errors['negativeLeftoverError']">
+        Отрицательный остаток! Доступно {{ leftover.amount | exponent }} продукции
       </span>
     </div>
   </div>

@@ -194,18 +194,22 @@ export class ProductsPageComponent implements OnInit {
     }
     const modalOptions: Partial < IModalDialogOptions < ProductOperationModalData >> = {
       title: 'Операция над продукцией',
-      childComponent: ProductOperationModalComponent,
-      data: {
-        productOperationRequest: {
-          operationDate: formatDate(this.daylyDate),
-          productTypeId,
-          operationType,
-          amount: undefined
-        },
-        func
-      }
+      childComponent: ProductOperationModalComponent
     };
-    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+    this.productsService.getProductLeftover(productTypeId, this.daylyDate)
+      .subscribe(leftover => {
+        modalOptions.data = {
+          productOperationRequest: {
+            operationDate: formatDate(this.daylyDate),
+            productTypeId,
+            operationType,
+            amount: undefined
+          },
+          productLeftover: leftover,
+          func
+        }
+        this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
   }
 
   openDeleteProductTypeModal(productType: ProductTypeResponse) {
