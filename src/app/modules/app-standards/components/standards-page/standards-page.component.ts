@@ -20,9 +20,8 @@ import {
   styleUrls: ['./standards-page.component.css']
 })
 export class StandardsPageComponent implements OnInit {
-  standards: StandardResponse[];
-  productsMap: Map < number,
-  ProductTypeResponse > ;
+  standardsMap: Map < number, StandardResponse >;
+  products: ProductTypeResponse[];
   rollsMap: Map < number,
   RollType > ;
 
@@ -41,8 +40,8 @@ export class StandardsPageComponent implements OnInit {
   fetchData() {
     this.standardsService.getStandardsInfo()
       .subscribe(info => {
-        this.standards = info.standardResponses;
-        this.productsMap = info.productTypes;
+        this.standardsMap = info.standardResponses;
+        this.products = info.productTypes;
         this.rollsMap = info.rollTypes;
         console.log(info);
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));

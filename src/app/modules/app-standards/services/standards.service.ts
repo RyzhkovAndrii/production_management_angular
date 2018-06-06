@@ -33,13 +33,13 @@ export class StandardsService {
 
   getStandardsInfo(): Observable < StandardsInfo > {
     return this.getStandards()
-      .flatMap(standards => this.productsService.getProductTypes()
-        .map(products => new Map(products.map(x => [x.id, x] as[number, ProductTypeResponse])))
+      .map(standards => new Map(standards.map(x => [x.productTypeId, x] as [number, StandardResponse])))
+      .flatMap(standardsMap => this.productsService.getProductTypes()
         .flatMap(productsMap => this.rollsService.getRollTypes()
           .map(rolls => new Map(rolls.map(x => [x.id, x] as[number, RollType])))
           .map(rollsMap => {
             const standardsInfo: StandardsInfo = {
-              standardResponses: standards,
+              standardResponses: standardsMap,
               productTypes: productsMap,
               rollTypes: rollsMap
             }

@@ -1,5 +1,5 @@
 interface StandardsInfo {
-    standardResponses: StandardResponse[];
-    productTypes: Map < number, ProductTypeResponse >;
+    standardResponses: Map < number, StandardResponse >;
+    productTypes: ProductTypeResponse[];
     rollTypes: Map < number, RollType >;
 }
