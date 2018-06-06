@@ -13,6 +13,9 @@ import {
 import {
   StandardsService
 } from '../../services/standards.service';
+import {
+  compareColors
+} from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-standards-page',
@@ -20,11 +23,7 @@ import {
   styleUrls: ['./standards-page.component.css']
 })
 export class StandardsPageComponent implements OnInit {
-  standardsMap: Map < number, StandardResponse >;
-  products: ProductTypeResponse[];
-  rollsMap: Map < number,
-  RollType > ;
-
+  standardsInfo: StandardInfo[] = [];
   constructor(
     private standardsService: StandardsService,
     private ngxModalService: ModalDialogService,
@@ -36,13 +35,20 @@ export class StandardsPageComponent implements OnInit {
     this.fetchData();
   }
 
+  sortStandardsInfo(): StandardInfo[] {
+    return this.standardsInfo.sort((a, b) => {
+      let sort = compareColors(a.productType.colorCode, b.productType.colorCode);
+      sort = sort == 0 ?
+        a.productType.weight - b.productType.weight == 0 ? a.productType.id - b.productType.id : a.productType.weight - b.productType.weight :
+        sort;
+      return sort;
+    });
+  }
 
   fetchData() {
     this.standardsService.getStandardsInfo()
       .subscribe(info => {
-        this.standardsMap = info.standardResponses;
-        this.products = info.productTypes;
-        this.rollsMap = info.rollTypes;
+        this.standardsInfo = info;
         console.log(info);
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }

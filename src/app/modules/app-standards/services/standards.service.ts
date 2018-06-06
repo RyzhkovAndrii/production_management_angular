@@ -20,6 +20,9 @@ import {
 import {
   RollsService
 } from '../../app-rolls/services/rolls.service';
+import {
+  from
+} from 'rxjs/observable/from';
 
 @Injectable()
 export class StandardsService {
@@ -31,20 +34,26 @@ export class StandardsService {
     private rollsService: RollsService
   ) {}
 
-  getStandardsInfo(): Observable < StandardsInfo > {
+  getStandardsInfo(): Observable < StandardInfo[] > {
     return this.getStandards()
-      .map(standards => new Map(standards.map(x => [x.productTypeId, x] as [number, StandardResponse])))
+      .map(standards => new Map(standards.map(x => [x.productTypeId, x] as[number, StandardResponse])))
       .flatMap(standardsMap => this.productsService.getProductTypes()
-        .flatMap(productsMap => this.rollsService.getRollTypes()
+        .flatMap(products => this.rollsService.getRollTypes()
           .map(rolls => new Map(rolls.map(x => [x.id, x] as[number, RollType])))
-          .map(rollsMap => {
-            const standardsInfo: StandardsInfo = {
-              standardResponses: standardsMap,
-              productTypes: productsMap,
-              rollTypes: rollsMap
-            }
-            return standardsInfo;
-          })));
+          .flatMap(rollsMap => from(products)
+            .map(product => {
+              const standard = standardsMap.get(product.id) || <StandardResponse>{};
+              const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [];
+              const info: StandardInfo = {
+                productType: product,
+                rollTypes,
+                standardResponse: standard
+              };
+              return info;
+            })
+          )
+        )
+      ).toArray();
   }
 
   getStandards(): Observable < StandardResponse[] > {

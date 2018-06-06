@@ -1,3 +1,48 @@
-<p>
-  standards-page works!
-</p>
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-stripped table-sm">
+      <thead>
+        <tr>
+          <th scope="col" colspan="3">Продукция</th>
+          <th scope="col" colspan="5">Рулон</th>
+          <th scope="col" colspan="1">Норматив</th>
+        </tr>
+        <tr>
+          <th scope="col">Наименование</th>
+          <th scope="col">Вес</th>
+          <th scope="col">Цвет</th>
+
+          <th scope="col">Примечание</th>
+          <th scope="col">Толщина</th>
+          <th scope="col">Вес</th>
+          <th scope="col">Длина</th>
+          <th scope="col">Цвет</th>
+
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody *ngFor="let info of sortStandardsInfo()">
+        <tr>
+          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">{{ info.productType.name }}</th>
+          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">{{ info.productType.weight }}</th>
+          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">
+            <span class="filled-circle" [ngStyle]="{'background-color': info.productType.colorCode}"></span>
+          </th>
+          <td colspan="5" [attr.rowspan]="info.rollTypes.length">
+            <div *ngFor="let roll of info.rollTypes">
+              <span>{{ roll.note }}</span>
+              <span>{{ roll.thickness }}</span>
+              <span>{{ roll.minWeight }}-{{ roll.maxWeight }}</span>
+              <span>{{ roll.length }}</span>
+              <span class="filled-circle" [ngStyle]="{'background-color': roll.colorCode}"></span>
+            </div>
+          </td>
+          <td [attr.rowspan]="info.rollTypes.length">
+            {{ info.standardResponse.norm }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
