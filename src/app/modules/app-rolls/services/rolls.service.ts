@@ -55,59 +55,63 @@ export class RollsService {
   }
 
   getRollsInfo(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
-    return this.http.get(this.urls.rollTypesUrl, {
-      headers: this.headers
-    }).flatMap(
-      (data: RollType[]) => from(data)
-      .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
-        .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
-          .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
-            .flatMap((totalOver: RollLeftover) => this.getRollCheck(type.id)
-              .flatMap((rollCheck: RollCheck) => {
-                const rollInfo: RollInfo = {
-                  rollType: type,
-                  rollBatches: batches,
-                  restRollLeftover: restOver,
-                  totalRollLeftover: totalOver,
-                  rollCheck
-                };
-                return of(rollInfo);
-              })
+    return this.getRollTypes()
+      .flatMap(
+        (data: RollType[]) => from(data)
+        .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
+          .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
+            .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
+              .flatMap((totalOver: RollLeftover) => this.getRollCheck(type.id)
+                .flatMap((rollCheck: RollCheck) => {
+                  const rollInfo: RollInfo = {
+                    rollType: type,
+                    rollBatches: batches,
+                    restRollLeftover: restOver,
+                    totalRollLeftover: totalOver,
+                    rollCheck
+                  };
+                  return of(rollInfo);
+                })
+              )
             )
           )
         )
-      )
-    ).toArray().catch(httpErrorHandle);
+      ).toArray().catch(httpErrorHandle);
   }
 
   getRollsInfoWithoutCheck(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
-    return this.http.get(this.urls.rollTypesUrl, {
-      headers: this.headers
-    }).flatMap(
-      (data: RollType[]) => from(data)
-      .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
-        .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
-          .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
-            .flatMap((totalOver: RollLeftover) => of ( < RollCheck > {
-                id: undefined,
-                rollTypeId: undefined,
-                rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
-              })
-              .flatMap((rollCheck: RollCheck) => {
-                const rollInfo: RollInfo = {
-                  rollType: type,
-                  rollBatches: batches,
-                  restRollLeftover: restOver,
-                  totalRollLeftover: totalOver,
-                  rollCheck
-                };
-                return of(rollInfo);
-              })
+    return this.getRollTypes()
+      .flatMap(
+        (data: RollType[]) => from(data)
+        .flatMap((type: RollType) => this.getRollBatchesByDateRange(type.id, fromDate, totalDate)
+          .flatMap((batches: RollBatch[]) => this.getRollLeftoverByRollIdAndDate(type.id, restDate)
+            .flatMap((restOver: RollLeftover) => this.getRollLeftoverByRollIdAndDate(type.id, totalDate)
+              .flatMap((totalOver: RollLeftover) => of ( < RollCheck > {
+                  id: undefined,
+                  rollTypeId: undefined,
+                  rollLeftOverCheckStatus: CheckStatus.NOT_CHECKED
+                })
+                .flatMap((rollCheck: RollCheck) => {
+                  const rollInfo: RollInfo = {
+                    rollType: type,
+                    rollBatches: batches,
+                    restRollLeftover: restOver,
+                    totalRollLeftover: totalOver,
+                    rollCheck
+                  };
+                  return of(rollInfo);
+                })
+              )
             )
           )
         )
-      )
-    ).toArray().catch(httpErrorHandle);
+      ).toArray().catch(httpErrorHandle);
+  }
+
+  getRollTypes(): Observable < RollType[] > {
+    return this.http.get(this.urls.rollTypesUrl, {
+      headers: this.headers
+    }).catch(httpErrorHandle);
   }
 
   getTotalLeftover(date: Date): Observable < number > {

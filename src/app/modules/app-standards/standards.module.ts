@@ -4,6 +4,16 @@ import {
 import {
   CommonModule
 } from '@angular/common';
+import {
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+import {
+  ContextMenuModule
+} from 'ngx-contextmenu';
+import {
+  ModalDialogModule
+} from 'ngx-modal-dialog';
 
 import {
   StandardsPageComponent
@@ -17,11 +27,21 @@ import {
 import {
   StandardsService
 } from './services/standards.service';
+import {
+  AppSharedModule
+} from '../app-shared/app-shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    StandardsRouting
+    StandardsRouting,
+    FormsModule,
+    ReactiveFormsModule,
+    ContextMenuModule.forRoot({
+      useBootstrap4: true
+    }),
+    ModalDialogModule.forRoot(),
+    AppSharedModule
   ],
   declarations: [StandardsPageComponent],
   providers: [
