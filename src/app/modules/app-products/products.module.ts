@@ -61,10 +61,6 @@ import {
   declarations: [
     ProductsPageComponent, ProductTypeModalComponent, ProductOperationModalComponent
   ],
-  providers: [
-    ProductsUrlsService,
-    ProductsService
-  ],
   entryComponents: [
     ProductTypeModalComponent,
     ProductOperationModalComponent

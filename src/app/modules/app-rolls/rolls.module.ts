@@ -69,10 +69,6 @@ import {
   entryComponents: [
     RollTypeModalComponent,
     RollOperationModalComponent
-  ],
-  providers: [
-    RollsService,
-    RollsUrlService
   ]
 })
 

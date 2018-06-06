@@ -27,6 +27,14 @@ import {
 import {
   AppModalService
 } from './modules/app-shared/services/app-modal.service';
+import {
+  ProductsService
+} from './modules/app-products/services/products.service';
+import {
+  ProductsUrlsService
+} from './modules/app-products/services/products-urls.service';
+import { RollsService } from './modules/app-rolls/services/rolls.service';
+import { RollsUrlService } from './modules/app-rolls/services/rolls-url.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +49,11 @@ import {
   ],
   providers: [
     RestDetailsService,
-    AppModalService
+    AppModalService,
+    ProductsUrlsService,
+    ProductsService,
+    RollsUrlService,
+    RollsService
   ],
   bootstrap: [AppComponent]
 })
