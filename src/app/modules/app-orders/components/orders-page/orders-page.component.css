@@ -10,13 +10,13 @@ table td, table th {
     white-space: nowrap;
 }
 
-#table-container { 
+#table-container {
     display: flex;
     position: left;
     margin-right: 5px;
 }
 
-#product-table-container {    
+#product-table-container {
     min-width: 10rem;
     max-width: 15rem;
     margin-right: 0.2rem;

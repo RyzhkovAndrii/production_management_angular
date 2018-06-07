@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-1">
-      <button class="btn btn-outline-dark btn-sm">
+      <button class="btn btn-outline-dark btn-sm"
+              (click)="openOrderAddForm()">
         <i class="material-icons">add</i>
       </button>
     </div>
@@ -12,16 +13,20 @@
         <div id="product-table-container">
           <table class="table-bordered">
             <tr>
-              <th colspan="3" class="table-header">Клиент</th>
+              <th colspan="3"
+                  class="table-header">Клиент</th>
             </tr>
             <tr>
-              <th colspan="3" class="table-header">Город</th>
+              <th colspan="3"
+                  class="table-header">Город</th>
             </tr>
             <tr>
-              <th colspan="3" class="table-header">Дата доставки</th>
+              <th colspan="3"
+                  class="table-header">Дата доставки</th>
             </tr>
             <tr>
-              <th colspan="3" class="table-header">Статус</th>
+              <th colspan="3"
+                  class="table-header">Статус</th>
             </tr>
             <tr style="height: 0.2rem;"></tr>
             <div *ngIf="productTypes"></div>
@@ -29,18 +34,19 @@
               <td>{{productType.name}}</td>
               <td>{{productType.weight}}</td>
               <td>
-                <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+                <i class="filled-circle"
+                   [ngStyle]="{ 'background-color': productType.colorCode }"></i>
               </td>
             </tr>
           </table>
         </div>
-        <app-order-leftover-product [productTypeList]="productTypes"></app-order-leftover-product>
+        <app-order-leftover-product></app-order-leftover-product>
         <div id="client-table-container">
-          <div *ngFor="let orderResponse of orderResponses">
-            <app-order [orderResponse]="orderResponse" [productTypeList]="productTypes"></app-order>
+          <div *ngFor="let order of orderList">
+            <app-order [order]="order"></app-order>
           </div>
         </div>
-        <app-order-leftover-product [productTypeList]="productTypes"></app-order-leftover-product>
+        <app-order-leftover-product [isLastLeftOver]="true"></app-order-leftover-product>
       </div>
     </div>
   </div>
