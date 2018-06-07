@@ -3,19 +3,19 @@
     <tr>
       <th>
         <div class="overflow-text">
-          <span>{{order.client?.name}}</span>
+          <span>{{orderDetails.client?.name}}</span>
         </div>
       </th>
     </tr>
     <tr>
       <th>
         <div class="overflow-text">
-          <span>{{order.city}}</span>
+          <span>{{orderDetails.city}}</span>
         </div>
       </th>
     </tr>
     <tr>
-      <th>{{order.deliveryDate | moment:'DD.MM.YYYY'}}</th>
+      <th>{{orderDetails.deliveryDate | moment:'DD.MM.YYYY'}}</th>
     </tr>
     <tr>
       <th>
@@ -26,7 +26,7 @@
     <tr style="height: 0.2rem;"></tr>
   </thead>
   <tbody>
-    <tr *ngFor="let orderItem of order.orderItemList">
+    <tr *ngFor="let orderItem of orderDetails.orderItemList">
       <td>{{orderItem?.amount | exponent}}</td>
     </tr>
   </tbody>

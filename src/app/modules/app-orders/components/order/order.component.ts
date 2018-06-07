@@ -1,63 +1,83 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ModalDialogService } from 'ngx-modal-dialog';
+
+import { OrderModalComponent } from '../order-modal/order-modal.component';
 import { OrdersService } from '../../services/orders.service';
 import { ClientsService } from '../../services/client.service';
 import { OrderItemService } from '../../services/order-item.service';
+import { ProductsService } from '../../../app-products/services/products.service';
+import { Order } from '../../models/order.model';
+import { OrderDetails } from '../../models/order-details.model';
+import { Client } from '../../models/client.model';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
 
-  order = {} as OrderDetails;
-
-  @Input()
-  orderResponse: OrderResponse;
+  orderDetails: OrderDetails;
 
   @Input()
-  productTypeList: ProductTypeResponse[];
+  order: Order;
+
+  private clientList: Client[] = [];
+
+  private sub1: Subscription;
+  private sub2: Subscription;
 
   constructor(private orderService: OrdersService,
     private clientService: ClientsService,
-    private orderItemService: OrderItemService) { }
+    private orderItemService: OrderItemService,
+    private productService: ProductsService,
+    private modalService: ModalDialogService,
+    private viewRef: ViewContainerRef) { }
 
   ngOnInit() {
-    this.convert();
+    this.orderDetails = this.orderService.convert(this.order);
   }
 
-  private convert() {
-    this.order.id = this.orderResponse.id;
-    this.order.city = this.orderResponse.city;
-    this.order.creationDate = this.orderResponse.creationDate;
-    this.order.deliveryDate = this.orderResponse.deliveryDate;
-    this.order.isImportant = this.orderResponse.isImportant;
-    this.order.isDelivered = this.orderResponse.isDelivered;
-    this.order.isOverdue = this.orderResponse.isOverdue;
-    this.clientService.getClient(this.orderResponse.clientId)
-      .subscribe(client => this.order.client = client);
-    this.orderItemService.getOrderItemList(this.orderResponse.id)
-      .subscribe(orderItemList => {
-        this.order.orderItemList = orderItemList;
-        this.sortOrderItemList();
-      });
-  }
-
-
-  private sortOrderItemList() {
-    const filledOrderItemList: OrderItemResponse[] = [];
-    for (let productType of this.productTypeList) {
-      let item = null;
-      for (let orderItem of this.order.orderItemList) {
-        if (orderItem.productTypeId === productType.id) {
-          item = orderItem;
-          continue;
-        }
-      }
-      filledOrderItemList.push(item);
+  ngOnDestroy() {
+    if (this.sub1) {
+      this.sub1.unsubscribe();
     }
-    this.order.orderItemList = filledOrderItemList;
+    if (this.sub2) {
+      this.sub2.unsubscribe();
+    }
+  }
+
+  openOrderEditForm() {
+    if (this.clientList.length === 0) {
+      this.sub1 = this.clientService.getAll().subscribe(data => {
+        this.clientList = data;
+        this._openOrderEditForm();
+      });
+    } else {
+      this._openOrderEditForm();
+    }
+  }
+
+  private _openOrderEditForm() {
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Изменить заказ',
+      childComponent: OrderModalComponent,
+      data: {
+        productTypeList: this.productService.getSingletonProductTypes(),
+        clientList: this.clientList,
+        order: this.orderDetails
+      }
+    })
+  }
+
+  deliverOrder() {
+    const { client, city, deliveryDate, isImportant } = this.orderDetails;
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true);
+    this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
+      .subscribe(order => {
+        // todo update orders-page
+      });
   }
 
 }
