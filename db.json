@@ -1,5 +1,306 @@
 {
-  "rollsInfo": [{
+  "product-leftovers": [
+    {
+      "date": "07-06-2018",
+      "productTypeId": 1,
+      "amount": 100256
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 2,
+      "amount": 5698
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 3,
+      "amount": 9687
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 4,
+      "amount": 100256
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 5,
+      "amount": 5698
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 6,
+      "amount": 9687
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 7,
+      "amount": 100256
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 8,
+      "amount": 5698
+    },
+    {
+      "date": "07-06-2018",
+      "productTypeId": 9,
+      "amount": 9687
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 1,
+      "amount": 5698
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 2,
+      "amount": -8745
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 3,
+      "amount": 635
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 4,
+      "amount": 9875
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 5,
+      "amount": -1234
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 6,
+      "amount": 6548
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 7,
+      "amount": 0
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 8,
+      "amount": 3695
+    },
+    {
+      "date": "31-08-2018",
+      "productTypeId": 9,
+      "amount": 7400
+    }
+  ],
+  "product-types": [
+    {
+      "id": 1,
+      "name": "T-27-1",
+      "weight": 2.7,
+      "colorCode": "#FFFFFF"
+    },
+    {
+      "id": 2,
+      "name": "T-30-1",
+      "weight": 3,
+      "colorCode": "#FFFFFF"
+    },
+    {
+      "id": 3,
+      "name": "T-28-2",
+      "weight": 2.8,
+      "colorCode": "#FFFF00"
+    },
+    {
+      "id": 4,
+      "name": "T-27-1",
+      "weight": 2.1,
+      "colorCode": "#008000"
+    },
+    {
+      "id": 5,
+      "name": "T-30-1",
+      "weight": 1.5,
+      "colorCode": "#FFFFFF"
+    },
+    {
+      "id": 6,
+      "name": "T-28-2",
+      "weight": 3.5,
+      "colorCode": "#FFFF00"
+    },
+    {
+      "id": 7,
+      "name": "T-27-1",
+      "weight": 2.7,
+      "colorCode": "#008000"
+    },
+    {
+      "id": 8,
+      "name": "T-30-1",
+      "weight": 3,
+      "colorCode": "#FFFFFF"
+    },
+    {
+      "id": 9,
+      "name": "T-28-2",
+      "weight": 1,
+      "colorCode": "#FFFF00"
+    }
+  ],
+  "order-items": [
+    {
+      "id": 1,
+      "productTypeId": 1,
+      "amount": 6365,
+      "orderId": 1
+    },
+    {
+      "id": 2,
+      "productTypeId": 2,
+      "amount": 2015,
+      "orderId": 1
+    },
+    {
+      "id": 3,
+      "productTypeId": 3,
+      "amount": 560,
+      "orderId": 1
+    },
+    {
+      "id": 4,
+      "productTypeId": 1,
+      "amount": 1115,
+      "orderId": 2
+    },
+    {
+      "id": 5,
+      "productTypeId": 3,
+      "amount": 658,
+      "orderId": 2
+    },
+    {
+      "id": 6,
+      "productTypeId": 1,
+      "amount": 1320,
+      "orderId": 3
+    },
+    {
+      "id": 7,
+      "productTypeId": 2,
+      "amount": 3658,
+      "orderId": 3
+    },
+    {
+      "id": 8,
+      "productTypeId": 3,
+      "amount": 120,
+      "orderId": 3
+    }
+  ],
+  "clients": [
+    {
+      "name": "Наша Ряба",
+      "id": 1
+    },
+    {
+      "name": "Галера Лимитед",
+      "id": 2
+    },
+    {
+      "name": "тестовый2",
+      "id": 15
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "clientId": 1,
+      "city": "Киев",
+      "isImportant": true,
+      "creationDate": "2018-05-21",
+      "deliveryDate": "2018-06-01",
+      "isDelivered": false,
+      "isOverdue": true
+    },
+    {
+      "id": 2,
+      "clientId": 2,
+      "city": "Львов",
+      "isImportant": false,
+      "creationDate": "2018-05-15",
+      "deliveryDate": "2018-08-23",
+      "isDelivered": false,
+      "isOverdue": false
+    },
+    {
+      "id": 3,
+      "clientId": 1,
+      "city": "Киев",
+      "isImportant": true,
+      "creationDate": "2018-05-21",
+      "deliveryDate": "2018-06-01",
+      "isDelivered": false,
+      "isOverdue": false
+    },
+    {
+      "clientId": 1,
+      "city": "Киев",
+      "deliveryDate": "2018-05-15",
+      "isImportant": true,
+      "isDelivered": false,
+      "id": 4
+    },
+    {
+      "clientId": 2,
+      "city": "Донецк",
+      "deliveryDate": "2018-05-20",
+      "isImportant": true,
+      "isDelivered": true,
+      "id": 5
+    },
+    {
+      "clientId": 2,
+      "city": "Харьков",
+      "deliveryDate": "2018-08-31",
+      "isImportant": true,
+      "isDelivered": true,
+      "id": 6
+    },
+    {
+      "clientId": 1,
+      "city": "Харьков",
+      "deliveryDate": "2018-05-10",
+      "isImportant": true,
+      "isDelivered": false,
+      "id": 7
+    },
+    {
+      "clientId": 2,
+      "city": "Харьков",
+      "deliveryDate": "2018-06-23",
+      "isImportant": true,
+      "isDelivered": false,
+      "id": 8
+    },
+    {
+      "clientId": 2,
+      "city": "Харьков",
+      "deliveryDate": "2018-06-23",
+      "isImportant": true,
+      "isDelivered": false,
+      "id": 9
+    },
+    {
+      "clientId": 2,
+      "city": "Днепр",
+      "deliveryDate": "2018-06-05",
+      "isImportant": true,
+      "isDelivered": false,
+      "id": 10
+    }
+  ],
+  "rollsInfo": [
+    {
       "rollType": {
         "id": 1,
         "name": "жовте",
@@ -7,7 +308,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -41,7 +343,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -75,7 +378,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -116,7 +420,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -150,7 +455,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -184,7 +490,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -225,7 +532,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -259,7 +567,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -293,7 +602,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -334,7 +644,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -368,7 +679,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -402,7 +714,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -443,7 +756,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -477,7 +791,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -511,7 +826,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -552,7 +868,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -586,7 +903,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -620,7 +938,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -661,7 +980,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -695,7 +1015,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -729,7 +1050,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -770,7 +1092,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -804,7 +1127,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -838,7 +1162,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
@@ -879,7 +1204,8 @@
         "colorCode": "#fff354",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-15",
           "rollTypeId": 1,
           "manufacturedAmount": 150,
@@ -913,7 +1239,8 @@
         "colorCode": "#008000",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-04-01",
           "rollTypeId": 2,
           "manufacturedAmount": 80,
@@ -947,7 +1274,8 @@
         "colorCode": "#5A009D",
         "thickness": 2.7
       },
-      "rollBatches": [{
+      "rollBatches": [
+        {
           "dateManufactured": "2018-03-21",
           "rollTypeId": 3,
           "manufacturedAmount": 530,
