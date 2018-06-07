@@ -17,4 +17,12 @@ export class OrderItemService {
         return this.http.get(this.urlService.orderItemUrl, { params }).catch(httpErrorHandle);
     }
 
+    saveOrderItem(orderItem: OrderItem) {
+        return this.http.post(this.urlService.orderItemUrl, orderItem).catch(httpErrorHandle);
+    }
+
+    saveOrderItemList(orderItemList: OrderItem[]) { // todo REST for this method
+        return this.http.post(this.urlService.orderItemUrl, orderItemList).catch(httpErrorHandle);
+    }
+
 }

@@ -8,6 +8,8 @@ import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
 import { ClientPageModalComponent } from '../client-page-modal/client-page-modal.component';
 import { Subscription } from 'rxjs';
+import { OrderItem } from '../../models/order-item.model';
+import { OrderItemService } from '../../services/order-item.service';
 
 @Component({
   selector: 'app-order-modal',
@@ -33,13 +35,16 @@ export class OrderModalComponent implements IModalDialog {
 
   order: OrderDetails;
 
+  newItemList: OrderItem[] = [];
+
   private orderPageViewRef: ViewContainerRef;
 
-  @Output()
-  onOrderCreateOrEdit = new EventEmitter<Order>();
+  // @Output()
+  // onOrderCreateOrEdit = new EventEmitter<Order>();
 
-  constructor(
+  constructor( // todo unsubscribe
     private orderService: OrdersService,
+    private orderItemService: OrderItemService,
     private modalService: ModalDialogService,
     private viewRef: ViewContainerRef
   ) {
@@ -47,7 +52,7 @@ export class OrderModalComponent implements IModalDialog {
       {
         text: "Отмена",
         buttonClass: "btn btn-outline-dark",
-        onAction: () => { return true }
+        onAction: () => true
       },
       {
         text: "Сохранить",
@@ -71,16 +76,21 @@ export class OrderModalComponent implements IModalDialog {
   }
 
   onSubmit() {
-    let subscription: Subscription;
     const { client, city, date, important } = this.form.value;
     let newOrder = new Order(client, city, date, important, false)
     if (this.order === null) {
-      subscription = this.orderService.save(newOrder).subscribe(order => newOrder = order);
+      this.orderService.save(newOrder)
+        .subscribe(order => {
+          newOrder = order;
+          this.newItemList.forEach(item => item.orderId = order.id);
+          this.newItemList
+            .forEach(item => this.orderItemService.saveOrderItem(item).subscribe()); // todo on list metod (look on next line)
+          // this.orderItemService.saveOrderItemList(this.newItemList).subscribe(); // todo REST for this method
+        });
     } else {
-      subscription = this.orderService.update(newOrder, this.order.id).subscribe(order => newOrder = order);
+      this.orderService.update(newOrder, this.order.id).subscribe(order => newOrder = order);
     }
-    this.onOrderCreateOrEdit.emit(newOrder);
-    subscription.unsubscribe();
+    // this.onOrderCreateOrEdit.emit(newOrder);
     return Promise.resolve(newOrder); // todo ???
   }
 
@@ -92,6 +102,29 @@ export class OrderModalComponent implements IModalDialog {
         clientList: this.clientList
       }
     })
+  }
+
+  addNewItem() {
+    const { itemType, itemAmount } = this.form.value;
+    const item = new OrderItem(null, itemType, itemAmount);
+    this.newItemList.push(item);
+    this.resetAddOrderItemForm();
+  }
+
+  private resetAddOrderItemForm() {
+    this.form.get("itemType").setValue("");
+    this.form.get("itemType").markAsUntouched();
+    this.form.get("itemAmount").setValue(0.001);
+    this.form.get("itemAmount").markAsUntouched();
+  }
+
+  removeNewItem(i: number) {
+    this.newItemList.splice(i, 1);
+  }
+
+  getProductTypeName(pruductTypeId: number): string { // todo field (not method)
+    console.log("getName");
+    return this.productTypeList.find((productType) => productType.id === pruductTypeId).name;
   }
 
 }

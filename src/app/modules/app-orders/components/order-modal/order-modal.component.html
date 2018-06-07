@@ -79,33 +79,48 @@
         <label class="col-form-label">Заказываемая продукция:</label>
       </div>
     </div>
-    <div *ngFor="let i of productTypeList">
-      <div class="form-group row">
-        <div class="col-6">
-          <ng-select id="itemType"
-                     class="form-control input-sm no-borders"
-                     [items]="productTypeList"
-                     bindLabel="name"
-                     bindValue="id"
-                     notFoundText="Тип не найден"
-                     placeholder="Выберите продукцию"
-                     formControlName="itemType">
-          </ng-select>
-        </div>
-        <input id="itemAmount"
-               class="form-control input-sm col-3"
-               type="number"
-               formControlName="itemAmount">
-        <div class="col-1">
-          <button class="btn btn-outline-secondary btn-sm">
-            <i class="material-icons">edit</i>
-          </button>
-        </div>
-        <div class="col-1">
-          <button class="btn btn-outline-secondary btn-sm ml-2">
-            <i class="material-icons">delete</i>
-          </button>
-        </div>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-hover">
+          <tbody>
+            <tr *ngFor="let newItem of newItemList; let i of index"
+                class="d-flex">
+              <td align="cell-center"
+                  class="col-7 text-left"> {{getProductTypeName(newItem.productTypeId)}} </td>
+              <td align="cell-center"
+                  class="col-3 text-left">{{newItem.amount}}</td>
+              <td class="col-2 cell-center text-right">
+                <button class="btn btn-outline-secondary btn-sm btn-outline"
+                        (click)="removeNewItem(i)">
+                  <i class="material-icons">delete_forever</i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-7">
+        <ng-select id="itemType"
+                   class="form-control input-sm no-borders"
+                   [items]="productTypeList"
+                   bindLabel="name"
+                   bindValue="id"
+                   notFoundText="Тип не найден"
+                   placeholder="Выберите продукцию"
+                   formControlName="itemType">
+        </ng-select>
+      </div>
+      <input id="itemAmount"
+             class="form-control input-sm col-3"
+             type="number"
+             formControlName="itemAmount">
+      <div class="col-2">
+        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                (click)="addNewItem()">
+          <i class="material-icons">add</i>
+        </button>
       </div>
     </div>
   </form>
