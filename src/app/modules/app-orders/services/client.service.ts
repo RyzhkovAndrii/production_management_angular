@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+
 import { OrderModuleUrlService } from './order-module-url.service';
+import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+import { Client } from '../models/client.model';
 
 @Injectable()
 export class ClientsService {
@@ -11,12 +13,27 @@ export class ClientsService {
     private urlService: OrderModuleUrlService) { }
 
   getAll() {
-    return this.http.get(this.urlService.clientUrl).catch(httpErrorHandle);
+    const params = new HttpParams().set('_sort', 'name'); // todo sort parameter in REST
+    return this.http.get(this.urlService.clientUrl, { params }).catch(httpErrorHandle);
   }
 
-  getClient(id: number): Observable<ClientResponse> {
+  getClient(id: number): Observable<Client> {
     const url = `${this.urlService.clientUrl}/${id}`;
     return this.http.get(url).catch(httpErrorHandle);
+  }
+
+  save(client: Client): Observable<Client> {
+    return this.http.post(this.urlService.clientUrl, client).catch(httpErrorHandle);
+  }
+
+  update(client: Client, id: number): Observable<Client> {
+    const url = `${this.urlService.clientUrl}/${id}`;
+    return this.http.put(url, client).catch(httpErrorHandle);
+  }
+
+  delete(id: number) {
+    const url = `${this.urlService.clientUrl}/${id}`;
+    return this.http.delete(url).catch(httpErrorHandle);
   }
 
 }
