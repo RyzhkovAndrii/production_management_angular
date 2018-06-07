@@ -1,6 +1,7 @@
 table {
     empty-cells: show;
     width: 3.5rem;
+    position: relative;
 }
 
 table td {
@@ -15,4 +16,15 @@ table th {
 
 table tr {
     height: 1.5rem;
+}
+
+.datepicker-container {
+    position: absolute;
+    right: 19rem;
+    z-index: 1;
+}
+
+.negative-leftover {
+    color: #de3163;
+    font-weight: bold;
 }

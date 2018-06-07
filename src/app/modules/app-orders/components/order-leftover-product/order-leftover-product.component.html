@@ -1,7 +1,20 @@
 <table class="table-bordered table-striped">
   <thead>
-    <tr>
-      <th rowspan="4">Остаток</th>
+    <tr *ngIf="isLastLeftOver">
+      <th rowspan="4"
+          (click)="d.toggle()"> Остаток {{date | date:'dd.MM.yyyy'}} </th>
+      <div class="datepicker-container">
+        <input class="color-picker"
+               [minDate]="minDate"
+               [hidden]="true"
+               [(ngModel)]="date"
+               (ngModelChange)="fetchLeftOverList()"
+               ngbDatepicker
+               #d="ngbDatepicker">
+      </div>
+    </tr>
+    <tr *ngIf="!isLastLeftOver">
+      <th rowspan="4"> Остаток {{date | date:'dd.MM.yyyy'}} </th>
     </tr>
     <tr></tr>
     <tr></tr>
@@ -10,7 +23,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let productLeftOver of sortedProductLeftOverList">
-      <td>{{productLeftOver.amount | exponent}}</td>
+      <td>
+        <span [ngClass]="{'negative-leftover': productLeftOver.amount <= 0}">
+          {{productLeftOver.amount | exponent}}
+        </span>
+      </td>
     </tr>
   </tbody>
 </table>
