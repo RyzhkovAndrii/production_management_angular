@@ -1,4 +1,5 @@
 import { Client } from "./client.model";
+import { OrderItem } from "./order-item.model";
 
 export class OrderDetails {
 
@@ -10,7 +11,7 @@ export class OrderDetails {
     public id?: number;
     public isOverdue?: boolean;
     public creationDate?: string;
-    public orderItemList?: OrderItemResponse[];
+    public orderItemList?: OrderItem[];
 
     constructor() { }
 
