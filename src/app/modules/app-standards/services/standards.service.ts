@@ -36,13 +36,13 @@ export class StandardsService {
 
   getStandardsInfo(): Observable < StandardInfo[] > {
     return this.getStandards()
-      .map(standards => new Map(standards.map(x => [x.productTypeId, x] as[number, StandardResponse])))
+      .map(standards => new Map(standards.map(x => [x.productTypeId, x] as[number, Standard])))
       .flatMap(standardsMap => this.productsService.getProductTypes()
         .flatMap(products => this.rollsService.getRollTypes()
           .map(rolls => new Map(rolls.map(x => [x.id, x] as[number, RollType])))
           .flatMap(rollsMap => from(products)
             .map(product => {
-              const standard = standardsMap.get(product.id) || <StandardResponse>{};
+              const standard = standardsMap.get(product.id) || <Standard>{};
               const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [];
               const info: StandardInfo = {
                 productType: product,
@@ -56,19 +56,19 @@ export class StandardsService {
       ).toArray();
   }
 
-  getStandards(): Observable < StandardResponse[] > {
+  getStandards(): Observable < Standard[] > {
     return this.http.get(this.urls.standardsUrl).catch(httpErrorHandle);
   }
 
-  getStandard(standardId: number): Observable < StandardResponse > {
+  getStandard(standardId: number): Observable < Standard > {
     return this.http.get(`${this.urls.standardsUrl}/${standardId}`).catch(httpErrorHandle);
   }
 
-  postStandard(standard: StandardRequest): Observable < StandardResponse > {
+  postStandard(standard: Standard): Observable < Standard > {
     return this.http.post(this.urls.standardsUrl, standard).catch(httpErrorHandle);
   }
 
-  putStandard(standardId: number, standard: StandardRequest): Observable < StandardResponse > {
+  putStandard(standardId: number, standard: Standard): Observable < Standard > {
     return this.http.put(`${this.urls}/${standardId}`, standard).catch(httpErrorHandle);
   }
 

@@ -1,5 +1,4 @@
-interface StandardResponse {
-  id: number;
+interface Standard {
   rollTypeIds: number[];
   productTypeId: number;
   norm: number;
