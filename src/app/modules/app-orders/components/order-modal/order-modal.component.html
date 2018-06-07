@@ -1,0 +1,112 @@
+<div class="container modal-body">
+  <form [formGroup]="form">
+    <div class="form-group row">
+      <div class="col-10">
+        <label for="client"
+               class="col-form-label">Клиент:</label>
+        <ng-select id="client"
+                   [items]="clientList"
+                   class="form-control input-sm no-borders"
+                   bindLabel="name"
+                   bindValue="id"
+                   notFoundText="Клиент не найден"
+                   placeholder="Выберите клиента"
+                   formControlName="client"
+                   [ngClass]="{
+                  'is-invalid': form.get('client').invalid && form.get('client').touched,
+                  'is-valid': !form.get('client').invalid && form.get('client').touched}">
+        </ng-select>
+        <span *ngIf="form.get('client').invalid && form.get('client').touched"
+              class="invalid-feedback">
+          <span *ngIf="form.get('client').errors['required']">Обязательное поле!</span>
+        </span>
+      </div>
+      <div id="list-button-container"
+           class="col-1">
+        <button class="btn btn-outline-secondary btn-sm"
+                (click)="openClientPage()">
+          <i class="material-icons">list</i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6">
+        <label for="city"
+               class="col-form-label">Город:</label>
+        <input id="city"
+               class="form-control"
+               type="text"
+               placeholder="Укажите город"
+               formControlName="city"
+               [ngClass]="{
+              'is-invalid': form.get('city').invalid && form.get('city').touched,
+              'is-valid': !form.get('city').invalid && form.get('city').touched}">
+        <span *ngIf="form.get('city').invalid && form.get('city').touched"
+              class="invalid-feedback">
+          <span *ngIf="form.get('city').errors['required']">Обязательное поле!</span>
+        </span>
+      </div>
+      <div class="form-group col-6">
+        <label for="date"
+               class="col-form-label">Дата доставки:</label>
+        <input id="date"
+               class="form-control"
+               type="date"
+               formControlName="date"
+               [ngClass]="{
+                'is-invalid': form.get('date').invalid && form.get('date').touched,
+                'is-valid': !form.get('date').invalid && form.get('date').touched}">
+        <span *ngIf="form.get('date').invalid && form.get('date').touched"
+              class="invalid-feedback">
+          <span *ngIf="form.get('date').errors['required']">Обязательное поле!</span>
+        </span>
+      </div>
+    </div>
+    <div class="form-check row">
+      <div class="col-12">
+        <label for="important"
+               class="form-check-label">
+          <input id="important"
+                 class="form-check-input"
+                 type="checkbox"
+                 formControlName="important"> Заказ важен
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-12">
+        <label class="col-form-label">Заказываемая продукция:</label>
+      </div>
+    </div>
+    <div *ngFor="let i of productTypeList">
+      <div class="form-group row">
+        <div class="col-6">
+          <ng-select id="itemType"
+                     class="form-control input-sm no-borders"
+                     [items]="productTypeList"
+                     bindLabel="name"
+                     bindValue="id"
+                     notFoundText="Тип не найден"
+                     placeholder="Выберите продукцию"
+                     formControlName="itemType">
+          </ng-select>
+        </div>
+        <input id="itemAmount"
+               class="form-control input-sm col-3"
+               type="number"
+               formControlName="itemAmount">
+        <div class="col-1">
+          <button class="btn btn-outline-secondary btn-sm">
+            <i class="material-icons">edit</i>
+          </button>
+        </div>
+        <div class="col-1">
+          <button class="btn btn-outline-secondary btn-sm ml-2">
+            <i class="material-icons">delete</i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

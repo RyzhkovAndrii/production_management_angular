@@ -1,0 +1,23 @@
+#list-button-container {
+    margin-top: 8.5%;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-top: 0;
+}
+
+.input-sm {
+    height: 2.4rem;
+    font-size: 0.9rem;
+}
+
+.input-sm.ng-select {
+    margin: 0;
+    padding: 0;
+}
+
+.btn-sm {
+    height: 2.4rem;    
+}
