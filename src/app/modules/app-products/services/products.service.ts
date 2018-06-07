@@ -27,6 +27,8 @@ import {
 @Injectable()
 export class ProductsService {
 
+  private _singletonProductTypeList: ProductTypeResponse[];
+
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
 
   getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[][] > {
@@ -72,7 +74,12 @@ export class ProductsService {
   getSortedProductTypes(): Observable< ProductTypeResponse[] > {
     return this.getProductTypes()
       .map(data => data.sort(this._compareFn))
+      .do(data => this._singletonProductTypeList = data)
       .catch(httpErrorHandle);
+  }
+
+  getSingletonProductTypes(): ProductTypeResponse[] {    
+    return this._singletonProductTypeList;
   }
 
   private _compareFn(first: ProductTypeResponse, second: ProductTypeResponse): number {
@@ -85,12 +92,15 @@ export class ProductsService {
     }
   }
 
-  getProductsLeftovers(date: Date): Observable < ProductLeftoverResponse[] > {
-    const params = new HttpParams()
-      .set('date', formatDate(date));
-    return this.http.get(this.urls.productLeftoverUrl, {
-      params
-    }).catch(httpErrorHandle);
+  getProductsLeftovers(date: Date): Observable< ProductLeftoverResponse[] > {
+    const params = new HttpParams().set('date', formatDate(date));
+    return this.http.get(this.urls.productLeftoverUrl, { params }).catch(httpErrorHandle);
+  }
+
+  getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {
+    // const url = `${this.urls.productLeftoverUrl}?last`
+    // return this.http.get(url).catch(httpErrorHandle);
+    return this.getProductsLeftovers(new Date("2018-08-31"));
   }
 
   getProductLeftover(productTypeId: number, date: Date): Observable < ProductLeftoverResponse > {
@@ -102,7 +112,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getDaylyBatches(date: Date): Observable < ProductBatchResponse[] > {
+  getDaylyBatches(date: Date): Observable<ProductBatchResponse[]> {
     const params = new HttpParams()
       .set('date', formatDate(date));
     return this.http.get(this.urls.productBatchUrl, {
@@ -110,7 +120,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getDaylyBatch(productTypeId: number, date: Date): Observable < ProductBatchResponse > {
+  getDaylyBatch(productTypeId: number, date: Date): Observable<ProductBatchResponse> {
     const params = new HttpParams()
       .set('product-type-id', String(productTypeId))
       .set('date', formatDate(date));
@@ -119,7 +129,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getMonthlyBatches(fromDate: Date, toDate: Date): Observable < ProductBatchResponse[] > {
+  getMonthlyBatches(fromDate: Date, toDate: Date): Observable<ProductBatchResponse[]> {
     const params = new HttpParams()
       .set('from', formatDate(fromDate))
       .set('to', formatDate(toDate));
@@ -128,7 +138,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getMonthlyBatch(productTypeId: number, fromDate: Date, toDate: Date): Observable < ProductBatchResponse > {
+  getMonthlyBatch(productTypeId: number, fromDate: Date, toDate: Date): Observable<ProductBatchResponse> {
     const params = new HttpParams()
       .set('product-type-id', String(productTypeId))
       .set('from', formatDate(fromDate))
@@ -138,11 +148,11 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getProductsChecks(): Observable < ProductCheckResponse[] > {
+  getProductsChecks(): Observable<ProductCheckResponse[]> {
     return this.http.get(this.urls.productChecksUrl).catch(httpErrorHandle);
   }
 
-  getProductCheck(productTypeId: number): Observable < ProductCheckResponse > {
+  getProductCheck(productTypeId: number): Observable<ProductCheckResponse> {
     const params = new HttpParams()
       .set('product_type_id', String(productTypeId));
     return this.http.get(this.urls.productChecksUrl, {
@@ -150,15 +160,15 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  postProductType(type: ProductTypeRequest): Observable < ProductTypeResponse > {
+  postProductType(type: ProductTypeRequest): Observable<ProductTypeResponse> {
     return this.http.post(this.urls.productTypesUrl, type).catch(httpErrorHandle);
   }
 
-  postProductOperation(operation: ProductOperationRequest): Observable < ProductOperationResponse > {
+  postProductOperation(operation: ProductOperationRequest): Observable<ProductOperationResponse> {
     return this.http.post(this.urls.productOperationUrl, operation).catch(httpErrorHandle);
   }
 
-  putProductType(id: number, type: ProductTypeRequest): Observable < ProductTypeResponse > {
+  putProductType(id: number, type: ProductTypeRequest): Observable<ProductTypeResponse> {
     const url = `${this.urls.productTypesUrl}/${id}`;
     return this.http.put(url, type).catch(httpErrorHandle);
   }
