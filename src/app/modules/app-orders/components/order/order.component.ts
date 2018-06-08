@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalDialogService } from 'ngx-modal-dialog';
 
@@ -24,6 +24,9 @@ export class OrderComponent implements OnInit, OnDestroy {
   order: Order;
 
   isOrderDelConfirmVisible: boolean = false;
+
+  @Output()
+  onChange = new EventEmitter<any>();
 
   private clientList: Client[] = [];
 
@@ -82,15 +85,16 @@ export class OrderComponent implements OnInit, OnDestroy {
     const newOrder = new Order(client.id, city, deliveryDate, isImportant, true);
     this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(order => {
-        // todo update orders-page
+        this.onChange.emit(); // todo one order reload
       });
   }
 
   private orderDelete() {
     this.sub3 = this.orderService.delete(this.orderDetails.id)
       .subscribe(() => {
-        // todo update orders-page
+        this.onChange.emit();
       });
+
   }
 
   private toggleOrderDelConfirmVisibility(dir: boolean) {

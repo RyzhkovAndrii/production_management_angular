@@ -43,10 +43,10 @@
         <app-order-leftover-product></app-order-leftover-product>
         <div id="client-table-container">
           <div *ngFor="let order of orderList">
-            <app-order [order]="order"></app-order>
+            <app-order [order]="order" (onChange)="reloadPage()"></app-order>
           </div>
         </div>
-        <app-order-leftover-product [isLastLeftOver]="true"></app-order-leftover-product>
+        <app-order-leftover-product #lastLeftover [isLastLeftOver]="true"></app-order-leftover-product>
       </div>
     </div>
   </div>

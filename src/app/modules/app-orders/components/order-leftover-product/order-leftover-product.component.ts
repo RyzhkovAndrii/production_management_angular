@@ -51,6 +51,10 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  reloadCurrentLeftOver() {
+    this.fetchLeftOverList();
+  }
+
   fetchLeftOverList() {
     this.sub1 = this.productService.getProductsLeftovers(this.date)
       .subscribe(data => {
@@ -74,10 +78,6 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
       const leftover = this.productLeftOverList.find(leftover => leftover.productTypeId === productType.id);
       this.sortedProductLeftOverList.push(leftover);
     })
-  }
-
-  private convertToDate(dateStruct: NgbDateStruct): Date {
-    return new Date(`${dateStruct.year}-${dateStruct.month}-${dateStruct.day}`);
   }
 
   private convertToDateStruct(date: Date): NgbDateStruct {

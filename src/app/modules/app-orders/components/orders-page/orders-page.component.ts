@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ModalDialogService, IModalDialogOptions } from 'ngx-modal-dialog';
+import { Subscription } from 'rxjs';
 
 import { getDate } from '../../../../app-utils/app-date-utils';
 import { OrderModalComponent } from '../order-modal/order-modal.component';
@@ -10,7 +11,6 @@ import { ProductsService } from '../../../app-products/services/products.service
 import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
 import { ClientPageModalComponent } from '../client-page-modal/client-page-modal.component';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-orders-page',
@@ -18,6 +18,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./orders-page.component.css']
 })
 export class OrdersPageComponent implements OnInit, OnDestroy {
+
+  @ViewChild('lastLeftover') lastLeftover;
 
   orderList: Order[];
   productTypes: ProductTypeResponse[];
@@ -53,6 +55,15 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
         this.productTypes = data[0];
         this.orderList = data[1];
       });
+  }
+
+  private reloadOrderList() {
+    this.ordersService.getOrderList().subscribe(data => this.orderList = data);
+  }
+
+  reloadPage() {
+    this.reloadOrderList();
+    this.lastLeftover.reloadCurrentLeftOver();
   }
 
   openOrderAddForm() {
