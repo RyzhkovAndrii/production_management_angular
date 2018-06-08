@@ -55,7 +55,7 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
     this.fetchLeftOverList();
   }
 
-  fetchLeftOverList() {
+  private fetchLeftOverList() {
     this.sub1 = this.productService.getProductsLeftovers(this.date)
       .subscribe(data => {
         this.productLeftOverList = data;
@@ -63,7 +63,7 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
       });
   }
 
-  fetchLastLeftOverList() {
+  private fetchLastLeftOverList() {
     this.sub2 = this.productService.getLastProductsLeftOvers()
       .subscribe(data => {
         this.productLeftOverList = data;
