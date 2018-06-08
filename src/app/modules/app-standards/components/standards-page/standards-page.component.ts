@@ -53,4 +53,24 @@ export class StandardsPageComponent implements OnInit {
         console.log(info);
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
+
+  openCreateStandardModal(item: StandardInfo) {
+    console.log(item);
+  }
+  
+  openEditStandardModal(item: StandardInfo) {
+    console.log(item);
+  }
+  
+  openDeleteStandardModal(item: StandardInfo) {
+    console.log(item);
+  }
+
+  isStandardMissing = (item: StandardInfo): boolean => {
+    return !this.isStandardExist(item);
+  }
+
+  isStandardExist = (item: StandardInfo): boolean => {
+    return item.standardResponse.productTypeId ? true : false;
+  }
 }

@@ -22,7 +22,7 @@
         </tr>
       </thead>
 
-      <tbody *ngFor="let info of sortStandardsInfo(); odd as isOdd" class="table-border">
+      <tbody *ngFor="let info of sortStandardsInfo(); odd as isOdd" class="table-border" [contextMenu]="standardsMenu" [contextMenuSubject]="info">
         <tr *ngFor="let roll of info.rollTypes; first as isFirst" [ngClass]="{
           'even': isOdd,
           'odd': !isOdd
@@ -49,3 +49,17 @@
     </table>
   </div>
 </div>
+
+<context-menu #standardsMenu>
+  <ng-template contextMenuItem let-item (execute)="openCreateStandardModal($event.item)" [enabled]="isStandardMissing">
+    Создать норматив
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openEditStandardModal($event.item)" [enabled]="isStandardExist">
+    Редактировать норматив
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeleteStandardModal($event.item)" [enabled]="isStandardExist">
+    Удалить норматив
+  </ng-template>
+</context-menu>
