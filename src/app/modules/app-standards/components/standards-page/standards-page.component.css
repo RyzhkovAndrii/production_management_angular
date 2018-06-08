@@ -10,6 +10,10 @@
     width: 10%;
 }
 
+td, th {
+    white-space: nowrap;
+}
+
 .odd>td, .even>td {
     border-top: none!important;
     border-bottom: none!important;
