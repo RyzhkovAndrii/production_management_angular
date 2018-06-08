@@ -35,6 +35,8 @@
   </tbody>
 </table>
 
+
+<!-- Context menu -->
 <context-menu #orderMenu>
   <ng-template contextMenuItem
                let-item
@@ -43,7 +45,7 @@
   </ng-template>
   <ng-template contextMenuItem
                let-item
-               (execute)="onOrderDelete()">
+               (execute)="openOrderDelConfirm()">
     Удалить заказ
   </ng-template>
   <ng-template contextMenuItem
@@ -54,3 +56,10 @@
     Заказ доставлен
   </ng-template>
 </context-menu>
+
+<!-- Modal -->
+<div *ngIf="isOrderDelConfirmVisible">
+  <app-order-del-confirm (onApply)="onOrderDelConfirmApply()"
+                         (onCancel)="onOrderDelConfirmCancel()">
+  </app-order-del-confirm>
+</div>

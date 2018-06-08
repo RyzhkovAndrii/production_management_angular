@@ -23,6 +23,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   @Input()
   order: Order;
 
+  isOrderDelConfirmVisible: boolean = false;
+
   private clientList: Client[] = [];
 
   private sub1: Subscription;
@@ -84,11 +86,28 @@ export class OrderComponent implements OnInit, OnDestroy {
       });
   }
 
-  onOrderDelete() {
+  private orderDelete() {
     this.sub3 = this.orderService.delete(this.orderDetails.id)
       .subscribe(() => {
         // todo update orders-page
       });
+  }
+
+  private toggleOrderDelConfirmVisibility(dir: boolean) {
+    this.isOrderDelConfirmVisible = dir;
+  }
+
+  openOrderDelConfirm() {
+    this.toggleOrderDelConfirmVisibility(true);
+  }
+
+  onOrderDelConfirmApply() {
+    this.toggleOrderDelConfirmVisibility(false);
+    this.orderDelete();
+  }
+
+  onOrderDelConfirmCancel() {
+    this.toggleOrderDelConfirmVisibility(false);
   }
 
 }
