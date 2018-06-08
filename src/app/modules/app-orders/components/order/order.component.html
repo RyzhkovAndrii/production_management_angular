@@ -1,4 +1,5 @@
-<table class="table-bordered table-striped" [contextMenu]="orderMenu">
+<table class="table-bordered table-striped"
+       [contextMenu]="orderMenu">
   <thead>
     <tr>
       <th>
@@ -19,8 +20,10 @@
     </tr>
     <tr>
       <th>
-        <i *ngIf="order.isImportant" class="material-icons icon-impotant">error_outline</i>
-        <i *ngIf="order.isOverdue" class="material-icons icon-overdue">alarm</i>
+        <i *ngIf="order.isImportant"
+           class="material-icons icon-impotant">error_outline</i>
+        <i *ngIf="order.isOverdue"
+           class="material-icons icon-overdue">alarm</i>
       </th>
     </tr>
     <tr style="height: 0.2rem;"></tr>
@@ -33,11 +36,21 @@
 </table>
 
 <context-menu #orderMenu>
-  <ng-template contextMenuItem let-item (execute)="openOrderEditForm()">
+  <ng-template contextMenuItem
+               let-item
+               (execute)="openOrderEditForm()">
     Редактировать заказ
   </ng-template>
-  <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem let-item (execute)="deliverOrder()">
+  <ng-template contextMenuItem
+               let-item
+               (execute)="onOrderDelete()">
+    Удалить заказ
+  </ng-template>
+  <ng-template contextMenuItem
+               divider="true"></ng-template>
+  <ng-template contextMenuItem
+               let-item
+               (execute)="deliverOrder()">
     Заказ доставлен
   </ng-template>
 </context-menu>

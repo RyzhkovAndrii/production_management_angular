@@ -34,6 +34,11 @@ export class OrdersService {
     return this.http.put(url, order).catch(httpErrorHandle);
   }
 
+  delete(id: number): Observable<Order> {
+    const url = `${this.urlService.orderUrl}/${id}`;
+    return this.http.delete(url).catch(httpErrorHandle);
+  }
+
   convert(order: Order): OrderDetails {
     let orderDetails = new OrderDetails();
     orderDetails.id = order.id;

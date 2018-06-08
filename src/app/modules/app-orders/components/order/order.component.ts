@@ -27,6 +27,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   private sub1: Subscription;
   private sub2: Subscription;
+  private sub3: Subscription;
 
   constructor(private orderService: OrdersService,
     private clientService: ClientsService,
@@ -45,6 +46,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
     if (this.sub2) {
       this.sub2.unsubscribe();
+    }
+    if (this.sub3) {
+      this.sub3.unsubscribe();
     }
   }
 
@@ -76,6 +80,13 @@ export class OrderComponent implements OnInit, OnDestroy {
     const newOrder = new Order(client.id, city, deliveryDate, isImportant, true);
     this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(order => {
+        // todo update orders-page
+      });
+  }
+
+  onOrderDelete() {
+    this.sub3 = this.orderService.delete(this.orderDetails.id)
+      .subscribe(() => {
         // todo update orders-page
       });
   }
