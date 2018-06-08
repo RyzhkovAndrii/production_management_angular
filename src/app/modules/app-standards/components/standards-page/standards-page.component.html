@@ -22,8 +22,11 @@
         </tr>
       </thead>
 
-      <tbody *ngFor="let info of sortStandardsInfo()">
-        <tr *ngFor="let roll of info.rollTypes; first as isFirst">
+      <tbody *ngFor="let info of sortStandardsInfo(); odd as isOdd" class="table-border">
+        <tr *ngFor="let roll of info.rollTypes; first as isFirst" [ngClass]="{
+          'even': isOdd,
+          'odd': !isOdd
+        }">
           <th scope="row" class="row-name align-middle w-5" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.name }}</th>
           <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.weight }}</th>
           <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
@@ -31,9 +34,11 @@
           </th>
           <td>{{ roll.note }}</td>
           <td>{{ roll.thickness }}</td>
-          <td><span *ngIf="roll.minWeight">{{ roll.minWeight }}-{{ roll.maxWeight }}</span></td>
+          <td>
+            <span *ngIf="roll.minWeight">{{ roll.minWeight }}-{{ roll.maxWeight }}</span>
+          </td>
           <td>{{ roll.length }}</td>
-          <td class="w-5">
+          <td class="w-3">
             <span *ngIf="roll.colorCode" class="filled-circle" [ngStyle]="{'background-color': roll.colorCode}"></span>
           </td>
           <td class="align-middle" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">

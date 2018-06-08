@@ -41,7 +41,7 @@ th {
 }
 
 td:hover,
-.table-striped>tbody>tr:nth-child(even)>td {
+.table-striped>tbody>tr:nth-child(even)>td, .even, .odd>td:hover {
   background-color: rgba(232, 232, 232, 1);
 }
 
@@ -50,7 +50,7 @@ td:hover,
 }
 
 [scope=row]:hover,
-.table-striped>tbody>tr:nth-child(even)>td:hover {
+.table-striped>tbody>tr:nth-child(even)>td:hover, .even>td:hover, .odd {
   background-color: #f2f2f2;
 }
 
