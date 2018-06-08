@@ -43,7 +43,7 @@ export class StandardsService {
           .flatMap(rollsMap => from(products)
             .map(product => {
               const standard = standardsMap.get(product.id) || <Standard>{};
-              const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [];
+              const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [<RollType>{}];
               const info: StandardInfo = {
                 productType: product,
                 rollTypes,

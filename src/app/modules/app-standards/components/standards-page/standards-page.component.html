@@ -23,22 +23,20 @@
       </thead>
 
       <tbody *ngFor="let info of sortStandardsInfo()">
-        <tr>
-          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">{{ info.productType.name }}</th>
-          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">{{ info.productType.weight }}</th>
-          <th scope="row" class="row-name" [attr.rowspan]="info.rollTypes.length">
-            <span class="filled-circle" [ngStyle]="{'background-color': info.productType.colorCode}"></span>
+        <tr *ngFor="let roll of info.rollTypes; first as isFirst">
+          <th scope="row" class="row-name align-middle w-5" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.name }}</th>
+          <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.weight }}</th>
+          <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
+            <span class="filled-circle" [ngStyle]="{'background-color': info.productType.colorCode}" *ngIf="isFirst"></span>
           </th>
-          <td colspan="5" [attr.rowspan]="info.rollTypes.length">
-            <div *ngFor="let roll of info.rollTypes">
-              <span>{{ roll.note }}</span>
-              <span>{{ roll.thickness }}</span>
-              <span>{{ roll.minWeight }}-{{ roll.maxWeight }}</span>
-              <span>{{ roll.length }}</span>
-              <span class="filled-circle" [ngStyle]="{'background-color': roll.colorCode}"></span>
-            </div>
+          <td>{{ roll.note }}</td>
+          <td>{{ roll.thickness }}</td>
+          <td><span *ngIf="roll.minWeight">{{ roll.minWeight }}-{{ roll.maxWeight }}</span></td>
+          <td>{{ roll.length }}</td>
+          <td class="w-5">
+            <span *ngIf="roll.colorCode" class="filled-circle" [ngStyle]="{'background-color': roll.colorCode}"></span>
           </td>
-          <td [attr.rowspan]="info.rollTypes.length">
+          <td class="align-middle" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
             {{ info.standardResponse.norm }}
           </td>
         </tr>
