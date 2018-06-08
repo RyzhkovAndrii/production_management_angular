@@ -39,6 +39,7 @@ export class StandardsPageComponent implements OnInit {
     return this.standardsInfo.sort((a, b) => {
       let sort = compareColors(a.productType.colorCode, b.productType.colorCode);
       sort = sort == 0 ?
+        a.productType.name.localeCompare(b.productType.name) != 0 ? a.productType.name.localeCompare(b.productType.name) :
         a.productType.weight - b.productType.weight == 0 ? a.productType.id - b.productType.id : a.productType.weight - b.productType.weight :
         sort;
       return sort;
