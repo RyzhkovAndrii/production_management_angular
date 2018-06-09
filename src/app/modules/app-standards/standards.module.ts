@@ -33,6 +33,7 @@ import {
 import {
   StandardModalComponent
 } from './components/standard-modal/standard-modal.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import {
     StandardsRouting,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     ContextMenuModule.forRoot({
       useBootstrap4: true
     }),

@@ -5,8 +5,12 @@ import {
 } from '@angular/core';
 import {
   IModalDialog,
-  IModalDialogOptions
+  IModalDialogOptions,
+  IModalDialogButton
 } from 'ngx-modal-dialog';
+import {
+  FormGroup, FormControl
+} from '@angular/forms';
 
 @Component({
   selector: 'app-standard-modal',
@@ -15,12 +19,39 @@ import {
 })
 export class StandardModalComponent implements OnInit, IModalDialog {
 
-  constructor() {}
+  actionButtons: IModalDialogButton[];
+  private btnClass = 'btn btn-outline-dark';
+  data: StandardModalData;
+  form: FormGroup;
 
-  dialogInit (reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
+  constructor() {
+    this.actionButtons = [{
+        text: 'Отмена',
+        buttonClass: this.btnClass,
+        onAction: () => true
+      },
+      {
+        text: 'Сохранить',
+        buttonClass: this.btnClass,
+        onAction: this.onSubmit.bind(this)
+      }
+    ];
+  }
 
+  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
+    this.data = options.data;
   };
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.data.rollTypes);
+    this.form = new FormGroup({
+      rollTypes: new FormControl(this.data.standardInfo.rollTypes),
+      standard: new FormControl(this.data.standardInfo.standardResponse.norm)
+    });
+  }
+
+  onSubmit(): Promise < Standard > {
+    return null;
+  }
 
 }
