@@ -1,40 +1,44 @@
 <form [formGroup]="form">
   <div class="form-group">
     <label for="rollTypes">Рулоны:</label>
-    <ng-select id="rollTypes" 
-    [items]="data.rollTypes" 
-    [multiple]="true" 
-    [hideSelected]="true"
-    formControlName="rollTypes">
+    <ng-select id="rollTypes" [items]="data.rollTypes" [multiple]="true" [hideSelected]="false" formControlName="rollTypes">
       <ng-template ng-header-tmp>
         <div class="row">
-          <div class="col-3 text-center t-75">Примечание</div>
           <div class="col-3 text-center t-75">Толщина</div>
-          <div class="col-2 text-center t-75">Вес</div>
-          <div class="col-2 text-center t-75">Длина</div>
-          <div class="col-2 text-center t-75">Цвет</div>
+          <div class="col-3 text-center t-75">Вес</div>
+          <div class="col-3 text-center t-75">Длина</div>
+          <div class="col-3 text-center t-75">Цвет</div>
+          <div class="col-12 text-center t-75">Примечание</div>
         </div>
       </ng-template>
-      <ng-template ng-label-tmp let-item="item">
+      <ng-template ng-label-tmp let-item="item" let-items="items">
+        
         <div class="row">
-          <div class="col-3 text-center t-75">{{ item.note }}</div>
-          <div class="col-3 text-center t-75">{{ item.thickness }}</div>
-          <div class="col-2 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
-          <div class="col-2 text-center t-75">{{ item.length }}</div>
+          <div class="col-1 text-left t-75">
+              <span aria-hidden="true" class="ng-value-icon" (click)="removeItem(item)">×</span>
+          </div>
+          <div class="col-3 text-center t-75">
+            {{ item.thickness }}
+          </div>
+          <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
+          <div class="col-3 text-center t-75">{{ item.length }}</div>
           <div class="col-2 text-center t-75">
             <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
           </div>
+          <div class="col-12 text-center t-75">
+              {{ item.note }}
+            </div>
         </div>
       </ng-template>
       <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
         <div class="row">
-          <div class="col-3 text-center t-75">{{ item.note }}</div>
           <div class="col-3 text-center t-75">{{ item.thickness }}</div>
-          <div class="col-2 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
-          <div class="col-2 text-center t-75">{{ item.length }}</div>
-          <div class="col-2 text-center t-75">
+          <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
+          <div class="col-3 text-center t-75">{{ item.length }}</div>
+          <div class="col-3 text-center t-75">
             <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
           </div>
+          <div class="col-12 text-center t-75">{{ item.note }}</div>
         </div>
       </ng-template>
     </ng-select>

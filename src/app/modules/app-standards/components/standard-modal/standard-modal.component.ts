@@ -9,7 +9,8 @@ import {
   IModalDialogButton
 } from 'ngx-modal-dialog';
 import {
-  FormGroup, FormControl
+  FormGroup,
+  FormControl
 } from '@angular/forms';
 
 @Component({
@@ -48,6 +49,15 @@ export class StandardModalComponent implements OnInit, IModalDialog {
       rollTypes: new FormControl(this.data.standardInfo.rollTypes),
       standard: new FormControl(this.data.standardInfo.standardResponse.norm)
     });
+  }
+
+  removeItem(item: RollType) {
+    const rolls = this.form.get('rollTypes');
+    if (rolls.value.length == 1) {
+      rolls.setValue([]);
+    } else {
+      rolls.setValue(this.form.get('rollTypes').value.filter(x => x.id == item.id));
+    }
   }
 
   onSubmit(): Promise < Standard > {

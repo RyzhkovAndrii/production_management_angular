@@ -1,3 +1,15 @@
 .t-75 {
-    font-size: 0.75rem;
+  font-size: 0.75rem;
+}
+
+#rollTypes::ng-deep .ng-value {
+    width: 25rem;
+}
+
+#rollTypes::ng-deep .ng-select-container {
+    width: 29.125rem;
+}
+
+#rollTypes .filled-circle {
+    padding: 0.1rem 0.64rem;
 }
