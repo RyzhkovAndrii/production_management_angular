@@ -114,6 +114,14 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
+  getRollsByColor(colorCode: string): Observable < RollType[] > {
+    const params = new HttpParams()
+      .set('color', colorCode);
+    return this.http.get(this.urls.rollTypesUrl, {
+      params
+    }).catch(httpErrorHandle);
+  }
+
   getTotalLeftover(date: Date): Observable < number > {
     const params = new HttpParams()
       .set('date', formatDate(date))
