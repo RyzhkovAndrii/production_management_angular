@@ -20,6 +20,7 @@ import { NgbDatepicker, NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
 import { ClientPageModalComponent } from './components/client-page-modal/client-page-modal.component';
 import { OrderDelConfirmComponent } from './components/order/order-del-confirm/order-del-confirm.component';
+import { OrderCreateComponent } from './components/orders-page/order-create/order-create.component';
 
 @NgModule({
     imports: [
@@ -43,6 +44,7 @@ import { OrderDelConfirmComponent } from './components/order/order-del-confirm/o
         OrderModalComponent,
         ClientPageModalComponent,
         OrderDelConfirmComponent,
+        OrderCreateComponent,
     ],
     providers: [
         OrdersService,

@@ -26,6 +26,8 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   productLeftOvers: ProductLeftoverResponse[];
   clientList: Client[] = [];
 
+  isOrderCreateVisible: boolean = false;
+
   private sub1: Subscription;
   private sub2: Subscription;
 
@@ -66,29 +68,41 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.lastLeftover.reloadCurrentLeftOver();
   }
 
-  openOrderAddForm() {
+  // private _openOrderAddorEditForm() {
+  //   this.modalService.openDialog(this.viewRef, {
+  //     title: 'Новый заказ',
+  //     childComponent: OrderModalComponent,
+  //     data: {
+  //       productTypeList: this.productTypes,
+  //       clientList: this.clientList,
+  //       order: null,
+  //       viewRef: this.viewRef
+  //     }
+  //   })
+  // }
+
+  onOrderCreateApply(order: Order) { // todo save in array ???
+    this.reloadPage();
+  }
+
+  onOrderCreateCancel() {
+    this.toggleOrderCreateVisibility(false);
+  }
+
+  openOrderCreate() {
     if (this.clientList.length === 0) {
       this.sub2 = this.clientsService.getAll()
         .subscribe(data => {
           this.clientList = data;
-          this._openOrderAddorEditForm();
+          this.toggleOrderCreateVisibility(true);
         });
     } else {
-      this._openOrderAddorEditForm();
+      this.toggleOrderCreateVisibility(true);
     }
   }
 
-  private _openOrderAddorEditForm() {
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Новый заказ',
-      childComponent: OrderModalComponent,
-      data: {
-        productTypeList: this.productTypes,
-        clientList: this.clientList,
-        order: null,
-        viewRef: this.viewRef
-      }
-    })
+  private toggleOrderCreateVisibility(dir: boolean) {
+    this.isOrderCreateVisible = dir;
   }
 
 }

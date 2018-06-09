@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-1">
       <button class="btn btn-outline-dark btn-sm"
-              (click)="openOrderAddForm()">
+              (click)="openOrderCreate()">
         <i class="material-icons">add</i>
       </button>
     </div>
@@ -43,11 +43,22 @@
         <app-order-leftover-product></app-order-leftover-product>
         <div id="client-table-container">
           <div *ngFor="let order of orderList">
-            <app-order [order]="order" (onChange)="reloadPage()"></app-order>
+            <app-order [order]="order"
+                       (onChange)="reloadPage()"></app-order>
           </div>
         </div>
-        <app-order-leftover-product #lastLeftover [isLastLeftOver]="true"></app-order-leftover-product>
+        <app-order-leftover-product #lastLeftover
+                                    [isLastLeftOver]="true"></app-order-leftover-product>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isOrderCreateVisible">
+  <app-order-create [clientList]="clientList"
+                    [productTypeList]="productTypes"
+                    (onSubmit)="onOrderCreateApply($event)"
+                    (onCancel)="onOrderCreateCancel()">
+  </app-order-create>
 </div>
