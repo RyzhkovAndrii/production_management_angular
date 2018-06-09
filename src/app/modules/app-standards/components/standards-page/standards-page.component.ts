@@ -4,7 +4,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  ModalDialogService
+  ModalDialogService,
+  IModalDialogOptions
 } from 'ngx-modal-dialog';
 import {
   AppModalService
@@ -16,6 +17,9 @@ import {
 import {
   compareColors
 } from '../../../../app-utils/app-comparators';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-standards-page',
@@ -57,13 +61,36 @@ export class StandardsPageComponent implements OnInit {
   openCreateStandardModal(item: StandardInfo) {
     console.log(item);
   }
-  
+
   openEditStandardModal(item: StandardInfo) {
     console.log(item);
   }
-  
+
   openDeleteStandardModal(item: StandardInfo) {
-    console.log(item);
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any > > = {
+      title: 'Подтвердите удаление норматива',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.standardsService.deleteStandard(item.standardResponse.productTypeId)
+              .subscribe(data => {
+                item.standardResponse = < Standard > {};
+                item.rollTypes = [ < RollType > {}];
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    }
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 
   isStandardMissing = (item: StandardInfo): boolean => {
