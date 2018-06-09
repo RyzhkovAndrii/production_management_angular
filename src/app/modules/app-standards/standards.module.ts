@@ -30,6 +30,9 @@ import {
 import {
   AppSharedModule
 } from '../app-shared/app-shared.module';
+import {
+  StandardModalComponent
+} from './components/standard-modal/standard-modal.component';
 
 @NgModule({
   imports: [
@@ -43,10 +46,16 @@ import {
     ModalDialogModule.forRoot(),
     AppSharedModule
   ],
-  declarations: [StandardsPageComponent],
+  declarations: [
+    StandardsPageComponent,
+    StandardModalComponent
+  ],
   providers: [
     StandardsUrlsService,
     StandardsService
+  ],
+  entryComponents: [
+    StandardModalComponent
   ]
 })
 export class StandardsModule {}

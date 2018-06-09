@@ -20,6 +20,12 @@ import {
 import {
   SimpleConfirmModalComponent
 } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  StandardModalComponent
+} from '../standard-modal/standard-modal.component';
+import {
+  RollsService
+} from '../../../app-rolls/services/rolls.service';
 
 @Component({
   selector: 'app-standards-page',
@@ -30,6 +36,7 @@ export class StandardsPageComponent implements OnInit {
   standardsInfo: StandardInfo[] = [];
   constructor(
     private standardsService: StandardsService,
+    private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private appModalService: AppModalService
@@ -59,11 +66,48 @@ export class StandardsPageComponent implements OnInit {
   }
 
   openCreateStandardModal(item: StandardInfo) {
-    console.log(item);
+    const title = 'Создание норматива';
+    const func: (result: Promise < Standard > ) => void = result => {
+      result.then(resolve => {
+        this.standardsService.postStandard(resolve)
+          .subscribe(data => {
+            this.fetchData();
+          });
+      }, reject => {});
+    };
+    this.openStandardModal(item, title, func);
   }
 
   openEditStandardModal(item: StandardInfo) {
-    console.log(item);
+    const title = 'Редактирование норматива';
+    const func: (result: Promise < Standard > ) => void = result => {
+      result.then(resolve => {
+        this.standardsService.putStandard(resolve.productTypeId, resolve)
+          .subscribe(data => {
+            this.fetchData;
+          }, reject => {});
+      })
+    }
+    this.openStandardModal(item, title, func);
+  }
+
+
+  private openStandardModal(standardInfo: StandardInfo, title: string, func: (result: Promise < Standard > ) => void) {
+    this.rollsService.getRollsByColor(standardInfo.productType.colorCode)
+      .subscribe(rollTypes => {
+        const data: StandardModalData = {
+          standardInfo,
+          rollTypes,
+          func
+        }
+        const modalOptions: Partial < IModalDialogOptions < StandardModalData >> = {
+          title: title,
+          childComponent: StandardModalComponent,
+          data
+        };
+        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+      });
+
   }
 
   openDeleteStandardModal(item: StandardInfo) {
