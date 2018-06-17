@@ -84,10 +84,10 @@ export class StandardsPageComponent implements OnInit {
       result.then(resolve => {
         this.standardsService.putStandard(resolve.productTypeId, resolve)
           .subscribe(data => {
-            this.fetchData;
-          }, reject => {});
-      })
-    }
+            this.fetchData();
+          });
+      }, reject => {});
+    };
     this.openStandardModal(item, title, func);
   }
 
