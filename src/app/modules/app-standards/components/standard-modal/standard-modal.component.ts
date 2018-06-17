@@ -45,8 +45,9 @@ export class StandardModalComponent implements OnInit, IModalDialog {
 
   ngOnInit() {
     console.log(this.data.rollTypes);
+    const rollTypes = this.data.standardInfo.rollTypes;
     this.form = new FormGroup({
-      rollTypes: new FormControl(this.data.standardInfo.rollTypes),
+      rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : []),
       standard: new FormControl(this.data.standardInfo.standardResponse.norm)
     });
   }
@@ -61,7 +62,21 @@ export class StandardModalComponent implements OnInit, IModalDialog {
   }
 
   onSubmit(): Promise < Standard > {
-    return null;
+    if (this.form.valid) {
+      const standard: Standard = {
+        productTypeId: this.data.standardInfo.productType.id,
+        rollTypeIds: ( < RollType[] > this.form.value.rollTypes).map(x => x.id),
+        norm: this.form.value.standard
+      }
+      const resolve = Promise.resolve(standard);
+      this.data.func(resolve);
+      return resolve;
+    } else {
+
+      const reject = Promise.reject('invalid');
+      this.data.func(reject);
+      return reject;
+    }
   }
 
   compareRolls(a: RollType, b: RollType): boolean {
