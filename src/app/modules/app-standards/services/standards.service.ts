@@ -23,6 +23,7 @@ import {
 import {
   from
 } from 'rxjs/observable/from';
+import appHeaders from '../../../app-utils/app-headers';
 
 @Injectable()
 export class StandardsService {
@@ -42,8 +43,8 @@ export class StandardsService {
           .map(rolls => new Map(rolls.map(x => [x.id, x] as[number, RollType])))
           .flatMap(rollsMap => from(products)
             .map(product => {
-              const standard = standardsMap.get(product.id) || <Standard>{};
-              const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [<RollType>{}];
+              const standard = standardsMap.get(product.id) || < Standard > {};
+              const rollTypes = standard.rollTypeIds ? standard.rollTypeIds.map(x => rollsMap.get(x)) : [ < RollType > {}];
               const info: StandardInfo = {
                 productType: product,
                 rollTypes,
@@ -57,22 +58,32 @@ export class StandardsService {
   }
 
   getStandards(): Observable < Standard[] > {
-    return this.http.get(this.urls.standardsUrl).catch(httpErrorHandle);
+    return this.http.get(this.urls.standardsUrl, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   getStandard(standardId: number): Observable < Standard > {
-    return this.http.get(`${this.urls.standardsUrl}/${standardId}`).catch(httpErrorHandle);
+    return this.http.get(`${this.urls.standardsUrl}/${standardId}`, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   postStandard(standard: Standard): Observable < Standard > {
-    return this.http.post(this.urls.standardsUrl, standard).catch(httpErrorHandle);
+    return this.http.post(this.urls.standardsUrl, standard, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   putStandard(standardId: number, standard: Standard): Observable < Standard > {
-    return this.http.put(`${this.urls}/${standardId}`, standard).catch(httpErrorHandle);
+    return this.http.put(`${this.urls}/${standardId}`, standard, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   deleteStandard(standardId: number): Observable < any > {
-    return this.http.delete(`${this.urls.standardsUrl}/${standardId}`).catch(httpErrorHandle);
+    return this.http.delete(`${this.urls.standardsUrl}/${standardId}`, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 }
