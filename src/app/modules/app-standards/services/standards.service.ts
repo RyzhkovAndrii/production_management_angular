@@ -76,7 +76,7 @@ export class StandardsService {
   }
 
   putStandard(standardId: number, standard: Standard): Observable < Standard > {
-    return this.http.put(`${this.urls}/${standardId}`, standard, {
+    return this.http.put(`${this.urls.standardsUrl}/${standardId}`, standard, {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }
