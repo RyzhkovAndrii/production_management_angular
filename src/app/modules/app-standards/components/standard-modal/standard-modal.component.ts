@@ -64,4 +64,8 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     return null;
   }
 
+  compareRolls(a: RollType, b: RollType): boolean {
+    return a.id == b.id;
+  }
+
 }

@@ -1,7 +1,7 @@
 <form [formGroup]="form">
   <div class="form-group">
     <label for="rollTypes">Рулоны:</label>
-    <ng-select id="rollTypes" [items]="data.rollTypes" [multiple]="true" [hideSelected]="false" formControlName="rollTypes">
+    <ng-select id="rollTypes" [items]="data.rollTypes" [multiple]="true" [hideSelected]="false" formControlName="rollTypes" [compareWith]="compareRolls">
       <ng-template ng-header-tmp>
         <div class="row">
           <div class="col-3 text-center t-75">Толщина</div>
