@@ -56,7 +56,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     if (rolls.value.length == 1) {
       rolls.setValue([]);
     } else {
-      rolls.setValue(this.form.get('rollTypes').value.filter(x => x.id == item.id));
+      rolls.setValue(this.form.get('rollTypes').value.filter(x => x.id != item.id));
     }
   }
 
