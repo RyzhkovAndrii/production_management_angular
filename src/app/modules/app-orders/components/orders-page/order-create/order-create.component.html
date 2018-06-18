@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Создание заказа</h4>
+        <h4 class="modal-title">Новый заказ</h4>
       </div>
       <div class="modal-body">
         <div class="container">
@@ -84,21 +84,25 @@
               </div>
             </div>
             <hr>
-            <div class="row">
+            <div class="form-group row">
               <div class="col-12">
-                <label class="col-form-label">Заказываемая продукция:</label>
+                <label class="col-form-label">Заказываемая продукция (тыс.шт.):</label>
               </div>
-            </div>
-            <div class="row">
               <div class="col-12">
                 <table class="table table-hover">
                   <tbody>
-                    <tr *ngFor="let newItem of newItemList; let i of index"
+                    <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
                         class="d-flex">
                       <td align="cell-center"
-                          class="col-7 text-left"> {{getProductTypeName(newItem.productTypeId)}} </td>
+                          class="col-7 text-left">
+                        {{newItemDetails.productType.name}} &nbsp;
+                        <i class="filled-circle"
+                           [ngStyle]="{ 'background-color': newItemDetails.productType.colorCode }">
+                        </i>
+                        &nbsp; {{newItemDetails.productType.weight}}
+                      </td>
                       <td align="cell-center"
-                          class="col-3 text-left">{{newItem.amount}}</td>
+                          class="col-3 text-left">{{newItemDetails.amount | exponent}}</td>
                       <td class="col-2 cell-center text-right">
                         <button class="btn btn-outline-secondary btn-sm btn-outline"
                                 (click)="removeNewItem(i)">
@@ -111,22 +115,51 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-7">
+              <div class="col-6">
                 <ng-select id="itemType"
                            class="form-control input-sm no-borders"
-                           [items]="productTypeList"
+                           [items]="currentProductTypeList"
                            bindLabel="name"
                            bindValue="id"
                            notFoundText="Тип не найден"
                            placeholder="Выберите продукцию"
-                           formControlName="itemType">
+                           formControlName="itemType"
+                           [ngClass]="{'is-invalid': showAddOrderItemErrors && form.get('itemType').invalid && form.get('itemType').pristine}">
+                  <ng-template ng-label-tmp
+                               let-item="item">
+                    {{item.name}} &nbsp;
+                    <i class="filled-circle"
+                       [ngStyle]="{ 'background-color': item.colorCode }">
+                    </i>
+                    &nbsp; {{item.weight}}
+                  </ng-template>
+                  <ng-template ng-option-tmp
+                               let-item="item">
+                    {{item.name}} &nbsp;
+                    <i class="filled-circle"
+                       [ngStyle]="{ 'background-color': item.colorCode }">
+                    </i>
+                    &nbsp; {{item.weight}}
+                  </ng-template>
                 </ng-select>
+                <span *ngIf="showAddOrderItemErrors && form.get('itemType').invalid && form.get('itemType').pristine"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('itemType').errors['required']">Обязательное поле!</span>
+                </span>
               </div>
-              <input id="itemAmount"
-                     class="form-control input-sm col-3"
-                     type="number"
-                     formControlName="itemAmount">
-              <div class="col-2">
+              <div class="col-4">
+                <input id="itemAmount"
+                       class="form-control input-sm"
+                       type="number"
+                       formControlName="itemAmount"
+                       [ngClass]="{'is-invalid': showAddOrderItemErrors && form.get('itemAmount').invalid && form.get('itemAmount').pristine}">
+                <span *ngIf="showAddOrderItemErrors && form.get('itemAmount').invalid && form.get('itemAmount').pristine"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('itemAmount').errors['required']">Обязательное поле!</span>
+                  <span *ngIf="form.get('itemAmount').errors['min'] || form.get('itemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                </span>
+              </div>
+              <div class="col-1">
                 <button class="btn btn-outline-secondary btn-sm btn-outline"
                         (click)="addNewItem()">
                   <i class="material-icons">add</i>
@@ -138,6 +171,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-dark"
+                [disabled]="form.get('client').invalid || form.get('city').invalid || form.get('date').invalid"
                 (click)="submit()">Сохранить</button>
         <button class="btn btn-outline-dark"
                 (click)="cancel()">Отмена</button>
