@@ -22,7 +22,8 @@ export class OrderItemService {
     }
 
     saveOrderItemList(orderItemList: OrderItem[]) { // todo REST for this method
-        return this.http.post(this.urlService.orderItemUrl, orderItemList).catch(httpErrorHandle);
+        const obs = (orderItemList.map(order => this.saveOrderItem(order)));
+        return Observable.combineLatest(obs).catch(httpErrorHandle);
     }
 
 }
