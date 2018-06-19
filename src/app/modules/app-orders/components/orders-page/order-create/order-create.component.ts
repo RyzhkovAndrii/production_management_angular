@@ -27,7 +27,7 @@ export class OrderCreateComponent implements OnInit {
   @Input() productTypeList: ProductTypeResponse[];
   @Input() clientList: Client[];
 
-  currentProductTypeList: ProductTypeResponse[];
+  productTypeListForSelect: ProductTypeResponse[];
 
   @Output() onSubmit = new EventEmitter<Order>();
   @Output() onCancel = new EventEmitter<any>();
@@ -51,7 +51,7 @@ export class OrderCreateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.currentProductTypeList = this.productTypeList;
+    this.productTypeListForSelect = this.productTypeList;
   }
 
   submit() {
@@ -64,10 +64,10 @@ export class OrderCreateComponent implements OnInit {
           const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
           newItemList.push(item);
         })
-        this.orderItemService.saveOrderItemList(newItemList).subscribe((itemList) => {
+        this.orderItemService.saveOrderItemList(newItemList).subscribe(() => {
           this.form.reset();
           this.newItemDetailsList = [];
-          this.currentProductTypeList = this.productTypeList;
+          this.productTypeListForSelect = this.productTypeList;
           this.showCreateMessage();
           this.onSubmit.emit(order);
         });
@@ -105,13 +105,13 @@ export class OrderCreateComponent implements OnInit {
   }
 
   private addOptionToProductTypeSelect(item: { productType: ProductTypeResponse, amount: number }) {
-    this.currentProductTypeList.push(item.productType);
-    this.productTypeSelect.itemsList.setItems(this.currentProductTypeList);
+    this.productTypeListForSelect.push(item.productType);
+    this.productTypeSelect.itemsList.setItems(this.productTypeListForSelect);
   }
 
   private removeOptionFromProductTypeSelect(item: { productType: ProductTypeResponse, amount: number }) {
-    this.currentProductTypeList = this.currentProductTypeList.filter(type => type.id !== item.productType.id);
-    this.productTypeSelect.itemsList.setItems(this.currentProductTypeList);
+    this.productTypeListForSelect = this.productTypeListForSelect.filter(type => type.id !== item.productType.id);
+    this.productTypeSelect.itemsList.setItems(this.productTypeListForSelect);
   }
 
   private resetAddOrderItemForm() {
