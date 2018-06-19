@@ -23,7 +23,8 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   clientList: Client[] = [];
 
   isOrderCreateVisible: boolean = false;
-  isClientListVisible: boolean = false; // todo remove
+  isClientListVisible: boolean = false;
+  isDeliveredOrdersVisible: boolean = false;
 
   private sub1: Subscription;
   private sub2: Subscription;
@@ -85,14 +86,18 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  openClientList() { // todo remove
+  openClientList() {
     this.isClientListVisible = true;
     this.onOrderCreateCancel();
   }
 
   onClientListCancel() {
-    this.isClientListVisible = false; // todo remove
+    this.isClientListVisible = false;
     this.openOrderCreate();
+  }
+
+  toggleDeliveredOrdersVisible(event) {
+    this.isDeliveredOrdersVisible = event.target.checked;
   }
 
 }
