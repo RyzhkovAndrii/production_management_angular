@@ -1,15 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-client-del-confirm',
   templateUrl: './client-del-confirm.component.html',
   styleUrls: ['./client-del-confirm.component.css']
 })
-export class ClientDelConfirmComponent implements OnInit {
+export class ClientDelConfirmComponent {
+
+  @Output() onApply = new EventEmitter<any>();
+  @Output() onCancel = new EventEmitter<any>();
 
   constructor() { }
 
-  ngOnInit() {
+  apply() {
+    this.onApply.emit();
+  }
+
+  cancel() {
+    this.onCancel.emit();
   }
 
 }

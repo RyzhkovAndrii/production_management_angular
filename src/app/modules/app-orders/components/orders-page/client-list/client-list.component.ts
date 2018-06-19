@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs';
 })
 export class ClientListComponent implements OnInit {
 
+  isClientDelConfirmVisible = false;
+
   @Input()
   clientList: Client[];
 
@@ -20,6 +22,7 @@ export class ClientListComponent implements OnInit {
 
   private _id: number = null;
   private updateElementIndex: number;
+  private currentIndexForDelete;
 
   form: FormGroup; 
 
@@ -54,13 +57,6 @@ export class ClientListComponent implements OnInit {
     }
   }
 
-  deleteClient(i: number) {
-    const id = this.clientList[i].id;
-    this.clientService.delete(id).subscribe();
-    this.clientList.splice(i, 1);
-    this.cleanForm();
-  }
-
   prepareToEdit(i: number) {
     this._id = this.clientList[i].id;
     this.form.get("name").setValue(this.clientList[i].name);
@@ -77,6 +73,27 @@ export class ClientListComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  openClientDelConfirm(i: number) {
+    this.isClientDelConfirmVisible = true;
+    this.currentIndexForDelete = i;
+  }
+
+  onClientDelConfirmApply() {
+    this.isClientDelConfirmVisible = false;
+    this.deleteClient(this.currentIndexForDelete);
+  }
+
+  onClientDelConfirmCancel() {
+    this.isClientDelConfirmVisible = false;
+  }
+
+  private deleteClient(i: number) {
+    const id = this.clientList[i].id;
+    this.clientService.delete(id).subscribe();
+    this.clientList.splice(i, 1);
+    this.cleanForm();
   }
 
   private cleanForm() {

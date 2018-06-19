@@ -21,6 +21,7 @@ import { OrderModalComponent } from './components/order-modal/order-modal.compon
 import { OrderDelConfirmComponent } from './components/order/order-del-confirm/order-del-confirm.component';
 import { OrderCreateComponent } from './components/orders-page/order-create/order-create.component';
 import { ClientListComponent } from './components/orders-page/client-list/client-list.component';
+import { ClientDelConfirmComponent } from './components/orders-page/client-list/client-del-confirm/client-del-confirm.component';
 
 @NgModule({
     imports: [
@@ -45,6 +46,7 @@ import { ClientListComponent } from './components/orders-page/client-list/client
         OrderDelConfirmComponent,
         OrderCreateComponent,
         ClientListComponent,
+        ClientDelConfirmComponent,
     ],
     providers: [
         OrdersService,
