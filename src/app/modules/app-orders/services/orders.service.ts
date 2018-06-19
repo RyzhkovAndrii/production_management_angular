@@ -48,6 +48,7 @@ export class OrdersService {
     orderDetails.isImportant = order.isImportant;
     orderDetails.isDelivered = order.isDelivered;
     orderDetails.isOverdue = order.isOverdue;
+    orderDetails.actualDeliveryDate = order.actualDeliveryDate;
     this.clientService.getClient(order.clientId)
       .subscribe(data => orderDetails.client = data);
     this.orderItemService.getOrderItemList(order.id)
