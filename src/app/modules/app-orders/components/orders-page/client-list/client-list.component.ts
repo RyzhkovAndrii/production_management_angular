@@ -17,8 +17,8 @@ export class ClientListComponent implements OnInit {
   @Input()
   clientList: Client[];
 
-  @Output()
-  onCancel = new EventEmitter<any>();
+  @Output() onCancel = new EventEmitter<any>();
+  @Output() onClientDelete = new EventEmitter<any>();
 
   private _id: number = null;
   private updateElementIndex: number;
@@ -83,6 +83,7 @@ export class ClientListComponent implements OnInit {
   onClientDelConfirmApply() {
     this.isClientDelConfirmVisible = false;
     this.deleteClient(this.currentIndexForDelete);
+    this.onClientDelete.emit();
   }
 
   onClientDelConfirmCancel() {

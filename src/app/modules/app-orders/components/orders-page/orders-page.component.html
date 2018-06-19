@@ -67,6 +67,7 @@
 <!-- Modal -->
 <div *ngIf="isClientListVisible">
   <app-client-list [clientList]="clientList"
+                   (onClientDelete)="reloadPage()"
                    (onCancel)="onClientListCancel()">
   </app-client-list>
 </div>

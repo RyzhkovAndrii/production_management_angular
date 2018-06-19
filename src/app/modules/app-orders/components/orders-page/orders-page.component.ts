@@ -49,12 +49,10 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.sub1 = Observable
       .combineLatest(
         this.productsService.getSortedProductTypes(),
-        this.ordersService.getOrderList(),
-        this.clientsService.getAll()) // todo remove
+        this.ordersService.getOrderList())
       .subscribe(data => {
         this.productTypes = data[0];
         this.orderList = data[1];
-        this.clientList = data[2]; // todo remove
       });
   }
 
