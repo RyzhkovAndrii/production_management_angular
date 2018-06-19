@@ -22,6 +22,7 @@ import { OrderDelConfirmComponent } from './components/order/order-del-confirm/o
 import { OrderCreateComponent } from './components/orders-page/order-create/order-create.component';
 import { ClientListComponent } from './components/orders-page/client-list/client-list.component';
 import { ClientDelConfirmComponent } from './components/orders-page/client-list/client-del-confirm/client-del-confirm.component';
+import { OrderEditComponent } from './components/orders-page/order-edit/order-edit.component';
 
 @NgModule({
     imports: [
@@ -47,6 +48,7 @@ import { ClientDelConfirmComponent } from './components/orders-page/client-list/
         OrderCreateComponent,
         ClientListComponent,
         ClientDelConfirmComponent,
+        OrderEditComponent,
     ],
     providers: [
         OrdersService,
