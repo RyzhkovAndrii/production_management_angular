@@ -1,16 +1,12 @@
 import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ModalDialogService, IModalDialogOptions } from 'ngx-modal-dialog';
 import { Subscription } from 'rxjs';
 
-import { getDate } from '../../../../app-utils/app-date-utils';
-import { OrderModalComponent } from '../order-modal/order-modal.component';
 import { ClientsService } from '../../services/client.service';
 import { OrdersService } from '../../services/orders.service';
 import { ProductsService } from '../../../app-products/services/products.service';
 import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
-import { ClientPageModalComponent } from '../client-page-modal/client-page-modal.component';
 
 @Component({
   selector: 'app-orders-page',
@@ -27,15 +23,16 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   clientList: Client[] = [];
 
   isOrderCreateVisible: boolean = false;
+  isClientListVisible: boolean = false; // todo remove
 
   private sub1: Subscription;
   private sub2: Subscription;
 
-  constructor(private ordersService: OrdersService,
+  constructor(
+    private ordersService: OrdersService,
     private clientsService: ClientsService,
-    private productsService: ProductsService,
-    private modalService: ModalDialogService,
-    private viewRef: ViewContainerRef) { }
+    private productsService: ProductsService
+  ) { }
 
   ngOnInit() {
     this.fetchData();
@@ -52,10 +49,12 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.sub1 = Observable
       .combineLatest(
         this.productsService.getSortedProductTypes(),
-        this.ordersService.getOrderList())
+        this.ordersService.getOrderList(),
+        this.clientsService.getAll()) // todo remove
       .subscribe(data => {
         this.productTypes = data[0];
         this.orderList = data[1];
+        this.clientList = data[2]; // todo remove
       });
   }
 
@@ -68,25 +67,12 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.lastLeftover.reloadCurrentLeftOver();
   }
 
-  // private _openOrderAddorEditForm() {
-  //   this.modalService.openDialog(this.viewRef, {
-  //     title: 'Новый заказ',
-  //     childComponent: OrderModalComponent,
-  //     data: {
-  //       productTypeList: this.productTypes,
-  //       clientList: this.clientList,
-  //       order: null,
-  //       viewRef: this.viewRef
-  //     }
-  //   })
-  // }
-
   onOrderCreateApply(order: Order) { // todo save in array ???
     this.reloadPage();
   }
 
   onOrderCreateCancel() {
-    this.toggleOrderCreateVisibility(false);
+    this.isOrderCreateVisible = false;
   }
 
   openOrderCreate() {
@@ -94,15 +80,19 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
       this.sub2 = this.clientsService.getAll()
         .subscribe(data => {
           this.clientList = data;
-          this.toggleOrderCreateVisibility(true);
+          this.isOrderCreateVisible = true;
         });
     } else {
-      this.toggleOrderCreateVisibility(true);
+      this.isOrderCreateVisible = true;
     }
   }
 
-  private toggleOrderCreateVisibility(dir: boolean) {
-    this.isOrderCreateVisible = dir;
+  openClientList() { // todo remove
+    this.isClientListVisible = true;
+  }
+
+  onClientListCancel() {
+    this.isClientListVisible = false; // todo remove
   }
 
 }

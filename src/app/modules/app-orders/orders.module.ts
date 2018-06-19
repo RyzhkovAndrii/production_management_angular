@@ -16,9 +16,8 @@ import { ProductsService } from "../app-products/services/products.service";
 import { ProductsUrlsService } from "../app-products/services/products-urls.service";
 import { OrderLeftoverProductComponent } from './components/order-leftover-product/order-leftover-product.component';
 import { OrderModuleUrlService } from "./services/order-module-url.service";
-import { NgbDatepicker, NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
-import { ClientPageModalComponent } from './components/client-page-modal/client-page-modal.component';
 import { OrderDelConfirmComponent } from './components/order/order-del-confirm/order-del-confirm.component';
 import { OrderCreateComponent } from './components/orders-page/order-create/order-create.component';
 import { ClientListComponent } from './components/orders-page/client-list/client-list.component';
@@ -43,7 +42,6 @@ import { ClientListComponent } from './components/orders-page/client-list/client
         OrderComponent,
         OrderLeftoverProductComponent,
         OrderModalComponent,
-        ClientPageModalComponent,
         OrderDelConfirmComponent,
         OrderCreateComponent,
         ClientListComponent,
@@ -57,8 +55,7 @@ import { ClientListComponent } from './components/orders-page/client-list/client
         OrderModuleUrlService
     ],
     entryComponents: [
-        OrderModalComponent,
-        ClientPageModalComponent
+        OrderModalComponent
     ]
 })
 export class OrdersModule { }

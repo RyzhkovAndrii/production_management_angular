@@ -59,6 +59,14 @@
   <app-order-create [clientList]="clientList"
                     [productTypeList]="productTypes"
                     (onSubmit)="onOrderCreateApply($event)"
-                    (onCancel)="onOrderCreateCancel()">
+                    (onCancel)="onOrderCreateCancel()"
+                    (onClientListOpen)="openClientList()">
   </app-order-create>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isClientListVisible">
+  <app-client-list [clientList]="clientList"
+                   (onCancel)="onClientListCancel()">
+  </app-client-list>
 </div>

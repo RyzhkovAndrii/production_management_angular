@@ -1,0 +1,33 @@
+.modal.in {
+    display: block;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.input-sm {
+    height: 2.4rem;
+    font-size: 0.9rem;
+}
+
+.btn-sm {
+    height: 2.4rem;
+}
+
+.btn-outline {
+    border: none;
+}
+
+.mi-sm {
+    font-size: 18px;
+}
+
+table th, td {
+    font-size: 0.9rem;
+}
+
+.cell-center {
+    padding: 0px;
+}
