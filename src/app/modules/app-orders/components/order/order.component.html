@@ -1,5 +1,6 @@
 <table class="table-bordered table-striped"
-       [contextMenu]="orderMenu">
+       [contextMenu]="orderMenu"
+       [ngClass]="{'is-delivered': orderDetails.isDelivered}">
   <thead>
     <tr>
       <th>
@@ -20,10 +21,14 @@
     </tr>
     <tr>
       <th>
-        <i *ngIf="order.isImportant"
-           class="material-icons icon-impotant">error_outline</i>
-        <i *ngIf="order.isOverdue"
-           class="material-icons icon-overdue">alarm</i>
+        <i *ngIf="orderDetails.isImportant"
+           class="material-icons"
+           [ngClass]="{'icon-impotant': !orderDetails.isDelivered,
+                       'icon-delivered': orderDetails.isDelivered}">error_outline</i>
+        <i *ngIf="orderDetails.isOverdue"
+           class="material-icons"
+           [ngClass]="{'icon-overdue': !orderDetails.isDelivered,
+                       'icon-delivered': orderDetails.isDelivered}">alarm</i>
       </th>
     </tr>
     <tr style="height: 0.2rem;"></tr>
@@ -38,7 +43,8 @@
 
 <!-- Context menu -->
 <context-menu #orderMenu>
-  <ng-template contextMenuItem
+  <ng-template *ngIf="!orderDetails.isDelivered"
+               contextMenuItem
                let-item
                (execute)="openOrderEditForm()">
     Редактировать заказ
@@ -50,15 +56,22 @@
   </ng-template>
   <ng-template contextMenuItem
                divider="true"></ng-template>
-  <ng-template contextMenuItem
+  <ng-template *ngIf="!orderDetails.isDelivered"
+               contextMenuItem
                let-item
                (execute)="deliverOrder()">
     Заказ доставлен
   </ng-template>
+  <ng-template *ngIf="orderDetails.isDelivered"
+               contextMenuItem
+               let-item
+               (execute)="returnOrder()">
+    Вернуть из доставки
+  </ng-template>
 </context-menu>
 
 <!-- Modal -->
-<div *ngIf="isOrderDelConfirmVisible">
+<div *ngIf="isOrderDelCOnfirmVisible">
   <app-order-del-confirm (onApply)="onOrderDelConfirmApply()"
                          (onCancel)="onOrderDelConfirmCancel()">
   </app-order-del-confirm>

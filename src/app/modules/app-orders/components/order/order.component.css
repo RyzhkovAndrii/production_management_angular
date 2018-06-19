@@ -33,6 +33,14 @@ i.icon-impotant {
     color: #e49b0f;
 }
 
+i.icon-delivered {
+    color: #bbb;
+}
+
 .material-icons {
     font-size: 18px;
+}
+
+table.is-delivered {
+    color: #bbb;
 }

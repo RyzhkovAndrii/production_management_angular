@@ -20,15 +20,13 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   orderDetails: OrderDetails;
 
-  @Input()
-  order: Order;
+  @Input() order: Order;
 
-  isOrderDelConfirmVisible: boolean = false;
-
-  @Output()
-  onChange = new EventEmitter<any>();
+  @Output() onChange = new EventEmitter<any>();
 
   private clientList: Client[] = [];
+
+  isOrderDelConfirmVisible: boolean = false;
 
   private sub1: Subscription;
   private sub2: Subscription;
@@ -85,7 +83,16 @@ export class OrderComponent implements OnInit, OnDestroy {
     const newOrder = new Order(client.id, city, deliveryDate, isImportant, true);
     this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(order => {
-        this.onChange.emit(); // todo one order reload
+        this.onChange.emit(); 
+      });
+  }
+
+  returnOrder() {
+    const { client, city, deliveryDate, isImportant } = this.orderDetails;
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, false);
+    this.orderService.update(newOrder, this.orderDetails.id)
+      .subscribe(order => {
+        this.onChange.emit(); 
       });
   }
 
