@@ -6,6 +6,7 @@ export class Order {
         public deliveryDate: string,
         public isImportant: boolean,
         public isDelivered: boolean,
+        public actualDeliveryDate?: string,
         public id?: number,
         public isOverdue?: boolean,        
         public creationDate?: string

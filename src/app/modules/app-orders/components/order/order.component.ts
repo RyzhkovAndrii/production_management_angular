@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewContainerRef, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 import { OrdersService } from '../../services/orders.service';
 import { Order } from '../../models/order.model';
@@ -51,7 +52,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   deliverOrder() {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true);
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true, moment(new Date()).format('YYYY-MM-DD')); // todo use common format date
     this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
@@ -60,7 +61,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   returnOrder() {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, false);
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, false, null);
     this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
