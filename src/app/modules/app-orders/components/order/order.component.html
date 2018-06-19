@@ -59,7 +59,7 @@
   <ng-template *ngIf="!orderDetails.isDelivered"
                contextMenuItem
                let-item
-               (execute)="deliverOrder()">
+               (execute)="openOrderDeliveryConfirm()">
     Заказ доставлен
   </ng-template>
   <ng-template *ngIf="orderDetails.isDelivered"
@@ -75,4 +75,11 @@
   <app-order-del-confirm (onApply)="onOrderDelConfirmApply()"
                          (onCancel)="onOrderDelConfirmCancel()">
   </app-order-del-confirm>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isOrderDeliveryConfirmVisible">
+  <app-order-delivery-confirm (onSubmit)="onOrderDeliveryConfirmApply($event)"
+                              (onCancel)="onOrderDeliveryConfirmCancel()">
+  </app-order-delivery-confirm>
 </div>

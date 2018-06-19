@@ -20,9 +20,8 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   @Output() onChange = new EventEmitter<any>();
 
-  private clientList: Client[] = [];
-
   isOrderDelConfirmVisible: boolean = false;
+  isOrderDeliveryConfirmVisible: boolean = false;
 
   private sub1: Subscription;
   private sub2: Subscription;
@@ -50,9 +49,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     // todo 
   }
 
-  deliverOrder() {
+  deliverOrder(date: Date) {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true, moment(new Date()).format('YYYY-MM-DD')); // todo use common format date
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true, moment(date).format('YYYY-MM-DD')); // todo use common format date
     this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
@@ -86,6 +85,19 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   onOrderDelConfirmCancel() {
     this.isOrderDelConfirmVisible = false;
+  }
+
+  openOrderDeliveryConfirm() {
+    this.isOrderDeliveryConfirmVisible = true;
+  }
+
+  onOrderDeliveryConfirmApply(date: Date) {
+    this.isOrderDeliveryConfirmVisible = false;
+    this.deliverOrder(date);
+  }
+
+  onOrderDeliveryConfirmCancel() {
+    this.isOrderDeliveryConfirmVisible = false;
   }
 
 }

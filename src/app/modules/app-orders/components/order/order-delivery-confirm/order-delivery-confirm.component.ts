@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import * as moment from 'moment';
+
+import { getDate, formatDate } from '../../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-order-delivery-confirm',
@@ -7,9 +11,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderDeliveryConfirmComponent implements OnInit {
 
+  form: FormGroup;
+
+  @Output() onSubmit = new EventEmitter<Date>();
+  @Output() onCancel = new EventEmitter<any>();
+
+  readonly now: string = moment(new Date()).format("YYYY-MM-DD");
+
   constructor() { }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      "actualDeliveryDate": new FormControl(this.now, [Validators.required])
+    })
+  }
+
+  submit() {
+    const { actualDeliveryDate } = this.form.value;
+    this.onSubmit.emit(moment(actualDeliveryDate, "YYYY-MM-DD").toDate()); // todo change format for server (use getDate)
+  }
+
+  cancel() {
+    this.onCancel.emit();
   }
 
 }
