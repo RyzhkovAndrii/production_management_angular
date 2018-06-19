@@ -24,7 +24,7 @@ export class ClientListComponent implements OnInit {
   private updateElementIndex: number;
   private currentIndexForDelete;
 
-  form: FormGroup; 
+  form: FormGroup;
 
   private subscription: Subscription;
 
@@ -53,8 +53,8 @@ export class ClientListComponent implements OnInit {
     } else {
       this.subscription = this.clientService.update(client, this._id)
         .subscribe(data => this.clientList[this.updateElementIndex] = data);
-      this.cleanForm();
     }
+    this.cleanForm();
   }
 
   prepareToEdit(i: number) {
