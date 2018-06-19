@@ -89,10 +89,12 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   openClientList() { // todo remove
     this.isClientListVisible = true;
+    this.onOrderCreateCancel();
   }
 
   onClientListCancel() {
     this.isClientListVisible = false; // todo remove
+    this.openOrderCreate();
   }
 
 }
