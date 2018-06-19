@@ -25,10 +25,6 @@ div.overflow-text:hover {
     overflow: visible;
 }
 
-/* div.overflow-text:hover {
-    white-space: normal;
-} */
-
 i.icon-overdue {
     color: #de3163;
 }

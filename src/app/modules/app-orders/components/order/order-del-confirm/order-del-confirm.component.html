@@ -1,15 +1,17 @@
 <div class="modal in">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Удаление заказа</h4>
       </div>
       <div class="modal-body">
-        <p>Вы действительно хотите удалить этот заказ?</p>
+        <p>Удалить заказ?</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-dark" (click)="apply()">Удалить</button>
-        <button class="btn btn-outline-dark" (click)="cancel()">Отмена</button>
+        <button class="btn btn-danger"
+                (click)="apply()">Удалить</button>
+        <button class="btn btn-outline-dark"
+                (click)="cancel()">Отмена</button>
       </div>
     </div>
   </div>
