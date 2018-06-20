@@ -24,7 +24,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   isOrderCreateVisible: boolean = false;
   isClientListVisible: boolean = false;
-  isDeliveredOrdersVisible: boolean = false;
 
   private sub1: Subscription;
   private sub2: Subscription;
@@ -94,10 +93,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   onClientListCancel() {
     this.isClientListVisible = false;
     this.openOrderCreate();
-  }
-
-  toggleDeliveredOrdersVisible(event) {
-    this.isDeliveredOrdersVisible = event.target.checked;
   }
 
 }

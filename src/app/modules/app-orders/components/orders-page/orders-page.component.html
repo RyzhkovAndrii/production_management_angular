@@ -8,27 +8,7 @@
     </div>
     <div class="col-1"></div>
     <div class="col-4 my-auto">
-      <div class="row align-items-center"
-           style="margin-top:0px">
-        <div class="col-7"
-             style="padding-right:0px">
-          <input type="checkbox"
-                 class="form-check-input custom-checkbox"
-                 (change)="toggleDeliveredOrdersVisible($event)">
-          <span style="font-size: 0.9rem"
-                [ngStyle]="{'color': (isDeliveredOrdersVisible ? 'black' : '#bbb')}">
-            Отобразить доставленные товары
-          </span>
-          <span *ngIf="isDeliveredOrdersVisible"
-                style="font-size: 0.9rem"> c </span>
-        </div>
-        <div class="col-4"
-             style="padding-left:0px">
-          <input *ngIf="isDeliveredOrdersVisible"
-                 type="date"
-                 class="form-control form-control-sm">
-        </div>
-      </div>
+      <app-order-delivered-show></app-order-delivered-show>
     </div>
   </div>
   <div class="row">

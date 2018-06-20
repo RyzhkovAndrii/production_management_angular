@@ -24,6 +24,7 @@ import { ClientListComponent } from './components/orders-page/client-list/client
 import { ClientDelConfirmComponent } from './components/orders-page/client-list/client-del-confirm/client-del-confirm.component';
 import { OrderEditComponent } from './components/orders-page/order-edit/order-edit.component';
 import { OrderDeliveryConfirmComponent } from './components/order/order-delivery-confirm/order-delivery-confirm.component';
+import { OrderDeliveredShowComponent } from './components/orders-page/order-delivered-show/order-delivered-show.component';
 
 @NgModule({
     imports: [
@@ -51,6 +52,7 @@ import { OrderDeliveryConfirmComponent } from './components/order/order-delivery
         ClientDelConfirmComponent,
         OrderEditComponent,
         OrderDeliveryConfirmComponent,
+        OrderDeliveredShowComponent,
     ],
     providers: [
         OrdersService,
