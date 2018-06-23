@@ -17,7 +17,6 @@ import { ProductsUrlsService } from "../app-products/services/products-urls.serv
 import { OrderLeftoverProductComponent } from './components/order-leftover-product/order-leftover-product.component';
 import { OrderModuleUrlService } from "./services/order-module-url.service";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { OrderModalComponent } from './components/order-modal/order-modal.component';
 import { OrderDelConfirmComponent } from './components/order/order-del-confirm/order-del-confirm.component';
 import { OrderCreateComponent } from './components/orders-page/order-create/order-create.component';
 import { ClientListComponent } from './components/orders-page/client-list/client-list.component';
@@ -45,7 +44,6 @@ import { OrderDeliveredShowComponent } from './components/orders-page/order-deli
         OrdersPageComponent,
         OrderComponent,
         OrderLeftoverProductComponent,
-        OrderModalComponent,
         OrderDelConfirmComponent,
         OrderCreateComponent,
         ClientListComponent,
@@ -62,8 +60,6 @@ import { OrderDeliveredShowComponent } from './components/orders-page/order-deli
         ProductsUrlsService,
         OrderModuleUrlService
     ],
-    entryComponents: [
-        OrderModalComponent
-    ]
+    entryComponents: []
 })
 export class OrdersModule { }
