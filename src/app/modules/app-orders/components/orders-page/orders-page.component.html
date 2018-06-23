@@ -6,9 +6,9 @@
         <i class="material-icons">add</i>
       </button>
     </div>
-    <div class="col-1"></div>
-    <div class="col-4 my-auto">
-      <app-order-delivered-show></app-order-delivered-show>
+    <div class="col-md-1"></div>
+    <div class="col-5 my-auto">
+      <app-order-delivered-show (onStartDateChange)="toggleDeliveredOrderVisibility($event)"></app-order-delivered-show>
     </div>
   </div>
   <div class="row">
@@ -30,7 +30,9 @@
             </tr>
             <tr>
               <th colspan="3"
-                  class="table-header">Статус</th>
+                  class="table-header">
+                <span>Статус</span>
+              </th>
             </tr>
             <tr style="height: 0.2rem;"></tr>
             <div *ngIf="productTypes"></div>

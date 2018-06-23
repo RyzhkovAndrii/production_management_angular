@@ -25,6 +25,8 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   isOrderCreateVisible: boolean = false;
   isClientListVisible: boolean = false;
 
+  showDeliveredOrderStartDate: Date = null;
+
   private sub1: Subscription;
   private sub2: Subscription;
 
@@ -57,12 +59,23 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   private reloadOrderList() {
-    this.ordersService.getOrderList().subscribe(data => this.orderList = data);
+    if (this.showDeliveredOrderStartDate === null) {
+      this.ordersService.getOrderList()
+        .subscribe(data => this.orderList = data);
+    } else {
+      this.ordersService.getOrderListWithDelivered(this.showDeliveredOrderStartDate)
+        .subscribe(data => this.orderList = data);
+    }
   }
 
   reloadPage() {
     this.reloadOrderList();
     this.lastLeftover.reloadCurrentLeftOver();
+  }
+
+  toggleDeliveredOrderVisibility(startDate: Date) {
+    this.showDeliveredOrderStartDate = startDate;
+    this.reloadOrderList();
   }
 
   onOrderCreateApply(order: Order) { // todo save in array ???
