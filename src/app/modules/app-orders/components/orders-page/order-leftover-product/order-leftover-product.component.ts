@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
-import { NgbDateStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
-
-import { getDate } from '../../../../app-utils/app-date-utils';
-import { ProductsService } from '../../../app-products/services/products.service';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+
+import { ProductsService } from '../../../../app-products/services/products.service';
+import { getDate } from '../../../../../app-utils/app-date-utils';
 
 const now: Date = new Date();
 

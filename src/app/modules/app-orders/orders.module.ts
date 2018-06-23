@@ -14,7 +14,6 @@ import { OrderComponent } from './components/order/order.component';
 import { OrderItemService } from "./services/order-item.service";
 import { ProductsService } from "../app-products/services/products.service";
 import { ProductsUrlsService } from "../app-products/services/products-urls.service";
-import { OrderLeftoverProductComponent } from './components/order-leftover-product/order-leftover-product.component';
 import { OrderModuleUrlService } from "./services/order-module-url.service";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { OrderDelConfirmComponent } from './components/order/order-del-confirm/order-del-confirm.component';
@@ -24,6 +23,7 @@ import { ClientDelConfirmComponent } from './components/orders-page/client-list/
 import { OrderEditComponent } from './components/orders-page/order-edit/order-edit.component';
 import { OrderDeliveryConfirmComponent } from './components/order/order-delivery-confirm/order-delivery-confirm.component';
 import { OrderDeliveredShowComponent } from './components/orders-page/order-delivered-show/order-delivered-show.component';
+import { OrderLeftoverProductComponent } from "./components/orders-page/order-leftover-product/order-leftover-product.component";
 
 @NgModule({
     imports: [
