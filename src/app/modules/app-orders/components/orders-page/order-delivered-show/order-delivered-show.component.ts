@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -12,22 +12,39 @@ export class OrderDeliveredShowComponent implements OnInit {
 
   form: FormGroup;
 
+  @Output() onStartDateChange = new EventEmitter<Date>();
+
   isDeliveredOrdersVisible: boolean = false;
 
   readonly now: string = moment(new Date()).format("YYYY-MM-DD");
-  startDate: Date = new Date();
+  startDate: Date;
 
   constructor() { }
 
   ngOnInit() {
-    this.startDate.setMonth(new Date().getMonth() - 1);
     this.form = new FormGroup({
-      "startDate": new FormControl(moment(this.startDate).format("YYYY-MM-DD"), [Validators.required])
+      "startDate": new FormControl(null, [Validators.required])
     })
+  }
+
+  submit() {
+    const { startDate } = this.form.value;
+    if (this.startDate !== startDate) {
+      this.startDate = startDate;
+      this.onStartDateChange.emit(this.startDate);
+    }
   }
 
   toggleDeliveredOrdersVisible(event) {
     this.isDeliveredOrdersVisible = event.target.checked;
+    if (this.isDeliveredOrdersVisible) {
+      this.startDate = new Date();
+      this.startDate.setMonth(this.startDate.getMonth() - 1);
+      this.form.get("startDate").patchValue(moment(this.startDate).format("YYYY-MM-DD"));
+      this.onStartDateChange.emit(this.startDate);
+    } else {
+      this.onStartDateChange.emit(null);
+    }
   }
 
 }
