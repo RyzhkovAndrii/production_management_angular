@@ -1,0 +1,36 @@
+<div class="modal in">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Заказ доставлен</h4>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="form-group row">
+            <div class="col-12">
+              <label for="city"
+                     class="col-form-label">Укажите фактическую дату доставки</label>
+              <input id="actualDeliveryDate"
+                     class="form-control"
+                     type="date"
+                     formControlName="actualDeliveryDate"
+                     max="{{now}}"
+                     [ngClass]="{'is-invalid': form.get('actualDeliveryDate').invalid && form.get('actualDeliveryDate').touched}">
+              <span *ngIf="form.get('actualDeliveryDate').invalid && form.get('actualDeliveryDate').touched"
+                    class="invalid-feedback">
+                <span *ngIf="form.get('actualDeliveryDate').errors['required']">Обязательное поле!</span>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-dark"
+                [disabled]="form.invalid"
+                (click)="submit()">Сохранить</button>
+        <button class="btn btn-outline-dark"
+                (click)="cancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
