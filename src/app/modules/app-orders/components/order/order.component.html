@@ -25,10 +25,12 @@
            class="material-icons"
            [ngClass]="{'icon-impotant': !orderDetails.isDelivered,
                        'icon-delivered': orderDetails.isDelivered}">error_outline</i>
-        <i *ngIf="orderDetails.isOverdue"
+        <i *ngIf="orderDetails.isOverdue && !orderDetails.isDelivered"
            class="material-icons"
            [ngClass]="{'icon-overdue': !orderDetails.isDelivered,
                        'icon-delivered': orderDetails.isDelivered}">alarm</i>
+        <span *ngIf="orderDetails.isDelivered"
+              class="is-delivered">{{orderDetails.actualDeliveryDate | moment:'DD.MM.YY'}}</span>
       </th>
     </tr>
     <tr style="height: 0.2rem;"></tr>
