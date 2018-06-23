@@ -2,6 +2,10 @@
     display: block;
 }
 
+.modal-dialog {
+    min-width: 40vw;
+}
+
 #list-button-container {
     margin-top: 8.5%;
 }
