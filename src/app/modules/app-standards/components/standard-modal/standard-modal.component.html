@@ -43,7 +43,7 @@
         </div>
       </ng-template>
     </ng-select>
-    <div *ngIf="form.get('rollTypes').invalid">
+    <div *ngIf="form.get('rollTypes').invalid && form.get('rollTypes').touched">
       <span class="invalid">Обязательное поле</span>
     </div>
   </div>
