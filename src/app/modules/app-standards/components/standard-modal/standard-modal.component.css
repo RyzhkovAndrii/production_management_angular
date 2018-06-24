@@ -13,3 +13,8 @@
 #rollTypes .filled-circle {
     padding: 0.1rem 0.57rem;
 }
+
+.remove-icon-center {
+    -ms-transform: translateY(50%);
+    transform: translateY(50%);
+}

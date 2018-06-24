@@ -15,7 +15,7 @@
         
         <div class="row">
           <div class="col-1 text-left t-75">
-              <span aria-hidden="true" class="ng-value-icon" (click)="removeItem(item)">×</span>
+              <span aria-hidden="true" class="ng-value-icon" [ngClass]="{'remove-icon-center': item.note}" (click)="removeItem(item)">×</span>
           </div>
           <div class="col-3 text-center t-75">
             {{ item.thickness }}
