@@ -7,6 +7,7 @@ import { OrdersService } from '../../services/orders.service';
 import { ProductsService } from '../../../app-products/services/products.service';
 import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
+import { OrderDetails } from '../../models/order-details.model';
 
 @Component({
   selector: 'app-orders-page',
@@ -21,8 +22,10 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   productTypes: ProductTypeResponse[];
   productLeftOvers: ProductLeftoverResponse[];
   clientList: Client[] = [];
+  editedOrder: OrderDetails;
 
   isOrderCreateVisible: boolean = false;
+  isOrderEditVisible: boolean = false;
   isClientListVisible: boolean = false;
 
   showDeliveredOrderStartDate: Date = null;
@@ -51,10 +54,12 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.sub1 = Observable
       .combineLatest(
         this.productsService.getSortedProductTypes(),
-        this.ordersService.getOrderList())
+        this.ordersService.getOrderList(),
+        this.clientsService.getAll())
       .subscribe(data => {
         this.productTypes = data[0];
         this.orderList = data[1];
+        this.clientList = data[2]; // todo load if need
       });
   }
 
@@ -87,25 +92,27 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   openOrderCreate() {
-    if (this.clientList.length === 0) {
-      this.sub2 = this.clientsService.getAll()
-        .subscribe(data => {
-          this.clientList = data;
-          this.isOrderCreateVisible = true;
-        });
-    } else {
-      this.isOrderCreateVisible = true;
-    }
+    this.isOrderCreateVisible = true;
+  }
+
+  onOrderEditApply(order: Order) { // todo save in array ???
+    this.reloadPage();
+  }
+
+  onOrderEditCancel() {
+    this.isOrderEditVisible = false;
+  }
+
+  openOrderEdit(order: OrderDetails) {
+    this.isOrderEditVisible = true;
   }
 
   openClientList() {
     this.isClientListVisible = true;
-    this.onOrderCreateCancel();
   }
 
   onClientListCancel() {
     this.isClientListVisible = false;
-    this.openOrderCreate();
   }
 
 }

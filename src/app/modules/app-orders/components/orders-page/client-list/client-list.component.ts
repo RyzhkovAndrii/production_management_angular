@@ -18,11 +18,13 @@ export class ClientListComponent implements OnInit {
   clientList: Client[];
 
   @Output() onCancel = new EventEmitter<any>();
-  @Output() onClientDelete = new EventEmitter<any>();
+  @Output() onClientListChange = new EventEmitter<any>();
 
   private _id: number = null;
   private updateElementIndex: number;
   private currentIndexForDelete;
+
+  private isChanged = false;
 
   form: FormGroup;
 
@@ -38,6 +40,9 @@ export class ClientListComponent implements OnInit {
 
   cancel() {
     this.onCancel.emit();
+    if (this.isChanged) {
+      this.onClientListChange.emit();
+    }
   }
 
   isEditOperation() {
@@ -53,7 +58,9 @@ export class ClientListComponent implements OnInit {
     } else {
       this.subscription = this.clientService.update(client, this._id)
         .subscribe(data => this.clientList[this.updateElementIndex] = data);
+
     }
+    this.isChanged = true;
     this.cleanForm();
   }
 
@@ -83,7 +90,6 @@ export class ClientListComponent implements OnInit {
   onClientDelConfirmApply() {
     this.isClientDelConfirmVisible = false;
     this.deleteClient(this.currentIndexForDelete);
-    this.onClientDelete.emit();
   }
 
   onClientDelConfirmCancel() {
@@ -94,6 +100,7 @@ export class ClientListComponent implements OnInit {
     const id = this.clientList[i].id;
     this.clientService.delete(id).subscribe();
     this.clientList.splice(i, 1);
+    this.isChanged = true;
     this.cleanForm();
   }
 

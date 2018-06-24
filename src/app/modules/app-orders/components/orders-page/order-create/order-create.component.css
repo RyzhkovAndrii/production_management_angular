@@ -6,10 +6,6 @@
     min-width: 40vw;
 }
 
-#list-button-container {
-    margin-top: 8.5%;
-}
-
 .modal-body {
     max-height: 70vh;
     overflow-y: auto;

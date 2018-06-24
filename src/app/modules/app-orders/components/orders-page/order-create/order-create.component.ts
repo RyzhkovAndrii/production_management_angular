@@ -31,7 +31,6 @@ export class OrderCreateComponent implements OnInit {
 
   @Output() onSubmit = new EventEmitter<Order>();
   @Output() onCancel = new EventEmitter<any>();
-  @Output() onClientListOpen = new EventEmitter<any>();
 
   form: FormGroup = new FormGroup({
     "client": new FormControl(null, [Validators.required]),
@@ -76,10 +75,6 @@ export class OrderCreateComponent implements OnInit {
 
   cancel() {
     this.onCancel.emit();
-  }
-
-  openClientList() {
-    this.onClientListOpen.emit();
   }
 
   addNewItem() {

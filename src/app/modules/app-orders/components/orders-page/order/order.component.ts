@@ -18,6 +18,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   @Input() order: Order;
 
   @Output() onChange = new EventEmitter<any>();
+  @Output() onEditOpen = new EventEmitter<OrderDetails>();
 
   isOrderDelConfirmVisible: boolean = false;
   isOrderDeliveryConfirmVisible: boolean = false;
@@ -45,7 +46,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   openOrderEditForm() {
-    // todo 
+    this.onEditOpen.emit(this.orderDetails);
   }
 
   deliverOrder(date: Date) {

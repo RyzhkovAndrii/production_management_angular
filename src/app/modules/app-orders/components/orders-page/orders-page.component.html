@@ -1,9 +1,13 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-1">
+    <div class="col-1 btn-group">
       <button class="btn btn-outline-dark btn-sm"
               (click)="openOrderCreate()">
         <i class="material-icons">add</i>
+      </button>
+      <button class="btn btn-outline-dark btn-sm ml-2"
+              (click)="openClientList()">
+        <i class="material-icons">list</i>
       </button>
     </div>
     <div class="col-md-1"></div>
@@ -50,7 +54,8 @@
         <div id="client-table-container">
           <div *ngFor="let order of orderList">
             <app-order [order]="order"
-                       (onChange)="reloadPage()"></app-order>
+                       (onChange)="reloadPage()"
+                       (onEditOpen)="openOrderEdit($event)"></app-order>
           </div>
         </div>
         <app-order-leftover-product #lastLeftover
@@ -71,9 +76,19 @@
 </div>
 
 <!-- Modal -->
+<div *ngIf="isOrderEditVisible">
+  <app-order-edit [clientList]="clientList"
+                  [productTypeList]="productTypes"
+                  [order]="editedOrder"
+                  (onSubmit)="onOrderEditApply($event)"
+                  (onCancel)="onOrderEditCancel()">
+  </app-order-edit>
+</div>
+
+<!-- Modal -->
 <div *ngIf="isClientListVisible">
   <app-client-list [clientList]="clientList"
-                   (onClientDelete)="reloadPage()"
+                   (onClientListChange)="reloadPage()"
                    (onCancel)="onClientListCancel()">
   </app-client-list>
 </div>
