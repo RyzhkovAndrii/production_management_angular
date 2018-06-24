@@ -10,7 +10,8 @@ import {
 } from 'ngx-modal-dialog';
 import {
   FormGroup,
-  FormControl
+  FormControl,
+  Validators
 } from '@angular/forms';
 
 @Component({
@@ -47,7 +48,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     console.log(this.data.rollTypes);
     const rollTypes = this.data.standardInfo.rollTypes;
     this.form = new FormGroup({
-      rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : []),
+      rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : [], [Validators.required]),
       standard: new FormControl(this.data.standardInfo.standardResponse.norm)
     });
   }

@@ -43,6 +43,9 @@
         </div>
       </ng-template>
     </ng-select>
+    <div *ngIf="form.get('rollTypes').invalid">
+      <span class="invalid">Обязательное поле</span>
+    </div>
   </div>
   <div class="form-group">
     <label for="standard">Норматив:</label>
