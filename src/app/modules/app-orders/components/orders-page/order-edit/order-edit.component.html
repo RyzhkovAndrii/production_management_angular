@@ -84,6 +84,35 @@
               <div class="col-12">
                 <table class="table table-hover">
                   <tbody>
+                    <tr *ngFor="let oldItemDetails of oldItemDetailsList; let i = index"
+                        class="d-flex">
+                      <td align="cell-center"
+                          class="col-7 text-left">
+                        {{oldItemDetails.productType.name}} &nbsp;
+                        <i class="filled-circle"
+                           [ngStyle]="{ 'background-color': oldItemDetails.productType.colorCode }">
+                        </i>
+                        &nbsp; {{oldItemDetails.productType.weight}}
+                      </td>
+                      <td align="cell-center"
+                          class="col-3 text-left">{{oldItemDetails.amount | exponent}}</td>
+                      <td class="col-2 cell-center text-right btn-group">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="editOldItem(i)">
+                          <i class="material-icons">edit</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="removeOldItem(i)">
+                          <i class="material-icons">delete_forever</i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-12">
+                <table class="table table-hover">
+                  <tbody>
                     <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
                         class="d-flex">
                       <td align="cell-center"

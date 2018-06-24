@@ -104,6 +104,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   openOrderEdit(order: OrderDetails) {
+    this.editedOrder = order;
     this.isOrderEditVisible = true;
   }
 
