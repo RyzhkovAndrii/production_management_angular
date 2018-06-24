@@ -26,6 +26,8 @@ export class StandardModalComponent implements OnInit, IModalDialog {
   data: StandardModalData;
   form: FormGroup;
 
+  readonly MIN_NORM = 1;
+
   constructor() {
     this.actionButtons = [{
         text: 'Отмена',
@@ -49,7 +51,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     const rollTypes = this.data.standardInfo.rollTypes;
     this.form = new FormGroup({
       rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : [], [Validators.required]),
-      standard: new FormControl(this.data.standardInfo.standardResponse.norm)
+      standard: new FormControl(this.data.standardInfo.standardResponse.norm, [Validators.required, Validators.min(this.MIN_NORM)])
     });
   }
 
@@ -63,6 +65,8 @@ export class StandardModalComponent implements OnInit, IModalDialog {
   }
 
   onSubmit(): Promise < Standard > {
+    this.form.controls['rollTypes'].markAsTouched();
+    this.form.controls['standard'].markAsTouched();
     if (this.form.valid) {
       const standard: Standard = {
         productTypeId: this.data.standardInfo.productType.id,
@@ -82,6 +86,11 @@ export class StandardModalComponent implements OnInit, IModalDialog {
 
   compareRolls(a: RollType, b: RollType): boolean {
     return a.id == b.id;
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return control.invalid && control.touched;
   }
 
 }

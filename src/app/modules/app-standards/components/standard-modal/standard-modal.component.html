@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="rollTypes">Рулоны:</label>
     <ng-select id="rollTypes" [items]="data.rollTypes" [multiple]="true" [hideSelected]="false" formControlName="rollTypes" [compareWith]="compareRolls"
-    [closeOnSelect]="false" notFoundText="Рулоны не найдены">
+      [closeOnSelect]="false" notFoundText="Рулоны не найдены">
       <ng-template ng-header-tmp>
         <div class="row">
           <div class="col-3 text-center t-75">Толщина</div>
@@ -13,10 +13,10 @@
         </div>
       </ng-template>
       <ng-template ng-label-tmp let-item="item" let-items="items">
-        
+
         <div class="row">
           <div class="col-1 text-left t-75">
-              <span aria-hidden="true" class="ng-value-icon" [ngClass]="{'remove-icon-center': item.note}" (click)="removeItem(item)">×</span>
+            <span aria-hidden="true" class="ng-value-icon" [ngClass]="{'remove-icon-center': item.note}" (click)="removeItem(item)">×</span>
           </div>
           <div class="col-3 text-center t-75">
             {{ item.thickness }}
@@ -27,8 +27,8 @@
             <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
           </div>
           <div class="col-12 text-center t-75">
-              {{ item.note }}
-            </div>
+            {{ item.note }}
+          </div>
         </div>
       </ng-template>
       <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
@@ -43,12 +43,17 @@
         </div>
       </ng-template>
     </ng-select>
-    <div *ngIf="form.get('rollTypes').invalid && form.get('rollTypes').touched">
+    <div *ngIf="isInvalid('rollTypes')">
       <span class="invalid">Обязательное поле</span>
     </div>
   </div>
   <div class="form-group">
     <label for="standard">Норматив:</label>
-    <input type="number" min="0" step="1" class="form-control" id="standard" formControlName="standard">
+    <input type="number" min="1" step="1" class="form-control" id="standard" formControlName="standard" [ngClass]="{'is-invalid': isInvalid('standard'),
+    'is-valid': !isInvalid('standard') && form.get('standard').touched}">
+    <div class="invalid-feedback" *ngIf="isInvalid('standard')">
+      <span *ngIf="form.get('standard').errors['required']">Обязательное поле</span>
+      <span *ngIf="form.get('standard').errors['min']">Минимальное значение: {{ MIN_NORM }}</span>
+    </div>
   </div>
 </form>
