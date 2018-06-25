@@ -20,6 +20,9 @@ import {
 import {
   ModalDialogModule
 } from 'ngx-modal-dialog';
+import {
+  NgbModule
+} from '@ng-bootstrap/ng-bootstrap';
 
 import {
   AppSharedModule
@@ -47,6 +50,7 @@ import {
 @NgModule({
   imports: [
     CommonModule,
+    NgbModule.forRoot(),
     ProductsRoutingModule,
     ColorPickerModule,
     FormsModule,

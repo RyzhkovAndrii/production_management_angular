@@ -32,6 +32,7 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
   submitPressed = false;
   presetColors = appPresetColors;
   productType: ProductTypeRequest;
+  standard: Standard;
   colorCode: string;
   private btnClass = 'btn btn-outline-dark';
 
@@ -57,13 +58,17 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
     this.form = new FormGroup({
       name: new FormControl(this.productType ? this.productType.name : undefined, [Validators.required]),
       weight: new FormControl(this.productType ? this.productType.weight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT)]),
-      colorCode: new FormControl(this.colorCode)
+      colorCode: new FormControl({
+        value: this.colorCode,
+        disabled: this.standard
+      })
     }, [], [this.validateUnique.bind(this)]);
   }
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductTypeModalData >> ) {
     this.options = options;
     this.productType = options.data.productType;
+    this.standard = options.data.standard;
   }
 
   onSubmit() {
@@ -93,7 +98,7 @@ export class ProductTypeModalComponent implements OnInit, IModalDialog {
       if (data.findIndex((value, index, array) => {
           return value.name === form.value.name &&
             value.weight === form.value.weight &&
-            value.colorCode.toLowerCase() === form.value.colorCode.toLowerCase();
+            value.colorCode.toLowerCase() === (form.value.colorCode || this.colorCode).toLowerCase();
         }) >= 0) {
         return {
           'notUnique': true

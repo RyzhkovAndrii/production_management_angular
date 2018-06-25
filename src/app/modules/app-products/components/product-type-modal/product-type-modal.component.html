@@ -27,6 +27,13 @@
         [style.background]="colorCode" [style.color]="colorCode" [cpOutputFormat]="'hex'" [cpPosition]="'left'" [cpOKButton]="true"
         [cpCancelButton]="true" [cpPresetColors]="presetColors" [cpWidth]="300" [cpPositionOffset]="-500" (colorPickerChange)="form.get('colorCode').setValue($event)">
     </div>
+    <div class="col-md-12 pt-3" *ngIf="standard">
+      <p>
+        <ngb-alert [dismissible]="false">
+          <small>Изменение цвета отключено. Продукция используется в нормативах!</small>
+        </ngb-alert>
+      </p>
+    </div>
   </div>
   <div class="invalid pt-2" *ngIf="form.errors && (form.touched || submitPressed)">
     <span *ngIf="form.errors['notUnique']">Такой продукт уже существует!</span>

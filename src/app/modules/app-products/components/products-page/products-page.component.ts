@@ -46,6 +46,9 @@ import {
 import {
   CheckStatus
 } from '../../../app-shared/enums/check-status.enum';
+import {
+  StandardsService
+} from '../../../app-standards/services/standards.service';
 
 @Component({
   selector: 'app-products-page',
@@ -68,6 +71,7 @@ export class ProductsPageComponent implements OnInit {
   });
 
   constructor(private productsService: ProductsService,
+    private standardsService: StandardsService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService) {}
@@ -162,26 +166,40 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openEditProductTypeModal(productType: ProductTypeResponse) {
-    const operation = (result: Promise < ProductTypeRequest > ) => {
-      result
-        .then((resolve: ProductTypeRequest) => {
-          this.productsService.putProductType(productType.id, resolve)
-            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
-        }, reject => {});
-    };
-    const modalOptions: Partial < IModalDialogOptions < ProductTypeModalData >> = {
-      title: 'Редактирование продукции',
-      childComponent: ProductTypeModalComponent,
-      data: {
-        productType: {
-          name: productType.name,
-          weight: productType.weight,
-          colorCode: productType.colorCode
-        },
-        operation: operation.bind(this)
-      }
-    };
-    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+    const func = (standard ? : Standard) => {
+      const operation = (result: Promise < ProductTypeRequest > ) => {
+        result
+          .then((resolve: ProductTypeRequest) => {
+            this.productsService.putProductType(productType.id, resolve)
+              .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+          }, reject => {});
+      };
+      const modalOptions: Partial < IModalDialogOptions < ProductTypeModalData >> = {
+        title: 'Редактирование продукции',
+        childComponent: ProductTypeModalComponent,
+        data: {
+          productType: {
+            name: productType.name,
+            weight: productType.weight,
+            colorCode: productType.colorCode
+          },
+          standard,
+          operation: operation.bind(this)
+        }
+      };
+      this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+    }
+
+    this.standardsService.getStandard(productType.id)
+      .subscribe(standard => {
+        func(standard);
+      }, error => {
+        if((<string>error[0]).includes('404')) {
+          func();
+        } else {
+          this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+        }
+      });
   }
 
   openAddProductOperation(productTypeId: number, operationType: string) {
