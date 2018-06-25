@@ -63,8 +63,3 @@ td:hover,
     padding: 0.1rem 0.65rem;
   }
 }
-
-ng-select.no-borders>div {
-  border: 0 !important;
-  outline: none;
-}

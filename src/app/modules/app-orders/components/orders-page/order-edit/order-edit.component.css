@@ -6,23 +6,19 @@
     min-width: 40vw;
 }
 
-#list-button-container {
-    margin-top: 2.4rem;
-}
-
 .modal-body {
     max-height: 70vh;
     overflow-y: auto;
 }
 
-.input-sm {
-    height: 2.4rem;
-    font-size: 0.9rem;
-}
-
 .input-sm.ng-select {
     margin: 0;
     padding: 0;
+}
+
+ng-select.no-borders>div {
+    border: 0;
+    outline: none;
 }
 
 .btn-sm {
@@ -49,4 +45,8 @@ table th, td {
     padding: 0rem 0.5rem;
     border-width: 0.04rem;
     font-size: 12px;
+}
+
+.custom-checkbox {
+    transform: scale(1.3);
 }
