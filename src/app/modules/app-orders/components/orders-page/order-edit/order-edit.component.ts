@@ -28,7 +28,8 @@ export class OrderEditComponent implements OnInit {
   productTypeListForSelect: ProductTypeResponse[];
 
   newItemDetailsList: { productType: ProductTypeResponse, amount: number }[] = [];
-  oldItemDetailsList: { productType: ProductTypeResponse, amount: number }[] = [];
+  oldItemDetailsList: { id: number, productType: ProductTypeResponse, amount: number }[] = [];
+  itemIdListForRemove: number[] = [];
 
   @ViewChild('productTypeSelect') productTypeSelect: NgSelectComponent;
 
@@ -58,39 +59,24 @@ export class OrderEditComponent implements OnInit {
     this.fillOldOrderItemList();
   }
 
-  private fillOldOrderItemList() {
-    if (this.order.orderItemList !== null) {
-      this.order.orderItemList.forEach(orderItem => {
-        if (orderItem !== null) {
-          const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === orderItem.productTypeId);
-          this.oldItemDetailsList.push({ "productType": productTypeDetails, "amount": orderItem.amount });
-          this.productTypeListForSelect = this.productTypeListForSelect.filter(type => type.id !== productTypeDetails.id);
-        }
-      })
-    }
-  }
-
   submit() {
-    const { client, city, date, important } = this.form.value;
-    let order = new Order(client, city, date, important, false);
-    // let newItemList: OrderItem[] = [];
-    this.orderService.update(order, this.order.id).subscribe((order) => {
-      this.showEditMessage();
-      this.onSubmit.emit(order);
-    });
-    //   .subscribe(order => { // todo some exception if order was not created
-    //   this.newItemDetailsList.forEach(itemDetails => {
-    //     const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
-    //     newItemList.push(item);
-    //   })
-    //   this.orderItemService.saveOrderItemList(newItemList).subscribe(() => {
-    //     this.form.reset();
-    //     this.newItemDetailsList = [];
-    //     this.productTypeListForSelect = this.productTypeList;
-    //     this.showEditMessage();
-    //     this.onSubmit.emit(order);
-    //   });
-    // });
+    this.orderService
+      .update(this.getOrderForUpdate(), this.order.id)
+      .subscribe(order => {
+        this.orderItemService
+          .removeListByIds(this.itemIdListForRemove)
+          .subscribe(() => {
+            console.log("remove submit");
+            this.itemIdListForRemove = [];
+            this.orderItemService
+              .saveOrderItemList(this.getOrderItemsForSave())
+              .subscribe(() => {
+                this.newItemDetailsList = [];
+                this.showEditMessage();
+                this.onSubmit.emit(order);
+              });
+          });
+      });
   }
 
   cancel() {
@@ -113,20 +99,51 @@ export class OrderEditComponent implements OnInit {
     }
   }
 
-  removeNewItem(i: number) {
+  removeNewItemFromForm(i: number) {
     const removedItem = this.newItemDetailsList.splice(i, 1)[0];
     this.addOptionToProductTypeSelect(removedItem.productType);
-    this.resetAddOrderItemForm();
   }
 
-  removeOldItem(i: number) {
+  removeOldItemFromForm(i: number) {
     const removedItem = this.oldItemDetailsList.splice(i, 1)[0];
     this.addOptionToProductTypeSelect(removedItem.productType);
-    this.resetAddOrderItemForm();
+    this.itemIdListForRemove.push(removedItem.id);
   }
 
-  editOldItem(i: number) {
-    // todo
+  private fillOldOrderItemList() {
+    if (this.order.orderItemList !== null) {
+      this.order.orderItemList.forEach(orderItem => {
+        if (orderItem !== null) {
+          const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === orderItem.productTypeId);
+          this.oldItemDetailsList.push({ "id": orderItem.id, "productType": productTypeDetails, "amount": orderItem.amount });
+          this.productTypeListForSelect = this.productTypeListForSelect.filter(type => type.id !== productTypeDetails.id);
+        }
+      })
+    }
+  }
+
+  private getOrderForUpdate(): Order {
+    const { client, city, date, important } = this.form.value;
+    const order = new Order(
+      client,
+      city,
+      date,
+      important,
+      this.order.isDelivered,
+      this.order.actualDeliveryDate,
+      this.order.id,
+      this.order.creationDate);
+    return order;
+  }
+
+  private getOrderItemsForSave(): OrderItem[] {
+    let newItemList: OrderItem[] = [];
+    this.newItemDetailsList
+      .forEach(itemDetails => {
+        const item: OrderItem = new OrderItem(this.order.id, itemDetails.productType.id, itemDetails.amount);
+        newItemList.push(item);
+      });
+    return newItemList;
   }
 
   private addOptionToProductTypeSelect(productType: ProductTypeResponse) {
@@ -157,6 +174,5 @@ export class OrderEditComponent implements OnInit {
     this.isEdited = true;
     window.setTimeout(() => this.isEdited = false, 5000);
   }
-
 
 }

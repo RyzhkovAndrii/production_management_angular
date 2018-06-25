@@ -24,7 +24,7 @@
                            formControlName="client"
                            [ngClass]="{
                               'is-invalid': form.get('client').invalid && form.get('client').touched,
-                              'is-valid': !form.get('client').invalid && form.get('client').touched}">
+                              'is-valid': !form.get('client').invalid}">
                 </ng-select>
                 <span *ngIf="form.get('client').invalid && form.get('client').touched"
                       class="invalid-feedback">
@@ -43,7 +43,7 @@
                        formControlName="city"
                        [ngClass]="{
                           'is-invalid': form.get('city').invalid && form.get('city').touched,
-                          'is-valid': !form.get('city').invalid && form.get('city').touched}">
+                          'is-valid': !form.get('city').invalid}">
                 <span *ngIf="form.get('city').invalid && form.get('city').touched"
                       class="invalid-feedback">
                   <span *ngIf="form.get('city').errors['required']">Обязательное поле!</span>
@@ -58,19 +58,19 @@
                        formControlName="date"
                        [ngClass]="{
                             'is-invalid': form.get('date').invalid && form.get('date').touched,
-                            'is-valid': !form.get('date').invalid && form.get('date').touched}">
+                            'is-valid': !form.get('date').invalid}">
                 <span *ngIf="form.get('date').invalid && form.get('date').touched"
                       class="invalid-feedback">
                   <span *ngIf="form.get('date').errors['required']">Обязательное поле!</span>
                 </span>
               </div>
             </div>
-            <div class="form-check row">
+            <div class="form-check row align-items-center">
               <div class="col-12">
                 <label for="important"
                        class="form-check-label">
                   <input id="important"
-                         class="form-check-input"
+                         class="form-check-input custom-checkbox"
                          type="checkbox"
                          formControlName="important"> Заказ важен
                 </label>
@@ -83,52 +83,40 @@
               </div>
               <div class="col-12">
                 <table class="table table-hover">
-                  <tbody>
+                  <tbody class="scrolling-tbody">
+                    <!-- Old order item list -->
                     <tr *ngFor="let oldItemDetails of oldItemDetailsList; let i = index"
                         class="d-flex">
-                      <td align="cell-center"
-                          class="col-7 text-left">
+                      <td class="col-7 text-left">
                         {{oldItemDetails.productType.name}} &nbsp;
                         <i class="filled-circle"
                            [ngStyle]="{ 'background-color': oldItemDetails.productType.colorCode }">
                         </i>
                         &nbsp; {{oldItemDetails.productType.weight}}
                       </td>
-                      <td align="cell-center"
-                          class="col-3 text-left">{{oldItemDetails.amount | exponent}}</td>
-                      <td class="col-2 cell-center text-right btn-group">
-                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
-                                (click)="editOldItem(i)">
-                          <i class="material-icons">edit</i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm btn-outline"
-                                (click)="removeOldItem(i)">
-                          <i class="material-icons">delete_forever</i>
+                      <td class="col-3 text-left">{{oldItemDetails.amount | exponent}}</td>
+                      <td class="col-2 p-0">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline ml-1 mr-1"
+                                (click)="removeOldItemFromForm(i)">
+                          <i class="material-icons mi-sm">delete_forever</i>
                         </button>
                       </td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-12">
-                <table class="table table-hover">
-                  <tbody>
+                    <!-- New order item list -->
                     <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
                         class="d-flex">
-                      <td align="cell-center"
-                          class="col-7 text-left">
+                      <td class="col-7 text-left">
                         {{newItemDetails.productType.name}} &nbsp;
                         <i class="filled-circle"
                            [ngStyle]="{ 'background-color': newItemDetails.productType.colorCode }">
                         </i>
                         &nbsp; {{newItemDetails.productType.weight}}
                       </td>
-                      <td align="cell-center"
-                          class="col-3 text-left">{{newItemDetails.amount | exponent}}</td>
-                      <td class="col-2 cell-center text-right">
+                      <td class="col-3 text-left">{{newItemDetails.amount | exponent}}</td>
+                      <td class="col-2 p-0">
                         <button class="btn btn-outline-secondary btn-sm btn-outline"
-                                (click)="removeNewItem(i)">
-                          <i class="material-icons">delete_forever</i>
+                                (click)="removeNewItemFromForm(i)">
+                          <i class="material-icons mi-sm">delete_forever</i>
                         </button>
                       </td>
                     </tr>
