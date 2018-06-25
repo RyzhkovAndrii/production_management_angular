@@ -8,8 +8,8 @@ export class Order {
         public isDelivered: boolean,
         public actualDeliveryDate?: string,
         public id?: number,
-        public isOverdue?: boolean,        
-        public creationDate?: string
+        public creationDate?: string,
+        public isOverdue?: boolean
     ) { }
 
 }

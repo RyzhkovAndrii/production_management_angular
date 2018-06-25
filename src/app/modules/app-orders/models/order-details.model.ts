@@ -9,9 +9,9 @@ export class OrderDetails {
     public isImportant: boolean;
     public isDelivered: boolean;
     public actualDeliveryDate?: string
-    public id?: number;
-    public isOverdue?: boolean;
+    public id?: number;    
     public creationDate?: string;
+    public isOverdue?: boolean;
     public orderItemList?: OrderItem[];
 
     constructor() { }
