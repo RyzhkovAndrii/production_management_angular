@@ -61,7 +61,6 @@ export class StandardsPageComponent implements OnInit {
     this.standardsService.getStandardsInfo()
       .subscribe(info => {
         this.standardsInfo = info;
-        console.log(info);
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
