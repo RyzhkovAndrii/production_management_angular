@@ -53,6 +53,9 @@ import {
 import {
   SimpleConfirmModalComponent
 } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  StandardsService
+} from '../../../app-standards/services/standards.service';
 
 
 @Component({
@@ -78,6 +81,7 @@ export class RollsPageComponent implements OnInit {
 
   constructor(
     private rollsService: RollsService,
+    private standardsService: StandardsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private router: Router,
@@ -190,31 +194,35 @@ export class RollsPageComponent implements OnInit {
   }
 
   openEditRollTypeModal(rollType: RollType) {
-    const operation = (result: Promise < RollType > ) => {
-      result
-        .then((resolve: RollType) => {
-          resolve.id = rollType.id;
-          this.rollsService.putRollType(resolve)
-            .subscribe(x => {
-              rollType.id = x.id;
-              rollType.note = x.note;
-              rollType.colorCode = x.colorCode;
-              rollType.thickness = x.thickness;
-              rollType.minWeight = x.minWeight;
-              rollType.maxWeight = x.maxWeight;
-              rollType.length = x.length;
-            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
-        }, reject => {});
-    };
-    const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
-      title: 'Редактирование рулона',
-      childComponent: RollTypeModalComponent,
-      data: {
-        rollType: rollType,
-        operation: operation.bind(this)
-      }
-    };
-    this.ngxModalService.openDialog(this.viewRef, modalOptions);
+    this.standardsService.getStandardsByRollId(rollType.id)
+      .subscribe(standards => {
+        const operation = (result: Promise < RollType > ) => {
+          result
+            .then((resolve: RollType) => {
+              resolve.id = rollType.id;
+              this.rollsService.putRollType(resolve)
+                .subscribe(x => {
+                  rollType.id = x.id;
+                  rollType.note = x.note;
+                  rollType.colorCode = x.colorCode;
+                  rollType.thickness = x.thickness;
+                  rollType.minWeight = x.minWeight;
+                  rollType.maxWeight = x.maxWeight;
+                  rollType.length = x.length;
+                }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
+            }, reject => {});
+        };
+        const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
+          title: 'Редактирование рулона',
+          childComponent: RollTypeModalComponent,
+          data: {
+            rollType: rollType,
+            standards: standards,
+            operation: operation.bind(this)
+          }
+        };
+        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {

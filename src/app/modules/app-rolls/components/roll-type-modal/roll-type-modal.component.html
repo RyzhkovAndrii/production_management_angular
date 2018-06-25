@@ -16,6 +16,13 @@
         [style.background]="colorCode" [style.color]="colorCode" [cpOutputFormat]="'hex'" [cpPosition]="'left'" [cpOKButton]="true"
         [cpCancelButton]="true" [cpPresetColors]="presetColors">
     </div>
+    <div class="col-md-12 pt-3" *ngIf="standards.length > 0">
+        <p>
+          <ngb-alert [dismissible]="false">
+            <small>Редактирование цвета отклчено. Рулон используется в нормах!</small>
+          </ngb-alert>
+        </p>
+      </div>
   </div>
 
   <div class="row">
@@ -25,10 +32,10 @@
           'is-invalid': form.get('thickness').invalid && isTouched('thickness'),
           'is-valid': form.get('thickness').valid && isTouched('thickness')
         }">
-        <div class="invalid-feedback" *ngIf="form.get('thickness').invalid && isTouched('thickness')">
-          <span *ngIf="form.get('thickness').errors['min']">Толщина должна быть больше {{ MIN_THICKNESS }}</span>
-          <span *ngIf="form.get('thickness').errors['required']">Обязательное поле!</span>
-        </div>
+      <div class="invalid-feedback" *ngIf="form.get('thickness').invalid && isTouched('thickness')">
+        <span *ngIf="form.get('thickness').errors['min']">Толщина должна быть больше {{ MIN_THICKNESS }}</span>
+        <span *ngIf="form.get('thickness').errors['required']">Обязательное поле!</span>
+      </div>
     </div>
     <div class="col-md-6">
       <label for="roll-length" class="col-form-label">Длина:</label>

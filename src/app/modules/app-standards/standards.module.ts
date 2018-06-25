@@ -52,10 +52,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     StandardsPageComponent,
     StandardModalComponent
   ],
-  providers: [
-    StandardsUrlsService,
-    StandardsService
-  ],
   entryComponents: [
     StandardModalComponent
   ]

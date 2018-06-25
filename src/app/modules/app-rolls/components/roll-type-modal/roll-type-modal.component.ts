@@ -45,6 +45,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   rollType: RollType;
   colorCode;
   readonly MAX_NOTE_LENGTH = 20;
+  standards: Standard[];
 
   submitPressed = false;
 
@@ -69,7 +70,10 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
 
     this.form = new FormGroup({
       note: new FormControl(this.rollType ? this.rollType.note : '', Validators.maxLength(this.MAX_NOTE_LENGTH)),
-      colorCode: new FormControl(this.colorCode),
+      colorCode: new FormControl({
+        value: this.colorCode,
+        disabled: this.standards.length > 0
+      }),
       thickness: new FormControl(this.rollType ? this.rollType.thickness : undefined, [Validators.required, Validators.min(this.MIN_THICKNESS)]),
       minWeight: new FormControl(this.rollType ? this.rollType.minWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMinWeight.bind(this)]),
       maxWeight: new FormControl(this.rollType ? this.rollType.maxWeight : undefined, [Validators.required, Validators.min(this.MIN_WEIGHT), this.validateMaxWeight.bind(this)]),
@@ -80,6 +84,7 @@ export class RollTypeModalComponent implements OnInit, IModalDialog {
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < RollTypeModalData >> ) {
     this.options = options;
     this.rollType = options.data.rollType;
+    this.standards = options.data.standards || [];
   };
 
   onSubmit(): Promise < RollType > {

@@ -33,8 +33,18 @@ import {
 import {
   ProductsUrlsService
 } from './modules/app-products/services/products-urls.service';
-import { RollsService } from './modules/app-rolls/services/rolls.service';
-import { RollsUrlService } from './modules/app-rolls/services/rolls-url.service';
+import {
+  RollsService
+} from './modules/app-rolls/services/rolls.service';
+import {
+  RollsUrlService
+} from './modules/app-rolls/services/rolls-url.service';
+import {
+  StandardsUrlsService
+} from './modules/app-standards/services/standards-urls.service';
+import {
+  StandardsService
+} from './modules/app-standards/services/standards.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +63,9 @@ import { RollsUrlService } from './modules/app-rolls/services/rolls-url.service'
     ProductsUrlsService,
     ProductsService,
     RollsUrlService,
-    RollsService
+    RollsService,
+    StandardsUrlsService,
+    StandardsService
   ],
   bootstrap: [AppComponent]
 })
