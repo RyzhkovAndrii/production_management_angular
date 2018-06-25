@@ -21,7 +21,7 @@ export class ClientListComponent implements OnInit {
   @Output() onClientListChange = new EventEmitter<any>();
 
   private _id: number = null;
-  private updateElementIndex: number;
+  private editElementIndex: number;
   private currentIndexForDelete;
 
   private isChanged = false;
@@ -49,26 +49,41 @@ export class ClientListComponent implements OnInit {
     return this._id !== null;
   }
 
-  saveOrUpdateClient() {
+  saveClient() {
     const { name } = this.form.value;
     const client = new Client(name);
-    if (this._id === null) {
-      this.subscription = this.clientService.save(client)
-        .subscribe(data => this.clientList.push(data));
-    } else {
-      this.subscription = this.clientService.update(client, this._id)
-        .subscribe(data => this.clientList[this.updateElementIndex] = data);
-
-    }
+    this.subscription = this.clientService
+      .save(client)
+      .subscribe(data => {
+        this.clientList.push(data);
+        this.isChanged = true;
+      });
     this.isChanged = true;
+    this.cleanForm();
+  }
+
+  editClient() {
+    const { name } = this.form.value;
+    const client = new Client(name);
+    this.subscription = this.clientService
+      .update(client, this._id)
+      .subscribe(data => {
+        this.clientList[this.editElementIndex] = data;
+        this.isChanged = true;
+      });
     this.cleanForm();
   }
 
   prepareToEdit(i: number) {
     this._id = this.clientList[i].id;
+    this.editElementIndex = i;
     this.form.get("name").setValue(this.clientList[i].name);
-    this.updateElementIndex = i;
     this.form.get("name").markAsTouched();
+  }
+
+  editCancel() {
+    this._id = null;
+    this.cleanForm();
   }
 
   uniqueNameValidator(control: AbstractControl) {

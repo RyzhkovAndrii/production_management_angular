@@ -8,7 +8,7 @@
         <div class="container">
           <form [formGroup]="form">
             <div class="row">
-              <div class="col-10">
+              <div class="col-9">
                 <label for="name"
                        class="col-form-label">
                   <span *ngIf="!isEditOperation()">Добавить клиентa:</span>
@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-10">
+              <div class="col-9">
                 <input id="name"
                        class="form-control"
                        type="text"
@@ -32,11 +32,24 @@
                   <span *ngIf="form.get('name').errors['uniqueName']">Наименование уже существует.</span>
                 </span>
               </div>
-              <div class="col-2">
+              <div *ngIf="!isEditOperation()"
+                   class="col-2">
+                <button class="btn btn-outline-secondary btn-sm btn-outline float-left"
+                        (click)="saveClient()"
+                        [disabled]="form.invalid">
+                  <i class="material-icons">add</i>
+                </button>
+              </div>
+              <div *ngIf="isEditOperation()"
+                   class="col-2 btn-group">
                 <button class="btn btn-outline-secondary btn-sm btn-outline"
-                        (click)="saveOrUpdateClient()"
+                        (click)="editClient()"
                         [disabled]="form.invalid">
                   <i class="material-icons">done</i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm btn-outline"
+                        (click)="editCancel()">
+                  <i class="material-icons">clear</i>
                 </button>
               </div>
             </div>
@@ -54,18 +67,14 @@
             <tbody class="scrolling-tbody">
               <tr *ngFor="let client of clientList; let i = index"
                   class="d-flex">
-                <td align="cell-center"
-                    class="col-1">{{i+1}}</td>
-                <td align="cell-center"
-                    class="col-9 text-left">{{client.name}}</td>
-                <td class="col-1 cell-center">
+                <td class="col-1">{{i+1}}</td>
+                <td class="col-9 text-left">{{client.name}}</td>
+                <td class="col-2 btn-group m-0 p-0">
                   <button class="btn btn-outline-secondary btn-sm btn-outline"
                           (click)="prepareToEdit(i)">
                     <i class="material-icons mi-sm">edit</i>
                   </button>
-                </td>
-                <td class="col-1 cell-center">
-                  <button class="btn btn-outline-secondary btn-sm btn-outline"
+                  <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
                           (click)="openClientDelConfirm(i)">
                     <i class="material-icons mi-sm">delete_forever</i>
                   </button>
