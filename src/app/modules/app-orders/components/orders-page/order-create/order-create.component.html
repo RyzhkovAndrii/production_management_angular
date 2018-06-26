@@ -87,19 +87,50 @@
                     <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
                         class="d-flex">
                       <td align="cell-center"
-                          class="col-7 text-left">
+                          class="col-6 text-left">
                         {{newItemDetails.productType.name}} &nbsp;
                         <i class="filled-circle"
                            [ngStyle]="{ 'background-color': newItemDetails.productType.colorCode }">
                         </i>
                         &nbsp; {{newItemDetails.productType.weight}}
                       </td>
-                      <td align="cell-center"
-                          class="col-3 text-left">{{newItemDetails.amount | exponent}}</td>
-                      <td class="col-2 cell-center text-right">
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-4">
+                        {{newItemDetails.amount | exponent}}
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-4 pt-1 pb-0">
+                        <input class="form-control input-sm"
+                               type="number"
+                               value="{{newItemDetails.amount | exponent}}"
+                               formControlName="editedItemAmount"
+                               [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
+                        <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
+                              class="invalid-feedback">
+                          <span *ngIf="form.get('editedItemAmount').errors['required']">Обязательное поле!</span>
+                          <span *ngIf="form.get('editedItemAmount').errors['min'] || form.get('editedItemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                        </span>
+                      </td>
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="editNewItem(i)">
+                          <i class="material-icons mi-sm">edit</i>
+                        </button>
                         <button class="btn btn-outline-secondary btn-sm btn-outline"
                                 (click)="removeNewItem(i)">
-                          <i class="material-icons">delete_forever</i>
+                          <i class="material-icons mi-sm">delete_forever</i>
+                        </button>
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="submitEditNewItem()">
+                          <i class="material-icons mi-sm">done</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="cancelEditNewItem()">
+                          <i class="material-icons mi-sm">clear</i>
                         </button>
                       </td>
                     </tr>

@@ -38,11 +38,13 @@ export class OrderCreateComponent implements OnInit {
     "date": new FormControl(null, [Validators.required]),
     "important": new FormControl(false, []),
     "productType": new FormControl(null, [Validators.required]),
-    "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+    "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+    "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
   });
 
   isCreated: boolean = false;
   showAddOrderItemErrors = false;
+  editedNewItemIndex: number = -1;
 
   constructor(
     private orderService: OrdersService,
@@ -92,6 +94,26 @@ export class OrderCreateComponent implements OnInit {
       this.removeOptionFromProductTypeSelect(itemDetails);
       this.resetAddOrderItemForm();
     }
+  }
+
+  editNewItem(i: number) {
+    this.editedNewItemIndex = i;
+    this.form.get("editedItemAmount").markAsDirty();
+  }
+
+  submitEditNewItem() {
+    if (this.form.get("editedItemAmount").invalid) {
+      this.form.get("editedItemAmount").markAsPristine();  
+    } else {
+      const {editedItemAmount} = this.form.value;
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      this.newItemDetailsList[this.editedNewItemIndex].amount = integerItemAmount;
+      this.editedNewItemIndex = -1;
+    }
+  }
+
+  cancelEditNewItem() {
+    this.editedNewItemIndex = -1;
   }
 
   removeNewItem(i: number) {
