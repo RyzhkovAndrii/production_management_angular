@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
 
 import { ProductsService } from '../../../../app-products/services/products.service';
 import { getDate } from '../../../../../app-utils/app-date-utils';
@@ -12,7 +11,7 @@ const now: Date = new Date();
   templateUrl: './order-leftover-product.component.html',
   styleUrls: ['./order-leftover-product.component.css']
 })
-export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
+export class OrderLeftoverProductComponent implements OnInit {
 
   @Input()
   isLastLeftOver: boolean = false;
@@ -24,9 +23,6 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
   date: Date;
 
   minDate: NgbDateStruct;
-
-  private sub1: Subscription;
-  private sub2: Subscription;
 
   constructor(private productService: ProductsService) {
     this.sortedProductLeftOverList = [];
@@ -42,21 +38,12 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.sub1) {
-      this.sub1.unsubscribe();
-    }
-    if (this.sub2) {
-      this.sub2.unsubscribe();
-    }
-  }
-
   reloadCurrentLeftOver() {
     this.fetchLeftOverList();
   }
 
   private fetchLeftOverList() {
-    this.sub1 = this.productService.getProductsLeftovers(this.date)
+    this.productService.getProductsLeftovers(this.date)
       .subscribe(data => {
         this.productLeftOverList = data;
         this.sortProductLeftOverList();
@@ -64,7 +51,7 @@ export class OrderLeftoverProductComponent implements OnInit, OnDestroy {
   }
 
   private fetchLastLeftOverList() {
-    this.sub2 = this.productService.getLastProductsLeftOvers()
+    this.productService.getLastProductsLeftOvers()
       .subscribe(data => {
         this.productLeftOverList = data;
         this.sortProductLeftOverList();

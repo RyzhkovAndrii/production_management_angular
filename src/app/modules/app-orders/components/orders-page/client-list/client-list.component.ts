@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 
 import { Client } from '../../../models/client.model';
 import { ClientsService } from '../../../services/client.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-client-list',
@@ -28,8 +27,6 @@ export class ClientListComponent implements OnInit {
 
   form: FormGroup;
 
-  private subscription: Subscription;
-
   constructor(private clientService: ClientsService) { }
 
   ngOnInit() {
@@ -52,8 +49,7 @@ export class ClientListComponent implements OnInit {
   saveClient() {
     const { name } = this.form.value;
     const client = new Client(name);
-    this.subscription = this.clientService
-      .save(client)
+    this.clientService.save(client)
       .subscribe(data => {
         this.clientList.push(data);
         this.isChanged = true;
@@ -65,8 +61,7 @@ export class ClientListComponent implements OnInit {
   editClient() {
     const { name } = this.form.value;
     const client = new Client(name);
-    this.subscription = this.clientService
-      .update(client, this._id)
+    this.clientService.update(client, this._id)
       .subscribe(data => {
         this.clientList[this.editElementIndex] = data;
         this.isChanged = true;

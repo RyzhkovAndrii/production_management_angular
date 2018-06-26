@@ -10,6 +10,7 @@ import { OrdersService } from '../../../services/orders.service';
 import { OrderItemService } from '../../../services/order-item.service';
 import { OrderItem } from '../../../models/order-item.model';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
+import { Subject } from 'rxjs/Subject';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -41,6 +42,8 @@ export class OrderEditComponent implements OnInit {
   isEdited: boolean = false;
   showAddOrderItemErrors = false;
 
+  private ngUnsubscribe: Subject<any> = new Subject();
+
   constructor(
     private orderService: OrdersService,
     private orderItemService: OrderItemService
@@ -59,12 +62,18 @@ export class OrderEditComponent implements OnInit {
     this.fillOldOrderItemList();
   }
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   submit() {
     this.orderService
       .update(this.getOrderForUpdate(), this.order.id)
       .subscribe(order => {
         this.orderItemService
           .removeListByIds(this.itemIdListForRemove)
+          .takeUntil(this.ngUnsubscribe)
           .subscribe(() => {
             console.log("remove submit");
             this.itemIdListForRemove = [];

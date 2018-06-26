@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import * as moment from 'moment';
 
 import { Order } from '../../../models/order.model';
@@ -11,7 +10,7 @@ import { OrdersService } from '../../../services/orders.service';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit, OnDestroy {
+export class OrderComponent implements OnInit {
 
   orderDetails: OrderDetails;
 
@@ -23,26 +22,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   isOrderDelConfirmVisible: boolean = false;
   isOrderDeliveryConfirmVisible: boolean = false;
 
-  private sub1: Subscription;
-  private sub2: Subscription;
-  private sub3: Subscription;
-
   constructor(private orderService: OrdersService) { }
 
   ngOnInit() {
     this.orderDetails = this.orderService.convert(this.order);
-  }
-
-  ngOnDestroy() {
-    if (this.sub1) {
-      this.sub1.unsubscribe();
-    }
-    if (this.sub2) {
-      this.sub2.unsubscribe();
-    }
-    if (this.sub3) {
-      this.sub3.unsubscribe();
-    }
   }
 
   openOrderEditForm() {
@@ -52,7 +35,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   deliverOrder(date: Date) {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
     const newOrder = new Order(client.id, city, deliveryDate, isImportant, true, moment(date).format('YYYY-MM-DD')); // todo use common format date
-    this.sub2 = this.orderService.update(newOrder, this.orderDetails.id)
+    this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
       });
@@ -68,7 +51,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   private orderDelete() {
-    this.sub3 = this.orderService.delete(this.orderDetails.id)
+    this.orderService.delete(this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
       });

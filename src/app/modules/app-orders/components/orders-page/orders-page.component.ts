@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 import { ClientsService } from '../../services/client.service';
 import { OrdersService } from '../../services/orders.service';
@@ -30,8 +30,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   showDeliveredOrderStartDate: Date = null;
 
-  private sub1: Subscription;
-  private sub2: Subscription;
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
     private ordersService: OrdersService,
@@ -44,18 +43,17 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub1.unsubscribe();
-    if (this.sub2) {
-      this.sub2.unsubscribe();
-    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   private fetchData() {
-    this.sub1 = Observable
+    Observable
       .combineLatest(
         this.productsService.getSortedProductTypes(),
         this.ordersService.getOrderList(),
         this.clientsService.getAll())
+      .takeUntil(this.ngUnsubscribe)
       .subscribe(data => {
         this.productTypes = data[0];
         this.orderList = data[1];
@@ -68,7 +66,9 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
       this.ordersService.getOrderList()
         .subscribe(data => this.orderList = data);
     } else {
-      this.ordersService.getOrderListWithDelivered(this.showDeliveredOrderStartDate)
+      this.ordersService
+        .getOrderListWithDelivered(this.showDeliveredOrderStartDate)
+        .takeUntil(this.ngUnsubscribe)
         .subscribe(data => this.orderList = data);
     }
   }

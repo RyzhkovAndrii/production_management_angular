@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Output, Input, OnInit, Pipe, PipeTransform, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import Decimal from 'decimal.js';
 
 import { Client } from '../../../models/client.model';
 import { OrderItem } from '../../../models/order-item.model';
 import { Order } from '../../../models/order.model';
 import { OrdersService } from '../../../services/orders.service';
 import { OrderItemService } from '../../../services/order-item.service';
-import Decimal from 'decimal.js';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
@@ -63,13 +63,14 @@ export class OrderCreateComponent implements OnInit {
           const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
           newItemList.push(item);
         })
-        this.orderItemService.saveOrderItemList(newItemList).subscribe(() => {
-          this.form.reset();
-          this.newItemDetailsList = [];
-          this.productTypeListForSelect = this.productTypeList;
-          this.showCreateMessage();
-          this.onSubmit.emit(order);
-        });
+        this.orderItemService.saveOrderItemList(newItemList)
+          .subscribe(() => {
+            this.form.reset();
+            this.newItemDetailsList = [];
+            this.productTypeListForSelect = this.productTypeList;
+            this.showCreateMessage();
+            this.onSubmit.emit(order);
+          });
       });
   }
 
