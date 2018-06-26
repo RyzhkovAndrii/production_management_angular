@@ -23,6 +23,7 @@ import {
 import {
   formatDate
 } from '../../../app-utils/app-date-utils';
+import appHeaders from '../../../app-utils/app-headers';
 
 @Injectable()
 export class ProductsService {
@@ -66,14 +67,17 @@ export class ProductsService {
   }
 
   getProductTypes(): Observable < ProductTypeResponse[] > {
-    return this.http.get(this.urls.productTypesUrl).catch(httpErrorHandle);
+    return this.http.get(this.urls.productTypesUrl, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   getProductsLeftovers(date: Date): Observable < ProductLeftoverResponse[] > {
     const params = new HttpParams()
       .set('date', formatDate(date));
     return this.http.get(this.urls.productLeftoverUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -82,7 +86,8 @@ export class ProductsService {
       .set('product-type-id', String(productTypeId))
       .set('date', formatDate(date));
     return this.http.get(this.urls.productLeftoverUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -90,7 +95,8 @@ export class ProductsService {
     const params = new HttpParams()
       .set('date', formatDate(date));
     return this.http.get(this.urls.productBatchUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -99,7 +105,8 @@ export class ProductsService {
       .set('product-type-id', String(productTypeId))
       .set('date', formatDate(date));
     return this.http.get(this.urls.productBatchUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -108,7 +115,8 @@ export class ProductsService {
       .set('from', formatDate(fromDate))
       .set('to', formatDate(toDate));
     return this.http.get(this.urls.productBatchUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -118,19 +126,23 @@ export class ProductsService {
       .set('from', formatDate(fromDate))
       .set('to', formatDate(toDate));
     return this.http.get(this.urls.productBatchUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
   getProductsChecks(): Observable < ProductCheckResponse[] > {
-    return this.http.get(this.urls.productChecksUrl).catch(httpErrorHandle);
+    return this.http.get(this.urls.productChecksUrl, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   getProductCheck(productTypeId: number): Observable < ProductCheckResponse > {
     const params = new HttpParams()
       .set('product_type_id', String(productTypeId));
     return this.http.get(this.urls.productChecksUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -138,21 +150,28 @@ export class ProductsService {
     const params = new HttpParams()
       .set('name', name);
     return this.http.get(this.urls.productTypesUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
   postProductType(type: ProductTypeRequest): Observable < ProductTypeResponse > {
-    return this.http.post(this.urls.productTypesUrl, type).catch(httpErrorHandle);
+    return this.http.post(this.urls.productTypesUrl, type, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   postProductOperation(operation: ProductOperationRequest): Observable < ProductOperationResponse > {
-    return this.http.post(this.urls.productOperationUrl, operation).catch(httpErrorHandle);
+    return this.http.post(this.urls.productOperationUrl, operation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   putProductType(id: number, type: ProductTypeRequest): Observable < ProductTypeResponse > {
     const url = `${this.urls.productTypesUrl}/${id}`;
-    return this.http.put(url, type).catch(httpErrorHandle);
+    return this.http.put(url, type, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   putProductChecks(productChecks: ProductCheckResponse[]): Observable < ProductCheckResponse[] > {
@@ -164,11 +183,15 @@ export class ProductsService {
     const body: ProductCheckRequest = {
       productLeftOverCheckStatus: check.productLeftOverCheckStatus
     };
-    return this.http.put(url, body).catch(httpErrorHandle);
+    return this.http.put(url, body, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   deleteProductType(id: number) {
     const url = `${this.urls.productTypesUrl}/${id}`;
-    return this.http.delete(url).catch(httpErrorHandle);
+    return this.http.delete(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 }

@@ -6,8 +6,7 @@ import {
 } from './rolls-url.service';
 import {
   HttpClient,
-  HttpParams,
-  HttpHeaders
+  HttpParams
 } from '@angular/common/http';
 import {
   flatMap
@@ -29,16 +28,17 @@ import {
 import {
   CheckStatus
 } from '../../app-shared/enums/check-status.enum';
+import appHeaders from '../../../app-utils/app-headers';
 
 @Injectable()
 export class RollsService {
 
-  headers = new HttpHeaders();
-
   constructor(private urls: RollsUrlService, private http: HttpClient) {}
 
   postRollOperation(rollOperation: RollOperation) {
-    return this.http.post(this.urls.rollOperationUrl, rollOperation).catch(httpErrorHandle);
+    return this.http.post(this.urls.rollOperationUrl, rollOperation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   putRollType(rollType: RollType): Observable < RollType > {
@@ -51,7 +51,9 @@ export class RollsService {
       maxWeight: rollType.maxWeight,
       length: rollType.length
     }
-    return <Observable < RollType >> this.http.put(requestUrl, dto).catch(httpErrorHandle);
+    return <Observable < RollType >> this.http.put(requestUrl, dto, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   getRollsInfo(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
@@ -110,7 +112,7 @@ export class RollsService {
 
   getRollTypes(): Observable < RollType[] > {
     return this.http.get(this.urls.rollTypesUrl, {
-      headers: this.headers
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -118,7 +120,8 @@ export class RollsService {
     const params = new HttpParams()
       .set('color', colorCode);
     return this.http.get(this.urls.rollTypesUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -127,7 +130,8 @@ export class RollsService {
       .set('date', formatDate(date))
       .set('total', undefined);
     return this.http.get(this.urls.rollLeftoverUrl, {
-        params
+        params,
+        headers: appHeaders
       })
       .map((value: RollTotalLeftOverResponse) => value.total)
       .catch(httpErrorHandle);
@@ -135,7 +139,7 @@ export class RollsService {
 
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
-      headers: this.headers
+      headers: appHeaders
     }).map((createdRollType: RollType) => {
       const info: RollInfo = {
         rollType: createdRollType,
@@ -170,7 +174,7 @@ export class RollsService {
     });
     return this.http.get(this.urls.rollBatchUrl, {
       params,
-      headers: this.headers
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -179,7 +183,8 @@ export class RollsService {
       .set('roll_type_id', String(rollTypeId))
       .set('date', date);
     return this.http.get(this.urls.rollBatchUrl, {
-      params
+      params,
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -188,7 +193,7 @@ export class RollsService {
       .append('roll_type_id', String(rollTypeId));
     return this.http.get(this.urls.rollChecksUrl, {
       params,
-      headers: this.headers
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -201,7 +206,7 @@ export class RollsService {
     });
     return this.http.get(this.urls.rollLeftoverUrl, {
       params,
-      headers: this.headers
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
@@ -214,12 +219,16 @@ export class RollsService {
     const body: RollCheckRequest = {
       rollLeftOverCheckStatus: rollCheck.rollLeftOverCheckStatus
     };
-    return this.http.put(url, body).catch(httpErrorHandle);
+    return this.http.put(url, body, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   putOperation(operationId: number, operation: RollOperation) {
     const url = `${this.urls.rollOperationUrl}/${operationId}`;
-    return this.http.put(url, operation).catch(httpErrorHandle);
+    return this.http.put(url, operation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   getRollOperations(rollTypeId: number, from: string, to: string) {
@@ -229,19 +238,22 @@ export class RollsService {
       .set('to_manuf', to);
     return this.http.get(this.urls.rollOperationUrl, {
       params,
-      headers: this.headers
+      headers: appHeaders
     }).catch(httpErrorHandle);
   }
 
   deleteRollType(rollTypeId: number) {
     const url = `${this.urls.rollTypesUrl}/${rollTypeId}`;
-    return this.http.delete(url)
-      .catch(httpErrorHandle);
+    return this.http.delete(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
   }
 
   deleteRollOperation(operationId: number) {
     const url = `${this.urls.rollOperationUrl}/${operationId}`;
-    return this.http.delete(url)
+    return this.http.delete(url, {
+        headers: appHeaders
+      })
       .catch(httpErrorHandle);
   }
 }
