@@ -5,7 +5,7 @@ import {
   NgModule
 } from '@angular/core';
 import {
-  NgbModule, NgbDateAdapter
+  NgbModule
 } from '@ng-bootstrap/ng-bootstrap';
 import {
   HttpClientModule
@@ -27,9 +27,6 @@ import {
 import {
   AppModalService
 } from './modules/app-shared/services/app-modal.service';
-import { 
-  NgbDateNativeAdapter
-} from './app-utils/app-ngb-date-native-adapter';
 
 @NgModule({
   declarations: [
@@ -44,8 +41,7 @@ import {
   ],
   providers: [
     RestDetailsService,
-    AppModalService,
-    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }
+    AppModalService
   ],
   bootstrap: [AppComponent]
 })

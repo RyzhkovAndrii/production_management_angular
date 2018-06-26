@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { DatepickerOptions } from 'ng2-datepicker';
+import * as moment from 'moment';
+import * as ruLocale from 'date-fns/locale/ru';
 
 import { ProductsService } from '../../../../app-products/services/products.service';
 import { getDate } from '../../../../../app-utils/app-date-utils';
@@ -17,16 +19,21 @@ export class OrderLeftoverProductComponent implements OnInit {
   @Input() producTypeList: ProductTypeResponse[];
 
   private productLeftOverList: ProductLeftoverResponse[];
-
   sortedProductLeftOverList: ProductLeftoverResponse[];
 
   date: Date;
 
-  minDate: NgbDateStruct;
+  datePickerOptions: DatepickerOptions = {
+    firstCalendarDay: 1,
+    locale: ruLocale,
+    addClass: 'form-control',
+    minDate: moment().add(-1, 'days').toDate(),
+    minYear: moment().toDate().getFullYear(),
+    dayNamesFormat: 'dd'
+  };
 
   constructor(private productService: ProductsService) {
     this.sortedProductLeftOverList = [];
-    this.minDate = this.convertToDateStruct(now);
   }
 
   ngOnInit() {
@@ -65,10 +72,6 @@ export class OrderLeftoverProductComponent implements OnInit {
       const leftover = this.productLeftOverList.find(leftover => leftover.productTypeId === productType.id);
       this.sortedProductLeftOverList.push(leftover);
     })
-  }
-
-  private convertToDateStruct(date: Date): NgbDateStruct {
-    return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() }
   }
 
 }
