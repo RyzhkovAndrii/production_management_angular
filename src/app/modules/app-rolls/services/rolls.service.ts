@@ -78,7 +78,7 @@ export class RollsService {
             )
           )
         )
-      ).toArray().catch(httpErrorHandle);
+      ).toArray();
   }
 
   getRollsInfoWithoutCheck(restDate: Date, fromDate: Date, totalDate: Date): Observable < RollInfo[] > {
@@ -107,7 +107,7 @@ export class RollsService {
             )
           )
         )
-      ).toArray().catch(httpErrorHandle);
+      ).toArray();
   }
 
   getRollTypes(): Observable < RollType[] > {
