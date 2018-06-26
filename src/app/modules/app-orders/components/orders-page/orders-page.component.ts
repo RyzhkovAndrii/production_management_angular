@@ -20,7 +20,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   orderList: Order[];
   productTypes: ProductTypeResponse[];
-  productLeftOvers: ProductLeftoverResponse[];
   clientList: Client[] = [];
   editedOrder: OrderDetails;
 

@@ -27,8 +27,6 @@ import {
 @Injectable()
 export class ProductsService {
 
-  private _singletonProductTypeList: ProductTypeResponse[]; //todo need ???
-
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
 
   getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[][] > {
@@ -74,12 +72,7 @@ export class ProductsService {
   getSortedProductTypes(): Observable< ProductTypeResponse[] > {
     return this.getProductTypes()
       .map(data => data.sort(this._compareFn))
-      .do(data => this._singletonProductTypeList = data) //todo need ???
       .catch(httpErrorHandle);
-  }
-
-  getSingletonProductTypes(): ProductTypeResponse[] {    
-    return this._singletonProductTypeList;
   }
 
   private _compareFn(first: ProductTypeResponse, second: ProductTypeResponse): number {

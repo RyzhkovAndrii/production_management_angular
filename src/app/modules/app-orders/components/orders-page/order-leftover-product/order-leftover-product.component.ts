@@ -13,8 +13,8 @@ const now: Date = new Date();
 })
 export class OrderLeftoverProductComponent implements OnInit {
 
-  @Input()
-  isLastLeftOver: boolean = false;
+  @Input() isLastLeftOver: boolean = false;
+  @Input() producTypeList: ProductTypeResponse[];
 
   private productLeftOverList: ProductLeftoverResponse[];
 
@@ -61,7 +61,7 @@ export class OrderLeftoverProductComponent implements OnInit {
 
   private sortProductLeftOverList() {
     this.sortedProductLeftOverList = [];
-    this.productService.getSingletonProductTypes().forEach(productType => {
+    this.producTypeList.forEach(productType => {
       const leftover = this.productLeftOverList.find(leftover => leftover.productTypeId === productType.id);
       this.sortedProductLeftOverList.push(leftover);
     })

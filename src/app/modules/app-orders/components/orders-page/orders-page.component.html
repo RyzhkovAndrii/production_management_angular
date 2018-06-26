@@ -50,16 +50,17 @@
             </tr>
           </table>
         </div>
-        <app-order-leftover-product></app-order-leftover-product>
+        <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
         <div id="client-table-container">
           <div *ngFor="let order of orderList">
             <app-order [order]="order"
+                       [productTypeList]="productTypes"
                        (onChange)="reloadPage()"
                        (onEditOpen)="openOrderEdit($event)"></app-order>
           </div>
         </div>
-        <app-order-leftover-product #lastLeftover
-                                    [isLastLeftOver]="true"></app-order-leftover-product>
+        <app-order-leftover-product [isLastLeftOver]="true"
+                                    [producTypeList]="productTypes"></app-order-leftover-product>
       </div>
     </div>
   </div>

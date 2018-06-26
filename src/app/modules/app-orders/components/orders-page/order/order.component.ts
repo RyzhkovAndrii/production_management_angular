@@ -4,6 +4,9 @@ import * as moment from 'moment';
 import { Order } from '../../../models/order.model';
 import { OrderDetails } from '../../../models/order-details.model';
 import { OrdersService } from '../../../services/orders.service';
+import { OrderItem } from '../../../models/order-item.model';
+import { ClientsService } from '../../../services/client.service';
+import { OrderItemService } from '../../../services/order-item.service';
 
 @Component({
   selector: 'app-order',
@@ -15,6 +18,7 @@ export class OrderComponent implements OnInit {
   orderDetails: OrderDetails;
 
   @Input() order: Order;
+  @Input() productTypeList: ProductTypeResponse[];
 
   @Output() onChange = new EventEmitter<any>();
   @Output() onEditOpen = new EventEmitter<OrderDetails>();
@@ -22,10 +26,48 @@ export class OrderComponent implements OnInit {
   isOrderDelConfirmVisible: boolean = false;
   isOrderDeliveryConfirmVisible: boolean = false;
 
-  constructor(private orderService: OrdersService) { }
+  constructor(
+    private orderService: OrdersService,
+    private clientService: ClientsService,
+    private orderItemService: OrderItemService) { }
 
   ngOnInit() {
-    this.orderDetails = this.orderService.convert(this.order);
+    this.orderDetails = this.convert(this.order);
+  }
+
+  private convert(order: Order): OrderDetails {
+    let orderDetails = new OrderDetails();
+    orderDetails.id = order.id;
+    orderDetails.city = order.city;
+    orderDetails.creationDate = order.creationDate;
+    orderDetails.deliveryDate = order.deliveryDate;
+    orderDetails.isImportant = order.isImportant;
+    orderDetails.isDelivered = order.isDelivered;
+    orderDetails.isOverdue = order.isOverdue;
+    orderDetails.actualDeliveryDate = order.actualDeliveryDate;
+    this.clientService.getClient(order.clientId)
+      .subscribe(data => orderDetails.client = data);
+    this.orderItemService.getOrderItemList(order.id)
+      .subscribe(data => {
+        orderDetails.orderItemList = this.sortOrderItemList(data);
+      });
+    return orderDetails;
+  }
+
+  private sortOrderItemList(itemList: OrderItem[]): OrderItem[] {
+    console.log(this.productTypeList);
+    const sortedOrderItemList: OrderItem[] = [];
+    for (const productType of this.productTypeList) {
+      let sortedItem = null;
+      for (let item of itemList) {
+        if (item.productTypeId === productType.id) {
+          sortedItem = item;
+          continue;
+        }
+      }
+      sortedOrderItemList.push(sortedItem);
+    }
+    return sortedOrderItemList;
   }
 
   openOrderEditForm() {
