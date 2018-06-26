@@ -1,9 +1,7 @@
 import {
   Component,
   OnInit,
-  Input,
-  ComponentRef,
-  ViewChild
+  ComponentRef
 } from '@angular/core';
 import {
   NgbActiveModal
@@ -18,9 +16,6 @@ import {
   IModalDialogOptions,
   IModalDialogButton
 } from 'ngx-modal-dialog';
-import {
-  from
-} from 'rxjs/observable/from';
 import appPresetColors from '../../../../app-utils/app-preset-colors';
 import {
   integerValidator
