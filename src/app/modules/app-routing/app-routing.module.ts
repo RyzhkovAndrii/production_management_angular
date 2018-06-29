@@ -25,6 +25,10 @@ const appRoutes: Routes = [{
   {
     path: 'standards',
     loadChildren: '../app-standards/standards.module#StandardsModule'
+  },
+  {
+    path: 'products-plan',
+    loadChildren: '../app-products-plan/products-plan.module#ProductsPlanModule'
   }
 ];
 
