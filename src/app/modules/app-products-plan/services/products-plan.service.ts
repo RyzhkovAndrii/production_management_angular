@@ -45,5 +45,58 @@ export class ProductsPlanService {
     }).catch(httpErrorHandle);
   }
 
-  
+  getOperationsByProduct(productTypeId: number, fromDate: string, toDate: string): Observable < ProductPlanOperationResponse[] > {
+    const params = new HttpParams()
+      .set('id', String(productTypeId))
+      .set('from', fromDate)
+      .set('to', toDate);
+    return this.http.get(this.urls.operationsUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getOperationsByRoll(rollTypeId: number, fromDate: string, toDate: string): Observable < ProductPlanOperationResponse[] > {
+    const params = new HttpParams()
+      .set('roll_id', String(rollTypeId))
+      .set('from', fromDate)
+      .set('to', toDate);
+    return this.http.get(this.urls.operationsUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getAllOperations(): Observable < ProductPlanOperationResponse[] > {
+    return this.http.get(this.urls.operationsUrl, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  getOperation(operationId: number): Observable < ProductPlanOperationResponse > {
+    const url = `${this.urls.operationsUrl}/${operationId}`;
+    return this.http.get(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  postOperation(operation: ProductPlanOperationRequest): Observable < ProductPlanOperationResponse > {
+    return this.http.post(this.urls.operationsUrl, operation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  putOperation(operationId: number, operation: ProductPlanOperationRequest): Observable < ProductPlanOperationResponse > {
+    const url = `${this.urls.operationsUrl}/${operationId}`;
+    return this.http.put(url, operation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  deleteOperation(operationId: number): Observable < any > {
+    const url = `${this.urls.operationsUrl}/${operationId}`;
+    return this.http.delete(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
 }
