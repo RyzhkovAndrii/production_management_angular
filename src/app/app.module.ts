@@ -45,6 +45,12 @@ import {
 import {
   StandardsService
 } from './modules/app-standards/services/standards.service';
+import {
+  ProductsPlanUrlsService
+} from './modules/app-products-plan/services/products-plan-urls.service';
+import {
+  ProductsPlanService
+} from './modules/app-products-plan/services/products-plan.service';
 
 @NgModule({
   declarations: [
@@ -65,7 +71,9 @@ import {
     RollsUrlService,
     RollsService,
     StandardsUrlsService,
-    StandardsService
+    StandardsService,
+    ProductsPlanUrlsService,
+    ProductsPlanService
   ],
   bootstrap: [AppComponent]
 })
