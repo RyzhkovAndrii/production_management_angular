@@ -55,7 +55,6 @@ export class OrderComponent implements OnInit {
   }
 
   private sortOrderItemList(itemList: OrderItem[]): OrderItem[] {
-    console.log(this.productTypeList);
     const sortedOrderItemList: OrderItem[] = [];
     for (const productType of this.productTypeList) {
       let sortedItem = null;
