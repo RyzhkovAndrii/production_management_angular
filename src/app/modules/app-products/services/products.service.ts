@@ -23,6 +23,9 @@ import {
 import {
   formatDate
 } from '../../../app-utils/app-date-utils';
+import { 
+  compareProductTypes
+} from '../../../app-utils/app-comparators';
 
 @Injectable()
 export class ProductsService {
@@ -71,18 +74,8 @@ export class ProductsService {
 
   getSortedProductTypes(): Observable< ProductTypeResponse[] > {
     return this.getProductTypes()
-      .map(data => data.sort(this._compareFn))
+      .map(data => data.sort(compareProductTypes))
       .catch(httpErrorHandle);
-  }
-
-  private _compareFn(first: ProductTypeResponse, second: ProductTypeResponse): number {
-    if (first.colorCode > second.colorCode) return 1;
-    if (first.colorCode < second.colorCode) return -1;
-    if (first.colorCode === second.colorCode) {
-      if (first.weight > second.weight) return 1;
-      if (first.weight < second.weight) return -1;
-      return 0;
-    }
   }
 
   getProductsLeftovers(date: Date): Observable< ProductLeftoverResponse[] > {
