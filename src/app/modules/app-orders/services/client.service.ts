@@ -13,7 +13,7 @@ export class ClientsService {
     private urlService: OrderModuleUrlService) { }
 
   getAll() {
-    const params = new HttpParams().set('sort', 'name'); // todo sort parameter in REST
+    const params = new HttpParams().set('sort', 'name');
     return this.http.get(this.urlService.clientUrl, { params }).catch(httpErrorHandle);
   }
 
