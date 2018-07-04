@@ -11,6 +11,7 @@ import { OrderItemService } from '../../../services/order-item.service';
 import { OrderItem } from '../../../models/order-item.model';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -30,7 +31,9 @@ export class OrderEditComponent implements OnInit {
 
   newItemDetailsList: { productType: ProductTypeResponse, amount: number }[] = [];
   oldItemDetailsList: { id: number, productType: ProductTypeResponse, amount: number }[] = [];
+  itemDetailsListForEdit: { id: number, productType: ProductTypeResponse, amount: number }[] = [];
   itemIdListForRemove: number[] = [];
+
 
   @ViewChild('productTypeSelect') productTypeSelect: NgSelectComponent;
 
@@ -41,6 +44,8 @@ export class OrderEditComponent implements OnInit {
 
   isEdited: boolean = false;
   showAddOrderItemErrors = false;
+  editedNewItemIndex = -1;
+  editedOldItemIndex = -1;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -57,7 +62,8 @@ export class OrderEditComponent implements OnInit {
       "date": new FormControl(this.order.deliveryDate, [Validators.required]),
       "important": new FormControl(this.order.isImportant, []),
       "productType": new FormControl(null, [Validators.required]),
-      "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+      "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+      "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
     });
     this.fillOldOrderItemList();
   }
@@ -75,15 +81,19 @@ export class OrderEditComponent implements OnInit {
           .removeListByIds(this.itemIdListForRemove)
           .takeUntil(this.ngUnsubscribe)
           .subscribe(() => {
-            console.log("remove submit");
             this.itemIdListForRemove = [];
-            this.orderItemService
-              .saveOrderItemList(this.getOrderItemsForSave())
+            Observable
+              .forkJoin(
+                this.orderItemService.updateOrderItemList(this.getOrderItemsForEdit()),
+                this.orderItemService.saveOrderItemList(this.getOrderItemsForSave())
+              )
+              .takeUntil(this.ngUnsubscribe)
               .subscribe(() => {
+                this.itemDetailsListForEdit = [];
                 this.newItemDetailsList = [];
                 this.showEditMessage();
                 this.onSubmit.emit(order);
-              });
+              })
           });
       });
   }
@@ -108,6 +118,18 @@ export class OrderEditComponent implements OnInit {
     }
   }
 
+  editNewItemOnForm(i: number) {
+    this.editedNewItemIndex = i;
+    this.editedOldItemIndex = -1;
+    this.form.get("editedItemAmount").markAsDirty();
+  }
+
+  editOldItemOnForm(i: number) {
+    this.editedOldItemIndex = i;
+    this.editedNewItemIndex = -1
+    this.form.get("editedItemAmount").markAsDirty();
+  }
+
   removeNewItemFromForm(i: number) {
     const removedItem = this.newItemDetailsList.splice(i, 1)[0];
     this.addOptionToProductTypeSelect(removedItem.productType);
@@ -117,6 +139,34 @@ export class OrderEditComponent implements OnInit {
     const removedItem = this.oldItemDetailsList.splice(i, 1)[0];
     this.addOptionToProductTypeSelect(removedItem.productType);
     this.itemIdListForRemove.push(removedItem.id);
+  }
+
+  submitEditNewItem() {
+    if (this.form.get("editedItemAmount").invalid) {
+      this.form.get("editedItemAmount").markAsPristine();
+    } else {
+      const { editedItemAmount } = this.form.value;
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      this.newItemDetailsList[this.editedNewItemIndex].amount = integerItemAmount;
+      this.editedNewItemIndex = -1;
+    }
+  }
+
+  submitEditOldItem() {
+    if (this.form.get("editedItemAmount").invalid) {
+      this.form.get("editedItemAmount").markAsPristine();
+    } else {
+      const { editedItemAmount } = this.form.value;
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      this.oldItemDetailsList[this.editedOldItemIndex].amount = integerItemAmount;
+      this.itemDetailsListForEdit.push(this.oldItemDetailsList[this.editedOldItemIndex]);
+      this.editedOldItemIndex = -1;
+    }
+  }
+
+  cancelEditItem() {
+    this.editedNewItemIndex = -1;
+    this.editedOldItemIndex = -1;
   }
 
   private fillOldOrderItemList() {
@@ -153,6 +203,20 @@ export class OrderEditComponent implements OnInit {
         newItemList.push(item);
       });
     return newItemList;
+  }
+
+  private getOrderItemsForEdit(): OrderItem[] {
+    let editedItemList: OrderItem[] = [];
+    this.itemDetailsListForEdit
+      .forEach(itemDetails => {
+        const item: OrderItem = new OrderItem(
+          this.order.id,
+          itemDetails.productType.id,
+          itemDetails.amount,
+          itemDetails.id);
+        editedItemList.push(item);
+      });
+    return editedItemList;
   }
 
   private addOptionToProductTypeSelect(productType: ProductTypeResponse) {

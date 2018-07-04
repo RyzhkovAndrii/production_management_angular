@@ -87,36 +87,102 @@
                     <!-- Old order item list -->
                     <tr *ngFor="let oldItemDetails of oldItemDetailsList; let i = index"
                         class="d-flex">
-                      <td class="col-7 text-left">
+                      <td align="cell-center"
+                          class="col-6 text-left">
                         {{oldItemDetails.productType.name}} &nbsp;
                         <i class="filled-circle"
                            [ngStyle]="{ 'background-color': oldItemDetails.productType.colorCode }">
                         </i>
                         &nbsp; {{oldItemDetails.productType.weight}}
                       </td>
-                      <td class="col-3 text-left">{{oldItemDetails.amount | exponent}}</td>
-                      <td class="col-2 p-0">
-                        <button class="btn btn-outline-secondary btn-sm btn-outline ml-1 mr-1"
+                      <td *ngIf="i !== editedOldItemIndex"
+                          class="col-4">
+                        {{oldItemDetails.amount | exponent}}
+                      </td>
+                      <td *ngIf="i === editedOldItemIndex"
+                          class="col-4 pt-1 pb-0">
+                        <input class="form-control input-sm"
+                               type="number"
+                               value="{{oldItemDetails.amount | exponent}}"
+                               formControlName="editedItemAmount"
+                               [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
+                        <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
+                              class="invalid-feedback">
+                          <span *ngIf="form.get('editedItemAmount').errors['required']">Обязательное поле!</span>
+                          <span *ngIf="form.get('editedItemAmount').errors['min'] || form.get('editedItemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                        </span>
+                      </td>
+                      <td *ngIf="i !== editedOldItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="editOldItemOnForm(i)">
+                          <i class="material-icons mi-sm">edit</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
                                 (click)="removeOldItemFromForm(i)">
                           <i class="material-icons mi-sm">delete_forever</i>
+                        </button>
+                      </td>
+                      <td *ngIf="i === editedOldItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="submitEditOldItem()">
+                          <i class="material-icons mi-sm">done</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="cancelEditItem()">
+                          <i class="material-icons mi-sm">clear</i>
                         </button>
                       </td>
                     </tr>
                     <!-- New order item list -->
                     <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
                         class="d-flex">
-                      <td class="col-7 text-left">
+                      <td align="cell-center"
+                          class="col-6 text-left">
                         {{newItemDetails.productType.name}} &nbsp;
                         <i class="filled-circle"
                            [ngStyle]="{ 'background-color': newItemDetails.productType.colorCode }">
                         </i>
                         &nbsp; {{newItemDetails.productType.weight}}
                       </td>
-                      <td class="col-3 text-left">{{newItemDetails.amount | exponent}}</td>
-                      <td class="col-2 p-0">
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-4">
+                        {{newItemDetails.amount | exponent}}
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-4 pt-1 pb-0">
+                        <input class="form-control input-sm"
+                               type="number"
+                               value="{{newItemDetails.amount | exponent}}"
+                               formControlName="editedItemAmount"
+                               [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
+                        <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
+                              class="invalid-feedback">
+                          <span *ngIf="form.get('editedItemAmount').errors['required']">Обязательное поле!</span>
+                          <span *ngIf="form.get('editedItemAmount').errors['min'] || form.get('editedItemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                        </span>
+                      </td>
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="editNewItemOnForm(i)">
+                          <i class="material-icons mi-sm">edit</i>
+                        </button>
                         <button class="btn btn-outline-secondary btn-sm btn-outline"
                                 (click)="removeNewItemFromForm(i)">
                           <i class="material-icons mi-sm">delete_forever</i>
+                        </button>
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="submitEditNewItem()">
+                          <i class="material-icons mi-sm">done</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="cancelEditItem()">
+                          <i class="material-icons mi-sm">clear</i>
                         </button>
                       </td>
                     </tr>

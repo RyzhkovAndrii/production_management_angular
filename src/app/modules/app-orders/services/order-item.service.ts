@@ -5,7 +5,6 @@ import { Observable } from "rxjs/Observable";
 import { OrderModuleUrlService } from "./order-module-url.service";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
 import { OrderItem } from "../models/order-item.model";
-import { EmptyObservable } from "rxjs/observable/EmptyObservable";
 
 @Injectable()
 export class OrderItemService {
@@ -22,9 +21,14 @@ export class OrderItemService {
         return this.http.post(this.urlService.orderItemUrl, orderItem).catch(httpErrorHandle);
     }
 
+    updateOrderItem(orderItem: OrderItem, id: number) {
+        const url = `${this.urlService.orderItemUrl}/${id}`;
+        return this.http.put(url, orderItem).catch(httpErrorHandle);    
+    }
+
     saveOrderItemList(orderItemList: OrderItem[]) { // todo REST for this method
         if (orderItemList.length !== 0) {
-            const obs = (orderItemList.map(order => this.saveOrderItem(order)));
+            const obs = (orderItemList.map(orderItem => this.saveOrderItem(orderItem)));
             return Observable.forkJoin(obs).catch(httpErrorHandle);
             // return this.http.post(this.urlService.orderItemUrl, orderItemList).catch(httpErrorHandle);
         } else {
@@ -32,18 +36,24 @@ export class OrderItemService {
         }
     }
 
+    updateOrderItemList(orderItemList: OrderItem[]) { 
+        if (orderItemList.length !== 0) {
+            const obs = (orderItemList.map(orderItem => this.updateOrderItem(orderItem, orderItem.id)));
+            return Observable.forkJoin(obs).catch(httpErrorHandle);
+        } else {
+            return Observable.of(null);
+        }
+    }
+
     removeById(id: number) {
         const url = `${this.urlService.orderItemUrl}/${id}`;
-        console.log(url);
         return this.http.delete(url).catch(httpErrorHandle);
     }
 
     removeListByIds(idList: number[]) {
         if (idList.length !== 0) {
             const obs = (idList.map(id => this.removeById(id)));
-            console.log(obs);
             const obs1 = Observable.forkJoin(obs).catch(httpErrorHandle);
-            console.log(obs1);
             return obs1;
         } else {
             return Observable.of(null);
