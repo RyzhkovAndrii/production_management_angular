@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { getDate } from '../../../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-order-delivery-confirm',
@@ -26,7 +27,7 @@ export class OrderDeliveryConfirmComponent implements OnInit {
 
   submit() {
     const { actualDeliveryDate } = this.form.value;
-    this.onSubmit.emit(moment(actualDeliveryDate, "YYYY-MM-DD").toDate()); // todo change format for server (use getDate)
+    this.onSubmit.emit(getDate(actualDeliveryDate, 'YYYY-MM-DD'));
   }
 
   cancel() {

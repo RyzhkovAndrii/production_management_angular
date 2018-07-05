@@ -17,7 +17,7 @@
       </th>
     </tr>
     <tr>
-      <th>{{orderDetails.deliveryDate | moment:'DD.MM.YYYY'}}</th>
+      <th>{{orderDetails.deliveryDate | date: 'dd.MM.yyyy'}}</th>
     </tr>
     <tr>
       <th>
@@ -30,7 +30,7 @@
            [ngClass]="{'icon-overdue': !orderDetails.isDelivered,
                        'icon-delivered': orderDetails.isDelivered}">alarm</i>
         <span *ngIf="orderDetails.isDelivered"
-              class="is-delivered">{{orderDetails.actualDeliveryDate | moment:'DD.MM.YY'}}</span>
+              class="is-delivered">{{orderDetails.actualDeliveryDate | date:'dd.MM.yyyy'}}</span>
       </th>
     </tr>
     <tr style="height: 0.2rem;"></tr>
