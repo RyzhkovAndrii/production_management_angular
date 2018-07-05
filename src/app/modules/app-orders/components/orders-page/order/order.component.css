@@ -1,0 +1,47 @@
+table {
+    empty-cells: show;
+    max-width: 8vw;
+}
+
+table th {
+    font-weight: normal;
+}
+
+table td, table th {
+    max-width: 8vw;
+    min-width: 5rem;
+}
+
+table tr {
+    height: 1.9rem;
+}
+
+div.overflow-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+div.overflow-text:hover {
+    overflow: visible;
+}
+
+i.icon-overdue {
+    color: #de3163;
+}
+
+i.icon-impotant {
+    color: #e49b0f;
+}
+
+i.icon-delivered {
+    color: #bbb;
+}
+
+.material-icons {
+    font-size: 18px;
+}
+
+table.is-delivered {
+    color: #bbb;
+}

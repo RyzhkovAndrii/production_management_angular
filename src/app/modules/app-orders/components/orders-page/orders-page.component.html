@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-1 btn-group">
+      <button class="btn btn-outline-dark btn-sm"
+              (click)="openOrderCreate()">
+        <i class="material-icons">add</i>
+      </button>
+      <button class="btn btn-outline-dark btn-sm ml-2"
+              (click)="openClientList()">
+        <i class="material-icons">list</i>
+      </button>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-5 my-auto">
+      <app-order-delivered-show (onStartDateChange)="toggleDeliveredOrderVisibility($event)"></app-order-delivered-show>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div id="table-container">
+        <div id="product-table-container">
+          <table class="table-bordered">
+            <tr class="table-header">
+              <th colspan="3">Клиент</th>
+            </tr>
+            <tr class="table-header">
+              <th colspan="3">Город</th>
+            </tr>
+            <tr class="table-header">
+              <th colspan="3">Дата доставки</th>
+            </tr>
+            <tr class="table-header">
+              <th colspan="3">Статус</th>
+            </tr>
+            <tr style="height: 0.2rem;"></tr>
+            <div *ngIf="productTypes"></div>
+            <tbody>
+              <tr *ngFor="let productType of productTypes"
+                  class="table-header">
+                <th style="width: 8rem;">{{productType.name}}</th>
+                <th>{{productType.weight}}</th>
+                <th>
+                  <i class="filled-circle"
+                     [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
+        <div id="orders-table-container">
+          <div *ngFor="let order of orderList">
+            <app-order [order]="order"
+                       [productTypeList]="productTypes"
+                       (onChange)="reloadPage()"
+                       (onEditOpen)="openOrderEdit($event)">
+            </app-order>
+          </div>
+        </div>
+        <app-order-leftover-product #lastLeftover
+                                    [isLastLeftOver]="true"
+                                    [producTypeList]="productTypes">
+        </app-order-leftover-product>
+      </div>
+    </div>
+  </div>
+  <div class="row"></div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isOrderCreateVisible">
+  <app-order-create [clientList]="clientList"
+                    [productTypeList]="productTypes"
+                    (onSubmit)="onOrderCreateApply($event)"
+                    (onCancel)="onOrderCreateCancel()">
+  </app-order-create>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isOrderEditVisible">
+  <app-order-edit [clientList]="clientList"
+                  [productTypeList]="productTypes"
+                  [order]="editedOrder"
+                  (onSubmit)="onOrderEditApply($event)"
+                  (onCancel)="onOrderEditCancel()">
+  </app-order-edit>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isClientListVisible">
+  <app-client-list [clientList]="clientList"
+                   (onClientListChange)="reloadPage()"
+                   (onCancel)="onClientListCancel()">
+  </app-client-list>
+</div>
