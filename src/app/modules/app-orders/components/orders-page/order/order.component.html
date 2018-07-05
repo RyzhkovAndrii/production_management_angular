@@ -51,13 +51,18 @@
                (execute)="openOrderEditForm()">
     Редактировать заказ
   </ng-template>
+  <ng-template *ngIf="!orderDetails.isDelivered"
+               contextMenuItem
+               divider="true">
+  </ng-template>
   <ng-template contextMenuItem
                let-item
                (execute)="openOrderDelConfirm()">
     Удалить заказ
   </ng-template>
   <ng-template contextMenuItem
-               divider="true"></ng-template>
+               divider="true">
+  </ng-template>
   <ng-template *ngIf="!orderDetails.isDelivered"
                contextMenuItem
                let-item
