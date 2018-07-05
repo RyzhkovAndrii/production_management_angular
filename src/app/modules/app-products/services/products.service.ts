@@ -84,9 +84,8 @@ export class ProductsService {
   }
 
   getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {
-    // const url = `${this.urls.productLeftoverUrl}?last`
-    // return this.http.get(url).catch(httpErrorHandle);
-    return this.getProductsLeftovers(new Date("2018-08-31")); // todo change on REST API
+    const url = `${this.urls.productLeftoverUrl}?latest`
+    return this.http.get(url).catch(httpErrorHandle);
   }
 
   getProductLeftover(productTypeId: number, date: Date): Observable < ProductLeftoverResponse > {
