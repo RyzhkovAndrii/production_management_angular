@@ -57,7 +57,8 @@
             </app-order>
           </div>
         </div>
-        <app-order-leftover-product [isLastLeftOver]="true"
+        <app-order-leftover-product #lastLeftover
+                                    [isLastLeftOver]="true"
                                     [producTypeList]="productTypes">
         </app-order-leftover-product>
       </div>
