@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { OrderModuleUrlService } from "./order-module-url.service";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
 import { OrderItem } from "../models/order-item.model";
+import appHeaders from "../../../app-utils/app-headers";
 
 @Injectable()
 export class OrderItemService {
@@ -14,16 +15,16 @@ export class OrderItemService {
 
     getOrderItemList(orderId: number): Observable<OrderItem[]> {
         const url = `${this.urlService.orderUrl}/${orderId}/${this.urlService.simpleOrderItemUrl}`;
-        return this.http.get(url).catch(httpErrorHandle);
+        return this.http.get(url, { headers: appHeaders }).catch(httpErrorHandle);
     }
 
     saveOrderItem(orderItem: OrderItem) {
-        return this.http.post(this.urlService.orderItemUrl, orderItem).catch(httpErrorHandle);
+        return this.http.post(this.urlService.orderItemUrl, orderItem, { headers: appHeaders }).catch(httpErrorHandle);
     }
 
     updateOrderItem(orderItem: OrderItem, id: number) {
         const url = `${this.urlService.orderItemUrl}/${id}`;
-        return this.http.put(url, orderItem).catch(httpErrorHandle);    
+        return this.http.put(url, orderItem, { headers: appHeaders }).catch(httpErrorHandle);    
     }
 
     saveOrderItemList(orderItemList: OrderItem[]) {
@@ -46,7 +47,7 @@ export class OrderItemService {
 
     removeById(id: number) {
         const url = `${this.urlService.orderItemUrl}/${id}`;
-        return this.http.delete(url).catch(httpErrorHandle);
+        return this.http.delete(url, { headers: appHeaders }).catch(httpErrorHandle);
     }
 
     removeListByIds(idList: number[]) {

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { OrderModuleUrlService } from './order-module-url.service';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 import { Client } from '../models/client.model';
+import appHeaders from '../../../app-utils/app-headers';
 
 @Injectable()
 export class ClientsService {
@@ -14,26 +15,26 @@ export class ClientsService {
 
   getAll() {
     const params = new HttpParams().set('sort', 'name');
-    return this.http.get(this.urlService.clientUrl, { params }).catch(httpErrorHandle);
+    return this.http.get(this.urlService.clientUrl, { params, headers: appHeaders }).catch(httpErrorHandle);
   }
 
   getClient(id: number): Observable<Client> {
     const url = `${this.urlService.clientUrl}/${id}`;
-    return this.http.get(url).catch(httpErrorHandle);
+    return this.http.get(url, { headers: appHeaders }).catch(httpErrorHandle);
   }
 
   save(client: Client): Observable<Client> {
-    return this.http.post(this.urlService.clientUrl, client).catch(httpErrorHandle);
+    return this.http.post(this.urlService.clientUrl, client, { headers: appHeaders }).catch(httpErrorHandle);
   }
 
   update(client: Client, id: number): Observable<Client> {
     const url = `${this.urlService.clientUrl}/${id}`;
-    return this.http.put(url, client).catch(httpErrorHandle);
+    return this.http.put(url, client, { headers: appHeaders }).catch(httpErrorHandle);
   }
 
   delete(id: number) {
     const url = `${this.urlService.clientUrl}/${id}`;
-    return this.http.delete(url).catch(httpErrorHandle);
+    return this.http.delete(url, { headers: appHeaders }).catch(httpErrorHandle);
   }
 
 }
