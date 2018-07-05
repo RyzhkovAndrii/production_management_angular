@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { OrderModuleUrlService } from './order-module-url.service';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 import { Order } from '../models/order.model';
-import { formatDate, formatDateServerToBrowser } from '../../../app-utils/app-date-utils';
+import { formatDate, formatDateServerToBrowser, formatDateBrowserToServer } from '../../../app-utils/app-date-utils';
 
 @Injectable()
 export class OrdersService {
@@ -15,27 +15,38 @@ export class OrdersService {
 
   getOrderList(): Observable<Order[]> {
     const params = new HttpParams()
-      .set('_sort', 'deliveryDate')
+      .set('sort', 'deliveryDate')
       .set('isDelivered', 'false');
-    // params.append('_sort', 'deliveryDate'); // todo sort parameter in REST
-    // params.append('isDelivered', 'false');
-    return this.http.get(this.urlService.orderUrl, { params }).catch(httpErrorHandle);
+    return this.http.get(this.urlService.orderUrl, { params })
+      .map((data: Order[]) => data.map(order => this.formatDatesFromServer(order)))
+      .catch(httpErrorHandle);
   }
 
   getOrderListWithDelivered(startDate: Date): Observable<Order[]> {
     console.log(formatDateServerToBrowser(formatDate(startDate)));
     const obsFirst$ = this.getOrderList();
     const params = new HttpParams()
-      .set('_sort', 'deliveryDate') // todo sort parameter in REST
-      .set('isDelivered', 'true') // todo in REST
-      // .set('showDeliveredStartDate', formatDateBrowserToServer(formatDate(startDate))); // todo in REST
-      .set('actualDeliveryDate_gte', formatDateServerToBrowser(formatDate(startDate)));
-    const obsSecond$ = this.http.get(this.urlService.orderUrl, { params }).catch(httpErrorHandle);
+      .set('sort', 'deliveryDate')
+      .set('isDelivered', 'true')
+      .set('from', formatDate(startDate));
+    const obsSecond$ = this.http.get(this.urlService.orderUrl, { params })
+      .map((data: Order[]) => data.map(order => this.formatDatesFromServer(order)))
+      .catch(httpErrorHandle);
     return Observable
       .forkJoin(obsFirst$, obsSecond$)
       .map(([data1, data2]) => [...data1, ...data2])
       .map(data => data.sort(this._compareFn))
       .catch(httpErrorHandle);
+  }
+
+  private formatDatesFromServer(order: Order) { // todo on server side
+    let convertedOrder = order;
+    convertedOrder.deliveryDate = formatDateServerToBrowser(order.deliveryDate);
+    convertedOrder.actualDeliveryDate = order.actualDeliveryDate === null
+      ? null
+      : formatDateServerToBrowser(order.actualDeliveryDate);
+    convertedOrder.creationDate = formatDateServerToBrowser(order.creationDate);
+    return convertedOrder;
   }
 
   private _compareFn(first: Order, second: Order): number {
@@ -45,17 +56,26 @@ export class OrdersService {
   }
 
   save(order: Order): Observable<Order> {
-    return this.http.post(this.urlService.orderUrl, order).catch(httpErrorHandle);
+    return this.http.post(this.urlService.orderUrl, this.formatDatesToServer(order)).catch(httpErrorHandle);
   }
 
   update(order: Order, id: number): Observable<Order> {
     const url = `${this.urlService.orderUrl}/${id}`;
-    return this.http.put(url, order).catch(httpErrorHandle);
+    return this.http.put(url, this.formatDatesToServer(order)).catch(httpErrorHandle);
   }
 
   delete(id: number): Observable<Order> {
     const url = `${this.urlService.orderUrl}/${id}`;
     return this.http.delete(url).catch(httpErrorHandle);
+  }
+
+  private formatDatesToServer(order: Order) { // todo on server side
+    let convertedOrder = order;
+    convertedOrder.deliveryDate = formatDateBrowserToServer(order.deliveryDate);
+    convertedOrder.actualDeliveryDate = order.actualDeliveryDate === null
+      ? null
+      : formatDateBrowserToServer(order.actualDeliveryDate);
+    return convertedOrder;
   }
 
 }

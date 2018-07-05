@@ -13,8 +13,8 @@ export class OrderItemService {
         private urlService: OrderModuleUrlService) { }
 
     getOrderItemList(orderId: number): Observable<OrderItem[]> {
-        const params = new HttpParams().set('orderId', String(orderId));
-        return this.http.get(this.urlService.orderItemUrl, { params }).catch(httpErrorHandle);
+        const url = `${this.urlService.orderUrl}/${orderId}/${this.urlService.simpleOrderItemUrl}`;
+        return this.http.get(url).catch(httpErrorHandle);
     }
 
     saveOrderItem(orderItem: OrderItem) {
@@ -26,11 +26,10 @@ export class OrderItemService {
         return this.http.put(url, orderItem).catch(httpErrorHandle);    
     }
 
-    saveOrderItemList(orderItemList: OrderItem[]) { // todo REST for this method
+    saveOrderItemList(orderItemList: OrderItem[]) {
         if (orderItemList.length !== 0) {
             const obs = (orderItemList.map(orderItem => this.saveOrderItem(orderItem)));
             return Observable.forkJoin(obs).catch(httpErrorHandle);
-            // return this.http.post(this.urlService.orderItemUrl, orderItemList).catch(httpErrorHandle);
         } else {
             return Observable.of(null);
         }
