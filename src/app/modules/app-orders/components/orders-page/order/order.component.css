@@ -9,6 +9,7 @@ table th {
 
 table td, table th {
     max-width: 8vw;
+    min-width: 5rem;
 }
 
 table tr {

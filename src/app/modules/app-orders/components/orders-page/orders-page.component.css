@@ -21,8 +21,6 @@ table td:hover, table th:hover {
 
 #table-container {
     display: flex;
-    position: left;
-    margin-right: 5px;
 }
 
 #product-table-container {

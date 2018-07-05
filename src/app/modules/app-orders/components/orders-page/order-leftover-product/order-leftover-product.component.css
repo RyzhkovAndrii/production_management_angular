@@ -10,7 +10,9 @@ table td {
 
 table th {
     font-weight: normal;
-    text-align: center;
+}
+
+.vertical-text {
     transform: rotate(270deg);
 }
 

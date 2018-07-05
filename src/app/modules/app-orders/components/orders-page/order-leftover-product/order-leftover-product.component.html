@@ -13,11 +13,13 @@
     <tr *ngIf="isLastLeftOver">
       <th rowspan="4"
           (click)="dp.toggle()">
-        Остаток {{date | date:'dd.MM.yyyy'}}
+        <div class="vertical-text">Остаток {{date | date:'dd.MM.yyyy'}}</div>
       </th>
     </tr>
     <tr *ngIf="!isLastLeftOver">
-      <th rowspan="4"> Остаток {{date | date:'dd.MM.yyyy'}} </th>
+      <th rowspan="4">
+        <div class="vertical-text">Остаток {{date | date:'dd.MM.yyyy'}}</div>
+      </th>
     </tr>
     <tr></tr>
     <tr></tr>
@@ -27,7 +29,7 @@
   <tbody>
     <tr *ngFor="let productLeftOver of sortedProductLeftOverList">
       <td>
-        <span [ngClass]="{'negative-leftover': productLeftOver.amount <= 0}">
+        <span [ngClass]="{'negative-leftover': productLeftOver.amount < 0}">
           {{productLeftOver.amount | exponent}}
         </span>
       </td>
