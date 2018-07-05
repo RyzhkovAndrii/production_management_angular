@@ -57,7 +57,7 @@ export class OrderCreateComponent implements OnInit {
 
   submit() {
     const { client, city, date, important } = this.form.value;
-    let order = new Order(client, city, date, important, false);
+    let order = new Order(client, city, date, important, null);
     let newItemList: OrderItem[] = [];
     this.orderService.save(order)
       .subscribe(order => { // todo some exception if order was not created

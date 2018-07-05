@@ -75,7 +75,7 @@ export class OrderComponent implements OnInit {
 
   deliverOrder(date: Date) {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, true, moment(date).format('YYYY-MM-DD')); // todo use common format date
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, moment(date).format('YYYY-MM-DD')); // todo use common format date
     this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();
@@ -84,7 +84,7 @@ export class OrderComponent implements OnInit {
 
   returnOrder() {
     const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, false, null);
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, null);
     this.orderService.update(newOrder, this.orderDetails.id)
       .subscribe(() => {
         this.onChange.emit();

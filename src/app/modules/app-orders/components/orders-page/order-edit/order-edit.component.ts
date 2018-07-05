@@ -188,10 +188,8 @@ export class OrderEditComponent implements OnInit {
       city,
       date,
       important,
-      this.order.isDelivered,
-      this.order.actualDeliveryDate,
-      this.order.id,
-      this.order.creationDate);
+      this.order.actualDeliveryDate
+    );
     return order;
   }
 
