@@ -1,6 +1,6 @@
 table {
     empty-cells: show;
-    width: 3.5rem;
+    width: 4.5rem;
     position: relative;
 }
 
@@ -15,16 +15,15 @@ table th {
 }
 
 table tr {
-    height: 1.5rem;
-}
-
-.datepicker-container {
-    position: absolute;
-    right: 19rem;
-    z-index: 1;
+    height: 1.9rem;
 }
 
 .negative-leftover {
     color: #de3163;
     font-weight: bold;
+}
+
+#datepicker-container {
+    position: absolute;
+    z-index: 100;
 }

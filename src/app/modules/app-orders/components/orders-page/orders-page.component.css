@@ -3,11 +3,20 @@ table {
 }
 
 table tr {
-    height: 1.5rem;
+    height: 1.9rem;
 }
 
 table td, table th {
     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: 3rem;
+}
+
+table td:hover, table th:hover {
+    overflow: visible;
 }
 
 #table-container {
@@ -17,12 +26,11 @@ table td, table th {
 }
 
 #product-table-container {
-    min-width: 10rem;
-    max-width: 15rem;
+    min-width: 12rem;
     margin-right: 0.2rem;
 }
 
-#client-table-container {
+#orders-table-container {
     overflow: auto;
     white-space: nowrap;
     display: flex;

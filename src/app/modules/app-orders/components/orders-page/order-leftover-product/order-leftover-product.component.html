@@ -1,17 +1,20 @@
+<div id="datepicker-container">
+  <ng-datepicker [(ngModel)]="date"
+                 (ngModelChange)="fetchLeftOverList()"
+                 position="bottom-left"
+                 headless="true"
+                 [options]="datePickerOptions"
+                 #dp>
+  </ng-datepicker>
+</div>
+
 <table class="table-bordered table-striped">
   <thead>
     <tr *ngIf="isLastLeftOver">
       <th rowspan="4"
-          (click)="d.toggle()"> Остаток {{date | date:'dd.MM.yyyy'}}
+          (click)="dp.toggle()">
+        Остаток {{date | date:'dd.MM.yyyy'}}
       </th>
-      <div class="datepicker-container">
-        <ng-datepicker [(ngModel)]="date"
-                       (ngModelChange)="fetchLeftOverList()"
-                       headless="true"
-                       [options]="datePickerOptions"
-                       #d>
-        </ng-datepicker>
-      </div>
     </tr>
     <tr *ngIf="!isLastLeftOver">
       <th rowspan="4"> Остаток {{date | date:'dd.MM.yyyy'}} </th>
