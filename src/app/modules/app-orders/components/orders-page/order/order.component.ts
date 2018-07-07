@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewContainerRef } from '@angular/core';
 import * as moment from 'moment';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { Order } from '../../../models/order.model';
 import { OrderDetails } from '../../../models/order-details.model';
@@ -7,6 +8,7 @@ import { OrdersService } from '../../../services/orders.service';
 import { OrderItem } from '../../../models/order-item.model';
 import { ClientsService } from '../../../services/client.service';
 import { OrderItemService } from '../../../services/order-item.service';
+import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-order',
@@ -29,7 +31,10 @@ export class OrderComponent implements OnInit {
   constructor(
     private orderService: OrdersService,
     private clientService: ClientsService,
-    private orderItemService: OrderItemService) { }
+    private orderItemService: OrderItemService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService) { }
 
   ngOnInit() {
     this.orderDetails = this.convert(this.order);
@@ -45,12 +50,18 @@ export class OrderComponent implements OnInit {
     orderDetails.isDelivered = order.isDelivered;
     orderDetails.isOverdue = order.isOverdue;
     orderDetails.actualDeliveryDate = order.actualDeliveryDate;
-    this.clientService.getClient(order.clientId)
-      .subscribe(data => orderDetails.client = data);
-    this.orderItemService.getOrderItemList(order.id)
-      .subscribe(data => {
-        orderDetails.orderItemList = this.sortOrderItemList(data);
-      });
+    this.clientService
+      .getClient(order.clientId)
+      .subscribe(
+        data => orderDetails.client = data,
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
+    this.orderItemService
+      .getOrderItemList(order.id)
+      .subscribe(
+        data => orderDetails.orderItemList = this.sortOrderItemList(data),
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
     return orderDetails;
   }
 
@@ -74,28 +85,32 @@ export class OrderComponent implements OnInit {
   }
 
   deliverOrder(date: Date) {
-    const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, moment(date).format('YYYY-MM-DD')); // todo use common format date
-    this.orderService.update(newOrder, this.orderDetails.id)
-      .subscribe(() => {
-        this.onChange.emit();
-      });
+    this.changeOrderDeliveryStatus(date);
   }
 
   returnOrder() {
-    const { client, city, deliveryDate, isImportant } = this.orderDetails;
-    const newOrder = new Order(client.id, city, deliveryDate, isImportant, null);
-    this.orderService.update(newOrder, this.orderDetails.id)
-      .subscribe(() => {
-        this.onChange.emit();
-      });
+    this.changeOrderDeliveryStatus(null);
+  }
+
+  private changeOrderDeliveryStatus(date: Date | null) {
+    const { id, client, city, deliveryDate, isImportant } = this.orderDetails;
+    const actualDeliveryDate = date === null ? null : moment(date).format('YYYY-MM-DD');
+    const newOrder = new Order(client.id, city, deliveryDate, isImportant, actualDeliveryDate);
+    this.orderService
+      .update(newOrder, id)
+      .subscribe(
+        () => this.onChange.emit(),
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   private orderDelete() {
-    this.orderService.delete(this.orderDetails.id)
-      .subscribe(() => {
-        this.onChange.emit();
-      });
+    this.orderService
+      .delete(this.orderDetails.id)
+      .subscribe(
+        () => this.onChange.emit(),
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   openOrderDelConfirm() {

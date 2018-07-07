@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { ClientsService } from '../../services/client.service';
 import { OrdersService } from '../../services/orders.service';
@@ -8,6 +9,7 @@ import { ProductsService } from '../../../app-products/services/products.service
 import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
 import { OrderDetails } from '../../models/order-details.model';
+import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-orders-page',
@@ -34,11 +36,14 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   constructor(
     private ordersService: OrdersService,
     private clientsService: ClientsService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
 
   ngOnInit() {
-    this.fetchData();
+    this.fetchInitData();
   }
 
   ngOnDestroy() {
@@ -46,29 +51,41 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  private fetchData() {
+  private fetchInitData() {
     Observable
-      .combineLatest(
+      .forkJoin(
         this.productsService.getSortedProductTypes(),
         this.ordersService.getOrderList(),
-        this.clientsService.getAll())
+        this.clientsService.getAll()
+      )
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(data => {
-        this.productTypes = data[0];
-        this.orderList = data[1];
-        this.clientList = data[2]; // todo load if need
-      });
+      .subscribe(
+        data => {
+          this.productTypes = data[0];
+          this.orderList = data[1];
+          this.clientList = data[2]; // todo load if need
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   private reloadOrderList() {
     if (this.showDeliveredOrderStartDate === null) {
-      this.ordersService.getOrderList()
-        .subscribe(data => this.orderList = data);
+      this.ordersService
+        .getOrderList()
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe(
+          data => this.orderList = data,
+          error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+        );
     } else {
       this.ordersService
         .getOrderListWithDelivered(this.showDeliveredOrderStartDate)
         .takeUntil(this.ngUnsubscribe)
-        .subscribe(data => this.orderList = data);
+        .subscribe(
+          data => this.orderList = data,
+          error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+        );
     }
   }
 

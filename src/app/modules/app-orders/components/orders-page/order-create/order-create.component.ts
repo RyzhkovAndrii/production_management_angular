@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Decimal from 'decimal.js';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { Client } from '../../../models/client.model';
 import { OrderItem } from '../../../models/order-item.model';
@@ -8,7 +10,7 @@ import { Order } from '../../../models/order.model';
 import { OrdersService } from '../../../services/orders.service';
 import { OrderItemService } from '../../../services/order-item.service';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -48,7 +50,10 @@ export class OrderCreateComponent implements OnInit {
 
   constructor(
     private orderService: OrdersService,
-    private orderItemService: OrderItemService
+    private orderItemService: OrderItemService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
 
   ngOnInit() {
@@ -59,21 +64,30 @@ export class OrderCreateComponent implements OnInit {
     const { client, city, date, important } = this.form.value;
     let order = new Order(client, city, date, important, null);
     let newItemList: OrderItem[] = [];
-    this.orderService.save(order)
-      .subscribe(order => { // todo some exception if order was not created
-        this.newItemDetailsList.forEach(itemDetails => {
-          const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
-          newItemList.push(item);
-        })
-        this.orderItemService.saveOrderItemList(newItemList)
-          .subscribe(() => {
-            this.form.reset();
-            this.newItemDetailsList = [];
-            this.productTypeListForSelect = this.productTypeList;
-            this.showCreateMessage();
-            this.onSubmit.emit(order);
-          });
-      });
+    this.orderService
+      .save(order)
+      .subscribe(
+        order => { // todo some exception if order was not created
+          this.newItemDetailsList
+            .forEach(itemDetails => {
+              const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
+              newItemList.push(item);
+            })
+          this.orderItemService
+            .saveOrderItemList(newItemList)
+            .subscribe(
+              () => {
+                this.form.reset();
+                this.newItemDetailsList = [];
+                this.productTypeListForSelect = this.productTypeList;
+                this.showCreateMessage();
+                this.onSubmit.emit(order);
+              },
+              error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+            );
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   cancel() {
@@ -103,9 +117,9 @@ export class OrderCreateComponent implements OnInit {
 
   submitEditNewItem() {
     if (this.form.get("editedItemAmount").invalid) {
-      this.form.get("editedItemAmount").markAsPristine();  
+      this.form.get("editedItemAmount").markAsPristine();
     } else {
-      const {editedItemAmount} = this.form.value;
+      const { editedItemAmount } = this.form.value;
       const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
       this.newItemDetailsList[this.editedNewItemIndex].amount = integerItemAmount;
       this.editedNewItemIndex = -1;

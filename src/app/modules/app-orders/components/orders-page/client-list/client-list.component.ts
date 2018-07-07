@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { Client } from '../../../models/client.model';
 import { ClientsService } from '../../../services/client.service';
+import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-client-list',
@@ -27,7 +29,12 @@ export class ClientListComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private clientService: ClientsService) { }
+  constructor(
+    private clientService: ClientsService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
+  ) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -49,24 +56,31 @@ export class ClientListComponent implements OnInit {
   saveClient() {
     const { name } = this.form.value;
     const client = new Client(name);
-    this.clientService.save(client)
-      .subscribe(data => {
-        this.clientList.push(data);
-        this.isChanged = true;
-      });
-    this.isChanged = true;
-    this.cleanForm();
+    this.clientService
+      .save(client)
+      .subscribe(
+        data => {
+          this.clientList.push(data);
+          this.isChanged = true;
+          this.cleanForm();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   editClient() {
     const { name } = this.form.value;
     const client = new Client(name);
-    this.clientService.update(client, this._id)
-      .subscribe(data => {
-        this.clientList[this.editElementIndex] = data;
-        this.isChanged = true;
-      });
-    this.cleanForm();
+    this.clientService
+      .update(client, this._id)
+      .subscribe(
+        data => {
+          this.clientList[this.editElementIndex] = data;
+          this.isChanged = true;
+          this.cleanForm();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   prepareToEdit(i: number) {
@@ -108,10 +122,16 @@ export class ClientListComponent implements OnInit {
 
   private deleteClient(i: number) {
     const id = this.clientList[i].id;
-    this.clientService.delete(id).subscribe();
-    this.clientList.splice(i, 1);
-    this.isChanged = true;
-    this.cleanForm();
+    this.clientService
+      .delete(id)
+      .subscribe(
+        () => {
+          this.clientList.splice(i, 1);
+          this.isChanged = true;
+          this.cleanForm();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   private cleanForm() {

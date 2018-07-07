@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
 import { DatepickerOptions } from 'ng2-datepicker';
+import { ModalDialogService } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 import * as ruLocale from 'date-fns/locale/ru';
 
 import { ProductsService } from '../../../../app-products/services/products.service';
 import { getDate } from '../../../../../app-utils/app-date-utils';
+import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 
 const now: Date = new Date();
 
@@ -32,7 +34,12 @@ export class OrderLeftoverProductComponent implements OnInit {
     dayNamesFormat: 'dd'
   };
 
-  constructor(private productService: ProductsService) {
+  constructor(
+    private productService: ProductsService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
+  ) {
     this.sortedProductLeftOverList = [];
   }
 
@@ -50,20 +57,28 @@ export class OrderLeftoverProductComponent implements OnInit {
   }
 
   private fetchLeftOverList() {
-    this.productService.getProductsLeftovers(this.date)
-      .subscribe(data => {
-        this.productLeftOverList = data;
-        this.sortProductLeftOverList();
-      });
+    this.productService
+      .getProductsLeftovers(this.date)
+      .subscribe(
+        data => {
+          this.productLeftOverList = data;
+          this.sortProductLeftOverList();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   private fetchLastLeftOverList() {
-    this.productService.getLastProductsLeftOvers()
-      .subscribe(data => {
-        this.productLeftOverList = data;
-        this.sortProductLeftOverList();
-        this.date = getDate(data[0].date);
-      });
+    this.productService
+      .getLastProductsLeftOvers()
+      .subscribe(
+        data => {
+          this.productLeftOverList = data;
+          this.sortProductLeftOverList();
+          this.date = getDate(data[0].date);
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   private sortProductLeftOverList() {

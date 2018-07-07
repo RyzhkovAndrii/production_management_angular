@@ -76,9 +76,7 @@ export class ProductsService {
   }
 
   getSortedProductTypes(): Observable< ProductTypeResponse[] > {
-    return this.getProductTypes()
-      .map(data => data.sort(compareProductTypes))
-      .catch(httpErrorHandle);
+    return this.getProductTypes().map(data => data.sort(compareProductTypes));
   }
 
   getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {

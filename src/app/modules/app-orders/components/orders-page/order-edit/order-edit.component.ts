@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ViewContainerRef } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ModalDialogService } from 'ngx-modal-dialog';
 import Decimal from 'decimal.js';
 
 import { Client } from '../../../models/client.model';
@@ -12,6 +13,7 @@ import { OrderItem } from '../../../models/order-item.model';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
+import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -51,7 +53,10 @@ export class OrderEditComponent implements OnInit {
 
   constructor(
     private orderService: OrdersService,
-    private orderItemService: OrderItemService
+    private orderItemService: OrderItemService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
 
   ngOnInit() {
@@ -76,26 +81,35 @@ export class OrderEditComponent implements OnInit {
   submit() {
     this.orderService
       .update(this.getOrderForUpdate(), this.order.id)
-      .subscribe(order => {
-        this.orderItemService
-          .removeListByIds(this.itemIdListForRemove)
-          .takeUntil(this.ngUnsubscribe)
-          .subscribe(() => {
-            this.itemIdListForRemove = [];
-            Observable
-              .forkJoin(
-                this.orderItemService.updateOrderItemList(this.getOrderItemsForEdit()),
-                this.orderItemService.saveOrderItemList(this.getOrderItemsForSave())
-              )
-              .takeUntil(this.ngUnsubscribe)
-              .subscribe(() => {
-                this.itemDetailsListForEdit = [];
-                this.newItemDetailsList = [];
-                this.showEditMessage();
-                this.onSubmit.emit(order);
-              })
-          });
-      });
+      .subscribe(
+        order => {
+          this.orderItemService
+            .removeListByIds(this.itemIdListForRemove)
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(
+              () => {
+                this.itemIdListForRemove = [];
+                Observable
+                  .forkJoin(
+                    this.orderItemService.updateOrderItemList(this.getOrderItemsForEdit()),
+                    this.orderItemService.saveOrderItemList(this.getOrderItemsForSave())
+                  )
+                  .takeUntil(this.ngUnsubscribe)
+                  .subscribe(
+                    () => {
+                      this.itemDetailsListForEdit = [];
+                      this.newItemDetailsList = [];
+                      this.showEditMessage();
+                      this.onSubmit.emit(order);
+                    },
+                    error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+                  )
+              },
+              error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+            );
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   cancel() {

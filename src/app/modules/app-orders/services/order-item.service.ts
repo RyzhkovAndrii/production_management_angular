@@ -10,8 +10,10 @@ import appHeaders from "../../../app-utils/app-headers";
 @Injectable()
 export class OrderItemService {
 
-    constructor(private http: HttpClient,
-        private urlService: OrderModuleUrlService) { }
+    constructor(
+        private http: HttpClient,
+        private urlService: OrderModuleUrlService
+    ) { }
 
     getOrderItemList(orderId: number): Observable<OrderItem[]> {
         const url = `${this.urlService.orderUrl}/${orderId}/${this.urlService.simpleOrderItemUrl}`;
@@ -24,22 +26,22 @@ export class OrderItemService {
 
     updateOrderItem(orderItem: OrderItem, id: number) {
         const url = `${this.urlService.orderItemUrl}/${id}`;
-        return this.http.put(url, orderItem, { headers: appHeaders }).catch(httpErrorHandle);    
+        return this.http.put(url, orderItem, { headers: appHeaders }).catch(httpErrorHandle);
     }
 
     saveOrderItemList(orderItemList: OrderItem[]) {
         if (orderItemList.length !== 0) {
             const obs = (orderItemList.map(orderItem => this.saveOrderItem(orderItem)));
-            return Observable.forkJoin(obs).catch(httpErrorHandle);
+            return Observable.forkJoin(obs);
         } else {
             return Observable.of(null);
         }
     }
 
-    updateOrderItemList(orderItemList: OrderItem[]) { 
+    updateOrderItemList(orderItemList: OrderItem[]) {
         if (orderItemList.length !== 0) {
             const obs = (orderItemList.map(orderItem => this.updateOrderItem(orderItem, orderItem.id)));
-            return Observable.forkJoin(obs).catch(httpErrorHandle);
+            return Observable.forkJoin(obs);
         } else {
             return Observable.of(null);
         }
@@ -53,7 +55,7 @@ export class OrderItemService {
     removeListByIds(idList: number[]) {
         if (idList.length !== 0) {
             const obs = (idList.map(id => this.removeById(id)));
-            const obs1 = Observable.forkJoin(obs).catch(httpErrorHandle);
+            const obs1 = Observable.forkJoin(obs);
             return obs1;
         } else {
             return Observable.of(null);

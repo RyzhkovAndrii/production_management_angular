@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { OrderModuleUrlService } from './order-module-url.service';
@@ -20,13 +20,13 @@ export class OrdersService {
     const params = new HttpParams()
       .set('sort', 'deliveryDate')
       .set('isDelivered', 'false');
-    return this.http.get(this.urlService.orderUrl, { params, headers: appHeaders })
+    return this.http
+      .get(this.urlService.orderUrl, { params, headers: appHeaders })
       .map((data: Order[]) => data.map(order => this.formatDatesFromServer(order)))
       .catch(httpErrorHandle);
   }
 
   getOrderListWithDelivered(startDate: Date): Observable<Order[]> {
-    console.log(formatDateServerToBrowser(formatDate(startDate)));
     const obsFirst$ = this.getOrderList();
     const params = new HttpParams()
       .set('sort', 'deliveryDate')
@@ -38,12 +38,12 @@ export class OrdersService {
     return Observable
       .forkJoin(obsFirst$, obsSecond$)
       .map(([data1, data2]) => [...data1, ...data2])
-      .map(data => data.sort(this._compareFn))
-      .catch(httpErrorHandle);
+      .map(data => data.sort(this._compareFn));
   }
 
   save(order: Order): Observable<Order> {
-    return this.http.post(this.urlService.orderUrl, this.formatDatesToServer(order), { headers: appHeaders })
+    return this.http
+      .post(this.urlService.orderUrl, this.formatDatesToServer(order), { headers: appHeaders })
       .catch(httpErrorHandle);
   }
 
