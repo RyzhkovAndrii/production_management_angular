@@ -77,7 +77,7 @@ export class OrderCreateComponent implements OnInit {
             .saveOrderItemList(newItemList)
             .subscribe(
               () => {
-                this.form.reset();
+                this.resetForm();
                 this.newItemDetailsList = [];
                 this.productTypeListForSelect = this.productTypeList;
                 this.showCreateMessage();
@@ -163,6 +163,11 @@ export class OrderCreateComponent implements OnInit {
   private showCreateMessage() {
     this.isCreated = true;
     window.setTimeout(() => this.isCreated = false, 5000);
+  }
+
+  private resetForm() {
+    this.form.reset();
+    this.form.get('important').patchValue(false);
   }
 
 }
