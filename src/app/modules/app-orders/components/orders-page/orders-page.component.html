@@ -15,7 +15,14 @@
       <app-order-delivered-show (onStartDateChange)="toggleDeliveredOrderVisibility($event)"></app-order-delivered-show>
     </div>
   </div>
-  <div class="row">
+  <div *ngIf="isOrderListEmpty()"
+       class="row">
+    <div class="col-12">
+      <p class="text-center">Активные заказы отсутствуют.</p>
+    </div>
+  </div>
+  <div *ngIf="!isOrderListEmpty()"
+       class="row">
     <div class="col-12">
       <div id="table-container">
         <div id="product-table-container">

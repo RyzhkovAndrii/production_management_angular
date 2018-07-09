@@ -20,8 +20,8 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('lastLeftover') lastLeftover;
 
-  orderList: Order[];
-  productTypes: ProductTypeResponse[];
+  orderList: Order[] = [];
+  productTypes: ProductTypeResponse[] = [];
   clientList: Client[] = [];
   editedOrder: OrderDetails;
 
@@ -130,6 +130,10 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   onClientListCancel() {
     this.isClientListVisible = false;
+  }
+
+  isOrderListEmpty() {
+    return this.orderList.length === 0;
   }
 
 }
