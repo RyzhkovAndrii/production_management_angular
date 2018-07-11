@@ -56,12 +56,14 @@
         </div>
         <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
         <div id="orders-table-container">
-          <div *ngFor="let order of orderList">
-            <app-order [order]="order"
-                       [productTypeList]="productTypes"
-                       (onChange)="reloadPage()"
-                       (onEditOpen)="openOrderEdit($event)">
-            </app-order>
+          <div id="orders-table-content">
+            <div *ngFor="let order of orderList">
+              <app-order [order]="order"
+                         [productTypeList]="productTypes"
+                         (onChange)="reloadPage()"
+                         (onEditOpen)="openOrderEdit($event)">
+              </app-order>
+            </div>
           </div>
         </div>
         <app-order-leftover-product #lastLeftover

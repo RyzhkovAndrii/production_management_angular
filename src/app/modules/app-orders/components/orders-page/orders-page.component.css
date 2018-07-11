@@ -21,6 +21,7 @@ table td:hover, table th:hover {
 
 #table-container {
     display: flex;
+    margin-top: 1.3%;
 }
 
 #product-table-container {
@@ -29,11 +30,19 @@ table td:hover, table th:hover {
 }
 
 #orders-table-container {
-    overflow: auto;
-    white-space: nowrap;
+    overflow-x: scroll; /* todo auto */
     display: flex;
     margin: 0 0.2rem;
     min-width: 5rem;
+    margin-top: -1.3%;
+}
+
+#orders-table-content {
+    display: flex;
+}
+
+#orders-table-container, #orders-table-content {
+    transform: scaleY(-1);
 }
 
 .row {
