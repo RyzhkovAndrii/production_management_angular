@@ -9,6 +9,7 @@ import { OrderItem } from '../../../models/order-item.model';
 import { ClientsService } from '../../../services/client.service';
 import { OrderItemService } from '../../../services/order-item.service';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
+import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-order',
@@ -21,12 +22,12 @@ export class OrderComponent implements OnInit {
 
   @Input() order: Order;
   @Input() productTypeList: ProductTypeResponse[];
+  @Input() ordersPageViewRef: ViewContainerRef;
 
   @Output() onChange = new EventEmitter<any>();
   @Output() onEditOpen = new EventEmitter<OrderDetails>();
 
-  isOrderDelConfirmVisible: boolean = false;
-  isOrderDeliveryConfirmVisible: boolean = false;
+  isOrderDeliveryConfirmVisible = false;
 
   constructor(
     private orderService: OrdersService,
@@ -114,16 +115,26 @@ export class OrderComponent implements OnInit {
   }
 
   openOrderDelConfirm() {
-    this.isOrderDelConfirmVisible = true;
-  }
-
-  onOrderDelConfirmApply() {
-    this.isOrderDelConfirmVisible = false;
-    this.orderDelete();
-  }
-
-  onOrderDelConfirmCancel() {
-    this.isOrderDelConfirmVisible = false;
+    const modalOptions = {
+      title: 'Подтвердите удаление Заказа',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [
+        {
+          text: 'Отменить',
+          buttonClass: 'btn btn-outline-dark',
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass: 'btn btn-danger',
+          onAction: () => {
+            this.orderDelete();
+            return true;
+          }
+        }
+      ]
+    };
+    this.ngxModalDialogService.openDialog(this.ordersPageViewRef, modalOptions);
   }
 
   openOrderDeliveryConfirm() {

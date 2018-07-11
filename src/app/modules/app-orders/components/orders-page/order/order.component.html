@@ -78,13 +78,6 @@
 </context-menu>
 
 <!-- Modal -->
-<div *ngIf="isOrderDelConfirmVisible">
-  <app-order-del-confirm (onApply)="onOrderDelConfirmApply()"
-                         (onCancel)="onOrderDelConfirmCancel()">
-  </app-order-del-confirm>
-</div>
-
-<!-- Modal -->
 <div *ngIf="isOrderDeliveryConfirmVisible">
   <app-order-delivery-confirm (onSubmit)="onOrderDeliveryConfirmApply($event)"
                               (onCancel)="onOrderDeliveryConfirmCancel()">

@@ -20,7 +20,6 @@ import { ClientListComponent } from './components/orders-page/client-list/client
 import { OrderEditComponent } from './components/orders-page/order-edit/order-edit.component';
 import { OrderComponent } from "./components/orders-page/order/order.component";
 import { OrderLeftoverProductComponent } from "./components/orders-page/order-leftover-product/order-leftover-product.component";
-import { OrderDelConfirmComponent } from "./components/orders-page/order/order-del-confirm/order-del-confirm.component";
 import { OrderDeliveredShowComponent } from './components/orders-page/order-delivered-show/order-delivered-show.component';
 import { OrderDeliveryConfirmComponent } from "./components/orders-page/order/order-delivery-confirm/order-delivery-confirm.component";
 import { OrderEditSuccessComponent } from './components/orders-page/order-edit/order-edit-success/order-edit-success.component';
@@ -43,7 +42,6 @@ import { OrderEditSuccessComponent } from './components/orders-page/order-edit/o
         OrdersPageComponent,
         OrderComponent,
         OrderLeftoverProductComponent,
-        OrderDelConfirmComponent,
         OrderCreateComponent,
         ClientListComponent,
         OrderEditComponent,
