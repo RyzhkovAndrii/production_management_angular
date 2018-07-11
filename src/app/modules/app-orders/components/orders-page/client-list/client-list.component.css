@@ -2,18 +2,20 @@
     display: block;
 }
 
-.modal-body {
-    max-height: 70vh;
-    overflow-y: auto;
+.modal.modal-backdrop {
+    background-color: rgba(0, 0, 0, .6);
 }
 
-.input-sm {
+.modal-dialog {
+    min-width: 42vw;
+}
+
+.btn-sm, .input-sm {
     height: 2.4rem;
+}
+
+.input-sm, table th, table td {
     font-size: 0.9rem;
-}
-
-.btn-sm {
-    height: 2.4rem;
 }
 
 .btn-outline {
@@ -24,6 +26,8 @@
     font-size: 18px;
 }
 
-table th, td {
-    font-size: 0.9rem;
+tbody {
+    display: block;
+    overflow: auto;
+    max-height: 42vh;
 }
