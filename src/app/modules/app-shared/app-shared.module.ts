@@ -31,6 +31,9 @@ import {
 import {
   FormsModule
 } from '@angular/forms';
+import {
+   TextConfirmModalComponent
+} from './components/text-confirm-modal/text-confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,8 @@ import {
     ExponentPipe,
     EmptyPipe,
     MomentPipe,
-    CheckSelectComponent
+    CheckSelectComponent,
+    TextConfirmModalComponent
   ],
   imports: [
     CommonModule,
@@ -49,6 +53,7 @@ import {
   exports: [
     HttpErrorModalComponent,
     SimpleConfirmModalComponent,
+    TextConfirmModalComponent,
     ExponentPipe,
     EmptyPipe,
     MomentPipe,
@@ -56,7 +61,8 @@ import {
   ],
   entryComponents: [
     HttpErrorModalComponent,
-    SimpleConfirmModalComponent
+    SimpleConfirmModalComponent,
+    TextConfirmModalComponent
   ]
 })
 export class AppSharedModule {}
