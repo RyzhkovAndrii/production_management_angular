@@ -60,6 +60,7 @@
             <div *ngFor="let order of orderList">
               <app-order [order]="order"
                          [productTypeList]="productTypes"
+                         [ordersPageViewRef]="ordersPageViewRef"
                          (onChange)="reloadPage()"
                          (onEditOpen)="openOrderEdit($event)">
               </app-order>
@@ -90,6 +91,7 @@
   <app-order-edit [clientList]="clientList"
                   [productTypeList]="productTypes"
                   [order]="editedOrder"
+                  [ordersPageViewRef]="ordersPageViewRef"
                   (onSubmit)="onOrderEditApply($event)"
                   (onCancel)="onOrderEditCancel()">
   </app-order-edit>

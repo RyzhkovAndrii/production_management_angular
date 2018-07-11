@@ -31,6 +31,8 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   showDeliveredOrderStartDate: Date = null;
 
+  ordersPageViewRef: ViewContainerRef;
+
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -44,6 +46,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchInitData();
+    this.ordersPageViewRef = this.viewRef;
   }
 
   ngOnDestroy() {
@@ -112,6 +115,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   onOrderEditApply(order: Order) { // todo save in array ???
+    this.isOrderEditVisible = false;
     this.reloadPage();
   }
 

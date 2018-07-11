@@ -14,6 +14,7 @@ import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
+import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -28,6 +29,8 @@ export class OrderEditComponent implements OnInit {
   @Input() productTypeList: ProductTypeResponse[];
   @Input() clientList: Client[];
   @Input() order: OrderDetails;
+
+  @Input() ordersPageViewRef: ViewContainerRef;
 
   productTypeListForSelect: ProductTypeResponse[];
 
@@ -99,7 +102,7 @@ export class OrderEditComponent implements OnInit {
                     () => {
                       this.itemDetailsListForEdit = [];
                       this.newItemDetailsList = [];
-                      this.showEditMessage();
+                      this.openOrderEditSuccess();
                       this.onSubmit.emit(order);
                     },
                     error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
@@ -183,6 +186,21 @@ export class OrderEditComponent implements OnInit {
     this.editedOldItemIndex = -1;
   }
 
+  private openOrderEditSuccess() {
+    const modalOptions = {
+      title: 'Заказ успешно обновлен',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [
+        {
+          text: 'OK',
+          buttonClass: 'btn btn-outline-dark',
+          onAction: () => true
+        }
+      ]
+    };
+    this.ngxModalDialogService.openDialog(this.ordersPageViewRef, modalOptions);
+  }
+
   private fillOldOrderItemList() {
     if (this.order.orderItemList !== null) {
       this.order.orderItemList.forEach(orderItem => {
@@ -253,11 +271,6 @@ export class OrderEditComponent implements OnInit {
 
   private isAddOrderItemFormInvalid() {
     return this.form.get("productType").invalid || this.form.get("itemAmount").invalid;
-  }
-
-  private showEditMessage() {
-    this.isEdited = true;
-    window.setTimeout(() => this.isEdited = false, 5000);
   }
 
 }
