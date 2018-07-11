@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { ModalDialogService } from 'ngx-modal-dialog';
+import { ModalDialogService, IModalDialogOptions } from 'ngx-modal-dialog';
 
 import { Client } from '../../../models/client.model';
 import { ClientsService } from '../../../services/client.service';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
+import { TextConfirmModalComponent } from '../../../../app-shared/components/text-confirm-modal/text-confirm-modal.component';
 
 @Component({
   selector: 'app-client-list',
@@ -12,8 +13,6 @@ import { AppModalService } from '../../../../app-shared/services/app-modal.servi
   styleUrls: ['./client-list.component.css']
 })
 export class ClientListComponent implements OnInit {
-
-  isClientDelConfirmVisible = false;
 
   @Input()
   clientList: Client[];
@@ -23,7 +22,6 @@ export class ClientListComponent implements OnInit {
 
   private _id: number = null;
   private editElementIndex: number;
-  private currentIndexForDelete;
 
   private isChanged = false;
 
@@ -107,17 +105,27 @@ export class ClientListComponent implements OnInit {
   }
 
   openClientDelConfirm(i: number) {
-    this.isClientDelConfirmVisible = true;
-    this.currentIndexForDelete = i;
-  }
-
-  onClientDelConfirmApply() {
-    this.isClientDelConfirmVisible = false;
-    this.deleteClient(this.currentIndexForDelete);
-  }
-
-  onClientDelConfirmCancel() {
-    this.isClientDelConfirmVisible = false;
+    const modalOptions = {
+      title: 'Подтвердите удаление Клиента',
+      childComponent: TextConfirmModalComponent,
+      data: "Удаление Клиента приведет к удалению всех его действующих и выполненных заказов!",
+      actionButtons: [
+        {
+          text: 'Отменить',
+          buttonClass: 'btn btn-outline-dark',
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass: 'btn btn-danger',
+          onAction: () => {
+            this.deleteClient(i);
+            return true;
+          }
+        }
+      ]
+    };
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 
   private deleteClient(i: number) {
