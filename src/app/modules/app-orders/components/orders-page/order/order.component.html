@@ -76,10 +76,3 @@
     Вернуть из доставки
   </ng-template>
 </context-menu>
-
-<!-- Modal -->
-<div *ngIf="isOrderDeliveryConfirmVisible">
-  <app-order-delivery-confirm (onSubmit)="onOrderDeliveryConfirmApply($event)"
-                              (onCancel)="onOrderDeliveryConfirmCancel()">
-  </app-order-delivery-confirm>
-</div>

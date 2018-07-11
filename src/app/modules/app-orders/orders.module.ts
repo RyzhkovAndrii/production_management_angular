@@ -55,8 +55,11 @@ import { OrderEditSuccessComponent } from './components/orders-page/order-edit/o
         OrderItemService,
         ProductsService,
         ProductsUrlsService,
-        OrderModuleUrlService
+        OrderModuleUrlService,
+        OrderDeliveryConfirmComponent
     ],
-    entryComponents: []
+    entryComponents: [
+        OrderDeliveryConfirmComponent
+    ]
 })
 export class OrdersModule { }

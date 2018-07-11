@@ -10,6 +10,7 @@ import { ClientsService } from '../../../services/client.service';
 import { OrderItemService } from '../../../services/order-item.service';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import { OrderDeliveryConfirmComponent } from './order-delivery-confirm/order-delivery-confirm.component';
 
 @Component({
   selector: 'app-order',
@@ -22,12 +23,11 @@ export class OrderComponent implements OnInit {
 
   @Input() order: Order;
   @Input() productTypeList: ProductTypeResponse[];
+
   @Input() ordersPageViewRef: ViewContainerRef;
 
   @Output() onChange = new EventEmitter<any>();
   @Output() onEditOpen = new EventEmitter<OrderDetails>();
-
-  isOrderDeliveryConfirmVisible = false;
 
   constructor(
     private orderService: OrdersService,
@@ -85,7 +85,7 @@ export class OrderComponent implements OnInit {
     this.onEditOpen.emit(this.orderDetails);
   }
 
-  deliverOrder(date: Date) {
+  private deliverOrder(date: Date) {
     this.changeOrderDeliveryStatus(date);
   }
 
@@ -138,16 +138,14 @@ export class OrderComponent implements OnInit {
   }
 
   openOrderDeliveryConfirm() {
-    this.isOrderDeliveryConfirmVisible = true;
-  }
-
-  onOrderDeliveryConfirmApply(date: Date) {
-    this.isOrderDeliveryConfirmVisible = false;
-    this.deliverOrder(date);
-  }
-
-  onOrderDeliveryConfirmCancel() {
-    this.isOrderDeliveryConfirmVisible = false;
+    const modalOptions = {
+      title: 'Заказ доставлен',
+      childComponent: OrderDeliveryConfirmComponent,
+      data: {
+        func: (date: Date) => this.deliverOrder(date)
+      }
+    };
+    this.ngxModalDialogService.openDialog(this.ordersPageViewRef, modalOptions);
   }
 
 }

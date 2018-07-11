@@ -1,37 +1,43 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ComponentRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { getDate } from '../../../../../../app-utils/app-date-utils';
+import { IModalDialog, IModalDialogOptions, IModalDialogButton } from '../../../../../../../../node_modules/ngx-modal-dialog';
 
 @Component({
   selector: 'app-order-delivery-confirm',
   templateUrl: './order-delivery-confirm.component.html',
   styleUrls: ['./order-delivery-confirm.component.css']
 })
-export class OrderDeliveryConfirmComponent implements OnInit {
+export class OrderDeliveryConfirmComponent implements IModalDialog {
 
-  form: FormGroup;
+  readonly now: string = moment(new Date()).format('YYYY-MM-DD');
 
-  @Output() onSubmit = new EventEmitter<Date>();
-  @Output() onCancel = new EventEmitter<any>();
-
-  readonly now: string = moment(new Date()).format("YYYY-MM-DD");
+  actionButtons: IModalDialogButton[] = [];
+  
+  form: FormGroup = new FormGroup({
+    'actualDeliveryDate': new FormControl(this.now, [Validators.required])
+  });
 
   constructor() { }
 
-  ngOnInit() {
-    this.form = new FormGroup({
-      "actualDeliveryDate": new FormControl(this.now, [Validators.required])
+  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+    this.actionButtons.push({
+      text: 'Отменить',
+      buttonClass: 'btn btn-outline-dark',
+      onAction: () => true
     })
-  }
-
-  submit() {
-    const { actualDeliveryDate } = this.form.value;
-    this.onSubmit.emit(getDate(actualDeliveryDate, 'YYYY-MM-DD'));
-  }
-
-  cancel() {
-    this.onCancel.emit();
+    this.actionButtons.push({
+      text: 'Сохранить',
+      buttonClass: 'btn btn-outline-dark',
+      onAction: () => {
+        const { actualDeliveryDate } = this.form.value;
+        const date = getDate(actualDeliveryDate, 'YYYY-MM-DD');
+        console.log(options.data.func);
+        options.data.func(date);
+        return true;
+      }
+    })
   }
 
 }
