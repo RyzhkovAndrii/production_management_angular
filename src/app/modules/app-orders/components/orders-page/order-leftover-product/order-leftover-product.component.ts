@@ -56,7 +56,7 @@ export class OrderLeftoverProductComponent implements OnInit {
     this.fetchLeftOverList();
   }
 
-  private fetchLeftOverList() {
+  fetchLeftOverList() {
     this.productService
       .getProductsLeftovers(this.date)
       .subscribe(
