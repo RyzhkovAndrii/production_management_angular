@@ -73,7 +73,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   private reloadOrderList() {
-    this.isDataLoaded = false;
     if (this.showDeliveredOrderStartDate === null) {
       this.ordersService
         .getOrderList()
@@ -81,7 +80,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
         .subscribe(
           data => {
             this.orderList = data;
-            this.isDataLoaded = true;
           },
           error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
         );
@@ -92,7 +90,6 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
         .subscribe(
           data => {
             this.orderList = data;
-            this.isDataLoaded = true;
           },
           error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
         );
