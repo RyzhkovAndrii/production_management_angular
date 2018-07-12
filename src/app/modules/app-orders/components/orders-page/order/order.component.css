@@ -22,8 +22,16 @@ div.overflow-text {
     overflow: hidden;
 }
 
-div.overflow-text:hover {
+div.overflow-text:active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 0.3rem;
     overflow: visible;
+    background: white;
+    z-index: 100;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 i.icon-overdue {
