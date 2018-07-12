@@ -28,6 +28,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   isOrderCreateVisible: boolean = false;
   isOrderEditVisible: boolean = false;
   isClientListVisible: boolean = false;
+  isDataLoaded = false;
 
   showDeliveredOrderStartDate: Date = null;
 
@@ -67,18 +68,23 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
           this.productTypes = data[0];
           this.orderList = data[1];
           this.clientList = data[2]; // todo load if need
+          this.isDataLoaded = true;
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
       );
   }
 
   private reloadOrderList() {
+    this.isDataLoaded = false;
     if (this.showDeliveredOrderStartDate === null) {
       this.ordersService
         .getOrderList()
         .takeUntil(this.ngUnsubscribe)
         .subscribe(
-          data => this.orderList = data,
+          data => {
+            this.orderList = data;
+            this.isDataLoaded = true;
+          },
           error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
         );
     } else {
@@ -86,7 +92,10 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
         .getOrderListWithDelivered(this.showDeliveredOrderStartDate)
         .takeUntil(this.ngUnsubscribe)
         .subscribe(
-          data => this.orderList = data,
+          data => {
+            this.orderList = data;
+            this.isDataLoaded = true;
+          },
           error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
         );
     }
