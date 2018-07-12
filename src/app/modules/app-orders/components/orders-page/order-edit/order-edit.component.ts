@@ -15,6 +15,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import { compareProductTypes } from '../../../../../app-utils/app-comparators';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -251,6 +252,7 @@ export class OrderEditComponent implements OnInit {
 
   private addOptionToProductTypeSelect(productType: ProductTypeResponse) {
     this.productTypeListForSelect.push(productType);
+    this.productTypeListForSelect.sort(compareProductTypes);
     this.productTypeSelect.itemsList.setItems(this.productTypeListForSelect);
   }
 

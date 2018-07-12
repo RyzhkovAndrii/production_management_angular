@@ -11,6 +11,7 @@ import { OrdersService } from '../../../services/orders.service';
 import { OrderItemService } from '../../../services/order-item.service';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
+import { compareProductTypes } from '../../../../../app-utils/app-comparators';
 
 const MIN_PRODUCT_AMOUNT = 0.001;
 const DECIMAL_PLACES = 3; // todo common option
@@ -67,7 +68,7 @@ export class OrderCreateComponent implements OnInit {
     this.orderService
       .save(order)
       .subscribe(
-        order => { // todo some exception if order was not created
+        order => {
           this.newItemDetailsList
             .forEach(itemDetails => {
               const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
@@ -138,6 +139,7 @@ export class OrderCreateComponent implements OnInit {
 
   private addOptionToProductTypeSelect(item: { productType: ProductTypeResponse, amount: number }) {
     this.productTypeListForSelect.push(item.productType);
+    this.productTypeListForSelect.sort(compareProductTypes);
     this.productTypeSelect.itemsList.setItems(this.productTypeListForSelect);
   }
 
