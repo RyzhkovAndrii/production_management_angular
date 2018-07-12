@@ -14,6 +14,8 @@ import { TextConfirmModalComponent } from '../../../../app-shared/components/tex
 })
 export class ClientListComponent implements OnInit {
 
+  readonly NAME_MAX_LENGTH = 50;
+
   @Input()
   clientList: Client[];
 
@@ -36,7 +38,7 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      "name": new FormControl(null, [Validators.required, this.uniqueNameValidator.bind(this)])
+      "name": new FormControl(null, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH), this.uniqueNameValidator.bind(this)])
     });
   }
 

@@ -17,15 +17,16 @@ import { AppModalService } from '../../../../app-shared/services/app-modal.servi
 import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 import { compareProductTypes } from '../../../../../app-utils/app-comparators';
 
-const MIN_PRODUCT_AMOUNT = 0.001;
-const DECIMAL_PLACES = 3; // todo common option
-
 @Component({
   selector: 'app-order-edit',
   templateUrl: './order-edit.component.html',
   styleUrls: ['./order-edit.component.css']
 })
 export class OrderEditComponent implements OnInit {
+
+  readonly MIN_PRODUCT_AMOUNT = 0.001;
+  readonly DECIMAL_PLACES = 3; // todo common option
+  readonly NAME_MAX_LENGTH = 50;
 
   @Input() productTypeList: ProductTypeResponse[];
   @Input() clientList: Client[];
@@ -67,12 +68,12 @@ export class OrderEditComponent implements OnInit {
     this.productTypeListForSelect = this.productTypeList;
     this.form = new FormGroup({
       "client": new FormControl(this.order.client.id, [Validators.required]),
-      "city": new FormControl(this.order.city, [Validators.required]),
+      "city": new FormControl(this.order.city, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
       "date": new FormControl(this.order.deliveryDate, [Validators.required]),
       "important": new FormControl(this.order.isImportant, []),
       "productType": new FormControl(null, [Validators.required]),
-      "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
-      "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+      "itemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+      "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
     });
     this.fillOldOrderItemList();
   }
@@ -128,7 +129,7 @@ export class OrderEditComponent implements OnInit {
       this.showAddOrderItemErrors = false;
       const { productType, itemAmount } = this.form.value;
       const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === productType);
-      const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
       const itemDetails = { "productType": productTypeDetails, "amount": integerItemAmount };
       this.newItemDetailsList.push(itemDetails);
       this.removeOptionFromProductTypeSelect(itemDetails.productType);
@@ -164,7 +165,7 @@ export class OrderEditComponent implements OnInit {
       this.form.get("editedItemAmount").markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
-      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
       this.newItemDetailsList[this.editedNewItemIndex].amount = integerItemAmount;
       this.editedNewItemIndex = -1;
     }
@@ -175,7 +176,7 @@ export class OrderEditComponent implements OnInit {
       this.form.get("editedItemAmount").markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
-      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
       this.oldItemDetailsList[this.editedOldItemIndex].amount = integerItemAmount;
       this.itemDetailsListForEdit.push(this.oldItemDetailsList[this.editedOldItemIndex]);
       this.editedOldItemIndex = -1;

@@ -13,15 +13,16 @@ import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 import { compareProductTypes } from '../../../../../app-utils/app-comparators';
 
-const MIN_PRODUCT_AMOUNT = 0.001;
-const DECIMAL_PLACES = 3; // todo common option
-
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.css']
 })
 export class OrderCreateComponent implements OnInit {
+  
+  readonly MIN_PRODUCT_AMOUNT = 0.001;
+  readonly DECIMAL_PLACES = 3; // todo common option
+  readonly NAME_MAX_LENGTH = 50;
 
   newItemDetailsList: { productType: ProductTypeResponse, amount: number }[] = [];
 
@@ -37,12 +38,12 @@ export class OrderCreateComponent implements OnInit {
 
   form: FormGroup = new FormGroup({
     "client": new FormControl(null, [Validators.required]),
-    "city": new FormControl(null, [Validators.required]),
+    "city": new FormControl(null, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
     "date": new FormControl(null, [Validators.required]),
     "important": new FormControl(false, []),
     "productType": new FormControl(null, [Validators.required]),
-    "itemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
-    "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+    "itemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+    "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
   });
 
   isCreated: boolean = false;
@@ -103,7 +104,7 @@ export class OrderCreateComponent implements OnInit {
       this.showAddOrderItemErrors = false;
       const { productType, itemAmount } = this.form.value;
       const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === productType);
-      const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
       const itemDetails = { "productType": productTypeDetails, "amount": integerItemAmount };
       this.newItemDetailsList.push(itemDetails);
       this.removeOptionFromProductTypeSelect(itemDetails);
@@ -121,7 +122,7 @@ export class OrderCreateComponent implements OnInit {
       this.form.get("editedItemAmount").markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
-      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, DECIMAL_PLACES)).toNumber();
+      const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
       this.newItemDetailsList[this.editedNewItemIndex].amount = integerItemAmount;
       this.editedNewItemIndex = -1;
     }

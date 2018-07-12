@@ -30,6 +30,7 @@
                       class="invalid-feedback">
                   <span *ngIf="form.get('name').errors['required']">Поле не может быть пустым.</span>
                   <span *ngIf="form.get('name').errors['uniqueName']">Наименование уже существует.</span>
+                  <span *ngIf="form.get('name').errors['maxlength']">Ограничение в {{NAME_MAX_LENGTH}} символов!</span>
                 </span>
               </div>
               <div *ngIf="!isEditOperation()"

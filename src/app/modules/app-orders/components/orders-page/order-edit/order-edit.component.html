@@ -47,6 +47,7 @@
                 <span *ngIf="form.get('city').invalid && form.get('city').touched"
                       class="invalid-feedback">
                   <span *ngIf="form.get('city').errors['required']">Обязательное поле!</span>
+                  <span *ngIf="form.get('city').errors['maxlength']">Ограничение в {{NAME_MAX_LENGTH}} символов!</span>
                 </span>
               </div>
               <div class="form-group col-6">
