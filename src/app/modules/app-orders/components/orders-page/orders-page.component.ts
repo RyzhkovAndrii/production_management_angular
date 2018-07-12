@@ -22,7 +22,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   orderList: Order[] = [];
   productTypes: ProductTypeResponse[] = [];
-  clientList: Client[] = [];
+  clientList: Client[] = null;
   editedOrder: OrderDetails;
 
   isOrderCreateVisible: boolean = false;
@@ -59,15 +59,13 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     Observable
       .forkJoin(
         this.productsService.getSortedProductTypes(),
-        this.ordersService.getOrderList(),
-        this.clientsService.getAll()
+        this.ordersService.getOrderList()
       )
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         data => {
           this.productTypes = data[0];
           this.orderList = data[1];
-          this.clientList = data[2]; // todo load if need
           this.isDataLoaded = true;
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
@@ -120,7 +118,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
   }
 
   openOrderCreate() {
-    this.isOrderCreateVisible = true;
+    this.fetchClientList(() => this.isOrderCreateVisible = true);
   }
 
   onOrderEditApply(order: Order) { // todo save in array ???
@@ -134,11 +132,11 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   openOrderEdit(order: OrderDetails) {
     this.editedOrder = order;
-    this.isOrderEditVisible = true;
+    this.fetchClientList(() => this.isOrderEditVisible = true);
   }
 
   openClientList() {
-    this.isClientListVisible = true;
+    this.fetchClientList(() => this.isClientListVisible = true);
   }
 
   onClientListCancel() {
@@ -147,6 +145,22 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   isOrderListEmpty() {
     return this.orderList.length === 0;
+  }
+
+  private fetchClientList(openWindow: Function) {
+    if (this.clientList === null) {
+      this.clientsService
+        .getAll()
+        .subscribe(
+          data => {
+            this.clientList = data;
+            openWindow();
+          },
+          error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+        );
+    } else {
+      openWindow();
+    }
   }
 
 }
