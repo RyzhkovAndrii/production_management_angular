@@ -33,35 +33,41 @@
       <div class="col-12">
         <div id="table-container">
           <div id="product-table-container">
-            <table class="table-bordered">
-              <tr class="table-header">
-                <th colspan="3">Клиент</th>
-              </tr>
-              <tr class="table-header">
-                <th colspan="3">Город</th>
-              </tr>
-              <tr class="table-header">
-                <th colspan="3">Дата доставки</th>
-              </tr>
-              <tr class="table-header">
-                <th colspan="3">Статус</th>
-              </tr>
-              <tr style="height: 0.2rem;"></tr>
-              <div *ngIf="productTypes"></div>
-              <tbody>
-                <tr *ngFor="let productType of productTypes"
-                    class="table-header">
-                  <th style="min-width: 8rem;">{{productType.name}}</th>
-                  <th>{{productType.weight}}</th>
-                  <th>
-                    <i class="filled-circle"
-                       [ngStyle]="{ 'background-color': productType.colorCode }"></i>
-                  </th>
+            <div id="product-table-content">
+              <table class="table-bordered">
+                <tr class="table-header">
+                  <th colspan="3">Клиент</th>
                 </tr>
-              </tbody>
-            </table>
+                <tr class="table-header">
+                  <th colspan="3">Город</th>
+                </tr>
+                <tr class="table-header">
+                  <th colspan="3">Дата доставки</th>
+                </tr>
+                <tr class="table-header">
+                  <th colspan="3">Статус</th>
+                </tr>
+                <tr style="height: 0.2rem;"></tr>
+                <div *ngIf="productTypes"></div>
+                <tbody>
+                  <tr *ngFor="let productType of productTypes"
+                      class="table-header">
+                    <th style="min-width: 8rem;">{{productType.name}}</th>
+                    <th>{{productType.weight}}</th>
+                    <th>
+                      <i class="filled-circle"
+                         [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
+          <div id="orders-leftover-container">
+            <div id="orders-leftover-content">
+              <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
+            </div>
+          </div>
           <div id="orders-table-container">
             <div id="orders-table-content">
               <div *ngFor="let order of orderList">
@@ -74,10 +80,14 @@
               </div>
             </div>
           </div>
-          <app-order-leftover-product #lastLeftover
-                                      [isLastLeftOver]="true"
-                                      [producTypeList]="productTypes">
-          </app-order-leftover-product>
+          <div id="orders-leftover-container">
+            <div id="orders-leftover-content">
+              <app-order-leftover-product #lastLeftover
+                                          [isLastLeftOver]="true"
+                                          [producTypeList]="productTypes">
+              </app-order-leftover-product>
+            </div>
+          </div>
         </div>
       </div>
     </div>
