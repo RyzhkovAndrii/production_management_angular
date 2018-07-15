@@ -51,6 +51,15 @@ import {
 import {
   ProductsPlanService
 } from './modules/app-products-plan/services/products-plan.service';
+import {
+   SecurityModule
+} from './modules/app-security/security.module';
+import {
+   AuthorizationService
+} from './modules/app-security/services/authorization.service';
+import {
+   AuthenticationService
+} from './modules/app-security/services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +70,8 @@ import {
     BrowserModule,
     NgbModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    SecurityModule
   ],
   providers: [
     RestDetailsService,
@@ -73,7 +83,9 @@ import {
     StandardsUrlsService,
     StandardsService,
     ProductsPlanUrlsService,
-    ProductsPlanService
+    ProductsPlanService,
+    AuthorizationService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })
