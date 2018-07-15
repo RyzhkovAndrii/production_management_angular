@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <form [formGroup]="form">
+    <div class="form-group row">
+      <label for="username">Username</label>
+      <input class="form-control col-4"
+             type="text"
+             placeholder="username"
+             formControlName="username">
+    </div>
+    <div class="form-group row">
+      <label for="password">Password</label>
+      <input class="form-control col-4"
+             type="text"
+             placeholder="password"
+             formControlName="password">
+    </div>
+    <div class="form-group row">
+      <button class="btn btn-outline-dark"
+              (click)="submit()">
+        Залогиниться
+      </button>
+    </div>
+  </form>
+</div>
