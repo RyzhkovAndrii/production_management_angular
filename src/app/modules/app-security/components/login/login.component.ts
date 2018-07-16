@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '../../../../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,6 +9,8 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  @Output() login = new EventEmitter<any>();
 
   constructor(
     private authService: AuthenticationService
@@ -25,6 +28,7 @@ export class LoginComponent implements OnInit {
     const {username, password} = this.form.value;
     this.authService.login(username, password);
     console.log(this.authService.getCurrentUser());
+    this.login.emit();
   }
 
 }
