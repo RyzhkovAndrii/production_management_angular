@@ -13,12 +13,14 @@ export class AuthorizationService {
 
     checkAuthorization(roles: Role[]): Observable<boolean> {
         let isAuthorized = false;
-        this.authService.getCurrentUser().roles
-            .forEach(role => {
+        const currentUser = this.authService.getCurrentUser();
+        if (currentUser !== null) {
+            currentUser.roles.forEach(role => {
                 if (roles.indexOf(role) > -1) {
                     isAuthorized = true;
                 }
             })
+        }
         return Observable.of(isAuthorized);
     }
 
