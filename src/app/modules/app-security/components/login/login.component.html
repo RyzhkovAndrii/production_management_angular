@@ -1,24 +1,53 @@
-<div class="container-fluid">
-  <form [formGroup]="form">
-    <div class="form-group row">
-      <label for="username">Username</label>
-      <input class="form-control col-4"
-             type="text"
-             placeholder="username"
-             formControlName="username">
+<div style="height: 100vh">
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-lg-4 col-md-6 col-sm-10">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title text-center mb-0">Войдите для работы</h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <input class="form-control"
+                           placeholder="Имя пользователя"
+                           formControlName="username"
+                           type="text"
+                           autofocus>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control"
+                           placeholder="Пароль"
+                           formControlName="password"
+                           type="password">
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary btn-block"
+                            (click)="submit()">
+                      Войти
+                    </button>
+                  </div>
+                  <div class="form-group mb-0">
+                    <div class="form-check-inline">
+                      <input class="form-check-input"
+                             formControlName="remember"
+                             type="checkbox">
+                      <label class="form-check-label">Запомнить меня</label>
+                    </div>
+                    <a class="float-right"
+                       href="#"
+                       onClick="">
+                      <small>Изменить пароль</small>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group row">
-      <label for="password">Password</label>
-      <input class="form-control col-4"
-             type="text"
-             placeholder="password"
-             formControlName="password">
-    </div>
-    <div class="form-group row">
-      <button class="btn btn-outline-dark"
-              (click)="submit()">
-        Залогиниться
-      </button>
-    </div>
-  </form>
+  </div>
 </div>
