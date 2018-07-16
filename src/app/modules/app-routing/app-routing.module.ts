@@ -15,6 +15,10 @@ const appRoutes: Routes = [{
     component: HomePageComponent
   },
   {
+    path: 'login',
+    loadChildren: '../app-security/security.module#SecurityModule'
+  },
+  {
     path: 'rolls',
     loadChildren: '../app-rolls/rolls.module#RollsModule'
   },
