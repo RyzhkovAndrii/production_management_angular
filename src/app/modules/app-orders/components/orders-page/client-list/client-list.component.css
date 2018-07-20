@@ -1,0 +1,33 @@
+.modal.in {
+    display: block;
+}
+
+.modal.modal-backdrop {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.modal-dialog {
+    min-width: 42vw;
+}
+
+.btn-sm, .input-sm {
+    height: 2.4rem;
+}
+
+.input-sm, table th, table td {
+    font-size: 0.9rem;
+}
+
+.btn-outline {
+    border: none;
+}
+
+.mi-sm {
+    font-size: 18px;
+}
+
+tbody {
+    display: block;
+    overflow: auto;
+    max-height: 42vh;
+}

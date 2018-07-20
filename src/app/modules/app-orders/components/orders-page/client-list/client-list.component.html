@@ -1,0 +1,95 @@
+<div class="modal in modal-backdrop">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Список клиентов</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form [formGroup]="form">
+            <div class="row">
+              <div class="col-9">
+                <label for="name"
+                       class="col-form-label">
+                  <span *ngIf="!isEditOperation()">Добавить клиентa:</span>
+                  <span *ngIf="isEditOperation()">Изменить информацию о клиенте:</span>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-9">
+                <input id="name"
+                       class="form-control"
+                       type="text"
+                       placeholder="Введите наименование клиента"
+                       formControlName="name"
+                       [ngClass]="{
+                            'is-invalid': form.get('name').invalid && form.get('name').touched,
+                            'is-valid': !form.get('name').invalid && form.get('name').touched}">
+                <span *ngIf="form.get('name').invalid && form.get('name').touched"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('name').errors['required']">Поле не может быть пустым.</span>
+                  <span *ngIf="form.get('name').errors['uniqueName']">Наименование уже существует.</span>
+                  <span *ngIf="form.get('name').errors['maxlength']">Ограничение в {{NAME_MAX_LENGTH}} символов!</span>
+                </span>
+              </div>
+              <div *ngIf="!isEditOperation()"
+                   class="col-2">
+                <button class="btn btn-outline-secondary btn-sm btn-outline float-left"
+                        (click)="saveClient()"
+                        [disabled]="form.invalid">
+                  <i class="material-icons">add</i>
+                </button>
+              </div>
+              <div *ngIf="isEditOperation()"
+                   class="col-2 btn-group">
+                <button class="btn btn-outline-secondary btn-sm btn-outline"
+                        (click)="editClient()"
+                        [disabled]="form.invalid">
+                  <i class="material-icons">done</i>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm btn-outline"
+                        (click)="editCancel()">
+                  <i class="material-icons">clear</i>
+                </button>
+              </div>
+            </div>
+          </form>
+          <hr>
+          <table class="table table-hover">
+            <thead class="thead-light">
+              <tr class="d-flex">
+                <th class="col-1">#</th>
+                <th class="col-9 text-left">Наименование</th>
+                <th class="col-2"
+                    colspan="2"></th>
+              </tr>
+            </thead>
+            <tbody class="scrolling-tbody">
+              <tr *ngFor="let client of clientList; let i = index"
+                  class="d-flex">
+                <td class="col-1">{{i+1}}</td>
+                <td class="col-9 text-left">{{client.name}}</td>
+                <td class="col-2 btn-group p-0 pt-1 pl-2">
+                  <button class="btn btn-outline-secondary btn-sm btn-outline"
+                          (click)="prepareToEdit(i)">
+                    <i class="material-icons mi-sm">edit</i>
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                          (click)="openClientDelConfirm(i)">
+                    <i class="material-icons mi-sm">delete_forever</i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-dark"
+                (click)="cancel()">Выход
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

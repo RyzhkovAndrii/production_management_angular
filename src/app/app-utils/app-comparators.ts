@@ -74,3 +74,15 @@ export function compareDates(d1: string, d2: string, format: string = 'DD-MM-YYY
   const result = m1.diff(m2, 'days');
   return result;
 }
+
+export function compareProductTypes(first: ProductTypeResponse, second: ProductTypeResponse): number {
+  const comparedColor = compareColors(first.colorCode, second.colorCode);
+  if (comparedColor === 0) {
+    if (first.name > second.name) return 1;
+    if (first.name < second.name) return -1;
+    if (first.name === second.name) {
+      return first.weight - second.weight;
+    }
+  }
+  return comparedColor;
+}

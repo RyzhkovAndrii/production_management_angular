@@ -2,7 +2,7 @@
   <a class="navbar-brand" routerLink="/">
     <img class="logo" src="/assets/logo.png" width="120" alt="">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" 
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
     aria-controls="navbarNavAltMarkup" aria-label="Toggle navigation"
     (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed">
     <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,9 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls">Рулоны</a>
       <a class="nav-item nav-link" routerLinkActive="active" routerLink="/products">Продукция</a>
+      <a class="nav-item nav-link" routerLinkActive="active" routerLink="/orders">Заказы</a>
       <a class="nav-item nav-link" routerLinkActive="active" routerLink="/standards">Нормативы</a>
+      <a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-plan">Планы продукции</a>
     </div>
   </div>
 </nav>

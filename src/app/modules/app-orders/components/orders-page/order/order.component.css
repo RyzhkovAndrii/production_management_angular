@@ -1,0 +1,55 @@
+table {
+    empty-cells: show;
+    max-width: 8vw;
+}
+
+table th {
+    font-weight: normal;
+}
+
+table td, table th {
+    max-width: 8vw;
+    min-width: 7rem;
+}
+
+table tr {
+    height: 1.9rem;
+}
+
+div.overflow-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+div.overflow-text:active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 0.3rem;
+    overflow: visible;
+    background: white;
+    z-index: 100;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+i.icon-overdue {
+    color: #de3163;
+}
+
+i.icon-impotant {
+    color: #e49b0f;
+}
+
+i.icon-delivered {
+    color: #bbb;
+}
+
+.material-icons {
+    font-size: 18px;
+}
+
+table.is-delivered {
+    color: #bbb;
+}

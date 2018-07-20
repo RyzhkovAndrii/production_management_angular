@@ -1,0 +1,207 @@
+<div class="modal in modal-backdrop">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Новый заказ</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div *ngIf="isCreated">
+            <div class="alert alert-success">Заказ успешно создан</div>
+          </div>
+          <form [formGroup]="form">
+            <div class="form-group row">
+              <div class="col-10">
+                <label for="client"
+                       class="col-form-label">Клиент:</label>
+                <ng-select id="client"
+                           [items]="clientList"
+                           class="form-control input-sm no-borders"
+                           bindLabel="name"
+                           bindValue="id"
+                           notFoundText="Клиент не найден"
+                           placeholder="Выберите клиента"
+                           formControlName="client"
+                           [ngClass]="{
+                              'is-invalid': form.get('client').invalid && form.get('client').touched,
+                              'is-valid': !form.get('client').invalid && form.get('client').touched}">
+                </ng-select>
+                <span *ngIf="form.get('client').invalid && form.get('client').touched"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('client').errors['required']">Обязательное поле!</span>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-6">
+                <label for="city"
+                       class="col-form-label">Город:</label>
+                <input id="city"
+                       class="form-control"
+                       type="text"
+                       placeholder="Укажите город"
+                       formControlName="city"
+                       [ngClass]="{
+                          'is-invalid': form.get('city').invalid && form.get('city').touched,
+                          'is-valid': !form.get('city').invalid && form.get('city').touched}">
+                <span *ngIf="form.get('city').invalid && form.get('city').touched"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('city').errors['required']">Обязательное поле!</span>
+                  <span *ngIf="form.get('city').errors['maxlength']">Ограничение в {{NAME_MAX_LENGTH}} символов!</span>
+                </span>
+              </div>
+              <div class="form-group col-6">
+                <label for="date"
+                       class="col-form-label">Дата доставки:</label>
+                <input id="date"
+                       class="form-control"
+                       type="date"
+                       formControlName="date"
+                       [ngClass]="{
+                            'is-invalid': form.get('date').invalid && form.get('date').touched,
+                            'is-valid': !form.get('date').invalid && form.get('date').touched}">
+                <span *ngIf="form.get('date').invalid && form.get('date').touched"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('date').errors['required']">Обязательное поле!</span>
+                </span>
+              </div>
+            </div>
+            <div class="form-check row align-items-center">
+              <div class="col-12">
+                <label for="important"
+                       class="form-check-label">
+                  <input id="important"
+                         class="form-check-input custom-checkbox"
+                         type="checkbox"
+                         formControlName="important"> Заказ важен
+                </label>
+              </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+              <div class="col-12">
+                <label class="col-form-label">Заказываемая продукция (тыс.шт.):</label>
+              </div>
+              <div class="col-12">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr *ngFor="let newItemDetails of newItemDetailsList; let i = index"
+                        class="d-flex">
+                      <td align="cell-center"
+                          class="col-6 text-left">
+                        {{newItemDetails.productType.name}} &nbsp;
+                        <i class="filled-circle"
+                           [ngStyle]="{ 'background-color': newItemDetails.productType.colorCode }">
+                        </i>
+                        &nbsp; {{newItemDetails.productType.weight}}
+                      </td>
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-4">
+                        {{newItemDetails.amount | exponent}}
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-4 pt-1 pb-0">
+                        <input class="form-control input-sm"
+                               type="number"
+                               value="{{newItemDetails.amount | exponent}}"
+                               formControlName="editedItemAmount"
+                               [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
+                        <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
+                              class="invalid-feedback">
+                          <span *ngIf="form.get('editedItemAmount').errors['required']">Обязательное поле!</span>
+                          <span *ngIf="form.get('editedItemAmount').errors['min'] || form.get('editedItemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                        </span>
+                      </td>
+                      <td *ngIf="i !== editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="editNewItem(i)">
+                          <i class="material-icons mi-sm">edit</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="removeNewItem(i)">
+                          <i class="material-icons mi-sm">delete_forever</i>
+                        </button>
+                      </td>
+                      <td *ngIf="i === editedNewItemIndex"
+                          class="col-2 bnt-group p-0 pt-1">
+                        <button class="btn btn-outline-secondary btn-sm btn-outline mr-1"
+                                (click)="submitEditNewItem()">
+                          <i class="material-icons mi-sm">done</i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm btn-outline"
+                                (click)="cancelEditNewItem()">
+                          <i class="material-icons mi-sm">clear</i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-6">
+                <ng-select id="productType"
+                           #productTypeSelect
+                           class="form-control input-sm no-borders"
+                           [items]="productTypeListForSelect"
+                           bindLabel="name"
+                           bindValue="id"
+                           notFoundText="Тип не найден"
+                           placeholder="Выберите продукцию"
+                           formControlName="productType"
+                           [ngClass]="{'is-invalid': showAddOrderItemErrors && form.get('productType').invalid && form.get('productType').pristine}">
+                  <ng-template ng-label-tmp
+                               let-item="item">
+                    {{item.name}} &nbsp;
+                    <i class="filled-circle"
+                       [ngStyle]="{ 'background-color': item.colorCode }">
+                    </i>
+                    &nbsp; {{item.weight}}
+                  </ng-template>
+                  <ng-template ng-option-tmp
+                               let-item="item">
+                    {{item.name}} &nbsp;
+                    <i class="filled-circle"
+                       [ngStyle]="{ 'background-color': item.colorCode }">
+                    </i>
+                    &nbsp; {{item.weight}}
+                  </ng-template>
+                </ng-select>
+                <span *ngIf="showAddOrderItemErrors && form.get('productType').invalid && form.get('productType').pristine"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('productType').errors['required']">Обязательное поле!</span>
+                </span>
+              </div>
+              <div class="col-4">
+                <input id="itemAmount"
+                       class="form-control input-sm"
+                       type="number"
+                       formControlName="itemAmount"
+                       [ngClass]="{'is-invalid': showAddOrderItemErrors && form.get('itemAmount').invalid && form.get('itemAmount').pristine}">
+                <span *ngIf="showAddOrderItemErrors && form.get('itemAmount').invalid && form.get('itemAmount').pristine"
+                      class="invalid-feedback">
+                  <span *ngIf="form.get('itemAmount').errors['required']">Обязательное поле!</span>
+                  <span *ngIf="form.get('itemAmount').errors['min'] || form.get('itemAmount').errors['decimalPlacesError']">Неверный формат!</span>
+                </span>
+              </div>
+              <div class="col-1">
+                <button class="btn btn-outline-secondary btn-sm btn-outline"
+                        (click)="addNewItem()">
+                  <i class="material-icons">add</i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-dark"
+                [disabled]="form.get('client').invalid || form.get('city').invalid || form.get('date').invalid"
+                (click)="submit()">Сохранить</button>
+        <button class="btn btn-outline-dark"
+                (click)="cancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>

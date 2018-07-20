@@ -1,0 +1,31 @@
+table {
+    empty-cells: show;
+    width: 4.5rem;
+    position: relative;
+}
+
+table td {
+    white-space: nowrap;
+}
+
+table th {
+    font-weight: normal;
+}
+
+.vertical-text {
+    transform: rotate(270deg);
+}
+
+table tr {
+    height: 1.9rem;
+}
+
+.negative-leftover {
+    color: #de3163;
+    font-weight: bold;
+}
+
+#datepicker-container {
+    position: absolute;
+    z-index: 100;
+}

@@ -23,6 +23,9 @@ import {
 import {
   formatDate
 } from '../../../app-utils/app-date-utils';
+import {
+  compareProductTypes
+} from '../../../app-utils/app-comparators';
 import appHeaders from '../../../app-utils/app-headers';
 
 @Injectable()
@@ -68,6 +71,17 @@ export class ProductsService {
 
   getProductTypes(): Observable < ProductTypeResponse[] > {
     return this.http.get(this.urls.productTypesUrl, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  getSortedProductTypes(): Observable< ProductTypeResponse[] > {
+    return this.getProductTypes().map(data => data.sort(compareProductTypes));
+  }
+
+  getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {
+    const url = `${this.urls.productLeftoverUrl}?latest`
+    return this.http.get(url, {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }
