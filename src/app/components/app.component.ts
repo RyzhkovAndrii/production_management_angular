@@ -14,8 +14,6 @@ export class AppComponent implements OnInit {
   title = 'app';
   isCollapsed = false;
 
-  isLoggedIn = false;
-
   currentUser: User;
 
   constructor(
@@ -25,13 +23,13 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   onActivate(elementRef) {
     if (elementRef.login !== undefined) {
       elementRef.login
         .subscribe(() => {
-          this.isLoggedIn = true;
           this.currentUser = this.authService.getCurrentUser();
           this.router.navigate(['/']);
         });
@@ -40,7 +38,6 @@ export class AppComponent implements OnInit {
 
   onLogout() {
     this.authService.logout();
-    this.isLoggedIn = false;
     this.currentUser = null;
   }
 
