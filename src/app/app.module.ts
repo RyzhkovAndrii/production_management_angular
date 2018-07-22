@@ -60,6 +60,9 @@ import {
 import {
    AuthenticationService
 } from './modules/app-security/services/authentication.service';
+import { 
+  SecurityModuleUrlService
+} from './modules/app-security/services/security-module-url.service';
 
 @NgModule({
   declarations: [
@@ -85,7 +88,8 @@ import {
     ProductsPlanUrlsService,
     ProductsPlanService,
     AuthorizationService,
-    AuthenticationService
+    AuthenticationService,
+    SecurityModuleUrlService,
   ],
   bootstrap: [AppComponent]
 })
