@@ -8,7 +8,7 @@ import { Role } from '../enums/role.enum';
 })
 export class CanAccessDirective {
 
-  @Input('appCanAccess') appCanAccess: Role[];
+  @Input('appCanAccess') appCanAccess: string[];
 
   private permission$: Subscription;
 
