@@ -80,6 +80,48 @@ export class ProductsPlanService {
     }).catch(httpErrorHandle);
   }
 
+  getProductPlanLeftoverWithoutPlan(productTypeId: number, fromDate: string, toDate: string): Observable < ProductLeftoverResponse > {
+    const params = new HttpParams()
+      .set('id', String(productTypeId))
+      .set('from', fromDate)
+      .set('to', toDate);
+    return this.http.get(this.urls.leftoverUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getProductPlanLeftoverTotal(productTypeId: number, fromDate: string, toDate: string): Observable < ProductLeftoverResponse > {
+    const params = new HttpParams()
+      .set('id', String(productTypeId))
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get(this.urls.leftoverUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getAllProductPlanLeftoversWithoutPlan(fromDate: string, toDate: string): Observable < ProductLeftoverResponse[] > {
+    const params = new HttpParams()
+      .set('from', fromDate)
+      .set('to', toDate);
+    return this.http.get(this.urls.leftoverUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getAllProductPlanLeftoversTotal(fromDate: string, toDate: string): Observable < ProductLeftoverResponse[] > {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get(this.urls.leftoverUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
   postOperation(operation: ProductPlanOperationRequest): Observable < ProductPlanOperationResponse > {
     return this.http.post(this.urls.operationsUrl, operation, {
       headers: appHeaders
