@@ -2,7 +2,8 @@ import {
   Injectable
 } from '@angular/core';
 import {
-  HttpClient, HttpParams
+  HttpClient,
+  HttpParams
 } from '@angular/common/http';
 
 import {
@@ -73,6 +74,15 @@ export class StandardsService {
   getStandard(standardId: number): Observable < Standard > {
     return this.http.get(`${this.urls.standardsUrl}/${standardId}`, {
       headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  getStandardByRollTypeId(rollTypeId: number): Observable < StandardWithRolls > {
+    const params = new HttpParams()
+      .set('rollTypeId', String(rollTypeId));
+    return this.http.get(this.urls.standardsUrl, {
+      headers: appHeaders,
+      params
     }).catch(httpErrorHandle);
   }
 
