@@ -1,11 +1,11 @@
 
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router";
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from "@angular/router";
 import { Injectable } from "@angular/core";
 import { Observable } from "../../../../../node_modules/rxjs";
 import { AuthorizationService } from "../services/authorization.service";
 
 @Injectable()
-export class RoleGuard implements CanActivate {
+export class RoleGuard implements CanActivate, CanActivateChild {
 
     constructor(
         private router: Router,
@@ -26,6 +26,10 @@ export class RoleGuard implements CanActivate {
         }
         this.router.navigate(['/auth/access-denied']);
         return false;
+    }
+
+    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+        return this.canActivate(childRoute, state);
     }
 
 

@@ -25,6 +25,7 @@ const appRoutes: Routes = [{
   path: 'rolls',
   loadChildren: '../app-rolls/rolls.module#RollsModule',
   canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
   data: {
     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO',
       'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
@@ -34,6 +35,7 @@ const appRoutes: Routes = [{
   path: 'products',
   loadChildren: '../app-products/products.module#ProductsModule',
   canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
   data: {
     roles: ['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO',
       'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
@@ -43,6 +45,7 @@ const appRoutes: Routes = [{
   path: 'orders',
   loadChildren: '../app-orders/orders.module#OrdersModule',
   canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
   data: {
     roles: ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST']
   }
@@ -51,6 +54,7 @@ const appRoutes: Routes = [{
   path: 'standards',
   loadChildren: '../app-standards/standards.module#StandardsModule',
   canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
   data: {
     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
   }
@@ -59,6 +63,7 @@ const appRoutes: Routes = [{
   path: 'products-plan',
   loadChildren: '../app-products-plan/products-plan.module#ProductsPlanModule',
   canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
   data: {
     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER']
   }
