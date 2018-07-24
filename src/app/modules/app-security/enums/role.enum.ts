@@ -6,6 +6,8 @@ export enum Role {
     TECHNOLOGIST = 'ROLE_TECHNOLOGIST',
     STOREKEEPER = 'ROLE_STOREKEEPER',
     CMO = 'ROLE_CMO',
-    CTO = 'ROLE_CTO'
-
+    CTO = 'ROLE_CTO',
+    ROLE_ECONOMIST = 'ROLE_ECONOMIST',
+    ROLE_CEO = 'ROLE_CEO'
+    
 }
