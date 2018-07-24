@@ -53,20 +53,23 @@ import {
   ProductsPlanService
 } from './modules/app-products-plan/services/products-plan.service';
 import {
-   SecurityModule
+  SecurityModule
 } from './modules/app-security/security.module';
 import {
-   AuthorizationService
+  AuthorizationService
 } from './modules/app-security/services/authorization.service';
 import {
-   AuthenticationService
+  AuthenticationService
 } from './modules/app-security/services/authentication.service';
-import { 
+import {
   SecurityModuleUrlService
 } from './modules/app-security/services/security-module-url.service';
-import { 
+import {
   TokenInterceptor
 } from './modules/app-security/interceptors/token.interceptor';
+import {
+  RoleGuard
+} from './modules/app-security/guards/role.guard';
 
 @NgModule({
   declarations: [
@@ -94,6 +97,7 @@ import {
     AuthorizationService,
     AuthenticationService,
     SecurityModuleUrlService,
+    RoleGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
