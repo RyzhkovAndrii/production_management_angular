@@ -11,25 +11,31 @@
               <div class="row">
                 <div class="col-12">
                   <div class="form-group">
-                    <div *ngIf="message !== null"
-                         class="alert-danger text-center">
-                      {{ message }}
-                    </div>
-                  </div>
-                  <div class="form-group">
                     <input class="form-control"
                            placeholder="Имя пользователя"
                            formControlName="username"
                            type="text"
+                           (input)="resetFormShowErr()"
                            autofocus
-                           (input)="hideAllert()">
+                           [ngClass]="{'is-invalid': (form.get('username').invalid && showValidErr) || showUserNotFound}">
+                    <span *ngIf="(form.get('username').invalid && showValidErr) || showUserNotFound"
+                          class="invalid-feedback">
+                      <span *ngIf="form.get('username').invalid">Обязательное поле!</span>
+                      <span *ngIf="showUserNotFound">Имя пользователя не найдено!</span>
+                    </span>
                   </div>
                   <div class="form-group">
                     <input class="form-control"
                            placeholder="Пароль"
                            formControlName="password"
                            type="password"
-                           (input)="hideAllert()">
+                           (input)="resetFormShowErr()"
+                           [ngClass]="{'is-invalid': (form.get('password').invalid && showValidErr) || showPassIncorrect}">
+                    <span *ngIf="(form.get('password').invalid && showValidErr) || showPassIncorrect"
+                          class="invalid-feedback">
+                      <span *ngIf="form.get('password').invalid">Обязательное поле!</span>
+                      <span *ngIf="showPassIncorrect">Неверный пароль!</span>
+                    </span>
                   </div>
                   <div class="form-group">
                     <button class="btn btn-primary btn-block"

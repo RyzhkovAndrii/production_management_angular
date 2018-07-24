@@ -12,7 +12,9 @@ export class LoginComponent implements OnInit {
 
   @Output() login = new EventEmitter<any>();
 
-  message?: String;
+  showValidErr = false;
+  showUserNotFound = false;
+  showPassIncorrect = false;
 
   constructor(
     private authService: AuthenticationService
@@ -28,6 +30,10 @@ export class LoginComponent implements OnInit {
   });
 
   submit() {
+    if (!this.form.valid) {
+      this.showValidErr = true;
+      return;
+    }
     const { username, password } = this.form.value;
     this.authService
       .login(username, password)
@@ -38,36 +44,32 @@ export class LoginComponent implements OnInit {
             .subscribe(
               user => {
                 this.authService.setCurrentUser(user);
-                this.hideAllert();
                 this.login.emit();
               }
             )
         },
         (err: HttpErrorResponse) => {
-          this.message = this.convertErrorMessage(JSON.parse(err.error).message);
+          this.toggleErrMessages(JSON.parse(err.error).message);
         }
       );
   }
 
-  private convertErrorMessage(message: string): string {
-    switch(message) {
-      case 'User is not specified': {
-        return 'Имя пользователя не указано'
-      }
+  private toggleErrMessages(message: string) {
+    switch (message) {
       case 'User does not exist': {
-        return 'Имя пользователя не найдено'
+        this.showUserNotFound = true;
+        break;
       }
       case 'Password is incorrect': {
-        return 'Пароль неверен'
-      }
-      default: {
-        return message;
+        this.showPassIncorrect = true;
+        break;
       }
     }
   }
 
-  hideAllert() {
-    this.message = null;
+  resetFormShowErr() {
+    this.showUserNotFound = false;
+    this.showPassIncorrect = false;
   }
 
 }
