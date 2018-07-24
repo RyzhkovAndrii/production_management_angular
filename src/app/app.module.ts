@@ -8,7 +8,8 @@ import {
   NgbModule
 } from '@ng-bootstrap/ng-bootstrap';
 import {
-  HttpClientModule
+  HttpClientModule,
+  HTTP_INTERCEPTORS
 } from '@angular/common/http';
 
 
@@ -63,6 +64,9 @@ import {
 import { 
   SecurityModuleUrlService
 } from './modules/app-security/services/security-module-url.service';
+import { 
+  TokenInterceptor
+} from './modules/app-security/interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -90,6 +94,11 @@ import {
     AuthorizationService,
     AuthenticationService,
     SecurityModuleUrlService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
