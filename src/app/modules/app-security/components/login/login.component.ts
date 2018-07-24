@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../services/authentication.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   @Output() login = new EventEmitter<any>();
 
@@ -22,9 +22,6 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router
   ) { }
-
-  ngOnInit() {
-  }
 
   form: FormGroup = new FormGroup({
     'username': new FormControl(null, [Validators.required]),

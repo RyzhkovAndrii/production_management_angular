@@ -20,7 +20,7 @@
                            [ngClass]="{'is-invalid': (form.get('username').invalid && showValidErr) || showUserNotFound}">
                     <span *ngIf="(form.get('username').invalid && showValidErr) || showUserNotFound"
                           class="invalid-feedback">
-                      <span *ngIf="form.get('username').invalid">Обязательное поле!</span>
+                      <span *ngIf="form.get('username').hasError('required')">Обязательное поле!</span>
                       <span *ngIf="showUserNotFound">Имя пользователя не найдено!</span>
                     </span>
                   </div>
@@ -33,10 +33,11 @@
                            [ngClass]="{'is-invalid': (form.get('password').invalid && showValidErr) || showPassIncorrect}">
                     <span *ngIf="(form.get('password').invalid && showValidErr) || showPassIncorrect"
                           class="invalid-feedback">
-                      <span *ngIf="form.get('password').invalid">Обязательное поле!</span>
+                      <span *ngIf="form.get('password').hasError('required')">Обязательное поле!</span>
                       <span *ngIf="showPassIncorrect">Неверный пароль!</span>
                     </span>
                   </div>
+                  <hr>
                   <div class="form-group">
                     <button class="btn btn-primary btn-block"
                             (click)="submit()">
