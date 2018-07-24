@@ -6,6 +6,7 @@ import { SecurityRoutingModule } from "./security-routing.module";
 import { CanAccessDirective } from "./directives/can-access.directive";
 import { LoginComponent } from './components/login/login.component';
 import { PasswordChangeComponent } from './components/password-change/password-change.component';
+import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { PasswordChangeComponent } from './components/password-change/password-c
     declarations: [
         CanAccessDirective,
         LoginComponent,
-        PasswordChangeComponent
+        PasswordChangeComponent,
+        AccessDeniedComponent
     ],
     exports: [
         CanAccessDirective

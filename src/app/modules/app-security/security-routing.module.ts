@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { LoginComponent } from "./components/login/login.component";
 import { PasswordChangeComponent } from "./components/password-change/password-change.component";
+import { AccessDeniedComponent } from "./components/access-denied/access-denied.component";
 
 const securityRoutes: Routes = [
     {
@@ -12,6 +13,10 @@ const securityRoutes: Routes = [
     {
         path: 'password',
         component: PasswordChangeComponent
+    },
+    {
+        path: 'access-denied',
+        component: AccessDeniedComponent
     }
 ];
 
