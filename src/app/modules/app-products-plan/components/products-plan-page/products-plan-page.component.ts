@@ -2,6 +2,10 @@ import {
   Component,
   OnInit
 } from '@angular/core';
+import {
+  ProductsPlanService
+} from '../../services/products-plan.service';
+import { midnightDate, addDays } from '../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -10,8 +14,13 @@ import {
 })
 export class ProductsPlanPageComponent implements OnInit {
 
-  constructor() {}
+  productsPlanInfo: ProductPlanInfo[] = [];
 
-  ngOnInit() {}
+  constructor(private productsPlanService: ProductsPlanService) {}
+
+  ngOnInit() {
+    this.productsPlanService.getProductPlanInfo(midnightDate(), addDays(midnightDate(), 14))
+      .subscribe(data => console.log(data));
+  }
 
 }

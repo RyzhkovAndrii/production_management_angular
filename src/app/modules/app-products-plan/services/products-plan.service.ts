@@ -9,6 +9,10 @@ import {
   Observable
 } from 'rxjs';
 import {
+  from
+} from 'rxjs/observable/from';
+
+import {
   ProductsPlanUrlsService
 } from './products-plan-urls.service';
 import {
@@ -18,6 +22,11 @@ import appHeaders from '../../../app-utils/app-headers';
 import {
   httpErrorHandle
 } from '../../../app-utils/app-http-error-handler';
+import {
+  addDays,
+  formatDate,
+  midnightDate
+} from '../../../app-utils/app-date-utils';
 
 @Injectable()
 export class ProductsPlanService {
@@ -25,6 +34,40 @@ export class ProductsPlanService {
   constructor(private urls: ProductsPlanUrlsService,
     private http: HttpClient,
     private productsService: ProductsService) {}
+
+  getProductPlanInfo(fromDate: Date, toDate: Date): Observable < ProductPlanInfo[] > {
+    const weeklyDate = formatDate(addDays(fromDate, 7));
+    const beginDate = formatDate(fromDate);
+    const endDate = formatDate(toDate);
+    const currentDate = formatDate(midnightDate());
+
+    return this.productsService.getProductTypes()
+      .flatMap(products => this.getBatchesByRange(beginDate, endDate)
+        .flatMap(batches => this.getAllProductPlanLeftoversWithoutPlan(currentDate).map(this.convertOversToMap)
+          .flatMap(currentOversMap => this.getAllProductPlanLeftoversWithoutPlan(weeklyDate).map(this.convertOversToMap)
+            .flatMap(weeklyOversMap => this.getAllProductPlanLeftoversTotal(weeklyDate).map(this.convertOversToMap)
+              .flatMap(weeklyTotalOversMap => this.getAllProductPlanLeftoversWithoutPlan(endDate).map(this.convertOversToMap)
+                .flatMap(toOversMap => this.getAllProductPlanLeftoversTotal(endDate).map(this.convertOversToMap)
+                  .flatMap(toTotalOversMap => from(products)
+                    .map(product => {
+                      const info: ProductPlanInfo = {
+                        productType: product,
+                        currentProductLeftover: currentOversMap.get(product.id),
+                        planBatches: batches[product.id],
+                        weeklyLeftoverWithoutPlans: weeklyOversMap.get(product.id),
+                        weeklyLeftoverTotal: weeklyTotalOversMap.get(product.id),
+                        inTwoWeeksLeftoverWithoutPlans: toOversMap.get(product.id),
+                        inTwoWeeksLeftoverTotal: toTotalOversMap.get(product.id)
+                      }
+                      return info;
+                    })
+                    .toArray()))))))
+      );
+  }
+
+  private convertOversToMap(overs: ProductLeftoverResponse[]): Map < number, ProductLeftoverResponse > {
+    return new Map(overs.map(x => [x.productTypeId, x] as[number, ProductLeftoverResponse]));
+  }
 
   getBatch(id: number, date: string): Observable < ProductPlanBatchResponse > {
     const params = new HttpParams()
@@ -39,6 +82,16 @@ export class ProductsPlanService {
   getBatches(date: string): Observable < ProductPlanBatchResponse[] > {
     const params = new HttpParams()
       .set('date', date);
+    return this.http.get(this.urls.batchesUrl, {
+      headers: appHeaders,
+      params
+    }).catch(httpErrorHandle);
+  }
+
+  getBatchesByRange(fromDate: string, toDate: string): Observable < Map < number, ProductBatchResponse[] > > {
+    const params = new HttpParams()
+      .set('fromDate', fromDate)
+      .set('toDate', toDate);
     return this.http.get(this.urls.batchesUrl, {
       headers: appHeaders,
       params
@@ -80,41 +133,17 @@ export class ProductsPlanService {
     }).catch(httpErrorHandle);
   }
 
-  getProductPlanLeftoverWithoutPlan(productTypeId: number, fromDate: string, toDate: string): Observable < ProductLeftoverResponse > {
+  getAllProductPlanLeftoversWithoutPlan(date: string): Observable < ProductLeftoverResponse[] > {
     const params = new HttpParams()
-      .set('id', String(productTypeId))
-      .set('from', fromDate)
-      .set('to', toDate);
+      .set('date', date);
     return this.http.get(this.urls.leftoverUrl, {
       headers: appHeaders,
       params
     }).catch(httpErrorHandle);
   }
 
-  getProductPlanLeftoverTotal(productTypeId: number, fromDate: string, toDate: string): Observable < ProductLeftoverResponse > {
+  getAllProductPlanLeftoversTotal(toDate: string): Observable < ProductLeftoverResponse[] > {
     const params = new HttpParams()
-      .set('id', String(productTypeId))
-      .set('from_date', fromDate)
-      .set('to_date', toDate);
-    return this.http.get(this.urls.leftoverUrl, {
-      headers: appHeaders,
-      params
-    }).catch(httpErrorHandle);
-  }
-
-  getAllProductPlanLeftoversWithoutPlan(fromDate: string, toDate: string): Observable < ProductLeftoverResponse[] > {
-    const params = new HttpParams()
-      .set('from', fromDate)
-      .set('to', toDate);
-    return this.http.get(this.urls.leftoverUrl, {
-      headers: appHeaders,
-      params
-    }).catch(httpErrorHandle);
-  }
-
-  getAllProductPlanLeftoversTotal(fromDate: string, toDate: string): Observable < ProductLeftoverResponse[] > {
-    const params = new HttpParams()
-      .set('from_date', fromDate)
       .set('to_date', toDate);
     return this.http.get(this.urls.leftoverUrl, {
       headers: appHeaders,
