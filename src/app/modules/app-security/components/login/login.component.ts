@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../services/authentication.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   @Output() login = new EventEmitter<any>();
 
@@ -18,16 +18,20 @@ export class LoginComponent {
   showUserNotFound = false;
   showPassIncorrect = false;
 
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) { }
-
   form: FormGroup = new FormGroup({
     'username': new FormControl(null, [Validators.required]),
     'password': new FormControl(null, [Validators.required]),
     'remember': new FormControl(false)
   });
+
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.authService.logout();
+  }
 
   submit() {
     if (!this.form.valid) {
