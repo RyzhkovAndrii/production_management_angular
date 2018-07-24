@@ -74,4 +74,15 @@ export class AuthenticationService {
         localStorage.setItem(this.USER_NAME, JSON.stringify(user));
     }
 
+    changeCurrentUserPassword(password: string): Observable<any> {
+        let headers = new HttpHeaders();
+        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded')
+        const body = `password=${password}`;
+        return this.http
+            .post(this.urlService.changePasswordUrl, body, {
+                headers: headers,
+                responseType: 'text'
+            });
+    }
+
 }
