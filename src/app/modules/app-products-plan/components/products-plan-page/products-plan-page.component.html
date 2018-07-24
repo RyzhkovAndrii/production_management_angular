@@ -1,3 +1,55 @@
-<p>
-  products-plan-page works!
-</p>
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" class="align-middle">
+            Продукция
+          </th>
+          <th scope="col" class="align-middle">
+            <div>Текущий остаток</div>
+            <div class="small">с не отгруженными заказами</div>
+          </th>
+          <th scope="col" *ngFor="let item of firstWeekHeaderDates" class="align-middle">
+            {{ item | moment:'DD MMM' }}
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через неделю
+            </div>
+            <div>
+              <small>с заказами</small>
+            </div>
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через неделю
+            </div>
+            <div>
+              <small>с заказами и планом</small>
+            </div>
+          </th>
+          <th scope="col" *ngFor="let item of secondWeekHeaderDates" class="align-middle">
+            {{ item | moment:'DD MMM' }}
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через 2 недели
+            </div>
+            <div>
+              <small>с заказами</small>
+            </div>
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через 2 недели
+            </div>
+            <div>
+              <small>с заказами и планом</small>
+            </div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
