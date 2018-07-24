@@ -15,7 +15,7 @@ const appRoutes: Routes = [{
     component: HomePageComponent
   },
   {
-    path: 'login',
+    path: 'auth',
     loadChildren: '../app-security/security.module#SecurityModule'
   },
   {
@@ -37,6 +37,10 @@ const appRoutes: Routes = [{
   {
     path: 'products-plan',
     loadChildren: '../app-products-plan/products-plan.module#ProductsPlanModule'
+  },
+  {
+    path: '**', // todo check without spring redirect
+    redirectTo: ''
   }
 ];
 

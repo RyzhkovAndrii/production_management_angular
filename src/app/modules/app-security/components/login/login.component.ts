@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { AuthenticationService } from '../../services/authentication.service';
-import { HttpErrorResponse } from '../../../../../../node_modules/@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,8 @@ export class LoginComponent implements OnInit {
   showPassIncorrect = false;
 
   constructor(
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -70,6 +73,10 @@ export class LoginComponent implements OnInit {
   resetFormShowErr() {
     this.showUserNotFound = false;
     this.showPassIncorrect = false;
+  }
+
+  goToPasswordChange() {
+    this.router.navigate(['/auth/password/']);
   }
 
 }
