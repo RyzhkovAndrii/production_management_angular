@@ -10,6 +10,7 @@ import { UserService } from "./services/user.service";
 import { UsersPageComponent } from "./components/users-page/users-page.component";
 import { UserModuleUrlService } from "./services/user-module-url.serivce";
 import { LastModificationComponent } from "./components/last-modification/last-modification.component";
+import { ModificationService } from "./services/modification.service";
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { LastModificationComponent } from "./components/last-modification/last-m
     ],
     providers: [
         UserService,
-        UserModuleUrlService
+        UserModuleUrlService,
+        ModificationService
     ],
     entryComponents: []
 })
