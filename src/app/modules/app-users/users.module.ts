@@ -20,7 +20,8 @@ import { UserModuleUrlService } from "./services/user-module-url.serivce";
         AppSharedModule,
         UsersRoutingModule
     ],
-    declarations: [    
+    declarations: [
+        UsersPageComponent    
     ],
     providers: [
         UserService,

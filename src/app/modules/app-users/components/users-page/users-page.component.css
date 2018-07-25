@@ -1,0 +1,16 @@
+.container-fluid {
+    height: calc(100% - 68px - 1.4rem);
+}
+
+#user-list-container {
+    margin-top: 0.7rem;
+    background-color: #ddd;
+}
+
+#user-list-container, .card {
+    border-radius: 10px;   
+}
+
+#user-list-container-overflow {
+    overflow-y: auto;
+}

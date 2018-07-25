@@ -1,3 +1,27 @@
-<p>
-  users-page works!
-</p>
+<div class="container-fluid">
+  <div class="row h-100">
+    <div class="col-lg-3 col-sm-3 h-100">
+      <div id="user-list-container" class="mr-5 p-2 pr-1 h-100">
+        <div id="user-list-container-overflow"
+             class="h-100 pr-2">
+          <div class="card mb-3">
+            <div class="card-body text-center pl-1 pr-1 pt-3 pb-3">
+              <strong>Новый пользователь</strong>
+            </div>
+          </div>
+          <div class="card mt-2"
+          *ngFor="let user of userList, let i = index">
+            <div class="card-body text-center">
+              <strong>{{user.firstName}}</strong>
+              <br>
+              <strong>{{user.lastName}}</strong>
+              <br>
+              <small>{{user.username}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-10 col-sm-10"></div>
+  </div>
+</div>
