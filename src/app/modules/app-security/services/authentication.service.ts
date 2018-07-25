@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import * as jwt_decode from 'jwt-decode';
 
-import { User } from "../models/user.model";
+import { User } from "../../app-users/models/user.model";
 import { SecurityModuleUrlService } from "./security-module-url.service";
 import { Observable } from "../../../../../node_modules/rxjs";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
