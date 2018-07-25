@@ -8,6 +8,7 @@ export class UserModuleUrlService {
     private host = this.restDetails.host;
 
     userUrl = `${this.host}/users`;
+    lastModificationUrl = `${this.host}/modifications`;
 
     constructor(private restDetails: RestDetailsService) { }
 
