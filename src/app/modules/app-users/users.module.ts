@@ -3,12 +3,12 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { ModalDialogModule } from "ngx-modal-dialog";
-import { NgDatepickerModule } from 'ng2-datepicker';
 
 import { AppSharedModule } from "../app-shared/app-shared.module";
 import { UsersRoutingModule } from "./users-router.module";
 import { UserService } from "./services/user.service";
 import { UsersPageComponent } from "./components/users-page/users-page.component";
+import { UserModuleUrlService } from "./services/user-module-url.serivce";
 
 @NgModule({
     imports: [
@@ -18,14 +18,13 @@ import { UsersPageComponent } from "./components/users-page/users-page.component
         NgSelectModule,
         ModalDialogModule.forRoot(),
         AppSharedModule,
-        NgDatepickerModule,
         UsersRoutingModule
     ],
-    declarations: [
-        UsersPageComponent
+    declarations: [    
     ],
     providers: [
-        UserService
+        UserService,
+        UserModuleUrlService
     ],
     entryComponents: []
 })
