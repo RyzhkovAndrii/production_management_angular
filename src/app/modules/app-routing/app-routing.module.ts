@@ -69,6 +69,15 @@ const appRoutes: Routes = [{
   }
 },
 {
+  path: 'users',
+  loadChildren: '../app-users/users.module#UsersModule',
+  canActivate: [RoleGuard],
+  canActivateChild: [RoleGuard],
+  data: {
+    roles: ['ROLE_ADMIN']
+  }
+},
+{
   path: '**', // todo check without spring redirect
   redirectTo: ''
 }
