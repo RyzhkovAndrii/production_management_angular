@@ -32,6 +32,7 @@ export class ProductsPlanPageComponent implements OnInit {
 
   firstWeekHeaderDates: Date[] = [];
   secondWeekHeaderDates: Date[] = [];
+  secondMonthIndex: number = -1;
 
   constructor(
     private productsPlanService: ProductsPlanService,
@@ -57,11 +58,25 @@ export class ProductsPlanPageComponent implements OnInit {
     this.currentDate = midnightDate();
     this.fromDate = addDays(this.currentDate, 1);
     this.toDate = addDays(this.currentDate, 14);
-    for (let i = 1; i <= 7; i++) {
-      this.firstWeekHeaderDates.push(addDays(this.currentDate, i));
+    for (let i = 0; i < 7; i++) {
+      this.firstWeekHeaderDates.push(addDays(this.currentDate, i + 1));
+      if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.firstWeekHeaderDates[i].getMonth()) {
+        this.secondMonthIndex = i;
+      }
     }
-    for (let i = 8; i <= 14; i++) {
-      this.secondWeekHeaderDates.push(addDays(this.currentDate, i));
+    for (let i = 7; i < 14; i++) {
+      this.secondWeekHeaderDates.push(addDays(this.currentDate, i + 1));
+      if (this.secondMonthIndex == -1 && this.firstWeekHeaderDates[this.firstWeekHeaderDates.length - 1].getMonth() < this.secondWeekHeaderDates[i - 7].getMonth()) {
+        this.secondMonthIndex = i;
+      }
     }
+  }
+
+  isFirstInOneMoth() {
+    return this.secondMonthIndex > 6 || this.secondMonthIndex < 0;
+  }
+
+  isSecondInOneMoth() {
+    return this.secondMonthIndex < this.firstWeekHeaderDates.length;
   }
 }

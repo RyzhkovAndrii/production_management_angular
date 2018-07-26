@@ -3,53 +3,88 @@
     <table class="table table-bordered table-striped table-sm">
       <thead>
         <tr class="table-header">
+          <th scope="col" class="align-middle" colspan="2"></th>
+          <th scope="col" class="align-middle"><small>с не отгруженными заказами</small></th>
+          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? 7 : secondMonthIndex">
+            <small>{{ firstWeekHeaderDates[0] | moment:'MMM YY' }}</small>
+          </th>
+          <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="7 - secondMonthIndex">
+            <small>{{ firstWeekHeaderDates[secondMonthIndex] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle"><small>с заказами</small></th>
+          <th scope="col" class="align-middle"><small>с заказами и планом</small></th>
+          <th *ngIf="!isSecondInOneMoth()" scope="col" class="align-middle" [attr.colspan]="secondMonthIndex - 7">
+            <small>{{ secondWeekHeaderDates[secondMonthIndex - 7 - 1] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle" [attr.colspan]="isSecondInOneMoth() ? 7 : 7 - (secondMonthIndex - 7)">
+            <small>{{ secondWeekHeaderDates[secondWeekHeaderDates.length - 1] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle"><small>с заказами</small></th>
+          <th scope="col" class="align-middle"><small>с заказами и планом</small></th>
+        </tr>
+        <tr class="table-header">
           <th scope="col" class="align-middle">
             Продукция
           </th>
+          <th scope="col" class="align-middle">Цвет</th>
           <th scope="col" class="align-middle">
-            <div>Текущий остаток</div>
-            <div class="small">с не отгруженными заказами</div>
+            Текущий остаток
           </th>
           <th scope="col" *ngFor="let item of firstWeekHeaderDates" class="align-middle">
-            {{ item | moment:'DD MMM' }}
+            {{ item | moment:'DD' }}
+          </th>
+          <th scope="col" class="align-middle">
+              Остаток через неделю
           </th>
           <th scope="col" class="align-middle">
             <div>
               Остаток через неделю
-            </div>
-            <div>
-              <small>с заказами</small>
-            </div>
-          </th>
-          <th scope="col" class="align-middle">
-            <div>
-              Остаток через неделю
-            </div>
-            <div>
-              <small>с заказами и планом</small>
             </div>
           </th>
           <th scope="col" *ngFor="let item of secondWeekHeaderDates" class="align-middle">
-            {{ item | moment:'DD MMM' }}
+            {{ item | moment:'DD' }}
           </th>
           <th scope="col" class="align-middle">
             <div>
               Остаток через 2 недели
             </div>
-            <div>
-              <small>с заказами</small>
-            </div>
           </th>
           <th scope="col" class="align-middle">
             <div>
               Остаток через 2 недели
-            </div>
-            <div>
-              <small>с заказами и планом</small>
             </div>
           </th>
         </tr>
       </thead>
+      <tbody>
+        <tr *ngFor="let info of productsPlanInfo">
+          <th>{{ info.productType.name }} {{ info.productType.weight }}</th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color':info.productType.colorCode }"></span>
+          </th>
+          <td class="w-8">
+            {{ info.currentProductLeftover.amount }}
+          </td>
+          <td class="w-3" *ngFor="let date of firstWeekHeaderDates">
+            {{ '' }}
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverWithoutPlans.amount }}
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverTotal.amount }}
+          </td>
+          <td class="w-3" *ngFor="let date of secondWeekHeaderDates">
+            {{ '' }}
+          </td>
+          <td class="w-8">
+            {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}
+          </td>
+          <td class="w-8">
+            {{ info.inTwoWeeksLeftoverTotal.amount }}
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>

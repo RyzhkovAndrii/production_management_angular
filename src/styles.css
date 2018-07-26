@@ -41,7 +41,9 @@ th {
 }
 
 td:hover,
-.table-striped>tbody>tr:nth-child(even)>td, .even, .odd>td:hover {
+.table-striped>tbody>tr:nth-child(even)>td,
+.even,
+.odd>td:hover {
   background-color: rgba(232, 232, 232, 1);
 }
 
@@ -50,7 +52,9 @@ td:hover,
 }
 
 [scope=row]:hover,
-.table-striped>tbody>tr:nth-child(even)>td:hover, .even>td:hover, .odd {
+.table-striped>tbody>tr:nth-child(even)>td:hover,
+.even>td:hover,
+.odd {
   background-color: #f2f2f2;
 }
 
@@ -61,6 +65,22 @@ td:hover,
 
 .ngx-contextmenu a {
   font-size: 0.9rem;
+}
+
+.w-12 {
+  width: 12% !important;
+}
+
+.w-8 {
+  width: 8% !important;
+}
+
+.w-4 {
+  width: 4% !important;
+}
+
+.w-3 {
+  width: 3% !important;
 }
 
 @media screen and (max-width: 1400px) {
