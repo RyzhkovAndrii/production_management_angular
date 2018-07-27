@@ -4,23 +4,33 @@
       <thead>
         <tr class="table-header">
           <th scope="col" class="align-middle" colspan="2"></th>
-          <th scope="col" class="align-middle"><small>с не отгруженными заказами</small></th>
+          <th scope="col" class="align-middle">
+            <small>с не отгруженными заказами</small>
+          </th>
           <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? 7 : secondMonthIndex">
             <small>{{ firstWeekHeaderDates[0] | moment:'MMM YY' }}</small>
           </th>
           <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="7 - secondMonthIndex">
             <small>{{ firstWeekHeaderDates[secondMonthIndex] | moment:'MMM YY' }}</small>
           </th>
-          <th scope="col" class="align-middle"><small>с заказами</small></th>
-          <th scope="col" class="align-middle"><small>с заказами и планом</small></th>
+          <th scope="col" class="align-middle">
+            <small>с заказами</small>
+          </th>
+          <th scope="col" class="align-middle">
+            <small>с заказами и планом</small>
+          </th>
           <th *ngIf="!isSecondInOneMoth()" scope="col" class="align-middle" [attr.colspan]="secondMonthIndex - 7">
             <small>{{ secondWeekHeaderDates[secondMonthIndex - 7 - 1] | moment:'MMM YY' }}</small>
           </th>
           <th scope="col" class="align-middle" [attr.colspan]="isSecondInOneMoth() ? 7 : 7 - (secondMonthIndex - 7)">
             <small>{{ secondWeekHeaderDates[secondWeekHeaderDates.length - 1] | moment:'MMM YY' }}</small>
           </th>
-          <th scope="col" class="align-middle"><small>с заказами</small></th>
-          <th scope="col" class="align-middle"><small>с заказами и планом</small></th>
+          <th scope="col" class="align-middle">
+            <small>с заказами</small>
+          </th>
+          <th scope="col" class="align-middle">
+            <small>с заказами и планом</small>
+          </th>
         </tr>
         <tr class="table-header">
           <th scope="col" class="align-middle">
@@ -34,7 +44,7 @@
             {{ item | moment:'DD' }}
           </th>
           <th scope="col" class="align-middle">
-              Остаток через неделю
+            Остаток через неделю
           </th>
           <th scope="col" class="align-middle">
             <div>
@@ -66,7 +76,7 @@
             {{ info.currentProductLeftover.amount }}
           </td>
           <td class="w-3" *ngFor="let date of firstWeekHeaderDates">
-            {{ '' }}
+            {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverWithoutPlans.amount }}
@@ -75,7 +85,7 @@
             {{ info.weeklyLeftoverTotal.amount }}
           </td>
           <td class="w-3" *ngFor="let date of secondWeekHeaderDates">
-            {{ '' }}
+            {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
             {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}

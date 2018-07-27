@@ -12,7 +12,9 @@ import {
 } from '../../services/products-plan.service';
 import {
   midnightDate,
-  addDays
+  addDays,
+  isSameDate,
+  getDate
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -78,5 +80,9 @@ export class ProductsPlanPageComponent implements OnInit {
 
   isSecondInOneMoth() {
     return this.secondMonthIndex < this.firstWeekHeaderDates.length;
+  }
+
+  findBatch(batches: ProductPlanBatchResponse[], colDate: Date): ProductPlanBatchResponse {
+    return batches.find(x => isSameDate(colDate, getDate(x.date)));
   }
 }
