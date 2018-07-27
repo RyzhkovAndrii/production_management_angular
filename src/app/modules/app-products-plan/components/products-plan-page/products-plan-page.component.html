@@ -7,10 +7,10 @@
           <th scope="col" class="align-middle">
             <small>с не отгруженными заказами</small>
           </th>
-          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? 7 : secondMonthIndex">
+          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? DATE_HEADER_SIZE : secondMonthIndex">
             <small>{{ firstWeekHeaderDates[0] | moment:'MMM YY' }}</small>
           </th>
-          <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="7 - secondMonthIndex">
+          <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
             <small>{{ firstWeekHeaderDates[secondMonthIndex] | moment:'MMM YY' }}</small>
           </th>
           <th scope="col" class="align-middle">
@@ -19,10 +19,10 @@
           <th scope="col" class="align-middle">
             <small>с заказами и планом</small>
           </th>
-          <th *ngIf="!isSecondInOneMoth()" scope="col" class="align-middle" [attr.colspan]="secondMonthIndex - 7">
-            <small>{{ secondWeekHeaderDates[secondMonthIndex - 7 - 1] | moment:'MMM YY' }}</small>
+          <th *ngIf="!isSecondInOneMoth()" scope="col" class="align-middle" [attr.colspan]="secondMonthIndex - DATE_HEADER_SIZE">
+            <small>{{ secondWeekHeaderDates[secondMonthIndex - DATE_HEADER_SIZE - 1] | moment:'MMM YY' }}</small>
           </th>
-          <th scope="col" class="align-middle" [attr.colspan]="isSecondInOneMoth() ? 7 : 7 - (secondMonthIndex - 7)">
+          <th scope="col" class="align-middle" [attr.colspan]="isSecondInOneMoth() ? DATE_HEADER_SIZE : DATE_HEADER_SIZE - (secondMonthIndex - DATE_HEADER_SIZE)">
             <small>{{ secondWeekHeaderDates[secondWeekHeaderDates.length - 1] | moment:'MMM YY' }}</small>
           </th>
           <th scope="col" class="align-middle">
