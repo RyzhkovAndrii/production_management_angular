@@ -6,6 +6,7 @@ export class Modififcation {
         public userId: number,
         public modificationDateTime: string,
         public tableType: TableType,
+        public id?: number
     ) { }
 
 }
