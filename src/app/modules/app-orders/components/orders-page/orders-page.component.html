@@ -21,6 +21,9 @@
       <div class="col-5 my-auto">
         <app-order-delivered-show (onStartDateChange)="toggleDeliveredOrderVisibility($event)"></app-order-delivered-show>
       </div>
+      <div class="col-5">
+        <app-last-modification #modification [tableType]="'ORDERS'" class="float-right"></app-last-modification>
+      </div>
     </div>
     <div *ngIf="isOrderListEmpty()"
          class="row">

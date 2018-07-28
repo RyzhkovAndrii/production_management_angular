@@ -19,6 +19,7 @@ import { AppModalService } from '../../../app-shared/services/app-modal.service'
 export class OrdersPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('lastLeftover') lastLeftover;
+  @ViewChild('modification') modification;
 
   orderList: Order[] = [];
   productTypes: ProductTypeResponse[] = [];
@@ -98,6 +99,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
 
   reloadPage() {
     this.reloadOrderList();
+    this.modification.reload();
     this.lastLeftover.reloadCurrentLeftOver();
   }
 
