@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "../../../../../node_modules/rxjs";
+import * as moment from 'moment';
 
 import { UserModuleUrlService } from "./user-module-url.serivce";
 import { TableType } from "../models/table-type.enum";
@@ -17,7 +18,17 @@ export class ModificationService {
 
     get(tableType: TableType): Observable<Modififcation> {
         const params = new HttpParams().set('table_type', tableType);
-        return this.http.get(this.urlService.lastModificationUrl, {params}).catch(httpErrorHandle);
+        return this.http
+            .get(this.urlService.lastModificationUrl, { params })
+            .map(this.formatDateTimeServerToBrowser)
+            .catch(httpErrorHandle);
+    }
+
+    private formatDateTimeServerToBrowser(modification: Modififcation) { // todo on server side ???
+        let convertedModification = modification;
+        convertedModification.modificationDateTime =
+            moment(modification.modificationDateTime, 'DD-MM-YYYY HH:mm:ss').format('DD.MM.YYYY в HH:mm').toString();
+        return convertedModification;
     }
 
 }
