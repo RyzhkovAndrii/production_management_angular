@@ -43,6 +43,9 @@ import {
 import {
   SharedModuleUrlService
 } from './services/shared-module-url.serivce';
+import {
+  UsersModule
+} from '../app-users/users.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,8 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    UsersModule
   ],
   exports: [
     HttpErrorModalComponent,
