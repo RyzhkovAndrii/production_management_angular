@@ -9,8 +9,6 @@ import { UsersRoutingModule } from "./users-router.module";
 import { UserService } from "./services/user.service";
 import { UsersPageComponent } from "./components/users-page/users-page.component";
 import { UserModuleUrlService } from "./services/user-module-url.serivce";
-import { LastModificationComponent } from "./components/last-modification/last-modification.component";
-import { ModificationService } from "./services/modification.service";
 
 @NgModule({
     imports: [
@@ -23,14 +21,13 @@ import { ModificationService } from "./services/modification.service";
         UsersRoutingModule
     ],
     declarations: [
-        UsersPageComponent,
-        LastModificationComponent   
+        UsersPageComponent
     ],
     providers: [
         UserService,
-        UserModuleUrlService,
-        ModificationService
+        UserModuleUrlService
     ],
+    exports: [],
     entryComponents: []
 })
 export class UsersModule { }

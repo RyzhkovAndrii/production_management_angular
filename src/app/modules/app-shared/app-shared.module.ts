@@ -32,8 +32,17 @@ import {
   FormsModule
 } from '@angular/forms';
 import {
-   TextConfirmModalComponent
+  TextConfirmModalComponent
 } from './components/text-confirm-modal/text-confirm-modal.component';
+import {
+  LastModificationComponent
+} from './components/last-modification/last-modification.component';
+import {
+  ModificationService
+} from './services/modification.service';
+import {
+  SharedModuleUrlService
+} from './services/shared-module-url.serivce';
 
 @NgModule({
   declarations: [
@@ -43,7 +52,8 @@ import {
     EmptyPipe,
     MomentPipe,
     CheckSelectComponent,
-    TextConfirmModalComponent
+    TextConfirmModalComponent,
+    LastModificationComponent
   ],
   imports: [
     CommonModule,
@@ -57,12 +67,17 @@ import {
     ExponentPipe,
     EmptyPipe,
     MomentPipe,
-    CheckSelectComponent
+    CheckSelectComponent,
+    LastModificationComponent
   ],
   entryComponents: [
     HttpErrorModalComponent,
     SimpleConfirmModalComponent,
     TextConfirmModalComponent
+  ],
+  providers: [
+    SharedModuleUrlService,
+    ModificationService
   ]
 })
-export class AppSharedModule {}
+export class AppSharedModule { }

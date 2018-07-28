@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
 import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
 
-import { User } from '../../models/user.model';
 import { Modififcation } from '../../models/modification.model';
 import { ModificationService } from '../../services/modification.service';
-import { TableType } from '../../models/table-type.enum';
-import { UserService } from '../../services/user.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
+import { TableType } from '../../enums/table-type.enum';
+import { User } from '../../../app-users/models/user.model';
+import { UserService } from '../../../app-users/services/user.service';
 
 @Component({
   selector: 'app-last-modification',

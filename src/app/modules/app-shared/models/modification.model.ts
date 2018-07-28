@@ -1,4 +1,4 @@
-import { TableType } from "./table-type.enum";
+import { TableType } from "../enums/table-type.enum";
 
 export class Modififcation {
 

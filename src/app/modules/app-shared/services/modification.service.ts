@@ -3,17 +3,17 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "../../../../../node_modules/rxjs";
 import * as moment from 'moment';
 
-import { UserModuleUrlService } from "./user-module-url.serivce";
-import { TableType } from "../models/table-type.enum";
 import { Modififcation } from "../models/modification.model";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
+import { SharedModuleUrlService } from "./shared-module-url.serivce";
+import { TableType } from "../enums/table-type.enum";
 
 @Injectable()
 export class ModificationService {
 
     constructor(
         private http: HttpClient,
-        private urlService: UserModuleUrlService
+        private urlService: SharedModuleUrlService
     ) { }
 
     get(tableType: TableType): Observable<Modififcation> {
