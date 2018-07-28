@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
 import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
+import * as moment from 'moment';
 
 import { Modififcation } from '../../models/modification.model';
 import { ModificationService } from '../../services/modification.service';
@@ -38,6 +39,7 @@ export class LastModificationComponent implements OnInit {
       .subscribe(
         response => {
           this.lastModification = response;
+          this.lastModification.modificationDateTime = this.formatDateTime(this.lastModification.modificationDateTime);
           this.userService
             .get(response.userId)
             .subscribe(
@@ -51,6 +53,18 @@ export class LastModificationComponent implements OnInit {
 
   reload() {
     this.fetchData();
+  }
+
+  private formatDateTime(dateTime: string) {
+    const modificationDate: moment.Moment = moment(dateTime, 'DD-MM-YYYY HH:mm:ss');
+    console.log(moment().diff(modificationDate, 'days'));
+    if (moment().diff(modificationDate, 'days') === 0) {
+      return modificationDate.format('сегодня в HH:mm').toString();
+    }
+    if (moment().diff(modificationDate, 'days') === 1) {
+      return modificationDate.format('вчера в HH:mm').toString();
+    }
+    return modificationDate.format('DD.MM.YYYY в HH:mm').toString();
   }
 
 }
