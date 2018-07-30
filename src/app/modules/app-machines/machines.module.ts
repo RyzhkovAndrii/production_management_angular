@@ -8,6 +8,7 @@ import { NgDatepickerModule } from 'ng2-datepicker';
 
 import { AppSharedModule } from "../app-shared/app-shared.module";
 import { MachinesRoutingModule } from "./machines-routing.module";
+import { MachineComponent } from "./machine/machine.component";
 
 @NgModule({
     imports: [
@@ -23,7 +24,9 @@ import { MachinesRoutingModule } from "./machines-routing.module";
         AppSharedModule,
         NgDatepickerModule
     ],
-    declarations: [],
+    declarations: [
+        MachineComponent
+    ],
     providers: [],
     entryComponents: []
 })
