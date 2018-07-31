@@ -9,6 +9,7 @@ import { NgDatepickerModule } from 'ng2-datepicker';
 import { AppSharedModule } from "../app-shared/app-shared.module";
 import { MachinesRoutingModule } from "./machines-routing.module";
 import { MachineComponent } from "./machine/machine.component";
+import { MachineService } from "./services/machine.service";
 
 @NgModule({
     imports: [
@@ -27,7 +28,9 @@ import { MachineComponent } from "./machine/machine.component";
     declarations: [
         MachineComponent
     ],
-    providers: [],
+    providers: [
+        MachineService
+    ],
     entryComponents: []
 })
 export class MachinesModule { }
