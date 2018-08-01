@@ -79,6 +79,14 @@ export class ProductsService {
     return this.getProductTypes().map(data => data.sort(compareProductTypes));
   }
 
+  getProductType(id: number): Observable< ProductTypeResponse > {
+    const url = `${this.urls.productTypesUrl}/${id}`;
+    console.log(url);
+    return this.http.get(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
   getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {
     const url = `${this.urls.productLeftoverUrl}?latest`
     return this.http.get(url, {
