@@ -81,7 +81,6 @@ export class ProductsService {
 
   getProductType(id: number): Observable< ProductTypeResponse > {
     const url = `${this.urls.productTypesUrl}/${id}`;
-    console.log(url);
     return this.http.get(url, {
       headers: appHeaders
     }).catch(httpErrorHandle);
