@@ -8,10 +8,10 @@
             <small>с не отгруженными заказами</small>
           </th>
           <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? DATE_HEADER_SIZE : secondMonthIndex">
-            <small>{{ firstWeekHeaderDates[0] | moment:'MMM YY' }}</small>
+            <small>{{ headerDates[0] | moment:'MMM YY' }}</small>
           </th>
           <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
-            <small>{{ firstWeekHeaderDates[secondMonthIndex] | moment:'MMM YY' }}</small>
+            <small>{{ headerDates[secondMonthIndex] | moment:'MMM YY' }}</small>
           </th>
           <th scope="col" class="align-middle">
             <small>с заказами</small>
@@ -28,7 +28,7 @@
           <th scope="col" class="align-middle">
             Текущий остаток
           </th>
-          <th scope="col" *ngFor="let item of firstWeekHeaderDates" class="align-middle">
+          <th scope="col" *ngFor="let item of headerDates" class="align-middle">
             {{ item | moment:'DD' }}
           </th>
           <th scope="col" class="align-middle">
@@ -50,7 +50,7 @@
           <td class="w-8">
             {{ info.currentProductLeftover.amount }}
           </td>
-          <td class="w-6" *ngFor="let date of firstWeekHeaderDates">
+          <td class="w-6" *ngFor="let date of headerDates">
             {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">

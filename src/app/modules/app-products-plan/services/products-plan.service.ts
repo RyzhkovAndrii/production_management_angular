@@ -46,23 +46,18 @@ export class ProductsPlanService {
         .flatMap(batches => this.getAllProductPlanLeftoversWithoutPlan(currentDate).map(this.convertOversToMap)
           .flatMap(currentOversMap => this.getAllProductPlanLeftoversWithoutPlan(weeklyDate).map(this.convertOversToMap)
             .flatMap(weeklyOversMap => this.getAllProductPlanLeftoversTotal(weeklyDate).map(this.convertOversToMap)
-              .flatMap(weeklyTotalOversMap => this.getAllProductPlanLeftoversWithoutPlan(endDate).map(this.convertOversToMap)
-                .flatMap(toOversMap => this.getAllProductPlanLeftoversTotal(endDate).map(this.convertOversToMap)
-                  .flatMap(toTotalOversMap => from(products)
-                    .map(product => {
-                      const info: ProductPlanInfo = {
-                        productType: product,
-                        currentProductLeftover: currentOversMap.get(product.id),
-                        planBatches: batches[product.id],
-                        weeklyLeftoverWithoutPlans: weeklyOversMap.get(product.id),
-                        weeklyLeftoverTotal: weeklyTotalOversMap.get(product.id),
-                        inTwoWeeksLeftoverWithoutPlans: toOversMap.get(product.id),
-                        inTwoWeeksLeftoverTotal: toTotalOversMap.get(product.id)
-                      }
-                      return info;
-                    })
-                    .toArray()))))))
-      );
+              .flatMap(weeklyTotalOversMap => from(products)
+                .map(product => {
+                  const info: ProductPlanInfo = {
+                    productType: product,
+                    currentProductLeftover: currentOversMap.get(product.id),
+                    planBatches: batches[product.id],
+                    weeklyLeftoverWithoutPlans: weeklyOversMap.get(product.id),
+                    weeklyLeftoverTotal: weeklyTotalOversMap.get(product.id)
+                  }
+                  return info;
+                })
+                .toArray())))));
   }
 
   private convertOversToMap(overs: ProductLeftoverResponse[]): Map < number, ProductLeftoverResponse > {

@@ -32,8 +32,7 @@ export class ProductsPlanPageComponent implements OnInit {
   toDate: Date;
   productsPlanInfo: ProductPlanInfo[] = [];
 
-  firstWeekHeaderDates: Date[] = [];
-  secondWeekHeaderDates: Date[] = [];
+  headerDates: Date[] = [];
   secondMonthIndex: number = -1;
   readonly DATE_HEADER_SIZE: number = 7;
 
@@ -60,16 +59,10 @@ export class ProductsPlanPageComponent implements OnInit {
   private initDateHeaders() {
     this.currentDate = midnightDate();
     this.fromDate = addDays(this.currentDate, 1);
-    this.toDate = addDays(this.currentDate, 14);
+    this.toDate = addDays(this.currentDate, this.DATE_HEADER_SIZE);
     for (let i = 0; i < this.DATE_HEADER_SIZE; i++) {
-      this.firstWeekHeaderDates.push(addDays(this.currentDate, i + 1));
-      if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.firstWeekHeaderDates[i].getMonth()) {
-        this.secondMonthIndex = i;
-      }
-    }
-    for (let i = this.DATE_HEADER_SIZE; i < this.DATE_HEADER_SIZE * 2; i++) {
-      this.secondWeekHeaderDates.push(addDays(this.currentDate, i + 1));
-      if (this.secondMonthIndex == -1 && this.firstWeekHeaderDates[this.firstWeekHeaderDates.length - 1].getMonth() < this.secondWeekHeaderDates[i - this.DATE_HEADER_SIZE].getMonth()) {
+      this.headerDates.push(addDays(this.currentDate, i + 1));
+      if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.headerDates[i].getMonth()) {
         this.secondMonthIndex = i;
       }
     }
@@ -77,10 +70,6 @@ export class ProductsPlanPageComponent implements OnInit {
 
   isFirstInOneMoth() {
     return this.secondMonthIndex > 6 || this.secondMonthIndex < 0;
-  }
-
-  isSecondInOneMoth() {
-    return this.secondMonthIndex < this.firstWeekHeaderDates.length;
   }
 
   findBatch(batches: ProductPlanBatchResponse[], colDate: Date): ProductPlanBatchResponse {
