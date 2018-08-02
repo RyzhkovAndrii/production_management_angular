@@ -1,3 +1,9 @@
-<p>
-  machine work
-</p>
+<div id="machine-container">
+  <div class="row h-100 m-0">
+    <div class="col-12 h-100 d-inline-flex p-0">
+      <app-machine-item *ngFor="let planItem of filledMachinePlan"
+                        [planItem]="planItem">
+      </app-machine-item>
+    </div>
+  </div>
+</div>
