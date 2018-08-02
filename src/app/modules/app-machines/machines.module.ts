@@ -10,6 +10,9 @@ import { AppSharedModule } from "../app-shared/app-shared.module";
 import { MachinesRoutingModule } from "./machines-routing.module";
 import { MachineComponent } from "./machine/machine.component";
 import { MachineService } from "./services/machine.service";
+import { MachinesPageComponent } from "./machines-page/machines-page.component";
+import { ProductsService } from "../app-products/services/products.service";
+import { MachineItemComponent } from './machine/machine-item/machine-item.component';
 
 @NgModule({
     imports: [
@@ -26,10 +29,13 @@ import { MachineService } from "./services/machine.service";
         NgDatepickerModule
     ],
     declarations: [
-        MachineComponent
+        MachineComponent,
+        MachinesPageComponent,
+        MachineItemComponent
     ],
     providers: [
-        MachineService
+        MachineService,
+        ProductsService
     ],
     entryComponents: []
 })
