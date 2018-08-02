@@ -1,0 +1,27 @@
+<div *ngIf="isFetched"
+     [contextMenu]="machinePlanItemMenu"
+     class="h-100 bordered d-flex flex-column justify-content-center"
+     [ngStyle]="{'width': detailsPlanItem.duration * 90 / 24 + 'vw', 'background-color':getColor(detailsPlanItem)}"
+     [ngClass]="{'gradient': isEmpty(detailsPlanItem)}">
+        <strong class="text-center"
+                *ngIf="!isEmpty(planItem)">{{detailsPlanItem.productType.name}}: {{detailsPlanItem.productAmount | exponent}}
+        </strong>
+</div>
+
+<!-- Context menu -->
+<context-menu #machinePlanItemMenu>
+        <ng-template [visible]="!isEmpty(planItem)"
+                     contextMenuItem
+                     (execute)="openInfo()">
+                Информация
+        </ng-template>
+        <ng-template [visible]="!isEmpty(planItem)"
+                     contextMenuItem
+                     divider="true">
+        </ng-template>
+        <ng-template [visible]="!isEmpty(planItem)"
+                     contextMenuItem
+                     (execute)="openPlanItemEditForm()">
+                Редактировать план
+        </ng-template>
+</context-menu>

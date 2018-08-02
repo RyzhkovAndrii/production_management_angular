@@ -1,0 +1,13 @@
+.bordered {
+    border: solid 1px black;
+    border-left: none;
+}
+
+.gradient {
+    background-image: linear-gradient(-45deg, black 25%, transparent 25%, transparent 50%, black 50%, black 75%, transparent 75%, transparent);
+    background-size: 5px 5px;
+}
+
+strong {
+    font-size: 0.7rem;
+}
