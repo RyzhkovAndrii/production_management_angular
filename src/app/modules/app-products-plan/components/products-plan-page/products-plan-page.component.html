@@ -43,7 +43,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let info of productsPlanInfo">
-          <th>{{ info.productType.name }} {{ info.productType.weight }}</th>
+          <th scope="row">{{ info.productType.name }} {{ info.productType.weight }}</th>
           <th scope="row" class="row-name">
             <span class="filled-circle" [ngStyle]="{ 'background-color':info.productType.colorCode }"></span>
           </th>
