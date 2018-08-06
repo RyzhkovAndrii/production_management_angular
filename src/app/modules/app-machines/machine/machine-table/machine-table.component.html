@@ -1,3 +1,32 @@
-<p>
-  machine-table works!
-</p>
+<div class="row mt-2">
+  <div class="col-8">
+    <table class="table table-sm">
+      <thead class="thead-light">
+        <tr>
+          <th>#</th>
+          <th>Продукция</th>
+          <th>Количество</th>
+          <th>Норматив&nbsp;время</th>
+          <th>Начало</th>
+          <th>Окончание</th>
+          <th>Продолжительность</th>
+          <th>Норматив&nbsp;рулон</th>
+          <th>Рулонов</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of machinePlan; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.productType?.name }}</td>
+          <td>{{ item.productAmount | exponent }}</td>
+          <td></td>
+          <td>{{ item.timeStart | date : 'HH:mm' }}</td>
+          <td></td>
+          <td>{{ item.duration }} ч.</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
