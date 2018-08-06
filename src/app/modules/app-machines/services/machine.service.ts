@@ -1,61 +1,34 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "../../../../../node_modules/rxjs";
 import { MachinePlanItem } from "../models/machine-plan-item.model";
+import { HttpParams, HttpClient } from "@angular/common/http";
+import { MachineModuleUrlService } from "./machine-module-url.service";
+import appHeaders from "../../../app-utils/app-headers";
+import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
+import { formatDate } from "../../../app-utils/app-date-utils";
 
 @Injectable()
 export class MachineService {
 
-    machine1: MachinePlanItem[] = [
-        {
-            machineNumber: 1,
-            timeStart: '31-07-2018 5:30',
-            productType: 1,
-            productAmount: 155000,
-            duration: 8.0
-        },
-        {
-            machineNumber: 1,
-            timeStart: '31-07-2018 16:00',
-            productType: 3,
-            productAmount: 55000,
-            duration: 2.0
-        },
-        {
-            machineNumber: 1,
-            timeStart: '31-07-2018 20:20',
-            productType: 2,
-            productAmount: 55000,
-            duration: 3.5
-        }
-    ];
+    constructor(
+        private http: HttpClient,
+        private urlService: MachineModuleUrlService
+    ) { }
 
-    machine2 = [
-        {
-            machineNumber: 2,
-            timeStart: '31-07-2018 8:00',
-            productType: 4,
-            productAmount: 200000,
-            duration: 10.5
-        },
-        {
-            machineNumber: 2,
-            timeStart: '31-07-2018 20:00',
-            productType: 3,
-            productAmount: 26000,
-            duration: 1.0
-        },
-    ];
+    getAll(date: Date, machineNumber: number) {
+        let params = new HttpParams()
+            .set('sort', 'timeStart')
+            .set('machine_number', machineNumber.toString())
+            .set('date', formatDate(date));
+        return this.http
+            .get(this.urlService.machineUrl, { params, headers: appHeaders })
+            .catch(httpErrorHandle);
+    }
 
-    constructor() { }
-
-    getAll(machineNumber: number): Observable<MachinePlanItem[]> {
-        if (machineNumber === 1) {
-            return Observable.of(this.machine1);
-        }
-        if (machineNumber === 2) {
-            Observable.of(this.machine1);
-        }
-        return Observable.of();
+    save(planItem: MachinePlanItem): Observable<MachinePlanItem> {
+        return this.http
+            .post(this.urlService.machineUrl, planItem, { headers: appHeaders })
+            .catch(httpErrorHandle);
     }
 
 }
