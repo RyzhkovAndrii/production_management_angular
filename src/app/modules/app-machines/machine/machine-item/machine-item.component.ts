@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef, Output, EventEmitter } from '@angular/core';
+import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
 
 import { MachinePlanItem } from '../../models/machine-plan-item.model';
 import { ProductsService } from '../../../app-products/services/products.service';
@@ -11,6 +12,9 @@ import { ProductsService } from '../../../app-products/services/products.service
 export class MachineItemComponent implements OnInit {
 
   @Input() planItem: MachinePlanItem;
+  @Input() currentIndex: number;
+
+  @Output() onFormOpen = new EventEmitter<number>();
 
   detailsPlanItem: MachinePlanItem;
   width: number;
@@ -34,12 +38,8 @@ export class MachineItemComponent implements OnInit {
       : 'white';
   }
 
-  openPlanItemEditForm() {
-
-  }
-
-  openInfo() {
-    
+  openPlanItemForm() {
+    this.onFormOpen.emit(this.currentIndex);
   }
 
   private fetchDetails() {

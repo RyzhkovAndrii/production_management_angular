@@ -10,18 +10,14 @@
 
 <!-- Context menu -->
 <context-menu #machinePlanItemMenu>
-        <ng-template [visible]="!isEmpty(planItem)"
+        <ng-template *ngIf="!isEmpty(planItem)"
                      contextMenuItem
-                     (execute)="openInfo()">
-                Информация
-        </ng-template>
-        <ng-template [visible]="!isEmpty(planItem)"
-                     contextMenuItem
-                     divider="true">
-        </ng-template>
-        <ng-template [visible]="!isEmpty(planItem)"
-                     contextMenuItem
-                     (execute)="openPlanItemEditForm()">
+                     (execute)="openPlanItemForm()">
                 Редактировать план
+        </ng-template>
+        <ng-template *ngIf="isEmpty(planItem)"
+                     contextMenuItem
+                     (execute)="openPlanItemForm()">
+                Новый план
         </ng-template>
 </context-menu>

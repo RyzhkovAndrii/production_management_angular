@@ -15,6 +15,7 @@ import { ProductsService } from "../app-products/services/products.service";
 import { MachineItemComponent } from './machine/machine-item/machine-item.component';
 import { MachineModuleUrlService } from "./services/machine-module-url.service";
 import { MachineTableComponent } from "./machine/machine-table/machine-table.component";
+import { MachineItemFormComponent } from "./machine/machine-item-form/machine-item-form.component";
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { MachineTableComponent } from "./machine/machine-table/machine-table.com
         MachineComponent,
         MachinesPageComponent,
         MachineItemComponent,
-        MachineTableComponent
+        MachineTableComponent,
+        MachineItemFormComponent
     ],
     providers: [
         MachineService,

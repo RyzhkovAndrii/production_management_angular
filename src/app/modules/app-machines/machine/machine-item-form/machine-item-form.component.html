@@ -1,0 +1,98 @@
+<div class="modal in modal-backdrop">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 *ngIf="isEmpty(current)" class="modal-title">Добавить план</h4>
+        <h4 *ngIf="!isEmpty(current)"class="modal-title">Редактировать план</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form [formGroup]="form">
+            <div class="form-group row">
+              <div class="col-12">
+                <label for="amount" class="col-form-label">Количество продукции:</label>
+                <input class="form-control"
+                       type="number"
+                       min="0"
+                       (change)="setExponent($event)"
+                       (change)="changeFinishTime()"
+                       (keyup)="changeFinishTime()"
+                       formControlName="amount">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12">
+                  <label for="startTime" class="col-form-label">Время начала:</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-5 border-right mr-3">
+                  <input class="form-control"
+                         type="time"
+                         formControlName="startTime"
+                         (input)="changeAmount()">
+                </div>
+                <div class="col-1 mr-0 ml-1 p-0">
+                  <button class="btn btn-outline-secondary btn-sm btn-outline" (click)="changeCurrentStartTime()">
+                    <i class="material-icons">add</i>
+                  </button>
+                </div>
+                <div class="col-2 mr-2 p-0 pl-1">
+                  <input class="form-control"
+                         type="number"
+                         formControlName="startChange">
+                </div>
+                <div class="col-1 ml-0 pl-0 d-flex flex-column justify-content-center border-right">
+                  <span>мин.</span>
+                </div>
+                <div class="col-2 ml-2">
+                    <button class="btn btn-outline-secondary btn-sm btn-outline" (click)="minCurrentStartTime()">
+                      <strong>MIN</strong>
+                    </button>
+                  </div>
+              </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                  <div class="col-12">
+                    <label for="finishTime" class="col-form-label">Время окончания:</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5 border-right mr-3">
+                    <input class="form-control"
+                           type="time"
+                           formControlName="finishTime"
+                           (input)="changeAmount()">
+                  </div>
+                  <div class="col-1 mr-0 ml-1 p-0">
+                    <button class="btn btn-outline-secondary btn-sm btn-outline" (click)="changeCurrentFinishTime()">
+                      <i class="material-icons">remove</i>
+                    </button>
+                  </div>
+                  <div class="col-2 mr-2 p-0 pl-1">
+                    <input class="form-control"
+                           type="number"
+                           formControlName="finishChange">
+                  </div>
+                  <div class="col-1 ml-0 pl-0 d-flex flex-column justify-content-center border-right">
+                    <span>мин.</span>
+                  </div>
+                  <div class="col-2 ml-2">
+                      <button class="btn btn-outline-secondary btn-sm btn-outline" (click)="maxCurrentFinishTime()">
+                        <strong>MAX</strong>
+                      </button>
+                    </div>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-dark" (click)="submit()">Сохранить</button>
+        <button class="btn btn-outline-dark" (click)="cancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>

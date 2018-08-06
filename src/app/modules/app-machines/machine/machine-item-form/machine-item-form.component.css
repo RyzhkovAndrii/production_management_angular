@@ -1,0 +1,23 @@
+.modal.in {
+    display: block;
+}
+
+.modal.modal-backdrop {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.modal-dialog {
+    min-width: 40vw;
+}
+
+.btn-sm {
+    height: 2.4rem;
+}
+
+.btn-outline {
+    border: none;
+}
+
+.border-left {
+    border-left: 1px dashed #333;
+}
