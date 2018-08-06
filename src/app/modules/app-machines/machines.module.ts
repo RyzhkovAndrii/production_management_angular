@@ -13,6 +13,7 @@ import { MachineService } from "./services/machine.service";
 import { MachinesPageComponent } from "./machines-page/machines-page.component";
 import { ProductsService } from "../app-products/services/products.service";
 import { MachineItemComponent } from './machine/machine-item/machine-item.component';
+import { MachineModuleUrlService } from "./services/machine-module-url.service";
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { MachineItemComponent } from './machine/machine-item/machine-item.compon
     ],
     providers: [
         MachineService,
-        ProductsService
+        ProductsService,
+        MachineModuleUrlService
     ],
     entryComponents: []
 })
