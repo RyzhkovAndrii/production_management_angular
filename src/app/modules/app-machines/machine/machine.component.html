@@ -7,11 +7,9 @@
       </strong>
     </div>
     <div class="col-11 h-100 d-inline-flex p-0">
-      <app-machine-item *ngFor="let planItem of filledMachinePlan; let i = index"
-                        [planItem]="planItem"
-                        [currentIndex]="i"
-                        (onFormOpen)="openPlanItemForm($event)">
-      </app-machine-item>
+      <div *ngFor="let planItem of filledMachinePlan; let i = index" (dblclick)="openPlanItemForm(i)">
+        <app-machine-item [planItem]="planItem"></app-machine-item>
+      </div>
     </div>
   </div>
 </div>

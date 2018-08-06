@@ -12,9 +12,6 @@ import { ProductsService } from '../../../app-products/services/products.service
 export class MachineItemComponent implements OnInit {
 
   @Input() planItem: MachinePlanItem;
-  @Input() currentIndex: number;
-
-  @Output() onFormOpen = new EventEmitter<number>();
 
   detailsPlanItem: MachinePlanItem;
   width: number;
@@ -36,10 +33,6 @@ export class MachineItemComponent implements OnInit {
     return planItem.productType !== undefined
       ? planItem.productType.colorCode
       : 'white';
-  }
-
-  openPlanItemForm() {
-    this.onFormOpen.emit(this.currentIndex);
   }
 
   private fetchDetails() {

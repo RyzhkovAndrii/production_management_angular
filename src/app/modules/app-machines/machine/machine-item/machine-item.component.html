@@ -1,23 +1,8 @@
 <div *ngIf="isFetched"
-     [contextMenu]="machinePlanItemMenu"
      class="h-100 bordered d-flex flex-column justify-content-center"
      [ngStyle]="{'width': detailsPlanItem.duration * 90 / 24 + 'vw', 'background-color':getColor(detailsPlanItem)}"
      [ngClass]="{'gradient': isEmpty(detailsPlanItem)}">
-        <strong class="text-center"
-                *ngIf="!isEmpty(planItem)">{{detailsPlanItem.productType.name}}: {{detailsPlanItem.productAmount | exponent}}
+        <strong  *ngIf="!isEmpty(planItem)" class="text-center">
+                {{detailsPlanItem.productType.name}}: {{detailsPlanItem.productAmount | exponent}}
         </strong>
 </div>
-
-<!-- Context menu -->
-<context-menu #machinePlanItemMenu>
-        <ng-template *ngIf="!isEmpty(planItem)"
-                     contextMenuItem
-                     (execute)="openPlanItemForm()">
-                Редактировать план
-        </ng-template>
-        <ng-template *ngIf="isEmpty(planItem)"
-                     contextMenuItem
-                     (execute)="openPlanItemForm()">
-                Новый план
-        </ng-template>
-</context-menu>
