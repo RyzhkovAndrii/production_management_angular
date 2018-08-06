@@ -9,7 +9,7 @@ export class OrderModuleUrlService {
     orderUrl = `${this.host}/orders`;
     clientUrl = `${this.host}/clients`;
     orderItemUrl = `${this.host}/order-items`;
-    simpleOrderItemUrl = `/order-items`
+    simpleOrderItemUrl = `order-items`
 
     constructor(private restDetails: RestDetailsService) { }
 
