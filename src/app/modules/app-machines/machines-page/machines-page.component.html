@@ -25,15 +25,8 @@
       </div>
     </div>
   </div>
-  <div class="row mt-2 flex-nowrap"
-       *ngFor="let machineNumber of [1, 2]">
-    <div class="col-1 d-flex flex-column justify-content-center p-0">
-      <strong style="font-size: 1.1rem"
-              class="text-center">
-        <span class="d-none d-md-inline">ТМ-</span>{{machineNumber}}
-      </strong>
-    </div>
-    <div class="col-11 m-0 p-0">
+  <div class="row mt-2 flex-nowrap" *ngFor="let machineNumber of [1, 2]">
+    <div class="col-12 m-0 p-0">
       <app-machine [machineNumber]="machineNumber" [date]="selectedDate"></app-machine>
     </div>
   </div>

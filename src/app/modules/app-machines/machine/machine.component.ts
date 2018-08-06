@@ -7,26 +7,52 @@ import { MachinePlanItem } from '../models/machine-plan-item.model';
 @Component({
   selector: 'app-machine',
   templateUrl: './machine.component.html',
-  styleUrls: ['./machine.component.css']
+  styleUrls: ['./machine.component.css'],
 })
-export class MachineComponent implements OnInit {
+export class MachineComponent {
 
-  @Input() public machineNumber: number;
+  @Input() machineNumber: number;
+
+  @Input()
+  set date(date: Date) {
+    this._date = date;
+    this.fetchPlanData();
+  }
+
+  get date() {
+    return this._date;
+  }
+
+  private _date: Date;
 
   public filledMachinePlan: MachinePlanItem[] = [];
   public machinePlan: MachinePlanItem[];
+
+  public isMachinePlanFormVisible = false;
+  public currentPlanItem: number;
+
+  public isTableVisible = false;
 
   constructor(
     private machineService: MachineService
   ) { }
 
-  ngOnInit() {
-    this.fetchPlanData();
+  openPlanItemForm(index: number) {
+    this.currentPlanItem = index;
+    this.isMachinePlanFormVisible = true;
+  }
+
+  cancelPlanItemForm() {
+    this.isMachinePlanFormVisible = false;
+  }
+
+  toggleTableVisible() {
+    this.isTableVisible = !this.isTableVisible;
   }
 
   private fetchPlanData() {
     this.machineService
-      .getAll(this.machineNumber)
+      .getAll(this.date, this.machineNumber)
       .subscribe(response => {
         this.machinePlan = response;
         this.fillPlan();
@@ -34,9 +60,12 @@ export class MachineComponent implements OnInit {
   }
 
   private fillPlan() {
+    this.filledMachinePlan = [];
     var diff;
     var nextStart;
-    const firstPlanTime = this.getDateTimeStart(this.machinePlan[0]);
+    const firstPlanTime = this.machinePlan.length === 0
+      ? moment(this.date).endOf('day')  // todo create date
+      : moment(this.getDateTimeStart(this.machinePlan[0]));
     const firstStart = moment(firstPlanTime);
     const todayMidnight = moment(firstPlanTime).startOf('day');
     const tomorrowMidnight = moment(firstPlanTime).endOf('day');
@@ -68,7 +97,7 @@ export class MachineComponent implements OnInit {
   }
 
   private getDateTimeStart(planItem: MachinePlanItem): Date {
-    const format = 'DD-MM-YYYY HH:mm';
+    const format = 'DD-MM-YYYY HH:mm:SS';
     return moment(planItem.timeStart, format).toDate();
   }
 

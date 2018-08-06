@@ -1,9 +1,33 @@
 <div id="machine-container">
   <div class="row h-100 m-0">
-    <div class="col-12 h-100 d-inline-flex p-0">
-      <app-machine-item *ngFor="let planItem of filledMachinePlan"
-                        [planItem]="planItem">
+    <div class="col-1 d-flex flex-column justify-content-center p-0 br-right" (dblclick)="toggleTableVisible()">
+      <strong style="font-size: 1.1rem"
+              class="text-center">
+        <span class="d-none d-md-inline">ТМ-</span>{{machineNumber}}
+      </strong>
+    </div>
+    <div class="col-11 h-100 d-inline-flex p-0">
+      <app-machine-item *ngFor="let planItem of filledMachinePlan; let i = index"
+                        [planItem]="planItem"
+                        [currentIndex]="i"
+                        (onFormOpen)="openPlanItemForm($event)">
       </app-machine-item>
     </div>
   </div>
 </div>
+<div *ngIf="isTableVisible" class="row m-0">
+  <div class="col-1 p-0"></div>
+  <div class="col-11 p-0">
+    <app-machine-table></app-machine-table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isMachinePlanFormVisible">
+    <app-machine-item-form [machinePlan]="filledMachinePlan"
+                           [currentIndex]="currentPlanItem"
+                           [date]="date"
+                           [machineNumber]="machineNumber"
+                           (onCancel)="cancelPlanItemForm()">
+    </app-machine-item-form>
+  </div>

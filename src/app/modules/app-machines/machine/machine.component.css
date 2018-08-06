@@ -1,3 +1,7 @@
 #machine-container {
     height: 2.5rem;
 }
+
+.br-right {
+    border-right: 1px solid black;
+}
