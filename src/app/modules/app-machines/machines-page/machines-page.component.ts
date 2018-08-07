@@ -38,7 +38,9 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
   ) {
-    this.hours = Array(24).fill(0).map((x, i) => i);
+    this.hours = Array(24).fill(0).map((x, i) => {
+      return i < 16 ? i + 8 : i - 16
+    });
   }
 
   ngOnInit() {

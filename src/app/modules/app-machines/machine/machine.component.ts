@@ -64,13 +64,13 @@ export class MachineComponent {
     this.filledMachinePlan = [];
     var diff;
     var nextStart;
+    const todayStart = moment(this.date).add(8, 'hours');
+    const todayEnd = moment(this.date).add(1, 'days').add(28799, 'seconds'); // 7h 59m 59s
     const firstPlanTime = this.machinePlan.length === 0
-      ? moment(this.date).endOf('day')  // todo create date
+      ? todayEnd
       : moment(this.getDateTimeStart(this.machinePlan[0]));
     const firstStart = moment(firstPlanTime);
-    const todayMidnight = moment(firstPlanTime).startOf('day');
-    const tomorrowMidnight = moment(firstPlanTime).endOf('day');
-    diff = this.getDiffInHours(todayMidnight, firstStart);
+    diff = this.getDiffInHours(todayStart, firstStart);
     if (diff > 0) {
       const empty = this.getEmptyPlan(diff);
       this.filledMachinePlan.push(empty);
@@ -79,7 +79,7 @@ export class MachineComponent {
       this.filledMachinePlan.push(this.machinePlan[i]);
       const currentEnd = moment(this.getDateTimeFinish(this.machinePlan[i]));
       if (i === this.machinePlan.length - 1) {
-        nextStart = tomorrowMidnight;
+        nextStart = todayEnd;
       } else {
         nextStart = moment(this.getDateTimeStart(this.machinePlan[i + 1]));
       }
