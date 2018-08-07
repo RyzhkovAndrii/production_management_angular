@@ -31,4 +31,9 @@ export class MachineService {
             .catch(httpErrorHandle);
     }
 
+    delete(id: number) {
+        const url = `${this.urlService.machineUrl}/${id}`;
+        return this.http.delete(url, { headers: appHeaders }).catch(httpErrorHandle);
+      }
+
 }
