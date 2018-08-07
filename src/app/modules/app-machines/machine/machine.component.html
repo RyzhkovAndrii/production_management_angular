@@ -29,6 +29,7 @@
                            [currentIndex]="currentPlanItem"
                            [date]="date"
                            [machineNumber]="machineNumber"
-                           (onCancel)="cancelPlanItemForm()">
+                           (onCancel)="cancelPlanItemForm()"
+                           (onSubmit)="submitPlanItemForm($event)">
     </app-machine-item-form>
   </div>

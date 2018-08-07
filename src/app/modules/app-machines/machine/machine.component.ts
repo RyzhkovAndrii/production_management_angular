@@ -43,6 +43,12 @@ export class MachineComponent {
     this.isMachinePlanFormVisible = true;
   }
 
+  submitPlanItemForm(planItem: MachinePlanItem) {
+    this.machinePlan.splice(this.currentPlanItem, 0, planItem);
+    this.fillPlan();
+    this.isMachinePlanFormVisible = false;
+  }
+
   cancelPlanItemForm() {
     this.isMachinePlanFormVisible = false;
   }

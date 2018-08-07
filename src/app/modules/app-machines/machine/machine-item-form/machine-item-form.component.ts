@@ -1,8 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MachinePlanItem } from '../../models/machine-plan-item.model';
+import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
 import * as moment from 'moment';
+
+import { MachinePlanItem } from '../../models/machine-plan-item.model';
 import { MachineService } from '../../services/machine.service';
+import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-machine-item-form',
@@ -31,7 +34,10 @@ export class MachineItemFormComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private machineService: MachineService
+    private machineService: MachineService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
 
   ngOnInit() {
@@ -48,11 +54,15 @@ export class MachineItemFormComponent implements OnInit {
     const startDate = moment(this.date).format('DD-MM-YYYY');
     const startDateAndTime = startDate + ' ' + startTime; // todo change seconds on variable
     const planItem = new MachinePlanItem();
-    planItem.machineNumber = this.machineNumber; 
+    planItem.machineNumber = this.machineNumber;
     planItem.productTypeId = 1; // todo change
     planItem.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
     planItem.timeStart = startDateAndTime;
-    this.machineService.save(planItem).subscribe(data => this.onSubmit.emit(data));
+    this.machineService.save(planItem)
+      .subscribe(
+        response => this.onSubmit.emit(response),
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
   }
 
   isEmpty(planItem: MachinePlanItem) {
