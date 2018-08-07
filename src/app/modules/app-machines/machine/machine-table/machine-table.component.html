@@ -17,12 +17,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of tableMachinePlan; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ item.planItem.productType?.name }}
+          <td ng-class="{ 'important': item.planItem.isImportant }">{{ i + 1 }}</td>
+          <td>{{ item.planItem.productType.name }}
               &nbsp;
-              <i class="filled-circle" [ngStyle]="{ 'background-color': item.planItem.productType?.colorCode }"></i>
+              <i class="filled-circle" [ngStyle]="{ 'background-color': item.planItem.productType.colorCode }"></i>
               &nbsp;
-              {{ item.planItem.productType?.weight }}
+              {{ item.planItem.productType.weight }}
           </td>
           <td>{{ item.planItem.productAmount | exponent }}</td>
           <td>{{ item.standard.normForDay | exponent }}</td>
