@@ -2,32 +2,40 @@
   <div class="row mt-1">
     <div class="col-12 d-flex flex-column">
       <form [formGroup]="dateForm" class="form-inline align-self-center mr-2 pb-2" style="border-bottom: 2px solid #ddd">
-        <input class="form-control-sm mr-2" type="date" formControlName="date">
+        <input class="form-control form-control-sm mr-2" type="date" formControlName="date">
         <button class="btn btn-outline-dark btn-sm" (click)="dateChange()" [disabled]="dateForm.invalid">Изменить</button>
       </form>
     </div>
   </div>
-  <div class="row mt-2 flex-nowrap">
-    <div class="col-1 p-0"></div>
-    <div class="col-11 m-0 p-0">
-      <div *ngFor="let hour of hours, let i = index"
-           class="d-inline-block text-left date-bordered"
-           style="background-color: #eee; width: 3.75vw; line-height: 100%">
-        <span *ngIf="i === 0">&nbsp;
-          <br>
-          <small>&nbsp;</small>
-        </span>
-        <span *ngIf="i !== 0">
-          <span [ngClass]="{'neg-ml-10': i<10, 'neg-ml-18': i>=10}">{{i}}</span>
-          <br>
-          <small style="margin-left: -5%">|</small>
-        </span>
-      </div>
+  <div *ngIf="!isFetched"
+       class="row">
+    <div class="col-12">
+      <p class="text-center">Загрузка...</p>
     </div>
   </div>
-  <div class="row mt-2 flex-nowrap" *ngFor="let machineNumber of [1, 2]">
-    <div class="col-12 m-0 p-0">
-      <app-machine [machineNumber]="machineNumber" [date]="selectedDate"></app-machine>
+  <div *ngIf="isFetched">
+    <div class="row mt-2 flex-nowrap">
+      <div class="col-1 p-0"></div>
+      <div class="col-11 m-0 p-0">
+        <div *ngFor="let hour of hours, let i = index"
+             class="d-inline-block text-left date-bordered"
+             style="background-color: #eee; width: 3.75vw; line-height: 100%">
+          <span *ngIf="i === 0">&nbsp;
+            <br>
+            <small>&nbsp;</small>
+          </span>
+          <span *ngIf="i !== 0">
+            <span [ngClass]="{'neg-ml-10': i<10, 'neg-ml-18': i>=10}">{{i}}</span>
+            <br>
+            <small style="margin-left: -5%">|</small>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2 flex-nowrap" *ngFor="let machineNumber of [1, 2]">
+      <div class="col-12 m-0 p-0">
+        <app-machine [machineNumber]="machineNumber" [date]="selectedDate"></app-machine>
+      </div>
     </div>
   </div>
 </div>
