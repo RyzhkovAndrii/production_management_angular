@@ -16,7 +16,10 @@
 <div *ngIf="isTableVisible" class="row m-0">
   <div class="col-1 p-0"></div>
   <div class="col-11 pl-0">
-    <app-machine-table [machinePlan]="machinePlan"></app-machine-table>
+    <app-machine-table [machinePlan]="machinePlan"
+                       [standards]="standards"
+                       (onPlanItemRemove)="fillPlan()">
+    </app-machine-table>
   </div>
 </div>
 

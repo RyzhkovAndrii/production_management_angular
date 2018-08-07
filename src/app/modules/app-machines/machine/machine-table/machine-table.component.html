@@ -1,30 +1,43 @@
 <div class="row mt-2">
-  <div class="col-8">
+  <div class="col-9">
     <table class="table table-sm">
       <thead class="thead-light">
         <tr>
           <th>#</th>
           <th>Продукция</th>
-          <th>Количество</th>
-          <th>Норматив&nbsp;время</th>
+          <th>Кол-во</th>
+          <th>Норм.&nbsp;время</th>
           <th>Начало</th>
           <th>Окончание</th>
-          <th>Продолжительность</th>
-          <th>Норматив&nbsp;рулон</th>
+          <th>Длительность</th>
+          <th>Норм.&nbsp;рулон</th>
           <th>Рулонов</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of machinePlan; let i = index">
+        <tr *ngFor="let item of tableMachinePlan; let i = index">
           <td>{{ i + 1 }}</td>
-          <td>{{ item.productType?.name }}</td>
-          <td>{{ item.productAmount | exponent }}</td>
-          <td></td>
-          <td>{{ item.timeStart | date : 'HH:mm' }}</td>
-          <td></td>
-          <td>{{ item.duration }} ч.</td>
-          <td></td>
-          <td></td>
+          <td>{{ item.planItem.productType?.name }}
+              &nbsp;
+              <i class="filled-circle" [ngStyle]="{ 'background-color': item.planItem.productType?.colorCode }"></i>
+              &nbsp;
+              {{ item.planItem.productType?.weight }}
+          </td>
+          <td>{{ item.planItem.productAmount | exponent }}</td>
+          <td>{{ item.standard.normForDay | exponent }}</td>
+          <td>{{ item.planItem.timeStart | date: 'HH:mm' }}</td>
+          <td>{{ getFinishTime(item.planItem) | date: 'hh:mm' }}</td>
+          <td>{{ item.planItem.duration | number: '1.1-1' }} ч.</td>
+          <td>{{ item.standard.norm | exponent }}</td>
+          <td>{{ item.planItem.productAmount / item.standard.norm }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-dark"
+                    style="font-size: 0.6rem"
+                    (click)="removePlanItem(i)">
+              удалить
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

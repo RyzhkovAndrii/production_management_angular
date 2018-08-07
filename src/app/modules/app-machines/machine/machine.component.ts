@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import * as moment from 'moment';
 
 import { MachineService } from '../services/machine.service';
@@ -12,6 +12,7 @@ import { MachinePlanItem } from '../models/machine-plan-item.model';
 export class MachineComponent {
 
   @Input() machineNumber: number;
+  @Input() standards: Standard[];
 
   @Input()
   set date(date: Date) {
@@ -59,7 +60,7 @@ export class MachineComponent {
       });
   }
 
-  private fillPlan() {
+  fillPlan() {
     this.filledMachinePlan = [];
     var diff;
     var nextStart;

@@ -25,7 +25,7 @@
             <small>&nbsp;</small>
           </span>
           <span *ngIf="i !== 0">
-            <span [ngClass]="{'neg-ml-10': i<10, 'neg-ml-18': i>=10}">{{i}}</span>
+            <span [ngClass]="{'neg-ml-10': hour<10, 'neg-ml-18': hour>=10}">{{hour}}</span>
             <br>
             <small style="margin-left: -5%">|</small>
           </span>
@@ -34,7 +34,10 @@
     </div>
     <div class="row mt-2 flex-nowrap" *ngFor="let machineNumber of [1, 2]">
       <div class="col-12 m-0 p-0">
-        <app-machine [machineNumber]="machineNumber" [date]="selectedDate"></app-machine>
+        <app-machine [machineNumber]="machineNumber"
+                     [date]="selectedDate"
+                     [standards]="standards">
+        </app-machine>
       </div>
     </div>
   </div>
