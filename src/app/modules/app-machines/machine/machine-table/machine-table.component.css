@@ -5,5 +5,17 @@
 }
 
 .important {
-    background-color:  #de3163;
+    background-color: #de3163;
+}
+
+.mi-sm {
+    font-size: 18px;
+}
+
+.no-borders {
+    border: none;
+}
+
+table.align-middle>tbody>tr>td {
+    vertical-align: middle;
 }

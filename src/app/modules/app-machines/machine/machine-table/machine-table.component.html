@@ -1,7 +1,7 @@
 <div class="row mt-2">
   <div class="col-9">
-    <table class="table table-sm">
-      <thead class="thead-light">
+    <table class="table table-sm align-middle">
+      <thead>
         <tr>
           <th>#</th>
           <th>Продукция</th>
@@ -18,11 +18,10 @@
       <tbody>
         <tr *ngFor="let item of tableMachinePlan; let i = index">
           <td ng-class="{ 'important': item.planItem.isImportant }">{{ i + 1 }}</td>
-          <td>{{ item.planItem.productType.name }}
-              &nbsp;
-              <i class="filled-circle" [ngStyle]="{ 'background-color': item.planItem.productType.colorCode }"></i>
-              &nbsp;
-              {{ item.planItem.productType.weight }}
+          <td>{{ item.planItem.productType.name }} &nbsp;
+            <i class="filled-circle"
+               [ngStyle]="{ 'background-color': item.planItem.productType.colorCode }"></i>
+            &nbsp; {{ item.planItem.productType.weight }}
           </td>
           <td>{{ item.planItem.productAmount | exponent }}</td>
           <td>{{ item.standard.normForDay | exponent }}</td>
@@ -32,10 +31,10 @@
           <td>{{ item.standard.norm | exponent }}</td>
           <td>{{ item.planItem.productAmount / item.standard.norm }}</td>
           <td>
-            <button class="btn btn-sm btn-outline-dark"
+            <button class="btn btn-sm btn-outline-danger no-borders"
                     style="font-size: 0.6rem"
                     (click)="removePlanItem(i)">
-              удалить
+              <i class="material-icons mi-sm">clear</i>
             </button>
           </td>
         </tr>
