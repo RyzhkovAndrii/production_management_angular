@@ -51,13 +51,21 @@ export class MachineItemFormComponent implements OnInit {
 
   submit() {
     const { startTime, amount } = this.form.value;
-    const startDate = moment(this.date).format('DD-MM-YYYY');
-    const startDateAndTime = startDate + ' ' + startTime; // todo change seconds on variable
+    const momentStartTime = moment(startTime, 'HH:mm:ss');
+    let startDateAndTime = moment(this.date);
+    startDateAndTime = startDateAndTime.set({
+      'hour': momentStartTime.hours(),
+      'minute': momentStartTime.minutes(),
+      'second': momentStartTime.seconds()
+    })
+    if (startDateAndTime.hours() < 8) {
+      startDateAndTime = startDateAndTime.add(1, 'days');
+    }
     const planItem = new MachinePlanItem();
     planItem.machineNumber = this.machineNumber;
     planItem.productTypeId = 1; // todo change
     planItem.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
-    planItem.timeStart = startDateAndTime;
+    planItem.timeStart = startDateAndTime.format('DD-MM-YYYY HH:mm:ss');
     this.machineService.save(planItem)
       .subscribe(
         response => this.onSubmit.emit(response),
@@ -110,15 +118,15 @@ export class MachineItemFormComponent implements OnInit {
   }
 
   private getTime(startTime: string | Date, hourInterval = 0) {
-    const format = 'DD-MM-YYYY HH:mm:SS';
+    const format = 'DD-MM-YYYY HH:mm:ss';
     const time = (startTime instanceof Date) ? moment(startTime) : moment(startTime, format);
     time.add(hourInterval, 'hours');
-    return time.format('HH:mm:SS');
+    return time.format('HH:mm:ss');
   }
 
   changeCurrentStartTime() {
     const { startTime, startChange } = this.form.value;
-    const format = 'HH:mm:SS';
+    const format = 'HH:mm:ss';
     const newStartTime = moment(startTime, format).add(startChange, 'minutes').format(format);
     this.form.get('startTime').patchValue(newStartTime);
     this.changeAmount();
@@ -131,7 +139,7 @@ export class MachineItemFormComponent implements OnInit {
 
   changeCurrentFinishTime() {
     const { finishTime, finishChange } = this.form.value;
-    const format = 'HH:mm:SS';
+    const format = 'HH:mm:ss';
     const newFinishTime = moment(finishTime, format).add((-1) * finishChange, 'minutes').format(format);
     this.form.get('finishTime').patchValue(newFinishTime);
     this.changeAmount();
@@ -143,7 +151,7 @@ export class MachineItemFormComponent implements OnInit {
   }
 
   private getDuration(startTime: string, finishTime: string) {
-    const format = 'HH:mm:SS';
+    const format = 'HH:mm:ss';
     const start = moment(startTime, format);
     const finish = moment(finishTime, format);
     return moment.duration(finish.diff(start)).asHours();
@@ -156,7 +164,7 @@ export class MachineItemFormComponent implements OnInit {
   }
 
   changeFinishTime() {
-    const format = 'HH:mm:SS';
+    const format = 'HH:mm:ss';
     const { startTime, amount } = this.form.value;
     const integerAmount = parseFloat(amount) * Math.pow(10, this.DECIMAL_PLACES);
     const duration = integerAmount / this.norm;
