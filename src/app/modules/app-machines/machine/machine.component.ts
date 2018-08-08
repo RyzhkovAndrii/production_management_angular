@@ -3,6 +3,7 @@ import * as moment from 'moment';
 
 import { MachineService } from '../services/machine.service';
 import { MachinePlanItem } from '../models/machine-plan-item.model';
+import { compareDateTimes } from '../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-machine',
@@ -10,6 +11,8 @@ import { MachinePlanItem } from '../models/machine-plan-item.model';
   styleUrls: ['./machine.component.css'],
 })
 export class MachineComponent {
+
+  readonly dateTimeFormat = 'DD-MM-YYYY HH:mm:ss'
 
   @Input() machineNumber: number;
   @Input() standards: Standard[];
@@ -44,7 +47,8 @@ export class MachineComponent {
   }
 
   submitPlanItemForm(planItem: MachinePlanItem) {
-    this.machinePlan.splice(this.currentPlanItem, 0, planItem);
+    this.machinePlan.push(planItem);
+    this.machinePlan.sort((a, b) => compareDateTimes(a.timeStart, b.timeStart));
     this.fillPlan();
     this.isMachinePlanFormVisible = false;
   }
@@ -70,8 +74,8 @@ export class MachineComponent {
     this.filledMachinePlan = [];
     var diff;
     var nextStart;
-    const todayStart = moment(this.date).add(8, 'hours');
-    const todayEnd = moment(this.date).add(1, 'days').add(28799, 'seconds'); // 7h 59m 59s
+    const todayStart = moment(this.date).startOf('days').add(8, 'hours');
+    const todayEnd = moment(this.date).endOf('days').add(8, 'hours');
     const firstPlanTime = this.machinePlan.length === 0
       ? todayEnd
       : moment(this.getDateTimeStart(this.machinePlan[0]));
@@ -104,8 +108,7 @@ export class MachineComponent {
   }
 
   private getDateTimeStart(planItem: MachinePlanItem): Date {
-    const format = 'DD-MM-YYYY HH:mm:SS';
-    return moment(planItem.timeStart, format).toDate();
+    return moment(planItem.timeStart, this.dateTimeFormat).toDate();
   }
 
   private getDateTimeFinish(planItem: MachinePlanItem): Date {
@@ -114,7 +117,7 @@ export class MachineComponent {
   }
 
   private getDiffInHours(before, after): number {
-    return moment.duration(after.diff(before)).asHours();;
+    return moment.duration(after.diff(before)).asHours();
   }
 
 }
