@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
+import { Observable, Subject } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { StandardsService } from '../../app-standards/services/standards.service';
 import { ProductsPlanService } from '../../app-products-plan/services/products-plan.service';
-import { Observable, Subject } from '../../../../../node_modules/rxjs';
-import { formatDateBrowserToServer } from '../../../app-utils/app-date-utils';
+import { formatDateBrowserToServer, formatDateServerToBrowser, getDate } from '../../../app-utils/app-date-utils';
 import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
   dailyPlans: ProductPlanBatchResponse[] = [];
 
   dateForm = new FormGroup({
-    'date': new FormControl(moment().format('YYYY-MM-DD'), [Validators.required])
+    'date': new FormControl(formatDateServerToBrowser(this.selectedDate), [Validators.required])
   })
 
   isFetched = false;
@@ -80,9 +80,12 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
       )
   }
 
-  dateChange() {
+  dateChange(daysChange: number) {
     const { date } = this.dateForm.value;
-    this.selectedDate = date;
+    this.selectedDate = (daysChange === null)
+      ? getDate(date)
+      : moment(date, 'YYYY-MM-DD').add(daysChange, 'days').toDate();
+    this.dateForm.get('date').patchValue(formatDateServerToBrowser(this.selectedDate));
     this.fetchData();
   }
 
