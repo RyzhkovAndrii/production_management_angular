@@ -1,8 +1,8 @@
 <div *ngIf="isFetched"
-     class="h-100 bordered d-flex flex-column justify-content-center"
+     class="h-100 bordered d-flex flex-column justify-content-center px-1"
      [ngStyle]="{'width': detailsPlanItem.duration * 90 / 24 + 'vw', 'background-color':getColor(detailsPlanItem)}"
      [ngClass]="{'gradient': isEmpty(detailsPlanItem)}">
-        <strong  *ngIf="!isEmpty(planItem)" class="text-center">
-                {{detailsPlanItem.productType.name}}: {{detailsPlanItem.productAmount | exponent}}
-        </strong>
+        <div *ngIf="!isEmpty(planItem)" class="text-center overflow-text">
+                <strong>{{detailsPlanItem.productType.name}}: {{detailsPlanItem.productAmount | exponent}}</strong>
+        </div>
 </div>

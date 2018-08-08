@@ -11,3 +11,9 @@
 strong {
     font-size: 0.7rem;
 }
+
+div.overflow-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
