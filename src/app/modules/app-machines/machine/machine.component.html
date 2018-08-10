@@ -1,4 +1,4 @@
-<div id="machine-container">
+<div id="machine-container" *ngIf="isFetched">
   <div class="row h-100 m-0">
     <div class="col-1 d-flex flex-column justify-content-center p-0 br-right"
          (dblclick)="toggleTableVisible()">

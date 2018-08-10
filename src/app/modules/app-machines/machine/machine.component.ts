@@ -1,9 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewContainerRef } from '@angular/core';
+import { Observable, Subject } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { MachinePlanService } from '../services/machine-plan.service';
 import { MachinePlan } from '../models/machine-plan.model'
 import { compareDateTimes } from '../../../app-utils/app-comparators';
+import { MachinePlanItemService } from '../services/machine-plan-item.service';
+import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
+import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-machine',
@@ -29,17 +33,29 @@ export class MachineComponent {
 
   private _date: Date;
 
-  public filledDailyMachinePlan: MachinePlan[] = [];
-  public dailyMachinePlan: MachinePlan[];
+  filledDailyMachinePlan: MachinePlan[] = [];
+  dailyMachinePlan: MachinePlan[];
 
-  public isMachinePlanFormVisible = false;
-  public currentMachinePlan: number;
+  isMachinePlanFormVisible = false;
+  currentMachinePlan: number;
 
-  public isTableVisible = false;
+  isTableVisible = false;
+  isFetched = false;
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
-    private machinePlanService: MachinePlanService
+    private machinePlanService: MachinePlanService,
+    private machinePlanItemService: MachinePlanItemService,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   openMachinePlanForm(index: number) {
     this.currentMachinePlan = index;
@@ -62,12 +78,29 @@ export class MachineComponent {
   }
 
   private fetchPlanData() {
+    this.isFetched = false;
+    const obsBatch: Observable<any>[] = [];
     this.machinePlanService
       .getAll(this.date, this.machineNumber)
       .subscribe(response => {
         this.dailyMachinePlan = response;
+        this.dailyMachinePlan.forEach(plan => obsBatch.push(this.machinePlanItemService.getAll(plan.id)));
+        if (obsBatch.length === 0) {
+          this.isFetched = true;
+        } else {
+          Observable
+            .forkJoin(obsBatch)
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(
+              response => {
+                response.forEach((planItems, i) => this.dailyMachinePlan[i].planItems = planItems);
+                this.isFetched = true;
+              },
+              error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+            );
+        }
         this.fillDailyPlan();
-      });
+      })
   }
 
   fillDailyPlan() {

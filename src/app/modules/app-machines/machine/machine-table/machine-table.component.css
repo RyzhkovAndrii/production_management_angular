@@ -19,3 +19,13 @@
 table.align-middle>tbody>tr>td {
     vertical-align: middle;
 }
+
+.table-fit td, .table-fit th {
+    white-space: nowrap;
+    width: 1%;
+}
+
+td>.row div {
+    display: inline-block;
+    float: none
+}

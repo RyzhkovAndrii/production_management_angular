@@ -1,6 +1,6 @@
 <div class="row mt-2">
-  <div class="col-9">
-    <table class="table table-sm align-middle">
+  <div class="col-8">
+    <table class="table table-sm align-top table-fit">
       <thead>
         <tr>
           <th>#</th>
@@ -9,27 +9,46 @@
           <th>Норм.&nbsp;время</th>
           <th>Начало</th>
           <th>Окончание</th>
-          <th>Длительность</th>
+          <th>Длит.</th>
           <th>Норм.&nbsp;рулон</th>
-          <th>Рулонов</th>
+          <th>Рулон</th>
+          <th>Кол-во</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let element of tableMachinePlan; let i = index">
-          <td ng-class="{ 'important': element.plan.isImportant }">{{ i + 1 }}</td>
-          <td>{{ element.plan.productType.name }} &nbsp;
+        <tr *ngFor="let plan of dailyMachinePlan; let i = index">
+          <td ng-class="{ 'important': plan.isImportant }">{{ i + 1 }}</td>
+          <td>{{ plan.productType.name }} &nbsp;
             <i class="filled-circle"
-               [ngStyle]="{ 'background-color': element.plan.productType.colorCode }"></i>
-            &nbsp; {{ element.plan.productType.weight }}
+               [ngStyle]="{ 'background-color': plan.productType.colorCode }">
+            </i>
+            &nbsp; {{ plan.productType.weight }}
           </td>
-          <td>{{ element.plan.productAmount | exponent }}</td>
-          <td>{{ element.standard.normForDay | exponent }}</td>
-          <td>{{ element.plan.timeStart | date: 'HH:mm' }}</td>
-          <td>{{ getFinishTime(element.plan) | date: 'hh:mm' }}</td>
-          <td>{{ element.plan.duration | number: '1.1-1' }} ч.</td>
-          <td>{{ element.standard.norm | exponent }}</td>
-          <td>{{ element.plan.productAmount / element.standard.norm }}</td>
+          <td>{{ plan.productAmount | exponent }}</td>
+          <td>{{ getStandard(plan).normForDay | exponent }}</td>
+          <td>{{ plan.timeStart | date: 'HH:mm' }}</td>
+          <td>{{ getFinishTime(plan) | date: 'hh:mm' }}</td>
+          <td>{{ plan.duration | number: '1.1-1' }} ч.</td>
+          <td>{{ getStandard(plan).norm | exponent }}</td>
+          <td>
+            <div class="row" *ngFor="let planItem of plan.planItems">
+              <div class="col-12">
+                {{ planItem.rollType?.thickness }}&nbsp;
+                <i class="filled-circle"
+                   [ngStyle]="{ 'background-color': planItem.rollType?.colorCode }">
+                </i>
+                &nbsp;{{ planItem.rollType?.minWeight }} - {{ planItem.rollType?.maxWeight }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="row" *ngFor="let planItem of plan.planItems">
+              <div class="col-12">
+                {{ planItem.rollAmount }}
+              </div>
+            </div>
+          </td>
           <td>
             <button class="btn btn-sm btn-outline-danger no-borders"
                     style="font-size: 0.6rem"
