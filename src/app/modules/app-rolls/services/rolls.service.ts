@@ -116,6 +116,13 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
+  getRollType(id: number): Observable < RollType > {
+    const url = `${this.urls.rollTypesUrl}/${id}`;
+    return this.http.get(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
   getRollsByColor(colorCode: string): Observable < RollType[] > {
     const params = new HttpParams()
       .set('color', colorCode);
