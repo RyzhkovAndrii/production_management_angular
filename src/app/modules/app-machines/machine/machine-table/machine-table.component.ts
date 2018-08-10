@@ -3,7 +3,7 @@ import { ModalDialogService } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 
 import { MachinePlan } from '../../models/machine-plan.model';
-import { MachineService } from '../../services/machine.service';
+import { MachinePlanService } from '../../services/machine-plan.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class MachineTableComponent implements OnInit {
   tableMachinePlan: { plan: MachinePlan, standard: Standard }[] = [];
 
   constructor(
-    private machineService: MachineService,
+    private machinePlanService: MachinePlanService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
@@ -32,7 +32,7 @@ export class MachineTableComponent implements OnInit {
   }
 
   removePlan(i: number) {
-    this.machineService
+    this.machinePlanService
       .delete(this.dailyMachinePlan[i].id)
       .subscribe(
         () => {

@@ -9,7 +9,7 @@ import { NgDatepickerModule } from 'ng2-datepicker';
 import { AppSharedModule } from "../app-shared/app-shared.module";
 import { MachinesRoutingModule } from "./machines-routing.module";
 import { MachineComponent } from "./machine/machine.component";
-import { MachineService } from "./services/machine.service";
+import { MachinePlanService } from "./services/machine-plan.service";
 import { MachinesPageComponent } from "./machines-page/machines-page.component";
 import { ProductsService } from "../app-products/services/products.service";
 import { MachinePlanComponent } from './machine/machine-plan/machine-plan.component';
@@ -42,7 +42,7 @@ import { DailyProductPlanService } from "./services/daily-product-plan.service";
         DailyPlanTableComponent
     ],
     providers: [
-        MachineService,
+        MachinePlanService,
         ProductsService,
         MachineModuleUrlService,
         DailyProductPlanService

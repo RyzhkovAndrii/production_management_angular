@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import * as moment from 'moment';
 
-import { MachineService } from '../services/machine.service';
+import { MachinePlanService } from '../services/machine-plan.service';
 import { MachinePlan } from '../models/machine-plan.model'
 import { compareDateTimes } from '../../../app-utils/app-comparators';
 
@@ -38,7 +38,7 @@ export class MachineComponent {
   public isTableVisible = false;
 
   constructor(
-    private machineService: MachineService
+    private machinePlanService: MachinePlanService
   ) { }
 
   openMachinePlanForm(index: number) {
@@ -62,7 +62,7 @@ export class MachineComponent {
   }
 
   private fetchPlanData() {
-    this.machineService
+    this.machinePlanService
       .getAll(this.date, this.machineNumber)
       .subscribe(response => {
         this.dailyMachinePlan = response;

@@ -4,7 +4,7 @@ import { ModalDialogService } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 
 import { MachinePlan } from '../../models/machine-plan.model';
-import { MachineService } from '../../services/machine.service';
+import { MachinePlanService } from '../../services/machine-plan.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class MachinePlanFormComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private machineService: MachineService,
+    private machinePlanService: MachinePlanService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
@@ -66,7 +66,7 @@ export class MachinePlanFormComponent implements OnInit {
     plan.productTypeId = 1; // todo change
     plan.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
     plan.timeStart = startDateAndTime.format('DD-MM-YYYY HH:mm:ss');
-    this.machineService.save(plan)
+    this.machinePlanService.save(plan)
       .subscribe(
         response => this.onSubmit.emit(response),
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)

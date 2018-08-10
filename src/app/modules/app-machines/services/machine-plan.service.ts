@@ -8,7 +8,7 @@ import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
 import { formatDate } from "../../../app-utils/app-date-utils";
 
 @Injectable()
-export class MachineService {
+export class MachinePlanService {
 
     constructor(
         private http: HttpClient,
