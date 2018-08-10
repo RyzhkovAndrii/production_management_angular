@@ -12,10 +12,10 @@ import { MachineComponent } from "./machine/machine.component";
 import { MachineService } from "./services/machine.service";
 import { MachinesPageComponent } from "./machines-page/machines-page.component";
 import { ProductsService } from "../app-products/services/products.service";
-import { MachineItemComponent } from './machine/machine-item/machine-item.component';
+import { MachinePlanComponent } from './machine/machine-plan/machine-plan.component';
 import { MachineModuleUrlService } from "./services/machine-module-url.service";
 import { MachineTableComponent } from "./machine/machine-table/machine-table.component";
-import { MachineItemFormComponent } from "./machine/machine-item-form/machine-item-form.component";
+import { MachinePlanFormComponent } from "./machine/machine-plan-form/machine-plan-form.component";
 import { DailyPlanTableComponent } from './machines-page/daily-plan-table/daily-plan-table.component';
 import { DailyProductPlanService } from "./services/daily-product-plan.service";
 
@@ -36,9 +36,9 @@ import { DailyProductPlanService } from "./services/daily-product-plan.service";
     declarations: [
         MachineComponent,
         MachinesPageComponent,
-        MachineItemComponent,
+        MachinePlanComponent,
         MachineTableComponent,
-        MachineItemFormComponent,
+        MachinePlanFormComponent,
         DailyPlanTableComponent
     ],
     providers: [

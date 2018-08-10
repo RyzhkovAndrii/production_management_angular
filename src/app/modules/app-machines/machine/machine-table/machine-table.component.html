@@ -16,24 +16,24 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of tableMachinePlan; let i = index">
-          <td ng-class="{ 'important': item.planItem.isImportant }">{{ i + 1 }}</td>
-          <td>{{ item.planItem.productType.name }} &nbsp;
+        <tr *ngFor="let element of tableMachinePlan; let i = index">
+          <td ng-class="{ 'important': element.plan.isImportant }">{{ i + 1 }}</td>
+          <td>{{ element.plan.productType.name }} &nbsp;
             <i class="filled-circle"
-               [ngStyle]="{ 'background-color': item.planItem.productType.colorCode }"></i>
-            &nbsp; {{ item.planItem.productType.weight }}
+               [ngStyle]="{ 'background-color': element.plan.productType.colorCode }"></i>
+            &nbsp; {{ element.plan.productType.weight }}
           </td>
-          <td>{{ item.planItem.productAmount | exponent }}</td>
-          <td>{{ item.standard.normForDay | exponent }}</td>
-          <td>{{ item.planItem.timeStart | date: 'HH:mm' }}</td>
-          <td>{{ getFinishTime(item.planItem) | date: 'hh:mm' }}</td>
-          <td>{{ item.planItem.duration | number: '1.1-1' }} ч.</td>
-          <td>{{ item.standard.norm | exponent }}</td>
-          <td>{{ item.planItem.productAmount / item.standard.norm }}</td>
+          <td>{{ element.plan.productAmount | exponent }}</td>
+          <td>{{ element.standard.normForDay | exponent }}</td>
+          <td>{{ element.plan.timeStart | date: 'HH:mm' }}</td>
+          <td>{{ getFinishTime(element.plan) | date: 'hh:mm' }}</td>
+          <td>{{ element.plan.duration | number: '1.1-1' }} ч.</td>
+          <td>{{ element.standard.norm | exponent }}</td>
+          <td>{{ element.plan.productAmount / element.standard.norm }}</td>
           <td>
             <button class="btn btn-sm btn-outline-danger no-borders"
                     style="font-size: 0.6rem"
-                    (click)="removePlanItem(i)">
+                    (click)="removePlan(i)">
               <i class="material-icons mi-sm">clear</i>
             </button>
           </td>

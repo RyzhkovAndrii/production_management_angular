@@ -1,0 +1,8 @@
+<div *ngIf="isFetched"
+     class="h-100 bordered d-flex flex-column justify-content-center px-1"
+     [ngStyle]="{'width': detailsPlan.duration * 90 / 24 + 'vw', 'background-color':getColor(detailsPlan)}"
+     [ngClass]="{'gradient': isEmpty(detailsPlan)}">
+        <div *ngIf="!isEmpty(plan)" class="text-center overflow-text">
+                <strong>{{detailsPlan.productType.name}}: {{detailsPlan.productAmount | exponent}}</strong>
+        </div>
+</div>

@@ -1,33 +1,33 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
+import { ModalDialogService } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 
-import { MachinePlanItem } from '../../models/machine-plan-item.model';
+import { MachinePlan } from '../../models/machine-plan.model';
 import { MachineService } from '../../services/machine.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
-  selector: 'app-machine-item-form',
-  templateUrl: './machine-item-form.component.html',
-  styleUrls: ['./machine-item-form.component.css']
+  selector: 'app-machine-plan-form',
+  templateUrl: './machine-plan-form.component.html',
+  styleUrls: ['./machine-plan-form.component.css']
 })
-export class MachineItemFormComponent implements OnInit {
+export class MachinePlanFormComponent implements OnInit {
 
   private readonly DECIMAL_PLACES = 3;
 
-  @Input() machinePlan: MachinePlanItem[];
+  @Input() machinePlans: MachinePlan[];
   @Input() currentIndex: number;
   @Input() date: Date;
   @Input() machineNumber: number;
   norm: number = 12500;
 
   @Output() onCancel = new EventEmitter<any>();
-  @Output() onSubmit = new EventEmitter<MachinePlanItem>();
+  @Output() onSubmit = new EventEmitter<MachinePlan>();
 
-  current: MachinePlanItem;
-  before: MachinePlanItem;
-  after: MachinePlanItem;
+  current: MachinePlan;
+  before: MachinePlan;
+  after: MachinePlan;
 
   currentAmount: number;
 
@@ -41,7 +41,7 @@ export class MachineItemFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.setPlanItems();
+    this.setPlan();
     this.setInitialFormValues();
   }
 
@@ -61,29 +61,29 @@ export class MachineItemFormComponent implements OnInit {
     if (startDateAndTime.hours() < 8) {
       startDateAndTime = startDateAndTime.add(1, 'days');
     }
-    const planItem = new MachinePlanItem();
-    planItem.machineNumber = this.machineNumber;
-    planItem.productTypeId = 1; // todo change
-    planItem.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
-    planItem.timeStart = startDateAndTime.format('DD-MM-YYYY HH:mm:ss');
-    this.machineService.save(planItem)
+    const plan = new MachinePlan();
+    plan.machineNumber = this.machineNumber;
+    plan.productTypeId = 1; // todo change
+    plan.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
+    plan.timeStart = startDateAndTime.format('DD-MM-YYYY HH:mm:ss');
+    this.machineService.save(plan)
       .subscribe(
         response => this.onSubmit.emit(response),
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
       );
   }
 
-  isEmpty(planItem: MachinePlanItem) {
-    return planItem.productTypeId === undefined;
+  isEmpty(plan: MachinePlan) {
+    return plan.productTypeId === undefined;
   }
 
-  private setPlanItems() {
-    this.current = this.machinePlan[this.currentIndex];
+  private setPlan() {
+    this.current = this.machinePlans[this.currentIndex];
     if (this.currentIndex !== 0) {
-      this.before = this.machinePlan[this.currentIndex - 1];
+      this.before = this.machinePlans[this.currentIndex - 1];
     }
-    if (this.currentIndex !== this.machinePlan.length - 1) {
-      this.after = this.machinePlan[this.currentIndex + 1];
+    if (this.currentIndex !== this.machinePlans.length - 1) {
+      this.after = this.machinePlans[this.currentIndex + 1];
     }
   }
 

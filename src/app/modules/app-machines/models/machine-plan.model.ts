@@ -1,4 +1,4 @@
-export class MachinePlanItem {
+export class MachinePlan {
 
     public machineNumber: number;
     public timeStart: string;

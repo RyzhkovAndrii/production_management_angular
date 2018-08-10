@@ -1,35 +1,38 @@
 <div id="machine-container">
   <div class="row h-100 m-0">
-    <div class="col-1 d-flex flex-column justify-content-center p-0 br-right" (dblclick)="toggleTableVisible()">
+    <div class="col-1 d-flex flex-column justify-content-center p-0 br-right"
+         (dblclick)="toggleTableVisible()">
       <strong style="font-size: 1.1rem"
               class="text-center">
         <span class="d-none d-md-inline">ТМ-</span>{{machineNumber}}
       </strong>
     </div>
     <div class="col-11 h-100 d-inline-flex p-0">
-      <div *ngFor="let planItem of filledMachinePlan; let i = index" (dblclick)="openPlanItemForm(i)">
-        <app-machine-item [planItem]="planItem"></app-machine-item>
+      <div *ngFor="let machinePlan of filledDailyMachinePlan; let i = index"
+           (dblclick)="openMachinePlanForm(i)">
+        <app-machine-plan [plan]="machinePlan"></app-machine-plan>
       </div>
     </div>
   </div>
 </div>
-<div *ngIf="isTableVisible" class="row m-0">
+<div *ngIf="isTableVisible"
+     class="row m-0">
   <div class="col-1 p-0"></div>
   <div class="col-11 pl-0">
-    <app-machine-table [machinePlan]="machinePlan"
+    <app-machine-table [dailyMachinePlan]="dailyMachinePlan"
                        [standards]="standards"
-                       (onPlanItemRemove)="fillPlan()">
+                       (onPlanRemove)="fillDailyPlan()">
     </app-machine-table>
   </div>
 </div>
 
 <!-- Modal -->
 <div *ngIf="isMachinePlanFormVisible">
-    <app-machine-item-form [machinePlan]="filledMachinePlan"
-                           [currentIndex]="currentPlanItem"
-                           [date]="date"
-                           [machineNumber]="machineNumber"
-                           (onCancel)="cancelPlanItemForm()"
-                           (onSubmit)="submitPlanItemForm($event)">
-    </app-machine-item-form>
-  </div>
+  <app-machine-plan-form [machinePlans]="filledDailyMachinePlan"
+                         [currentIndex]="currentMachinePlan"
+                         [date]="date"
+                         [machineNumber]="machineNumber"
+                         (onCancel)="cancelMachinePlanForm()"
+                         (onSubmit)="submitMachinePlanForm($event)">
+  </app-machine-plan-form>
+</div>

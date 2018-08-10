@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "../../../../../node_modules/rxjs";
-import { MachinePlanItem } from "../models/machine-plan-item.model";
+import { MachinePlan } from "../models/machine-plan.model";
 import { HttpParams, HttpClient } from "@angular/common/http";
 import { MachineModuleUrlService } from "./machine-module-url.service";
 import appHeaders from "../../../app-utils/app-headers";
@@ -15,7 +15,7 @@ export class MachineService {
         private urlService: MachineModuleUrlService
     ) { }
 
-    getAll(date: Date, machineNumber: number) {
+    getAll(date: Date, machineNumber: number): Observable<MachinePlan[]> {
         let params = new HttpParams()
             .set('sort', 'timeStart')
             .set('machine_number', machineNumber.toString())
@@ -25,9 +25,9 @@ export class MachineService {
             .catch(httpErrorHandle);
     }
 
-    save(planItem: MachinePlanItem): Observable<MachinePlanItem> {
+    save(plan: MachinePlan): Observable<MachinePlan> {
         return this.http
-            .post(this.urlService.machineUrl, planItem, { headers: appHeaders })
+            .post(this.urlService.machineUrl, plan, { headers: appHeaders })
             .catch(httpErrorHandle);
     }
 

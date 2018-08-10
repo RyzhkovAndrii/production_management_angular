@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef } from '@angular/core';
-import { ModalDialogService } from '../../../../../../node_modules/ngx-modal-dialog';
+import { ModalDialogService } from 'ngx-modal-dialog';
 import * as moment from 'moment';
 
-import { MachinePlanItem } from '../../models/machine-plan-item.model';
+import { MachinePlan } from '../../models/machine-plan.model';
 import { MachineService } from '../../services/machine.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
@@ -13,12 +13,12 @@ import { AppModalService } from '../../../app-shared/services/app-modal.service'
 })
 export class MachineTableComponent implements OnInit {
 
-  @Input() machinePlan: MachinePlanItem[];
+  @Input() dailyMachinePlan: MachinePlan[];
   @Input() standards: Standard[];
 
-  @Output() onPlanItemRemove = new EventEmitter<MachinePlanItem>();
+  @Output() onPlanRemove = new EventEmitter<MachinePlan>();
 
-  tableMachinePlan: { planItem: MachinePlanItem, standard: Standard }[] = [];
+  tableMachinePlan: { plan: MachinePlan, standard: Standard }[] = [];
 
   constructor(
     private machineService: MachineService,
@@ -31,38 +31,38 @@ export class MachineTableComponent implements OnInit {
     this.createComponentData();
   }
 
-  removePlanItem(i: number) {
+  removePlan(i: number) {
     this.machineService
-      .delete(this.machinePlan[i].id)
+      .delete(this.dailyMachinePlan[i].id)
       .subscribe(
         () => {
-          this.machinePlan.splice(i, 1);
+          this.dailyMachinePlan.splice(i, 1);
           this.tableMachinePlan.splice(i, 1);
-          this.onPlanItemRemove.emit();
+          this.onPlanRemove.emit();
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
       )
   }
 
-  getFinishTime(planItem: MachinePlanItem) {
+  getFinishTime(plan: MachinePlan) {
     const format = 'DD-MM-YYYY HH:mm:SS';
-    const time = moment(planItem.timeStart, format);
-    time.add(planItem.duration, 'hours');
+    const time = moment(plan.timeStart, format);
+    time.add(plan.duration, 'hours');
     return time.toDate();
   }
 
   private createComponentData() {
-    this.machinePlan.forEach(planItem =>
+    this.dailyMachinePlan.forEach(plan =>
       this.tableMachinePlan.push(
         {
-          planItem: planItem,
-          standard: this.getStandard(planItem)
+          plan: plan,
+          standard: this.getStandard(plan)
         }
       )
     )
   }
 
-  private getStandard(machinePlan: MachinePlanItem) {
+  private getStandard(machinePlan: MachinePlan) {
     return this.standards.find(standard => standard.productTypeId === machinePlan.productTypeId);
   }
 
