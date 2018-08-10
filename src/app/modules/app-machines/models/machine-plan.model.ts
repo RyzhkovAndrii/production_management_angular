@@ -1,3 +1,5 @@
+import { MachinePlanItem } from "./machine-plan-item.model";
+
 export class MachinePlan {
 
     public machineNumber: number;
@@ -7,6 +9,8 @@ export class MachinePlan {
     public isImportant: boolean;
     public id?: number;
     public duration?: number;
+    public planItems?: MachinePlanItem[]
+    
     public productType?: ProductTypeResponse;
 
     constructor() { }
