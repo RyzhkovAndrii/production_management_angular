@@ -6,7 +6,9 @@ export class MachineModuleUrlService {
 
     private host = this.restDetails.host;
 
-    machineUrl = `${this.host}/machine-plan`; // todo 'machine-planS'
+    machinePlanUrl = `${this.host}/machine-plan`; // todo 'machine-planS'
+    machinePlanItemFullUrl = `${this.host}/machine-plan-item`; 
+    machinePlanItemUrl = 'machine-plan-item'; 
 
     constructor(private restDetails: RestDetailsService) { }
 

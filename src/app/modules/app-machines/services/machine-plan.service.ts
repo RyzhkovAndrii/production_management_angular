@@ -21,18 +21,18 @@ export class MachinePlanService {
             .set('machine_number', machineNumber.toString())
             .set('date', formatDate(date));
         return this.http
-            .get(this.urlService.machineUrl, { params, headers: appHeaders })
+            .get(this.urlService.machinePlanUrl, { params, headers: appHeaders })
             .catch(httpErrorHandle);
     }
 
     save(plan: MachinePlan): Observable<MachinePlan> {
         return this.http
-            .post(this.urlService.machineUrl, plan, { headers: appHeaders })
+            .post(this.urlService.machinePlanUrl, plan, { headers: appHeaders })
             .catch(httpErrorHandle);
     }
 
     delete(id: number) {
-        const url = `${this.urlService.machineUrl}/${id}`;
+        const url = `${this.urlService.machinePlanUrl}/${id}`;
         return this.http.delete(url, { headers: appHeaders }).catch(httpErrorHandle);
       }
 
