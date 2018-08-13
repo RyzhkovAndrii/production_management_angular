@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { MachinePlan } from '../../models/machine-plan.model';
 import { MachinePlanService } from '../../services/machine-plan.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
-import { DailyProductPlanService } from '../../services/daily-product-plan.service';
+import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
 
 @Component({
   selector: 'app-machine-table',
@@ -21,7 +21,7 @@ export class MachineTableComponent implements OnInit {
 
   constructor(
     private machinePlanService: MachinePlanService,
-    private dailyProductPlanService: DailyProductPlanService,
+    private cashService: MachineModuleCasheService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
@@ -53,7 +53,7 @@ export class MachineTableComponent implements OnInit {
   private fetchPlanDetails() {
     this.dailyMachinePlan.forEach(plan =>
       plan.planItems.forEach(planItem =>
-        this.dailyProductPlanService
+        this.cashService
           .getRollType(planItem.rollTypeId)
           .subscribe(response => planItem.rollType = response)
       )

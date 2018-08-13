@@ -17,7 +17,7 @@ import { MachineModuleUrlService } from "./services/machine-module-url.service";
 import { MachineTableComponent } from "./machine/machine-table/machine-table.component";
 import { MachinePlanFormComponent } from "./machine/machine-plan-form/machine-plan-form.component";
 import { DailyPlanTableComponent } from './machines-page/daily-plan-table/daily-plan-table.component';
-import { DailyProductPlanService } from "./services/daily-product-plan.service";
+import { MachineModuleCasheService } from "./services/machine-module-cashe.service";
 import { MachinePlanItemService } from "./services/machine-plan-item.service";
 
 @NgModule({
@@ -47,7 +47,7 @@ import { MachinePlanItemService } from "./services/machine-plan-item.service";
         MachinePlanItemService,
         ProductsService,
         MachineModuleUrlService,
-        DailyProductPlanService
+        MachineModuleCasheService
     ],
     entryComponents: []
 })

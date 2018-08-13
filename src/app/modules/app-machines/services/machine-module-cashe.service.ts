@@ -4,10 +4,10 @@ import { Observable } from "../../../../../node_modules/rxjs";
 import { RollsService } from "../../app-rolls/services/rolls.service";
 
 @Injectable()
-export class DailyProductPlanService {
+export class MachineModuleCasheService {
 
-    private productTypeCash: ProductTypeResponse[] = [];
-    private rollTypeCash: RollType[] = [];
+    private productTypeCashe: ProductTypeResponse[] = [];
+    private rollTypeCashe: RollType[] = [];
 
     constructor(
         private productService: ProductsService,
@@ -15,21 +15,21 @@ export class DailyProductPlanService {
     ) { }
 
     getProductType(id: number): Observable<ProductTypeResponse> {
-        const cash = this.productTypeCash.find(productType => productType.id == id);
+        const cash = this.productTypeCashe.find(productType => productType.id == id);
         return cash
             ? Observable.of(cash)
             : this.productService
                 .getProductType(id)
-                .do(response => this.productTypeCash.push(response));
+                .do(response => this.productTypeCashe.push(response));
     }
 
     getRollType(id: number): Observable<RollType> {
-        const cash = this.rollTypeCash.find(rollType => rollType.id == id);
+        const cash = this.rollTypeCashe.find(rollType => rollType.id == id);
         return cash
             ? Observable.of(cash)
             : this.rollService
                 .getRollType(id)
-                .do(response => this.rollTypeCash.push(response));
+                .do(response => this.rollTypeCashe.push(response));
     }
 
 }
