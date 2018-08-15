@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
-import { Observable, Subject } from '../../../../../node_modules/rxjs';
+import { Observable, Subject, BehaviorSubject } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { StandardsService } from '../../app-standards/services/standards.service';
 import { ProductsPlanService } from '../../app-products-plan/services/products-plan.service';
 import { formatDateBrowserToServer, formatDateServerToBrowser, getDate } from '../../../app-utils/app-date-utils';
 import { AppModalService } from '../../app-shared/services/app-modal.service';
+import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
+import { MachineModuleCasheService } from '../services/machine-module-cashe.service';
+import { compareProductTypes } from '../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-machines-page',
@@ -20,6 +23,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
   selectedDate: Date = new Date();
 
   standards: Standard[] = [];
+  productTypes: ProductTypeResponse[] = [];
 
   dailyPlans: ProductPlanBatchResponse[] = [];
 
@@ -34,6 +38,8 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
   constructor(
     private standardService: StandardsService,
     private productPlanSerivce: ProductsPlanService,
+    private casheService: MachineModuleCasheService,
+    private dataService: MachineModuleStoreDataService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
@@ -54,26 +60,20 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
 
   fetchData() {
     this.isFetched = false;
-    const obsBatch: Observable<any>[] = [];
     this.productPlanSerivce
       .getBatches(formatDateBrowserToServer(this.selectedDate))
       .subscribe(
         response => {
           this.dailyPlans = response.filter(productPlan => productPlan.manufacturedAmount !== 0);
-          this.dailyPlans.forEach(plan => obsBatch.push(this.standardService.getStandard(plan.productTypeId)));
-          if (obsBatch.length === 0) {
-            this.isFetched = true;
-          } else {
+          if (this.dailyPlans.length !== 0) {
             Observable
-              .forkJoin(obsBatch)
+              .combineLatest(this.fetchDailyStandards(), this.fetchDailyProductPlans())
               .takeUntil(this.ngUnsubscribe)
-              .subscribe(
-                response => {
-                  response.forEach(standard => this.standards.push(standard));
-                  this.isFetched = true;
-                },
-                error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-              );
+              .subscribe(() => {
+                this.isFetched = true;
+              });
+          } else {
+            this.isFetched = true;
           }
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
@@ -87,6 +87,45 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
       : moment(date, 'YYYY-MM-DD').add(daysChange, 'days').toDate();
     this.dateForm.get('date').patchValue(formatDateServerToBrowser(this.selectedDate));
     this.fetchData();
+  }
+
+  private fetchDailyStandards(): Observable<any> {
+    const result = new Subject<any>();
+    const obsBatch: Observable<any>[] = [];
+    this.dailyPlans.forEach(plan => obsBatch.push(this.standardService.getStandard(plan.productTypeId)));
+    Observable
+      .forkJoin(obsBatch)
+      .takeUntil(this.ngUnsubscribe)
+      .delay(1) // todo change
+      .subscribe(
+        response => {
+          response.forEach(standard => this.standards.push(standard));
+          result.next();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
+    return result.asObservable();
+  }
+
+  private fetchDailyProductPlans(): Observable<any> {
+    this.productTypes = [];
+    const result = new Subject<any>();
+    const obsBatch: Observable<any>[] = [];
+    this.dailyPlans.forEach(plan => obsBatch.push(this.casheService.getProductType(plan.productTypeId)));
+    Observable
+      .forkJoin(obsBatch)
+      .takeUntil(this.ngUnsubscribe)
+      .delay(1) // todo change
+      .subscribe(
+        response => {
+          response.forEach(type => this.productTypes.push(type));
+          this.productTypes.sort(compareProductTypes);
+          this.dataService.setDailyProductTypes(this.productTypes);
+          result.next();
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      );
+    return result.asObservable();
   }
 
 }
