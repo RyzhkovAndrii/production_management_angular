@@ -6,6 +6,7 @@ import { MachinePlan } from '../../models/machine-plan.model';
 import { MachinePlanService } from '../../services/machine-plan.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
 import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
+import { getDate } from '../../../../app-utils/app-date-utils';
 
 @Component({
   selector: 'app-machine-table',
@@ -48,6 +49,10 @@ export class MachineTableComponent implements OnInit {
     const time = moment(plan.timeStart, format);
     time.add(plan.duration, 'hours');
     return time.toDate();
+  }
+
+  getDate(date: string) {
+    return getDate(date, 'DD-MM-YYYY HH:mm:SS');
   }
 
   private fetchPlanDetails() {

@@ -27,8 +27,8 @@
           </td>
           <td>{{ plan.productAmount | exponent }}</td>
           <td>{{ getStandard(plan).normForDay | exponent }}</td>
-          <td>{{ plan.timeStart | date: 'HH:mm' }}</td>
-          <td>{{ getFinishTime(plan) | date: 'hh:mm' }}</td>
+          <td>{{ getDate(plan.timeStart) | date: 'HH:mm' }}</td>
+          <td>{{ getFinishTime(plan) | date: 'HH:mm' }}</td>
           <td>{{ plan.duration | number: '1.1-1' }} ч.</td>
           <td>{{ getStandard(plan).norm | exponent }}</td>
           <td>
