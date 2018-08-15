@@ -29,9 +29,12 @@ export class MachinePlanComponent implements OnInit {
   }
 
   getColor(plan: MachinePlan) {
-    return plan.productType !== undefined
-      ? plan.productType.colorCode 
-      : 'white';
+    if (this.isEmpty(plan)) {
+      return 'grey';
+    }
+    if (plan.isImportant) {
+      return '#de3163';
+    }
   }
 
   private fetchDetails() {
