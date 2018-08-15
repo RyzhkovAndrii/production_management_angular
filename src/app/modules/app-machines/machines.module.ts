@@ -19,6 +19,7 @@ import { MachinePlanFormComponent } from "./machine/machine-plan-form/machine-pl
 import { DailyPlanTableComponent } from './machines-page/daily-plan-table/daily-plan-table.component';
 import { MachineModuleCasheService } from "./services/machine-module-cashe.service";
 import { MachinePlanItemService } from "./services/machine-plan-item.service";
+import { MachineModuleStoreDataService } from "./services/machine-module-store-data.service";
 
 @NgModule({
     imports: [
@@ -47,7 +48,8 @@ import { MachinePlanItemService } from "./services/machine-plan-item.service";
         MachinePlanItemService,
         ProductsService,
         MachineModuleUrlService,
-        MachineModuleCasheService
+        MachineModuleCasheService,
+        MachineModuleStoreDataService
     ],
     entryComponents: []
 })
