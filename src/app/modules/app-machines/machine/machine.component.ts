@@ -79,28 +79,15 @@ export class MachineComponent {
 
   private fetchPlanData() {
     this.isFetched = false;
-    const obsBatch: Observable<any>[] = [];
-    this.machinePlanService
-      .getAll(this.date, this.machineNumber)
-      .subscribe(response => {
-        this.dailyMachinePlan = response;
-        this.dailyMachinePlan.forEach(plan => obsBatch.push(this.machinePlanItemService.getAll(plan.id)));
-        if (obsBatch.length === 0) {
+    this.machinePlanService.getAllWithItems(this.date, this.machineNumber)
+      .subscribe(
+        response => {
+          this.dailyMachinePlan = response;
+          this.fillDailyPlan();
           this.isFetched = true;
-        } else {
-          Observable
-            .forkJoin(obsBatch)
-            .takeUntil(this.ngUnsubscribe)
-            .subscribe(
-              response => {
-                response.forEach((planItems, i) => this.dailyMachinePlan[i].planItems = planItems);
-                this.isFetched = true;
-              },
-              error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-            );
-        }
-        this.fillDailyPlan();
-      })
+        },
+        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
+      )
   }
 
   fillDailyPlan() {

@@ -6,12 +6,14 @@ import { MachineModuleUrlService } from "./machine-module-url.service";
 import appHeaders from "../../../app-utils/app-headers";
 import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
 import { formatDate } from "../../../app-utils/app-date-utils";
+import { MachinePlanItemService } from "./machine-plan-item.service";
 
 @Injectable()
 export class MachinePlanService {
 
     constructor(
         private http: HttpClient,
+        private planItemService: MachinePlanItemService,
         private urlService: MachineModuleUrlService
     ) { }
 
@@ -23,6 +25,24 @@ export class MachinePlanService {
         return this.http
             .get(this.urlService.machinePlanUrl, { params, headers: appHeaders })
             .catch(httpErrorHandle);
+    }
+
+    getAllWithItems(date: Date, machineNumber: number): Observable<MachinePlan[]> {
+        return this.getAll(date, machineNumber)
+            .flatMap(plans => {
+                return plans.length === 0
+                    ? Observable.of([])
+                    : Observable.forkJoin(
+                        plans.map(plan => {
+                            return this.planItemService
+                                .getAll(plan.id)
+                                .map(items => {
+                                    plan.planItems = items;
+                                    return plan;
+                                })
+                        })
+                    )
+            })
     }
 
     save(plan: MachinePlan): Observable<MachinePlan> {
