@@ -5,7 +5,6 @@ export class MachinePlanItem {
     public productAmount: number;
     public machinePlanId: number;
     public id?: number;
-
     public rollType?: RollType;
 
     constructor() { }
