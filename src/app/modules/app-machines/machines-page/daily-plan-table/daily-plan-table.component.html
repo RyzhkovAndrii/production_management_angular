@@ -12,23 +12,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let plan of dailyPlans; let i = index">
+        <tr *ngFor="let data of tableData$ | async; let i = index">
           <td>{{ i + 1 }}</td>
-          <td>{{ productTypes[i]?.name }} &nbsp;
-            <i class="filled-circle"
-               [ngStyle]="{ 'background-color': productTypes[i]?.colorCode }"></i>
-            &nbsp; {{ productTypes[i]?.weight }}
-          </td>
-          <td>{{ plan.manufacturedAmount | exponent }}</td>
-          <td>{{ plan.productToMachinePlane | exponent }}</td>
-          <td class="">
-            <span *ngIf="amountDiff(plan) === 0"> 0.000 </span>
-            <button *ngIf="amountDiff(plan) !== 0"
+          <td><app-product-name [productType]="data.type"></app-product-name></td>
+          <td>{{ data.plan.manufacturedAmount | exponent }}</td>
+          <td>{{ data.plan.productToMachinePlane | exponent }}</td>
+          <td *ngIf="data.plan.manufacturedAmount - data.plan.productToMachinePlane; let diff">
+            <span *ngIf="diff === 0"> 0.000 </span>
+            <button *ngIf="diff !== 0"
                     class="btn btn-sm w-100"
-                    [ngClass]="{ 'btn-outline-danger': amountDiff(plan) > 0, 'btn-outline-success': amountDiff(plan) < 0 }"
-                    style="font-size: 0.7rem">
-              <span *ngIf="amountDiff(plan) > 0">- {{ amountDiff(plan) | exponent }}</span>
-              <span *ngIf="amountDiff(plan) < 0">+ {{ (-1)*amountDiff(plan) | exponent}}</span>
+                    [ngClass]="{ 'btn-outline-danger': diff > 0, 'btn-outline-success': diff < 0 }"
+                    style="font-size: 0.7rem"
+                    (click)="changePlanAmount(data.plan)">
+              <span *ngIf="diff > 0">- {{ diff | exponent }}</span>
+              <span *ngIf="diff < 0">+ {{ (-1)*diff | exponent}}</span>
             </button>
           </td>
         </tr>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
-import { Observable, Subject, BehaviorSubject } from '../../../../../node_modules/rxjs';
+import { Observable, Subject } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { StandardsService } from '../../app-standards/services/standards.service';
@@ -29,7 +29,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
 
   dateForm = new FormGroup({
     'date': new FormControl(formatDateServerToBrowser(this.selectedDate), [Validators.required])
-  })
+  });
 
   isFetched = false;
 
@@ -45,7 +45,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
     private appModalService: AppModalService
   ) {
     this.hours = Array(24).fill(0).map((x, i) => {
-      return i < 16 ? i + 8 : i - 16
+      return i < 16 ? i + 8 : i - 16;
     });
   }
 
@@ -65,6 +65,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.dailyPlans = response.filter(productPlan => productPlan.manufacturedAmount !== 0);
+          this.dataService.setDailyPlan(this.dailyPlans);
           if (this.dailyPlans.length !== 0) {
             Observable
               .combineLatest(this.fetchDailyStandards(), this.fetchDailyProductPlans())
@@ -77,7 +78,7 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
           }
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      )
+      );
   }
 
   dateChange(daysChange: number) {
