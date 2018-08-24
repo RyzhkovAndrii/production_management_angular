@@ -24,6 +24,7 @@ import { AppHttpErrorService } from '../app-shared/services/app-http-error.servi
 import { ProductSelectComponent } from './machine/machine-plan-form/product-select/product-select.component';
 import { MachinePlanFormService } from './services/machine-plan-form.service';
 import { ProductNameComponent } from './machines-page/product-name/product-name.component';
+import { TimeLineComponent } from './machines-page/time-line/time-line.component';
 
 @NgModule({
     imports: [
@@ -47,7 +48,8 @@ import { ProductNameComponent } from './machines-page/product-name/product-name.
         MachinePlanFormComponent,
         DailyPlanTableComponent,
         ProductSelectComponent,
-        ProductNameComponent
+        ProductNameComponent,
+        TimeLineComponent
     ],
     providers: [
         MachinePlanService,
