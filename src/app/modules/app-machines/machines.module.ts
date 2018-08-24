@@ -20,6 +20,7 @@ import { DailyPlanTableComponent } from './machines-page/daily-plan-table/daily-
 import { MachineModuleCasheService } from './services/machine-module-cashe.service';
 import { MachinePlanItemService } from './services/machine-plan-item.service';
 import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
+import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
 import { ProductSelectComponent } from './machine/machine-plan-form/product-select/product-select.component';
 
 @NgModule({
@@ -51,7 +52,8 @@ import { ProductSelectComponent } from './machine/machine-plan-form/product-sele
         ProductsService,
         MachineModuleUrlService,
         MachineModuleCasheService,
-        MachineModuleStoreDataService
+        MachineModuleStoreDataService,
+        AppHttpErrorService
     ],
     entryComponents: []
 })

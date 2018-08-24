@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -9,4 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 export class AppComponent {
   title = 'app';
   isCollapsed = false;
+
+  constructor(public viewContainerRef: ViewContainerRef) { }
+
 }
