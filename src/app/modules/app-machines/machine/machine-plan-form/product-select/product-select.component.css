@@ -37,12 +37,6 @@ ng-select.no-borders>div {
     outline: none;
 }
 
-.filled-circle {
-    padding: 0rem 0.5rem;
-    border-width: 0.04rem;
-    font-size: 12px;
-}
-
 .bordered-top {
     border-top: solid 1px #ddd;
     padding-top: 0.5rem;
