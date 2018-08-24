@@ -22,6 +22,7 @@ import { MachinePlanItemService } from './services/machine-plan-item.service';
 import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
 import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
 import { ProductSelectComponent } from './machine/machine-plan-form/product-select/product-select.component';
+import { MachinePlanFormService } from './services/machine-plan-form.service';
 
 @NgModule({
     imports: [
@@ -49,6 +50,7 @@ import { ProductSelectComponent } from './machine/machine-plan-form/product-sele
     providers: [
         MachinePlanService,
         MachinePlanItemService,
+        MachinePlanFormService,
         ProductsService,
         MachineModuleUrlService,
         MachineModuleCasheService,
