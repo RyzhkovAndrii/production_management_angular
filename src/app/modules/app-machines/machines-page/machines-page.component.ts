@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
-import { Observable, Subject } from '../../../../../node_modules/rxjs';
+import { Observable } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { StandardsService } from '../../app-standards/services/standards.service';
@@ -17,23 +17,15 @@ import { compareProductTypes } from '../../../app-utils/app-comparators';
   templateUrl: './machines-page.component.html',
   styleUrls: ['./machines-page.component.css']
 })
-export class MachinesPageComponent implements OnInit, OnDestroy {
+export class MachinesPageComponent implements OnInit {
 
-  hours: number[];
   selectedDate: Date = new Date();
-
-  standards: Standard[] = [];
-  productTypes: ProductTypeResponse[] = [];
-
-  dailyPlans: ProductPlanBatchResponse[] = [];
 
   dateForm = new FormGroup({
     'date': new FormControl(formatDateServerToBrowser(this.selectedDate), [Validators.required])
   });
 
   isFetched = false;
-
-  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
     private standardService: StandardsService,
@@ -43,90 +35,55 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
-  ) {
-    this.hours = Array(24).fill(0).map((x, i) => {
-      return i < 16 ? i + 8 : i - 16;
-    });
-  }
+  ) { }
 
   ngOnInit() {
     this.fetchData();
   }
 
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
-  fetchData() {
-    this.isFetched = false;
-    this.productPlanSerivce
-      .getBatches(formatDateBrowserToServer(this.selectedDate))
-      .subscribe(
-        response => {
-          this.dailyPlans = response.filter(productPlan => productPlan.manufacturedAmount !== 0);
-          this.dataService.setDailyPlan(this.dailyPlans);
-          if (this.dailyPlans.length !== 0) {
-            Observable
-              .combineLatest(this.fetchDailyStandards(), this.fetchDailyProductPlans())
-              .takeUntil(this.ngUnsubscribe)
-              .subscribe(() => {
-                this.isFetched = true;
-              });
-          } else {
-            this.isFetched = true;
-          }
-        },
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      );
-  }
-
-  dateChange(daysChange: number) {
+  changeDate(daysChange: number) {
     const { date } = this.dateForm.value;
     this.selectedDate = (daysChange === null)
       ? getDate(date)
       : moment(date, 'YYYY-MM-DD').add(daysChange, 'days').toDate();
     this.dateForm.get('date').patchValue(formatDateServerToBrowser(this.selectedDate));
+    this.dataService.setCurrentDate(this.selectedDate);
     this.fetchData();
   }
 
-  private fetchDailyStandards(): Observable<any> {
-    const result = new Subject<any>();
-    const obsBatch: Observable<any>[] = [];
-    this.dailyPlans.forEach(plan => obsBatch.push(this.standardService.getStandard(plan.productTypeId)));
-    Observable
-      .forkJoin(obsBatch)
-      .takeUntil(this.ngUnsubscribe)
-      .delay(1) // todo change
+  private fetchData() {
+    this.isFetched = false;
+    this.productPlanSerivce
+      .getBatches(formatDateBrowserToServer(this.selectedDate))
+      .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
+      .do(productPlans => this.dataService.setDailyPlan(productPlans))
+      .map(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
       .subscribe(
-        response => {
-          response.forEach(standard => this.standards.push(standard));
-          result.next();
-        },
+        () => this.isFetched = true,
+        // todo added auto open error window
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
       );
-    return result.asObservable();
   }
 
-  private fetchDailyProductPlans(): Observable<any> {
-    this.productTypes = [];
-    const result = new Subject<any>();
-    const obsBatch: Observable<any>[] = [];
-    this.dailyPlans.forEach(plan => obsBatch.push(this.casheService.getProductType(plan.productTypeId)));
-    Observable
-      .forkJoin(obsBatch)
-      .takeUntil(this.ngUnsubscribe)
-      .delay(1) // todo change
-      .subscribe(
-        response => {
-          response.forEach(type => this.productTypes.push(type));
-          this.productTypes.sort(compareProductTypes);
-          this.dataService.setDailyProductTypes(this.productTypes);
-          result.next();
-        },
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      );
-    return result.asObservable();
+  private fetchDailyStandards(dailyPlans: ProductPlanBatchResponse[]): Observable<Standard[]> {
+    return dailyPlans.length === 0
+      ? Observable.of([])
+      : Observable
+        .forkJoin(
+          dailyPlans.map(plan => this.standardService.getStandard(plan.productTypeId))
+        )
+        .do(standards => this.dataService.setStandards(standards));
+  }
+
+  private fetchDailyProductPlans(dailyPlans: ProductPlanBatchResponse[]): Observable<ProductTypeResponse[]> {
+    return dailyPlans.length === 0
+      ? Observable.of([])
+      : Observable
+        .forkJoin(
+          dailyPlans.map(plan => this.casheService.getProductType(plan.productTypeId))
+        )
+        .map(types => types.sort(compareProductTypes))
+        .do(types => this.dataService.setDailyProductTypes(types));
   }
 
 }
