@@ -1,7 +1,6 @@
-<div *ngIf="isFetched"
-     class="h-100 bordered d-flex flex-column justify-content-center px-1"
-     [ngStyle]="{'width': detailsPlan.duration * 90 / 24 + 'vw', 'background-color': getColor(detailsPlan)}">
-        <div *ngIf="!isEmpty(plan)" class="text-center overflow-text">
-                <strong>{{detailsPlan.productType.name}}: {{detailsPlan.productAmount | exponent}}</strong>
+<div *ngIf="plan$ | async; let plan" class="h-100 bordered d-flex flex-column justify-content-center px-1"
+     [ngStyle]="{'width': width + 'vw', 'background-color': color}">
+        <div *ngIf="!isPlanEmpty" class="text-center overflow-text">
+                <strong>{{plan.productType.name}}: {{plan.productAmount | exponent}}</strong>
         </div>
 </div>

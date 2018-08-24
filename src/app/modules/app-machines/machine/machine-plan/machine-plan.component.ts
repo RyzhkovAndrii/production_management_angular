@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, ViewContainerRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { MachinePlan } from '../../models/machine-plan.model';
-import { ProductsService } from '../../../app-products/services/products.service';
+import { Observable } from 'rxjs/Observable';
+import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
 
 @Component({
   selector: 'app-machine-plan',
@@ -11,44 +12,36 @@ import { ProductsService } from '../../../app-products/services/products.service
 export class MachinePlanComponent implements OnInit {
 
   @Input() plan: MachinePlan;
+  plan$: Observable<MachinePlan>;
 
-  detailsPlan: MachinePlan;
+  color: string;
   width: number;
-  isFetched = false;
+  isPlanEmpty: boolean;
 
   constructor(
-    private productService: ProductsService
+    private casheService: MachineModuleCasheService
   ) { }
 
   ngOnInit() {
-    this.fetchDetails();
+    this.isPlanEmpty = this.plan.productTypeId === undefined;
+    this.width = this.plan.duration * 90 / 24;
+    this.color = this.isPlanEmpty ? 'grey' : this.plan.isImportant ? '#de3163' : 'white';
+    this.plan$ = this.getDetailedPlan(this.plan);
   }
 
-  isEmpty(plan: MachinePlan) {
-    return plan.productTypeId === undefined;
-  }
-
-  getColor(plan: MachinePlan) {
-    if (this.isEmpty(plan)) {
-      return 'grey';
-    }
-    if (plan.isImportant) {
-      return '#de3163';
-    }
-  }
-
-  private fetchDetails() {
-    this.detailsPlan = this.plan;
-    if (this.plan.productTypeId !== undefined) {
-      this.productService
-        .getProductType(this.plan.productTypeId)
-        .subscribe(response => {
-          this.detailsPlan.productType = response
-          this.isFetched = true;
+  private getDetailedPlan(plan: MachinePlan): Observable<MachinePlan> {
+    return this.isPlanEmpty
+      ? Observable.of(plan)
+      : Observable.of(this.plan)
+        .flatMap(obsPlan => {
+          return this.casheService
+            .getProductType(obsPlan.productTypeId)
+            .map(productType => {
+              console.log(productType);
+              plan.productType = productType;
+              return plan;
+            });
         });
-    } else {
-      this.isFetched = true;
-    }
   }
 
 }
