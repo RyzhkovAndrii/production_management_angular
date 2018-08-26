@@ -1,63 +1,59 @@
 <div class="row mt-2">
   <div class="col-8">
-    <table class="table table-sm align-top table-fit">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Продукция</th>
-          <th>Кол-во</th>
-          <th>Норм.&nbsp;время</th>
-          <th>Начало</th>
-          <th>Окончание</th>
-          <th>Длит.</th>
-          <th>Норм.&nbsp;рулон</th>
-          <th>Рулон</th>
-          <th>Кол-во</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let plan of dailyMachinePlan; let i = index">
-          <td ng-class="{ 'important': plan.isImportant }">{{ i + 1 }}</td>
-          <td>{{ plan.productType.name }} &nbsp;
-            <i class="filled-circle"
-               [ngStyle]="{ 'background-color': plan.productType.colorCode }">
-            </i>
-            &nbsp; {{ plan.productType.weight }}
-          </td>
-          <td>{{ plan.productAmount | exponent }}</td>
-          <td>{{ getStandard(plan).normForDay | exponent }}</td>
-          <td>{{ getDate(plan.timeStart) | date: 'HH:mm' }}</td>
-          <td>{{ getFinishTime(plan) | date: 'HH:mm' }}</td>
-          <td>{{ plan.duration | number: '1.1-1' }} ч.</td>
-          <td>{{ getStandard(plan).norm | exponent }}</td>
-          <td>
-            <div class="row" *ngFor="let planItem of plan.planItems">
-              <div class="col-12">
-                {{ planItem.rollType?.thickness }}&nbsp;
-                <i class="filled-circle"
-                   [ngStyle]="{ 'background-color': planItem.rollType?.colorCode }">
-                </i>
-                &nbsp;{{ planItem.rollType?.minWeight }} - {{ planItem.rollType?.maxWeight }}
+    <div *ngIf="tableData$ | async as tableData; else loading">
+      <table class="table table-sm align-top table-fit">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Продукция</th>
+            <th>Кол-во</th>
+            <th>Норм.&nbsp;время</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Длит.</th>
+            <th>Норм.&nbsp;рулон</th>
+            <th>Рулон</th>
+            <th>Кол-во</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of tableData; let i = index">
+            <td [ngClass]="{ 'important': data.plan.isImportant }">{{ i + 1 }}</td>
+            <td>
+              <app-product-name [productType]="data.plan.productType"></app-product-name>
+            </td>
+            <td>{{ data.plan.productAmount | exponent }}</td>
+            <td>{{ data.standard.normForDay | exponent }}</td>
+            <td>{{ data.startTime | date: 'HH:mm' }}</td>
+            <td>{{ data.finishTime | date: 'HH:mm' }}</td>
+            <td>{{ data.plan.duration | number: '1.1-1' }} ч.</td>
+            <td>{{ data.standard.norm | exponent }}</td>
+            <td>
+              <div class="row" *ngFor="let planItem of data.plan.planItems">
+                <div class="col-12">
+                  <app-roll-name [rollType]="planItem.rollType"></app-roll-name>
+                </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <div class="row" *ngFor="let planItem of plan.planItems">
-              <div class="col-12">
-                {{ planItem.rollAmount }}
+            </td>
+            <td>
+              <div class="row" *ngFor="let planItem of data.plan.planItems">
+                <div class="col-12">
+                  {{ planItem.rollAmount }}
+                </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-outline-danger no-borders"
-                    style="font-size: 0.6rem"
-                    (click)="removePlan(i)">
-              <i class="material-icons mi-sm">clear</i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger no-borders" style="font-size: 0.6rem" (click)="onRemovePlan(data.plan)">
+                <i class="material-icons mi-sm">clear</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #loading>
+      <p>Загрузка...</p>
+    </ng-template>
   </div>
 </div>

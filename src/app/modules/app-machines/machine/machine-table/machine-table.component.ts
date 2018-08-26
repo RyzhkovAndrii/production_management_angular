@@ -1,12 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewContainerRef } from '@angular/core';
-import { ModalDialogService } from 'ngx-modal-dialog';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
 import { MachinePlan } from '../../models/machine-plan.model';
-import { MachinePlanService } from '../../services/machine-plan.service';
-import { AppModalService } from '../../../app-shared/services/app-modal.service';
-import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
-import { getDate } from '../../../../app-utils/app-date-utils';
+import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
+
+interface TableData {
+  plan: MachinePlan;
+  standard: Standard;
+  startTime: Date;
+  finishTime: Date;
+}
 
 @Component({
   selector: 'app-machine-table',
@@ -15,58 +19,43 @@ import { getDate } from '../../../../app-utils/app-date-utils';
 })
 export class MachineTableComponent implements OnInit {
 
-  @Input() dailyMachinePlan: MachinePlan[];
-  @Input() standards: Standard[];
+  @Input() machinePlans$: Observable<MachinePlan[]>;
 
-  @Output() onPlanRemove = new EventEmitter<MachinePlan>();
+  @Output() planRemove = new EventEmitter<MachinePlan>();
+
+  standards$: Observable<Standard[]>;
+  tableData$: Observable<TableData[]>;
 
   constructor(
-    private machinePlanService: MachinePlanService,
-    private cashService: MachineModuleCasheService,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
+    private dataService: MachineModuleStoreDataService
   ) { }
 
   ngOnInit() {
-    this.fetchPlanDetails();
+    this.standards$ = this.dataService.getStandards();
+    this.tableData$ = this.getTableData();
   }
 
-  removePlan(i: number) {
-    this.machinePlanService
-      .delete(this.dailyMachinePlan[i].id)
-      .subscribe(
-        () => {
-          this.dailyMachinePlan.splice(i, 1);
-          this.onPlanRemove.emit();
-        },
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      )
+  onRemovePlan(plan: MachinePlan) {
+    this.planRemove.emit(plan);
   }
 
-  getFinishTime(plan: MachinePlan) {
-    const format = 'DD-MM-YYYY HH:mm:SS';
-    const time = moment(plan.timeStart, format);
-    time.add(plan.duration, 'hours');
-    return time.toDate();
+  private getTableData(): Observable<TableData[]> {
+    return Observable.combineLatest(
+      this.machinePlans$,
+      this.standards$,
+      (plans, standards) => plans.map(plan => this.getTableRow(plan, standards)));
   }
 
-  getDate(date: string) {
-    return getDate(date, 'DD-MM-YYYY HH:mm:SS');
-  }
-
-  private fetchPlanDetails() {
-    this.dailyMachinePlan.forEach(plan =>
-      plan.planItems.forEach(planItem =>
-        this.cashService
-          .getRollType(planItem.rollTypeId)
-          .subscribe(response => planItem.rollType = response)
-      )
-    )
-  }
-
-  getStandard(machinePlan: MachinePlan) {
-    return this.standards.find(standard => standard.productTypeId === machinePlan.productTypeId);
+  private getTableRow(plan: MachinePlan, standards: Standard[]): TableData {
+    const momentStart = moment(plan.timeStart, 'DD-MM-YYYY HH:mm:SS');
+    const start = momentStart.toDate();
+    const finish = momentStart.add(plan.duration, 'hours').toDate();
+    return {
+      plan: plan,
+      standard: standards.find(standard => standard.productTypeId === plan.productTypeId),
+      startTime: start,
+      finishTime: finish
+    };
   }
 
 }
