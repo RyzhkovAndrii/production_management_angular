@@ -1,60 +1,75 @@
-import { Component, Input, ViewContainerRef } from '@angular/core';
-import { Observable, Subject } from '../../../../../node_modules/rxjs';
-import * as moment from 'moment';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { MachinePlanService } from '../services/machine-plan.service';
-import { MachinePlan } from '../models/machine-plan.model'
+import { MachinePlan } from '../models/machine-plan.model';
+import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
 import { compareDateTimes } from '../../../app-utils/app-comparators';
-import { MachinePlanItemService } from '../services/machine-plan-item.service';
-import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
-import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-machine',
   templateUrl: './machine.component.html',
   styleUrls: ['./machine.component.css'],
 })
-export class MachineComponent {
-
-  readonly dateTimeFormat = 'DD-MM-YYYY HH:mm:ss'
+export class MachineComponent implements OnInit {
 
   @Input() machineNumber: number;
-  @Input() standards: Standard[];
 
-  @Input()
-  set date(date: Date) {
-    this._date = date;
-    this.fetchPlanData();
-  }
+  machinePlans: MachinePlan[];
+  machinePlansSubject = new BehaviorSubject<MachinePlan[]>([]);
+  machinePlans$: Observable<MachinePlan[]> = this.machinePlansSubject.asObservable();
+  machinePlansWithItems$: Observable<MachinePlan[]>;
+  machinePlansWithEmpty$: Observable<MachinePlan[]>;
+  machinePlansWithItemsWithEmpty$: Observable<MachinePlan[]>;
 
-  get date() {
-    return this._date;
-  }
-
-  private _date: Date;
-
-  filledDailyMachinePlan: MachinePlan[] = [];
-  dailyMachinePlan: MachinePlan[];
-
-  isMachinePlanFormVisible = false;
   currentMachinePlan: number;
 
+  isMachinePlanFormVisible = false;
   isTableVisible = false;
+  wasTableOpened = false;
   isFetched = false;
-
-  private ngUnsubscribe: Subject<any> = new Subject();
+  isRemoving = false;
 
   constructor(
     private machinePlanService: MachinePlanService,
-    private machinePlanItemService: MachinePlanItemService,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
+    private dataService: MachineModuleStoreDataService
   ) { }
 
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+  ngOnInit() {
+    this.dataService
+      .getCurrentDate()
+      .flatMap(currentDate => this.machinePlanService.getAll(currentDate, this.machineNumber))
+      .subscribe(data => {
+        this.machinePlans = data;
+        this.machinePlansSubject.next(data);
+        this.isFetched = true;
+      });
+    this.machinePlans$ = this.machinePlanService.addProductTypes(this.machinePlans$);
+    this.machinePlansWithItems$ = this.machinePlanService.addItems(this.machinePlans$);
+    this.machinePlansWithEmpty$ = this.machinePlanService.addEmptyPlans(this.machinePlans$);
+    this.machinePlansWithItemsWithEmpty$ = this.machinePlanService.addEmptyPlans(this.machinePlansWithItems$);
+  }
+
+  removePlan(plan: MachinePlan) {
+    this.isRemoving = true;
+    this.machinePlanService
+      .delete(plan.id)
+      .subscribe(() => {
+        this.machinePlans = this.machinePlans.filter(p => p !== plan);
+        this.machinePlansSubject.next(this.machinePlans);
+        this.isRemoving = false;
+      });
+  }
+
+  addPlan(plan: MachinePlan) {
+    this.machinePlanService
+      .saveWithItems(plan)
+      .subscribe(res => {
+        this.machinePlans.push(res);
+        this.machinePlans.sort((p1, p2) => compareDateTimes(p1.timeStart, p2.timeStart));
+        this.machinePlansSubject.next(this.machinePlans);
+      });
   }
 
   openMachinePlanForm(index: number) {
@@ -63,9 +78,8 @@ export class MachineComponent {
   }
 
   submitMachinePlanForm(plan: MachinePlan) {
-    this.dailyMachinePlan.push(plan);
-    this.dailyMachinePlan.sort((a, b) => compareDateTimes(a.timeStart, b.timeStart));
-    this.fillDailyPlan();
+    this.machinePlans.push(plan);
+    this.machinePlans.sort((a, b) => compareDateTimes(a.timeStart, b.timeStart));
     this.isMachinePlanFormVisible = false;
   }
 
@@ -74,70 +88,10 @@ export class MachineComponent {
   }
 
   toggleTableVisible() {
+    if (!this.isTableVisible) {
+      this.wasTableOpened = true;
+    }
     this.isTableVisible = !this.isTableVisible;
-  }
-
-  private fetchPlanData() {
-    this.isFetched = false;
-    this.machinePlanService.getAllWithItems(this.date, this.machineNumber)
-      .subscribe(
-        response => {
-          this.dailyMachinePlan = response;
-          this.fillDailyPlan();
-          this.isFetched = true;
-        },
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      )
-  }
-
-  fillDailyPlan() {
-    this.filledDailyMachinePlan = [];
-    var diff;
-    var nextStart;
-    const todayStart = moment(this.date).startOf('days').add(8, 'hours');
-    const todayEnd = moment(this.date).endOf('days').add(8, 'hours');
-    const firstPlanTime = this.dailyMachinePlan.length === 0
-      ? todayEnd
-      : moment(this.getDateTimeStart(this.dailyMachinePlan[0]));
-    const firstStart = moment(firstPlanTime);
-    diff = this.getDiffInHours(todayStart, firstStart);
-    if (diff > 0) {
-      const empty = this.getEmptyPlan(diff);
-      this.filledDailyMachinePlan.push(empty);
-    }
-    for (var i = 0; i < this.dailyMachinePlan.length; i++) {
-      this.filledDailyMachinePlan.push(this.dailyMachinePlan[i]);
-      const currentEnd = moment(this.getDateTimeFinish(this.dailyMachinePlan[i]));
-      if (i === this.dailyMachinePlan.length - 1) {
-        nextStart = todayEnd;
-      } else {
-        nextStart = moment(this.getDateTimeStart(this.dailyMachinePlan[i + 1]));
-      }
-      diff = this.getDiffInHours(currentEnd, nextStart);
-      if (diff > 0) {
-        const empty = this.getEmptyPlan(diff);
-        this.filledDailyMachinePlan.push(empty);
-      }
-    }
-  }
-
-  private getEmptyPlan(duration: number) {
-    let empty = new MachinePlan();
-    empty.duration = duration;
-    return empty;
-  }
-
-  private getDateTimeStart(plan: MachinePlan): Date {
-    return moment(plan.timeStart, this.dateTimeFormat).toDate();
-  }
-
-  private getDateTimeFinish(plan: MachinePlan): Date {
-    const dateTimeStart = this.getDateTimeStart(plan);
-    return moment(dateTimeStart).add(plan.duration, 'hour').toDate();
-  }
-
-  private getDiffInHours(before, after): number {
-    return moment.duration(after.diff(before)).asHours();
   }
 
 }

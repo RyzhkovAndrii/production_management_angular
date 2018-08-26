@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from '../../../../../node_modules/rxjs';
 import { HttpParams, HttpClient } from '@angular/common/http';
+import * as moment from 'moment';
 
 import appHeaders from '../../../app-utils/app-headers';
 import { formatDate } from '../../../app-utils/app-date-utils';
@@ -112,6 +113,52 @@ export class MachinePlanService {
                     )
                 );
         });
+    }
+
+    addEmptyPlans(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
+        return plans$.map(plans => this._addEmptyPlans(plans));
+    }
+
+    private _addEmptyPlans(plans: MachinePlan[]): MachinePlan[] {
+        const plansWithEmplty: MachinePlan[] = [];
+        if (plans.length === 0) {
+            const empty = this.getEmptyPlan(24);
+            plansWithEmplty.push(empty);
+            return plansWithEmplty;
+        }
+        let diff = this.getDiff(null, plans[0]);
+        if (diff > 0) {
+            const empty = this.getEmptyPlan(diff);
+            plansWithEmplty.push(empty);
+        }
+        for (let i = 0; i < plans.length; i++) {
+            const p1 = plans[i];
+            const p2 = i === plans.length - 1 ? null : plans[i + 1];
+            plansWithEmplty.push(plans[i]);
+            diff = this.getDiff(p1, p2);
+            if (diff > 0) {
+                const empty = this.getEmptyPlan(diff);
+                plansWithEmplty.push(empty);
+            }
+        }
+        return plansWithEmplty;
+    }
+
+    private getEmptyPlan(duration: number) {
+        const empty = new MachinePlan();
+        empty.duration = duration;
+        return empty;
+    }
+
+    private getDiff(p1: MachinePlan, p2: MachinePlan): number {
+        const dateTimeFormat = 'DD-MM-YYYY HH:mm:ss';
+        const before = p1
+            ? moment(p1.timeStart, dateTimeFormat).add(p1.duration, 'hour')
+            : moment(p2.timeStart, dateTimeFormat).startOf('days').add(8, 'hours');
+        const after = p2
+            ? moment(p2.timeStart, dateTimeFormat)
+            : moment(p1.timeStart, dateTimeFormat).endOf('days').add(8, 'hours');
+        return moment.duration(after.diff(before)).asHours();
     }
 
 }
