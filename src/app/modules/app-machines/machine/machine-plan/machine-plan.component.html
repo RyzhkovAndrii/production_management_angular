@@ -1,5 +1,4 @@
-<div *ngIf="plan$ | async; let plan" class="h-100 bordered d-flex flex-column justify-content-center px-1"
-     [ngStyle]="{'width': width + 'vw', 'background-color': color}">
+<div class="h-100 bordered d-flex flex-column justify-content-center px-1" [ngStyle]="{'width': width + 'vw', 'background-color': color}">
         <div *ngIf="!isPlanEmpty" class="text-center overflow-text">
                 <strong>{{plan.productType.name}}: {{plan.productAmount | exponent}}</strong>
         </div>
