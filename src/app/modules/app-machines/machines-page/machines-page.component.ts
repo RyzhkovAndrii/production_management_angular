@@ -57,7 +57,7 @@ export class MachinesPageComponent implements OnInit {
       .getBatches(formatDateBrowserToServer(this.selectedDate))
       .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
       .do(productPlans => this.dataService.setDailyPlan(productPlans))
-      .map(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
+      .flatMap(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
       .subscribe(
         () => this.isFetched = true,
         // todo added auto open error window
