@@ -8,6 +8,7 @@ import { MachinePlan } from '../models/machine-plan.model';
 import { MachineModuleUrlService } from './machine-module-url.service';
 import { MachinePlanItemService } from './machine-plan-item.service';
 import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
+import { MachineModuleCasheService } from './machine-module-cashe.service';
 
 @Injectable()
 export class MachinePlanService {
@@ -15,6 +16,7 @@ export class MachinePlanService {
     constructor(
         private http: HttpClient,
         private planItemService: MachinePlanItemService,
+        private casheService: MachineModuleCasheService,
         private urlService: MachineModuleUrlService,
         private httpErrorService: AppHttpErrorService
     ) { }
@@ -27,24 +29,6 @@ export class MachinePlanService {
         return this.http
             .get(this.urlService.machinePlanUrl, { params, headers: appHeaders })
             .catch(err => this.httpErrorService.openHttpErrorWindow(err));
-    }
-
-    getAllWithItems(date: Date, machineNumber: number): Observable<MachinePlan[]> {
-        return this.getAll(date, machineNumber)
-            .flatMap(plans => {
-                return plans.length === 0
-                    ? Observable.of([])
-                    : Observable.forkJoin(
-                        plans.map(plan => {
-                            return this.planItemService
-                                .getAll(plan.id)
-                                .map(items => {
-                                    plan.planItems = items;
-                                    return plan;
-                                });
-                        })
-                    );
-            });
     }
 
     save(plan: MachinePlan): Observable<MachinePlan> {
@@ -70,6 +54,64 @@ export class MachinePlanService {
         return this.http
             .delete(url, { headers: appHeaders })
             .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
+    addProductTypes(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
+        return plans$.flatMap(plans => {
+            return plans.length === 0
+                ? Observable.of([])
+                : Observable.forkJoin(
+                    plans.map(plan => {
+                        return this.casheService
+                            .getProductType(plan.productTypeId)
+                            .map(productType => {
+                                plan.productType = productType;
+                                return plan;
+                            });
+                    }));
+        });
+    }
+
+    addItems(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
+        const withItems$ = plans$.flatMap(plans => {
+            return plans.length === 0
+                ? Observable.of([])
+                : Observable.forkJoin(
+                    plans.map(plan => {
+                        return this.planItemService
+                            .getAll(plan.id)
+                            .map(items => {
+                                plan.planItems = items;
+                                return plan;
+                            });
+                    })
+                );
+        });
+        return this.addRollTypes(withItems$);
+    }
+
+    private addRollTypes(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
+        return plans$.flatMap(plans => {
+            return plans.length === 0
+                ? Observable.of([])
+                : Observable.forkJoin(
+                    plans.map(plan =>
+                        Observable.forkJoin(
+                            plan.planItems.map(item => {
+                                return this.casheService
+                                    .getRollType(item.rollTypeId)
+                                    .map(type => {
+                                        item.rollType = type;
+                                        return item;
+                                    });
+                            })
+                        ).map(items => {
+                            plan.planItems = items;
+                            return plan;
+                        })
+                    )
+                );
+        });
     }
 
 }
