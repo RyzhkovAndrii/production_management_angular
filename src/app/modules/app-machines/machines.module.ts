@@ -26,6 +26,7 @@ import { MachinePlanFormService } from './services/machine-plan-form.service';
 import { ProductNameComponent } from './machines-page/product-name/product-name.component';
 import { TimeLineComponent } from './machines-page/time-line/time-line.component';
 import { RollNameComponent } from './machines-page/roll-name/roll-name.component';
+import { RollTableComponent } from './machine/machine-plan-form/roll-table/roll-table.component';
 
 @NgModule({
     imports: [
@@ -51,7 +52,8 @@ import { RollNameComponent } from './machines-page/roll-name/roll-name.component
         ProductSelectComponent,
         ProductNameComponent,
         TimeLineComponent,
-        RollNameComponent
+        RollNameComponent,
+        RollTableComponent
     ],
     providers: [
         MachinePlanService,
