@@ -22,7 +22,7 @@ export class RollTableComponent implements OnInit {
 
   @Input() productType$: Observable<ProductTypeResponse>;
 
-  @Output() change = new EventEmitter<number>();
+  @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
 
   standard$: Observable<Standard>;
   tableData$: Observable<TableData[]>;
@@ -42,7 +42,7 @@ export class RollTableComponent implements OnInit {
   }
 
   onChange() {
-    // todo too much calculations
+    // todo remove too much calculations
     let rollAmount = 0;
     this.rollAmounts.forEach(elem => {
       let amount = Number.parseInt(elem.nativeElement.value);
@@ -51,7 +51,7 @@ export class RollTableComponent implements OnInit {
       rollAmount += amount;
     });
     const productAmount = rollAmount * this.standard.norm;
-    this.change.emit(productAmount);
+    this.changeData.emit(productAmount);
   }
 
   getDiffAmount(operation: ProductPlanOperationResponse): number {
@@ -63,7 +63,7 @@ export class RollTableComponent implements OnInit {
     let rollAmount = 0;
     operations.forEach(operation => rollAmount += this.getDiffAmount(operation));
     const productAmount = rollAmount * this.standard.norm;
-    this.change.emit(productAmount);
+    this.changeData.emit(productAmount);
   }
 
   private getStandard(type$: Observable<ProductTypeResponse>): Observable<Standard> {
