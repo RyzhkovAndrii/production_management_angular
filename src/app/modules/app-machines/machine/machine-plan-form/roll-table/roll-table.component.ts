@@ -37,7 +37,7 @@ export class RollTableComponent implements OnInit {
 
   ngOnInit() {
     this.standard$ = this.getStandard(this.productType$);
-    this.tableData$ = this.getTableData(this.productType$);
+    this.tableData$ = this.getTableData(this.productType$).do(data => this.setInitAmount(data));
     this.standard$.subscribe(s => this.standard = s);
   }
 
@@ -59,10 +59,13 @@ export class RollTableComponent implements OnInit {
     return amount > 0 ? amount : 0;
   }
 
-  private setInitAmount(operations: ProductPlanOperationResponse[]) {
-    let rollAmount = 0;
-    operations.forEach(operation => rollAmount += this.getDiffAmount(operation));
-    const productAmount = rollAmount * this.standard.norm;
+  private setInitAmount(tableData: TableData[]) {
+    let productAmount = 0;
+    if (tableData !== null) {
+      let rollAmount = 0;
+      tableData.forEach(data => rollAmount += this.getDiffAmount(data.operation));
+      productAmount = rollAmount * this.standard.norm;
+    }
     this.changeData.emit(productAmount);
   }
 
@@ -73,7 +76,7 @@ export class RollTableComponent implements OnInit {
         .map(standards =>
           standards.find(standard =>
             standard.productTypeId === type.id));
-      return type ? standard$ : Observable.empty();
+      return type ? standard$ : Observable.of(null);
     });
   }
 
@@ -103,10 +106,10 @@ export class RollTableComponent implements OnInit {
     const data$ =
       Observable.combineLatest(
         this.getRollTypes(type$),
-        this.getOperations(type$).do(operations => this.setInitAmount(operations)),
+        this.getOperations(type$),
         (rolls, operations) => rolls.length !== 0 ? rolls.map(roll => this.getTableRow(roll, operations)) : []
       );
-    return type$.switchMap(type => type ? data$ : Observable.empty());
+    return type$.switchMap(type => type ? data$ : Observable.of(null));
   }
 
   private getTableRow(roll: RollType, operations: ProductPlanOperationResponse[]): TableData {
