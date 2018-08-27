@@ -4,6 +4,11 @@ import { Observable } from '../../../../../../node_modules/rxjs';
 import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
 import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
 
+interface TableData {
+  plan: ProductPlanBatchResponse;
+  type: ProductTypeResponse;
+}
+
 @Component({
   selector: 'app-daily-plan-table',
   templateUrl: './daily-plan-table.component.html',
@@ -11,11 +16,7 @@ import { MachineModuleStoreDataService } from '../../services/machine-module-sto
 })
 export class DailyPlanTableComponent implements OnInit {
 
-  tableData$: Observable<{ plan: ProductPlanBatchResponse, type: ProductTypeResponse }[]>;
-
-  productTypes: ProductTypeResponse[] = [];
-
-  fetchedPlans$: Observable<{ ProductPlanBatchResponse, ProductTypeResponse }[]>;
+  tableData$: Observable<TableData[]>;
 
   constructor(
     private casheService: MachineModuleCasheService,
@@ -26,7 +27,7 @@ export class DailyPlanTableComponent implements OnInit {
     this.tableData$ = this.fetchTableData();
   }
 
-  fetchTableData(): Observable<{ plan: ProductPlanBatchResponse, type: ProductTypeResponse }[]> {
+  fetchTableData(): Observable<TableData[]> {
     return this.dataService
       .getDailyPlan()
       .flatMap(plans => {
