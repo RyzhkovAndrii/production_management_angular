@@ -1,11 +1,11 @@
 <div *ngIf="productType$ | async as type">
   <div *ngIf="tableData$ | async as tableData; else loading" id="rolls-container">
-    <div class="form-group row bordered-top my-2">
+    <div class="row bordered-top my-2">
       <div class="col-12">
         <span>Укажите количество рулонов (норматив - {{ standard.norm | exponent }} тыс.шт. / рул.)</span>
       </div>
     </div>
-    <div *ngFor="let data of tableData; let i = index" class="row form-group d-flex">
+    <div *ngFor="let data of tableData; let i = index" class="row d-flex mt-1">
       <div class="col-5 align-self-center">
         <app-roll-name [rollType]="data.roll"></app-roll-name>
       </div>
@@ -14,14 +14,14 @@
                class="form-control"
                type="number"
                min="0"
-               value="{{ data.operation.rollAmount - data.operation.rollToMachinePlane }}"
+               value="{{ getDiffAmount(data.operation) }}"
                (change)="onChange()">
       </div>
       <div class="col-2 align-self-center bordered-left">
-        <input class="form-control" type="number" readonly value="{{ data.operation.rollToMachinePlane }}">
+        <input class="form-control" type="text" readonly value="{{ data.operation.rollToMachinePlane }}">
       </div>
       <div class="col-2 align-self-center bordered-left">
-        <input class="form-control" type="number" readonly value="{{ data.operation.rollAmount }}">
+        <input class="form-control" type="text" readonly value="{{ data.operation.rollAmount }}">
       </div>
     </div>
   </div>

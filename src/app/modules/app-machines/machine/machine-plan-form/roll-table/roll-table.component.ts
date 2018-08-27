@@ -25,8 +25,6 @@ export class RollTableComponent implements OnInit {
   @Output() change = new EventEmitter<number>();
 
   standard$: Observable<Standard>;
-  rollTypes$: Observable<RollType[]>;
-  operations$: Observable<ProductPlanOperationResponse[]>;
   tableData$: Observable<TableData[]>;
 
   standard: Standard;
@@ -38,11 +36,8 @@ export class RollTableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // todo remove null check form all observable methods
     this.standard$ = this.getStandard(this.productType$);
-    this.rollTypes$ = this.getRollTypes(this.standard$);
-    this.operations$ = this.getOperations(this.productType$).do(operations => this.setInitAmount(operations));
-    this.tableData$ = this.getTableData();
+    this.tableData$ = this.getTableData(this.productType$);
     this.standard$.subscribe(s => this.standard = s);
   }
 
@@ -59,25 +54,31 @@ export class RollTableComponent implements OnInit {
     this.change.emit(productAmount);
   }
 
+  getDiffAmount(operation: ProductPlanOperationResponse): number {
+    const amount = operation.rollAmount - operation.rollToMachinePlane;
+    return amount > 0 ? amount : 0;
+  }
+
   private setInitAmount(operations: ProductPlanOperationResponse[]) {
     let rollAmount = 0;
-    operations.forEach(operation => rollAmount += (operation.rollAmount - operation.rollToMachinePlane));
+    operations.forEach(operation => rollAmount += this.getDiffAmount(operation));
     const productAmount = rollAmount * this.standard.norm;
     this.change.emit(productAmount);
   }
 
   private getStandard(type$: Observable<ProductTypeResponse>): Observable<Standard> {
     return type$.flatMap(type => {
-      return !type
-        ? Observable.of()
-        : this.dataService.getStandards()
-          .map(standards => {
-            return standards.find(standard => standard.productTypeId === type.id);
-          });
+      const standard$ = this.dataService
+        .getStandards()
+        .map(standards =>
+          standards.find(standard =>
+            standard.productTypeId === type.id));
+      return type ? standard$ : Observable.empty();
     });
   }
 
-  private getRollTypes(standard$: Observable<Standard>): Observable<RollType[]> {
+  private getRollTypes(type$: Observable<ProductTypeResponse>): Observable<RollType[]> {
+    const standard$ = this.getStandard(type$);
     return standard$.flatMap(standard => {
       return standard.rollTypeIds.length === 0
         ? Observable.of([])
@@ -89,31 +90,23 @@ export class RollTableComponent implements OnInit {
 
   private getOperations(type$: Observable<ProductTypeResponse>): Observable<ProductPlanOperationResponse[]> {
     return Observable.combineLatest(this.dataService.getCurrentDate(), type$)
-      .flatMap(data => {
-        if (!data[1]) {
-          return Observable.of();
-        }
-        return this.productPlanService
-          .getOperationsByProduct(
-            data[1].id,
-            formatDateBrowserToServer(data[0]),
-            formatDateBrowserToServer(data[0])
-          );
-      });
+      .flatMap(data => this.productPlanService
+        .getOperationsByProduct(
+          data[1].id,
+          formatDateBrowserToServer(data[0]),
+          formatDateBrowserToServer(data[0])
+        )
+      );
   }
 
-  private getTableData(): Observable<TableData[]> {
-    return Observable.combineLatest(
-      this.rollTypes$,
-      this.operations$,
-      (rolls, operations) => {
-        if (!rolls) {
-          return null;
-        }
-        return rolls.length !== 0
-          ? rolls.map(roll => this.getTableRow(roll, operations))
-          : [];
-      });
+  private getTableData(type$: Observable<ProductTypeResponse>): Observable<TableData[]> {
+    const data$ =
+      Observable.combineLatest(
+        this.getRollTypes(type$),
+        this.getOperations(type$).do(operations => this.setInitAmount(operations)),
+        (rolls, operations) => rolls.length !== 0 ? rolls.map(roll => this.getTableRow(roll, operations)) : []
+      );
+    return type$.switchMap(type => type ? data$ : Observable.empty());
   }
 
   private getTableRow(roll: RollType, operations: ProductPlanOperationResponse[]): TableData {
