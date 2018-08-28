@@ -58,6 +58,7 @@ export class MachineComponent implements OnInit {
       .subscribe(() => {
         this.machinePlans = this.machinePlans.filter(p => p !== plan);
         this.machinePlansSubject.next(this.machinePlans);
+        this.dataService.updateDailyPlan(plan, null);
         this.isRemoving = false;
       });
   }
@@ -69,6 +70,7 @@ export class MachineComponent implements OnInit {
         this.machinePlans.push(res);
         this.machinePlans.sort((p1, p2) => compareDateTimes(p1.timeStart, p2.timeStart));
         this.machinePlansSubject.next(this.machinePlans);
+        this.dataService.updateDailyPlan(null, plan);
       });
   }
 
