@@ -19,11 +19,9 @@ import { compareProductTypes } from '../../../app-utils/app-comparators';
 })
 export class MachinesPageComponent implements OnInit {
 
-  selectedDate: Date = new Date();
+  selectedDate: Date;
 
-  dateForm = new FormGroup({
-    'date': new FormControl(formatDateServerToBrowser(this.selectedDate), [Validators.required])
-  });
+  dateForm: FormGroup;
 
   isFetched = false;
 
@@ -38,6 +36,12 @@ export class MachinesPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.dataService.getCurrentDate().subscribe(date => {
+      this.selectedDate = date;
+      this.dateForm = new FormGroup({
+        'date': new FormControl(formatDateServerToBrowser(date), [Validators.required])
+      });
+    });
     this.fetchData();
   }
 
