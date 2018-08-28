@@ -12,9 +12,10 @@ interface TableData {
   operation: ProductPlanOperationResponse;
 }
 
-interface RollAmount {
+interface PlanItem {
   roll: RollType;
-  amount: number;
+  rollAmount: number;
+  productAmount: number;
 }
 
 @Component({
@@ -31,11 +32,11 @@ export class RollTableComponent implements OnInit, OnDestroy {
   @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
 
   tableData$: Observable<TableData[]>;
-  private _rollAmounts: RollAmount[] = [];
+  private _planItems: PlanItem[] = [];
   private standard$: Observable<Standard>;
 
   private commonRollAmount = 0;
-  private standard: Standard; // todo make standard async
+  standard: Standard; // todo make standard async
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -45,8 +46,8 @@ export class RollTableComponent implements OnInit, OnDestroy {
     private productPlanService: ProductsPlanService
   ) { }
 
-  public get rollAmounts() {
-    return this._rollAmounts;
+  public get planItems() {
+    return this._planItems;
   }
 
   ngOnInit() {
@@ -64,9 +65,10 @@ export class RollTableComponent implements OnInit, OnDestroy {
     const rollAmountInput = this.rollAmountInputs.toArray()[i];
     let newAmount = Number.parseInt(rollAmountInput.nativeElement.value);
     newAmount = newAmount > 0 ? Math.round(newAmount) : 0;
-    const oldAmount = this._rollAmounts[i].amount;
     rollAmountInput.nativeElement.value = newAmount;
-    this._rollAmounts[i].amount = newAmount;
+    const oldAmount = this._planItems[i].rollAmount;
+    this._planItems[i].rollAmount = newAmount;
+    this._planItems[i].productAmount = newAmount * this.standard.norm;
     this.commonRollAmount = this.commonRollAmount - oldAmount + newAmount;
     const productAmount = this.commonRollAmount * this.standard.norm;
     this.changeData.emit(productAmount);
@@ -83,8 +85,8 @@ export class RollTableComponent implements OnInit, OnDestroy {
       tableData.forEach(data => {
         const diffAmount = this.getDiffAmount(data.operation);
         this.commonRollAmount += diffAmount;
-        const rollAmount = { roll: data.roll, amount: diffAmount };
-        this._rollAmounts.push(rollAmount);
+        const planItem = { roll: data.roll, rollAmount: diffAmount, productAmount: diffAmount * this.standard.norm };
+        this._planItems.push(planItem);
       });
       productAmount = this.commonRollAmount * this.standard.norm;
     }
