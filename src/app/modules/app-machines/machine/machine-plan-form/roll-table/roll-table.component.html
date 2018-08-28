@@ -15,7 +15,7 @@
                type="number"
                min="0"
                value="{{ getDiffAmount(data.operation) }}"
-               (change)="onChange()">
+               (change)="onChange(i)">
       </div>
       <div class="col-2 align-self-center bordered-left">
         <input class="form-control" type="text" readonly value="{{ data.operation.rollToMachinePlane }}">

@@ -12,6 +12,11 @@ interface TableData {
   operation: ProductPlanOperationResponse;
 }
 
+interface RollAmount {
+  roll: RollType;
+  amount: number;
+}
+
 @Component({
   selector: 'app-roll-table',
   templateUrl: './roll-table.component.html',
@@ -19,16 +24,18 @@ interface TableData {
 })
 export class RollTableComponent implements OnInit, OnDestroy {
 
-  @ViewChildren('rollAmount') rollAmounts: QueryList<ElementRef>;
+  @ViewChildren('rollAmount') rollAmountInputs: QueryList<ElementRef>;
 
   @Input() productType$: Observable<ProductTypeResponse>;
 
   @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
 
-  standard$: Observable<Standard>;
   tableData$: Observable<TableData[]>;
+  private _rollAmounts: RollAmount[] = [];
+  private standard$: Observable<Standard>;
 
-  standard: Standard; // todo make standard async
+  private commonRollAmount = 0;
+  private standard: Standard; // todo make standard async
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -37,6 +44,10 @@ export class RollTableComponent implements OnInit, OnDestroy {
     private casheService: MachineModuleCasheService,
     private productPlanService: ProductsPlanService
   ) { }
+
+  public get rollAmounts() {
+    return this._rollAmounts;
+  }
 
   ngOnInit() {
     this.standard$ = this.getStandard(this.productType$);
@@ -49,16 +60,15 @@ export class RollTableComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onChange() {
-    // todo remove too much calculations
-    let rollAmount = 0;
-    this.rollAmounts.forEach(elem => {
-      let amount = Number.parseInt(elem.nativeElement.value);
-      amount = amount > 0 ? Math.round(amount) : 0;
-      elem.nativeElement.value = amount;
-      rollAmount += amount;
-    });
-    const productAmount = rollAmount * this.standard.norm;
+  onChange(i: number) {
+    const rollAmountInput = this.rollAmountInputs.toArray()[i];
+    let newAmount = Number.parseInt(rollAmountInput.nativeElement.value);
+    newAmount = newAmount > 0 ? Math.round(newAmount) : 0;
+    const oldAmount = this._rollAmounts[i].amount;
+    rollAmountInput.nativeElement.value = newAmount;
+    this._rollAmounts[i].amount = newAmount;
+    this.commonRollAmount = this.commonRollAmount - oldAmount + newAmount;
+    const productAmount = this.commonRollAmount * this.standard.norm;
     this.changeData.emit(productAmount);
   }
 
@@ -70,9 +80,13 @@ export class RollTableComponent implements OnInit, OnDestroy {
   private setInitAmount(tableData: TableData[]) {
     let productAmount = 0;
     if (tableData !== null) {
-      let rollAmount = 0;
-      tableData.forEach(data => rollAmount += this.getDiffAmount(data.operation));
-      productAmount = rollAmount * this.standard.norm;
+      tableData.forEach(data => {
+        const diffAmount = this.getDiffAmount(data.operation);
+        this.commonRollAmount += diffAmount;
+        const rollAmount = { roll: data.roll, amount: diffAmount };
+        this._rollAmounts.push(rollAmount);
+      });
+      productAmount = this.commonRollAmount * this.standard.norm;
     }
     this.changeData.emit(productAmount);
   }
