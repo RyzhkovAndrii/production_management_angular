@@ -17,8 +17,7 @@
           <td><app-product-name [productType]="data.type"></app-product-name></td>
           <td>{{ data.plan.manufacturedAmount | exponent }}</td>
           <td>{{ data.plan.productToMachinePlane | exponent }}</td>
-          <td *ngIf="data.plan.manufacturedAmount - data.plan.productToMachinePlane; let diff">
-            <span *ngIf="diff === 0"> 0.000 </span>
+          <td *ngIf="data.plan.manufacturedAmount - data.plan.productToMachinePlane; let diff; else zero">
             <button *ngIf="diff !== 0"
                     class="btn btn-sm w-100"
                     [ngClass]="{ 'btn-outline-danger': diff > 0, 'btn-outline-success': diff < 0 }"
@@ -28,6 +27,9 @@
               <span *ngIf="diff < 0">+ {{ (-1)*diff | exponent}}</span>
             </button>
           </td>
+          <ng-template #zero>
+            <td> 0.000 </td>
+          </ng-template>
         </tr>
       </tbody>
     </table>
