@@ -10,6 +10,7 @@ import { MachineModuleUrlService } from './machine-module-url.service';
 import { MachinePlanItemService } from './machine-plan-item.service';
 import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
 import { MachineModuleCasheService } from './machine-module-cashe.service';
+import { MachineModuleStoreDataService } from './machine-module-store-data.service';
 
 @Injectable()
 export class MachinePlanService {
@@ -32,6 +33,13 @@ export class MachinePlanService {
             .catch(err => this.httpErrorService.openHttpErrorWindow(err));
     }
 
+    getOne(id: number): Observable<MachinePlan> {
+        const url = `${this.urlService.machinePlanUrl}/${id}`;
+        return this.http
+            .get(url, { headers: appHeaders })
+            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
     save(plan: MachinePlan): Observable<MachinePlan> {
         return this.http
             .post(this.urlService.machinePlanUrl, plan, { headers: appHeaders })
@@ -43,10 +51,7 @@ export class MachinePlanService {
             .flatMap(planResp =>
                 Observable
                     .forkJoin(plan.planItems.map(item => this.planItemService.save(planResp.id, item)))
-                    .map(respItems => {
-                        planResp.planItems = respItems;
-                        return planResp;
-                    })
+                    .flatMap(() => this.getOne(planResp.id))
             );
     }
 
