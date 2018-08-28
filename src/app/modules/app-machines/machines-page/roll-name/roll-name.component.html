@@ -1,5 +1,7 @@
-{{ rollType.thickness }}&nbsp;
-<i class="filled-circle"
-   [ngStyle]="{ 'background-color': rollType.colorCode }">
-</i>
-&nbsp;{{ rollType.minWeight }} - {{ rollType.maxWeight }}
+<div *ngIf="rollType" >
+    {{ rollType.thickness }}&nbsp;
+    <i class="filled-circle"
+       [ngStyle]="{ 'background-color': rollType.colorCode }">
+    </i>
+    &nbsp;{{ rollType.minWeight }} - {{ rollType.maxWeight }}
+</div>
