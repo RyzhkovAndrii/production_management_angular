@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { MachineModuleStoreDataService } from '../../../services/machine-module-store-data.service';
 import { MachineModuleCasheService } from '../../../services/machine-module-cashe.service';
 import { ProductsPlanService } from '../../../../app-products-plan/services/products-plan.service';
 import { formatDateBrowserToServer } from '../../../../../app-utils/app-date-utils';
+import { Subject } from 'rxjs/Subject';
 
 interface TableData {
   roll: RollType;
@@ -16,7 +17,7 @@ interface TableData {
   templateUrl: './roll-table.component.html',
   styleUrls: ['./roll-table.component.css']
 })
-export class RollTableComponent implements OnInit {
+export class RollTableComponent implements OnInit, OnDestroy {
 
   @ViewChildren('rollAmount') rollAmounts: QueryList<ElementRef>;
 
@@ -27,7 +28,9 @@ export class RollTableComponent implements OnInit {
   standard$: Observable<Standard>;
   tableData$: Observable<TableData[]>;
 
-  standard: Standard;
+  standard: Standard; // todo make standard async
+
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
     private dataService: MachineModuleStoreDataService,
@@ -38,7 +41,12 @@ export class RollTableComponent implements OnInit {
   ngOnInit() {
     this.standard$ = this.getStandard(this.productType$);
     this.tableData$ = this.getTableData(this.productType$).do(data => this.setInitAmount(data));
-    this.standard$.subscribe(s => this.standard = s);
+    this.standard$.takeUntil(this.ngUnsubscribe).subscribe(s => this.standard = s);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onChange() {
