@@ -1,183 +1,194 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewContainerRef } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ModalDialogService } from 'ngx-modal-dialog';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, ViewChild } from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Observable, Subject, BehaviorSubject } from '../../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { MachinePlan } from '../../models/machine-plan.model';
-import { MachinePlanService } from '../../services/machine-plan.service';
-import { AppModalService } from '../../../app-shared/services/app-modal.service';
+import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
+import { MachinePlanItem } from '../../models/machine-plan-item.model';
+import { MachinePlanFormService } from '../../services/machine-plan-form.service';
+import { RollTableComponent } from './roll-table/roll-table.component';
 
 @Component({
   selector: 'app-machine-plan-form',
   templateUrl: './machine-plan-form.component.html',
   styleUrls: ['./machine-plan-form.component.css']
 })
-export class MachinePlanFormComponent implements OnInit {
+export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
-  private readonly DECIMAL_PLACES = 3;
+  private readonly DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm:SS';
+  private readonly TIME_FORMAT = 'HH:mm';
 
-  @Input() machinePlans: MachinePlan[];
+  @ViewChild(RollTableComponent) rollTable: RollTableComponent;
+
+  @Input() machinePlans$: Observable<MachinePlan[]>;
   @Input() currentIndex: number;
-  @Input() date: Date;
   @Input() machineNumber: number;
-  norm: number = 12500;
 
-  @Output() onCancel = new EventEmitter<any>();
-  @Output() onSubmit = new EventEmitter<MachinePlan>();
+  @Output() cancel = new EventEmitter<any>();
+  @Output() submit = new EventEmitter<MachinePlan>();
+
+  date: Date;
+  machinePlans: MachinePlan[];
+  standards: Standard[];
+  dailyProductTypes: ProductTypeResponse[];
 
   current: MachinePlan;
   before: MachinePlan;
   after: MachinePlan;
 
-  currentAmount: number;
+  isUpdating = false;
 
-  form: FormGroup;
+  currentAmount: number;
+  currentStartTime: Date;
+  currentFinishTime: Date;
+  currentStandard: Standard;
+  currentPlanOperations: ProductPlanOperationResponse[] = [];
+
+  minTime: Date;
+  maxTime: Date;
+
+  currentRolls$: Observable<RollType[]>;
+
+  planForm: FormGroup;
+
+  // todo check all components on unsubscribe
+  private ngUnsubscribe: Subject<any> = new Subject();
+
+  isFetched = false;
+  isTable = false;
+
+  productTypeSubject = new BehaviorSubject<ProductTypeResponse>(null);
+  productType$ = this.productTypeSubject.asObservable();
 
   constructor(
-    private machinePlanService: MachinePlanService,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
-  ) { }
+    private machinePlanFormService: MachinePlanFormService,
+    private dataService: MachineModuleStoreDataService,
+  ) {
+    this.planForm = this.machinePlanFormService.initPlanForm();
+  }
 
   ngOnInit() {
-    this.setPlan();
-    this.setInitialFormValues();
+    Observable.combineLatest(
+      this.dataService.getCurrentDate(),
+      this.dataService.getStandards(),
+      this.dataService.getDailyProductTypes(),
+      this.machinePlans$
+    )
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(data => {
+        this.date = data[0];
+        this.standards = data[1];
+        this.dailyProductTypes = data[2];
+        this.machinePlans = data[3];
+        this.initData();
+        this.initForm();
+        this.isFetched = true; // todo add loading
+      });
   }
 
-  cancel() {
-    this.onCancel.emit();
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
-  submit() {
-    const { startTime, amount } = this.form.value;
-    const momentStartTime = moment(startTime, 'HH:mm:ss');
-    let startDateAndTime = moment(this.date);
-    startDateAndTime = startDateAndTime.set({
-      'hour': momentStartTime.hours(),
-      'minute': momentStartTime.minutes(),
-      'second': momentStartTime.seconds()
-    })
-    if (startDateAndTime.hours() < 8) {
-      startDateAndTime = startDateAndTime.add(1, 'days');
-    }
-    const plan = new MachinePlan();
-    plan.machineNumber = this.machineNumber;
-    plan.productTypeId = 1; // todo change
-    plan.productAmount = amount * Math.pow(10, this.DECIMAL_PLACES);
-    plan.timeStart = startDateAndTime.format('DD-MM-YYYY HH:mm:ss');
-    this.machinePlanService.save(plan)
-      .subscribe(
-        response => this.onSubmit.emit(response),
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      );
+  onSubmit() {
+    const plan = this.getPlan();
+    this.submit.emit(plan);
   }
 
-  isEmpty(plan: MachinePlan) {
-    return plan.productTypeId === undefined;
+  onCancel() {
+    this.cancel.emit();
   }
 
-  private setPlan() {
+  private initData() {
     this.current = this.machinePlans[this.currentIndex];
-    if (this.currentIndex !== 0) {
-      this.before = this.machinePlans[this.currentIndex - 1];
-    }
-    if (this.currentIndex !== this.machinePlans.length - 1) {
-      this.after = this.machinePlans[this.currentIndex + 1];
-    }
+    this.before = (this.currentIndex !== 0) ? this.machinePlans[this.currentIndex - 1] : null;
+    this.after = (this.currentIndex !== this.machinePlans.length - 1) ? this.machinePlans[this.currentIndex + 1] : null;
+    this.isUpdating = (this.current.productTypeId !== undefined);
+    const dayStart = moment(this.date).startOf('days').add(8, 'hours').toDate();
+    const dayEnd = moment(this.date).endOf('days').add(8, 'hours').toDate();
+    this.minTime = this.before ? this.getTime(this.before.timeStart, this.before.duration) : dayStart;
+    this.maxTime = this.after ? this.getTime(this.after.timeStart) : dayEnd;
+    this.currentStartTime = this.isUpdating ? this.getTime(this.current.timeStart) : this.minTime;
+    this.currentFinishTime = this.isUpdating ? this.getTime(this.current.timeStart, this.current.duration) : this.currentStartTime;
+    this.currentAmount = this.current ? this.current.productAmount : 0;
   }
 
-  private setInitialFormValues() {
-    this.form = new FormGroup({
-      'startTime': new FormControl(this.startTime, [Validators.required]),
-      'startChange': new FormControl(30, [Validators.required]),
-      'finishTime': new FormControl(this.finishTime, [Validators.required]),
-      'finishChange': new FormControl(30, [Validators.required]),
-      'amount': new FormControl(this.getStrDecNumber(this.current.productAmount), [Validators.required])
-    });
+  private initForm() {
+    const defaultStartChangeTime = 30;
+    const productTypeId = this.isUpdating ? this.current.productTypeId : null;
+    this.planForm = new FormGroup(
+      {
+        'productType': new FormControl(productTypeId, [Validators.required]),
+        'startTime': new FormControl(this.currentStartTime, [Validators.required]),
+        'startChange': new FormControl(defaultStartChangeTime, [Validators.required]),
+        'finishTime': new FormControl(this.currentFinishTime, [Validators.required]),
+        'amount': new FormControl(this.currentAmount, [Validators.required]),
+      });
   }
 
-  private get startTime() {
-    if (!this.isEmpty(this.current)) {
-      return this.getTime(this.current.timeStart);
-    }
-    if (this.before && !this.isEmpty(this.before)) {
-      return this.getTime(this.before.timeStart, this.before.duration);
-    }
-    return '00:00:00';
+  private getPlan(): MachinePlan {
+    const { productType } = this.planForm.value;
+    const plan = this.isUpdating ? this.current : new MachinePlan();
+    plan.machineNumber = this.machineNumber;
+    plan.productTypeId = productType;
+    plan.timeStart = moment(this.currentStartTime).format(this.DATE_TIME_FORMAT);
+    plan.isImportant = true; // todo form value
+    plan.planItems = this.getPlanItems();
+    return plan;
   }
 
-  private get finishTime() {
-    if (!this.isEmpty(this.current)) {
-      return this.getTime(this.current.timeStart, this.current.duration);
-    }
-    if (this.after && !this.isEmpty(this.after)) {
-      return this.getTime(this.after.timeStart);
-    }
-    return '23:59:59';
+  private getPlanItems(): MachinePlanItem[] {
+    return this.rollTable.planItems
+      .filter(i => i.rollAmount > 0)
+      .map(i => {
+        const item = new MachinePlanItem();
+        item.rollTypeId = i.roll.id;
+        item.rollAmount = i.rollAmount;
+        item.productAmount = i.productAmount;
+        return item;
+      });
   }
 
-  private getTime(startTime: string | Date, hourInterval = 0) {
-    const format = 'DD-MM-YYYY HH:mm:ss';
-    const time = (startTime instanceof Date) ? moment(startTime) : moment(startTime, format);
-    time.add(hourInterval, 'hours');
-    return time.format('HH:mm:ss');
+  setProductType() {
+    const { productType } = this.planForm.value;
+    const type = productType ? this.dailyProductTypes.find(t => t.id === productType) : null;
+    this.productTypeSubject.next(type);
+    this.currentStandard = type ? this.standards.find(standard => standard.productTypeId === type.id) : null;
+  }
+
+  updateAmount(amount: number) {
+    this.currentAmount = amount;
+    this.updateFinishTime();
+  }
+
+  updateFinishTime() {
+    if (this.currentStandard) {
+      const normForHour = this.currentStandard.normForDay / 24;
+      const duration = this.currentAmount / normForHour;
+      this.currentFinishTime = this.getTime(this.currentStartTime, duration);
+    } else {
+      this.currentFinishTime = this.currentStartTime;
+    }
   }
 
   changeCurrentStartTime() {
-    const { startTime, startChange } = this.form.value;
-    const format = 'HH:mm:ss';
-    const newStartTime = moment(startTime, format).add(startChange, 'minutes').format(format);
-    this.form.get('startTime').patchValue(newStartTime);
-    this.changeAmount();
+    const { startTime, startChange } = this.planForm.value;
+    const momentStart = moment(startTime, this.TIME_FORMAT);
+    this.currentStartTime = moment(this.currentStartTime)
+      .startOf('day')
+      .add(momentStart.get('hour'), 'hours')
+      .add(momentStart.get('minute'), 'minutes')
+      .add(startChange, 'minutes')
+      .toDate();
+    this.updateFinishTime();
   }
 
-  minCurrentStartTime() {
-    this.form.get('startTime').patchValue(this.startTime); // todo change method for update
-    this.changeAmount();
-  }
-
-  changeCurrentFinishTime() {
-    const { finishTime, finishChange } = this.form.value;
-    const format = 'HH:mm:ss';
-    const newFinishTime = moment(finishTime, format).add((-1) * finishChange, 'minutes').format(format);
-    this.form.get('finishTime').patchValue(newFinishTime);
-    this.changeAmount();
-  }
-
-  maxCurrentFinishTime() {
-    this.form.get('finishTime').patchValue(this.finishTime); // todo change method for update
-    this.changeAmount();
-  }
-
-  private getDuration(startTime: string, finishTime: string) {
-    const format = 'HH:mm:ss';
-    const start = moment(startTime, format);
-    const finish = moment(finishTime, format);
-    return moment.duration(finish.diff(start)).asHours();
-  }
-
-  changeAmount() {
-    const { startTime, finishTime } = this.form.value;
-    const amount = this.getDuration(startTime, finishTime) * this.norm;
-    this.form.get('amount').patchValue(this.getStrDecNumber(amount));
-  }
-
-  changeFinishTime() {
-    const format = 'HH:mm:ss';
-    const { startTime, amount } = this.form.value;
-    const integerAmount = parseFloat(amount) * Math.pow(10, this.DECIMAL_PLACES);
-    const duration = integerAmount / this.norm;
-    const newTime = moment(startTime, format).add(duration, 'hours').format(format);
-    this.form.get('finishTime').patchValue(newTime);
-  }
-
-  setExponent($event) {
-    $event.target.value = parseFloat($event.target.value).toFixed(3);
-  }
-
-  private getStrDecNumber(num: number): string {
-    return (num / Math.pow(10, this.DECIMAL_PLACES)).toFixed(this.DECIMAL_PLACES);
+  private getTime(startTime: string | Date, hourInterval = 0) {
+    const time = (startTime instanceof Date) ? moment(startTime) : moment(startTime, this.DATE_TIME_FORMAT);
+    time.add(hourInterval, 'hours');
+    return time.toDate();
   }
 
 }
