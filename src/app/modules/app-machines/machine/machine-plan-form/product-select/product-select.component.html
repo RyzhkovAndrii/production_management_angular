@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup">
-  <div class="form-group row">
+  <div class="form-group row my-0">
     <label for="productType" class="col-5 col-form-label">Тип продукции</label>
     <div class="col-7">
       <ng-select id="productType"
@@ -9,7 +9,8 @@
                  notFoundText="Тип не найден"
                  placeholder="Выберите продукцию"
                  [formControlName]="formControlName"
-                 (change)="onChange()">
+                 (change)="onChange()"
+                 [ngClass]="{ 'is-invalid': formGroup.get('productType').invalid && formGroup.get('productType').touched }">
         <ng-template ng-label-tmp let-item="item">
           <app-product-name [productType]="item"></app-product-name>
         </ng-template>
@@ -17,6 +18,9 @@
           <app-product-name [productType]="item"></app-product-name>
         </ng-template>
       </ng-select>
+      <span *ngIf="{ 'is-invalid': formGroup.get('productType').invalid && formGroup.get('productType').touched }" class="invalid-feedback">
+        <span>обязтельное поле</span>
+      </span>
     </div>
   </div>
 </div>
