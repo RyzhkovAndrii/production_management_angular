@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -6,13 +6,14 @@ import { MachinePlanService } from '../services/machine-plan.service';
 import { MachinePlan } from '../models/machine-plan.model';
 import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
 import { compareDateTimes } from '../../../app-utils/app-comparators';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-machine',
   templateUrl: './machine.component.html',
   styleUrls: ['./machine.component.css'],
 })
-export class MachineComponent implements OnInit {
+export class MachineComponent implements OnInit, OnDestroy {
 
   @Input() machineNumber: number;
 
@@ -31,6 +32,8 @@ export class MachineComponent implements OnInit {
   isFetched = false;
   isRemoving = false;
 
+  private ngUnsubscribe: Subject<any> = new Subject();
+
   constructor(
     private machinePlanService: MachinePlanService,
     private dataService: MachineModuleStoreDataService
@@ -40,6 +43,7 @@ export class MachineComponent implements OnInit {
     this.dataService
       .getCurrentDate()
       .flatMap(currentDate => this.machinePlanService.getAll(currentDate, this.machineNumber))
+      .takeUntil(this.ngUnsubscribe)
       .subscribe(data => {
         this.machinePlans = data;
         this.machinePlansSubject.next(data);
@@ -49,6 +53,11 @@ export class MachineComponent implements OnInit {
     this.machinePlansWithItems$ = this.machinePlanService.addItems(this.machinePlans$);
     this.machinePlansWithEmpty$ = this.machinePlanService.addEmptyPlans(this.machinePlans$);
     this.machinePlansWithItemsWithEmpty$ = this.machinePlanService.addEmptyPlans(this.machinePlansWithItems$);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   removePlan(plan: MachinePlan) {
@@ -63,26 +72,25 @@ export class MachineComponent implements OnInit {
       });
   }
 
-  addPlan(plan: MachinePlan) {
+  submitlMachinePlanForm(plan: MachinePlan) {
+    this.addPlan(plan);
+  }
+
+  private addPlan(plan: MachinePlan) {
     this.machinePlanService
       .saveWithItems(plan)
       .subscribe(res => {
         this.machinePlans.push(res);
         this.machinePlans.sort((p1, p2) => compareDateTimes(p1.timeStart, p2.timeStart));
         this.machinePlansSubject.next(this.machinePlans);
-        this.dataService.updateDailyPlan(null, plan);
+        this.dataService.updateDailyPlan(null, res);
+        this.isMachinePlanFormVisible = false;
       });
   }
 
   openMachinePlanForm(index: number) {
     this.currentMachinePlan = index;
     this.isMachinePlanFormVisible = true;
-  }
-
-  submitMachinePlanForm(plan: MachinePlan) {
-    this.machinePlans.push(plan);
-    this.machinePlans.sort((a, b) => compareDateTimes(a.timeStart, b.timeStart));
-    this.isMachinePlanFormVisible = false;
   }
 
   cancelMachinePlanForm() {
