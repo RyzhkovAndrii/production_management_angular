@@ -4,4 +4,5 @@ interface ProductPlanOperationResponse {
     rollTypeId: number;
     rollAmount: number;
     productAmount: number;
+    rollToMachinePlane: number;
 }
