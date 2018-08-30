@@ -7,6 +7,9 @@ import {
 import {
   ModalDialogModule
 } from 'ngx-modal-dialog';
+import {
+  ContextMenuModule
+} from 'ngx-contextmenu';
 
 import {
   ProductsPlanPageComponent
@@ -23,7 +26,11 @@ import {
     CommonModule,
     ProductsPlanRoutingModule,
     ModalDialogModule.forRoot(),
-    AppSharedModule
+    AppSharedModule,
+    ContextMenuModule.forRoot({
+      useBootstrap4: true
+    }),
+
   ],
   declarations: [ProductsPlanPageComponent]
 })

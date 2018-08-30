@@ -7,10 +7,10 @@
           <th scope="col" class="align-middle">
             <small>с не отгруженными заказами</small>
           </th>
-          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? DATE_HEADER_SIZE : secondMonthIndex">
+          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMonth() ? DATE_HEADER_SIZE : secondMonthIndex">
             <small>{{ headerDates[0] | moment:'MMM YY' }}</small>
           </th>
-          <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
+          <th *ngIf="!isFirstInOneMonth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
             <small>{{ headerDates[secondMonthIndex] | moment:'MMM YY' }}</small>
           </th>
           <th scope="col" class="align-middle">
@@ -50,8 +50,8 @@
           <td class="w-8">
             {{ info.currentProductLeftover.amount }}
           </td>
-          <td class="w-6" *ngFor="let date of headerDates">
-            {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
+          <td class="w-6" *ngFor="let batch of getBatches(info.planBatches)" [contextMenu]="plansMenu" [contextMenuSubject]="batch">
+            {{ batch?.manufacturedAmount | empty }}
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverWithoutPlans.amount }}
@@ -64,3 +64,16 @@
     </table>
   </div>
 </div>
+<context-menu #plansMenu>
+  <ng-template contextMenuItem let-item (execute)="openCreatePlanModal($event.item)">
+    Создать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openEditPlanModal($event.item)">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openDeletePlanModal($event.item)">
+    Удалить
+  </ng-template>
+</context-menu>
