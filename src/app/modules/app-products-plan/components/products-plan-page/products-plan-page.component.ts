@@ -73,10 +73,6 @@ export class ProductsPlanPageComponent implements OnInit {
     return this.secondMonthIndex > 6 || this.secondMonthIndex < 0;
   }
 
-  findBatch(batches: ProductPlanBatchResponse[], colDate: Date): ProductPlanBatchResponse {
-    return batches.find(x => isSameDate(colDate, getDate(x.date)));
-  }
-
   getBatches(planBatches: ProductPlanBatchResponse[]): ProductPlanBatchResponse[] {
     const result = new Array(this.DATE_HEADER_SIZE);
     planBatches.forEach(item => result[getIndex(midnightDate(item.date), result.length, (24 * 60 * 60 * 1000), this.toDate)] = item);
