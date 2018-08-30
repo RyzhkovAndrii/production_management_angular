@@ -13,8 +13,6 @@ import {
 import {
   midnightDate,
   addDays,
-  isSameDate,
-  getDate,
   getIndex
 } from '../../../../app-utils/app-date-utils';
 import {
