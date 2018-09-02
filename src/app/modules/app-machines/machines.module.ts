@@ -22,7 +22,6 @@ import { MachinePlanItemService } from './services/machine-plan-item.service';
 import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
 import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
 import { ProductSelectComponent } from './machine/machine-plan-form/product-select/product-select.component';
-import { MachinePlanFormService } from './services/machine-plan-form.service';
 import { ProductNameComponent } from './machines-page/product-name/product-name.component';
 import { TimeLineComponent } from './machines-page/time-line/time-line.component';
 import { RollNameComponent } from './machines-page/roll-name/roll-name.component';
@@ -58,7 +57,6 @@ import { RollTableComponent } from './machine/machine-plan-form/roll-table/roll-
     providers: [
         MachinePlanService,
         MachinePlanItemService,
-        MachinePlanFormService,
         ProductsService,
         MachineModuleUrlService,
         MachineModuleCasheService,
