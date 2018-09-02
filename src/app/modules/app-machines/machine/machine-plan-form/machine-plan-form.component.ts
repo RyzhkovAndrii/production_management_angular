@@ -1,12 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, ViewChild } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable, Subject, BehaviorSubject } from '../../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { MachinePlan } from '../../models/machine-plan.model';
 import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
 import { MachinePlanItem } from '../../models/machine-plan-item.model';
-import { MachinePlanFormService } from '../../services/machine-plan-form.service';
 import { RollTableComponent } from './roll-table/roll-table.component';
 
 @Component({
@@ -18,8 +17,10 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
   private readonly DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm:SS';
   private readonly TIME_FORMAT = 'HH:mm';
+  readonly machineRestMinutes = 30;
 
   @ViewChild(RollTableComponent) rollTable: RollTableComponent;
+  @ViewChild('select') select;
 
   @Input() machinePlans$: Observable<MachinePlan[]>;
   @Input() currentIndex: number;
@@ -52,21 +53,23 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
   planForm: FormGroup;
 
-  // todo check all components on unsubscribe
-  private ngUnsubscribe: Subject<any> = new Subject();
-
   isFetched = false;
   isTable = false;
+
+  startTimeError: string;
+  finishTimeError: string;
+  startTimeWarning: string;
+  finishTimeWarning: string;
 
   productTypeSubject = new BehaviorSubject<ProductTypeResponse>(null);
   productType$ = this.productTypeSubject.asObservable();
 
+  // todo check all components on unsubscribe
+  private ngUnsubscribe: Subject<any> = new Subject();
+
   constructor(
-    private machinePlanFormService: MachinePlanFormService,
     private dataService: MachineModuleStoreDataService,
-  ) {
-    this.planForm = this.machinePlanFormService.initPlanForm();
-  }
+  ) { }
 
   ngOnInit() {
     Observable.combineLatest(
@@ -113,18 +116,19 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.currentStartTime = this.isUpdating ? this.getTime(this.current.timeStart) : this.minTime;
     this.currentFinishTime = this.isUpdating ? this.getTime(this.current.timeStart, this.current.duration) : this.currentStartTime;
     this.currentAmount = this.current ? this.current.productAmount : 0;
+    this.validateStartTime();
+    this.validateFinishTime();
   }
 
   private initForm() {
-    const defaultStartChangeTime = 30;
     const productTypeId = this.isUpdating ? this.current.productTypeId : null;
     this.planForm = new FormGroup(
       {
         'productType': new FormControl(productTypeId, [Validators.required]),
-        'startTime': new FormControl(this.currentStartTime, [Validators.required]),
-        'startChange': new FormControl(defaultStartChangeTime, [Validators.required]),
-        'finishTime': new FormControl(this.currentFinishTime, [Validators.required]),
-        'amount': new FormControl(this.currentAmount, [Validators.required]),
+        'startTime': new FormControl(this.currentStartTime),
+        'startChange': new FormControl(this.machineRestMinutes),
+        'finishTime': new FormControl(this.currentFinishTime),
+        'amount': new FormControl(this.currentAmount, [Validators.required, Validators.min(0)]),
       });
   }
 
@@ -171,24 +175,75 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     } else {
       this.currentFinishTime = this.currentStartTime;
     }
+    this.validateFinishTime();
+  }
+
+  updateStartTime() {
+    const { startTime } = this.planForm.value;
+    if (startTime) {
+      const momentStart = moment(startTime, this.TIME_FORMAT);
+      const addedDays = momentStart.get('hour') < 8 ? 1 : 0;
+      this.currentStartTime = moment(this.date)
+        .startOf('day')
+        .add(momentStart.get('hour'), 'hours')
+        .add(momentStart.get('minute'), 'minutes')
+        .add(addedDays, 'days')
+        .toDate();
+    } else {
+      this.currentStartTime = this.minTime;
+    }
+    this.validateStartTime();
+    this.updateFinishTime();
+    // console.log(this.currentStartTime);
   }
 
   changeCurrentStartTime() {
     const { startTime, startChange } = this.planForm.value;
     const momentStart = moment(startTime, this.TIME_FORMAT);
-    this.currentStartTime = moment(this.currentStartTime)
-      .startOf('day')
-      .add(momentStart.get('hour'), 'hours')
-      .add(momentStart.get('minute'), 'minutes')
-      .add(startChange, 'minutes')
-      .toDate();
-    this.updateFinishTime();
+    const startWithChange = momentStart.add(startChange, 'minutes').format(this.TIME_FORMAT);
+    this.planForm.get('startTime').setValue(startWithChange);
+    this.updateStartTime();
   }
 
   private getTime(startTime: string | Date, hourInterval = 0) {
     const time = (startTime instanceof Date) ? moment(startTime) : moment(startTime, this.DATE_TIME_FORMAT);
     time.add(hourInterval, 'hours');
     return time.toDate();
+  }
+
+  getDateTimeDiffMinutes(d1: Date, d2: Date): number {
+    return Math.round((d2.valueOf() - d1.valueOf()) / 1000 / 60);
+  }
+
+  private validateStartTime() {
+    this.startTimeError = null;
+    this.startTimeWarning = null;
+    const diff = this.getDateTimeDiffMinutes(this.minTime, this.currentStartTime);
+    this.startTimeError = diff < 0 ? 'время начала текущего плана выходит за границы выбранного периода' : null;
+    this.startTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.before
+      ? `перерыв между предыдущим и текущим планами составляет ${diff} мин.`
+      : null;
+  }
+
+  private validateFinishTime() {
+    this.finishTimeError = null;
+    this.finishTimeWarning = null;
+    const diff = this.getDateTimeDiffMinutes(this.currentFinishTime, this.maxTime);
+    this.finishTimeError = diff < 0 ? 'время окончания текущего плана выходит за границы выбранного периода' : null;
+    this.finishTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.after
+      ? `перерыв между текущим и последующим планами составляет ${diff} мин.`
+      : null;
+  }
+
+  isProductTypeSelectedValid() {
+    return !this.planForm.hasError('required', ['productType']);
+  }
+
+  isFormValid() {
+    return !this.startTimeError
+      && !this.finishTimeError
+      && this.isProductTypeSelectedValid()
+      && this.currentAmount > 0;
   }
 
 }

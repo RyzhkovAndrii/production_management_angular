@@ -18,7 +18,7 @@
           <app-product-name [productType]="item"></app-product-name>
         </ng-template>
       </ng-select>
-      <span *ngIf="{ 'is-invalid': formGroup.get('productType').invalid && formGroup.get('productType').touched }" class="invalid-feedback">
+      <span *ngIf="formGroup.get('productType').invalid && formGroup.get('productType').touched" class="invalid-feedback">
         <span>обязтельное поле</span>
       </span>
     </div>
