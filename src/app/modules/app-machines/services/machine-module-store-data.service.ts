@@ -34,6 +34,13 @@ export class MachineModuleStoreDataService {
         this.setDailyPlan(dailyPlan);
     }
 
+    equalizeDailyPlan(plan: ProductPlanBatchResponse) {
+        const dailyPlan = this.dailyPlanSource.value;
+        const i = dailyPlan.findIndex(p => p.productTypeId === plan.productTypeId);
+        dailyPlan[i].manufacturedAmount = dailyPlan[i].productToMachinePlane;
+        this.setDailyPlan(dailyPlan);
+    }
+
     getDailyProductTypes() {
         return this.dailyProductTypesSource.asObservable();
     }

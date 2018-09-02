@@ -22,7 +22,7 @@
                     class="btn btn-sm w-100"
                     [ngClass]="{ 'btn-outline-danger': diff > 0, 'btn-outline-success': diff < 0 }"
                     style="font-size: 0.7rem"
-                    (click)="changePlanAmount(data.plan)">
+                    (click)="equalizePlanAmount(data.plan)">
               <span *ngIf="diff > 0">- {{ diff | exponent }}</span>
               <span *ngIf="diff < 0">+ {{ (-1)*diff | exponent}}</span>
             </button>

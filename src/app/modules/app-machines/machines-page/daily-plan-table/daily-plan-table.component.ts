@@ -3,6 +3,7 @@ import { Observable } from '../../../../../../node_modules/rxjs';
 
 import { MachineModuleCasheService } from '../../services/machine-module-cashe.service';
 import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
+import { ProductsPlanService } from '../../../app-products-plan/services/products-plan.service';
 
 interface TableData {
   plan: ProductPlanBatchResponse;
@@ -20,7 +21,8 @@ export class DailyPlanTableComponent implements OnInit {
 
   constructor(
     private casheService: MachineModuleCasheService,
-    private dataService: MachineModuleStoreDataService
+    private dataService: MachineModuleStoreDataService,
+    private planService: ProductsPlanService
   ) { }
 
   ngOnInit() {
@@ -43,8 +45,10 @@ export class DailyPlanTableComponent implements OnInit {
       });
   }
 
-  changePlanAmount(plan: ProductPlanBatchResponse) {
-    // todo change product operations amount
+  equalizePlanAmount(plan: ProductPlanBatchResponse) {
+    this.planService
+      .equalizePlanToMachinePlan(plan.productTypeId, plan.date)
+      .subscribe(() => this.dataService.equalizeDailyPlan(plan));
   }
 
 }

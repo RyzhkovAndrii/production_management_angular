@@ -18,6 +18,9 @@ import appHeaders from '../../../app-utils/app-headers';
 import {
   httpErrorHandle
 } from '../../../app-utils/app-http-error-handler';
+import {
+  formatDate
+} from '../../../app-utils/app-date-utils';
 
 @Injectable()
 export class ProductsPlanService {
@@ -99,4 +102,17 @@ export class ProductsPlanService {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }
+
+  equalizePlanToMachinePlan(productPlanId: number, date: Date | string) {
+    console.log(date);
+    const formattedDate = (date instanceof Date) ? formatDate(date) : date;
+    const params = new HttpParams()
+      .set('id', String(productPlanId))
+      .set('date', formattedDate);
+      console.log(params);
+    return this.http
+      .put(this.urls.equalizeUrl, null, { params, headers: appHeaders })
+      .catch(httpErrorHandle);
+  }
+
 }
