@@ -52,3 +52,7 @@ ng-select.no-borders>div {
     border-left: solid 2px #ddd;
     padding-left: 1rem;
 }
+
+.custom-checkbox {
+    transform: scale(1.3);
+}

@@ -8,7 +8,13 @@
       <div class="modal-body">
         <div class="container">
           <form [formGroup]="planForm">
-            <div class="form-group row">
+            <div class="form-check row">
+              <div class="col-12">
+                <input id="important" class="form-check-input custom-checkbox" type="checkbox" formControlName="important">
+                <label for="important" class="form-check-label">план важен</label>
+              </div>
+            </div>
+            <div class="form-group row my-2 bordered-top">
               <div class="col-12">
                 <app-product-select [formGroup]="planForm"
                                     formControlName="productType"
