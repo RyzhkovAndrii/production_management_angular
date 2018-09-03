@@ -30,4 +30,18 @@ export class MachinePlanItemService {
             .catch(err => this.httpErrorService.openHttpErrorWindow(err));
     }
 
+    update(planItem: MachinePlanItem): Observable<MachinePlanItem> {
+        const url = `${this.urlService.machinePlanItemFullUrl}/${planItem.id}`;
+        return this.http
+            .put(url, planItem, { headers: appHeaders })
+            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
+    delete(id: number) {
+        const url = `${this.urlService.machinePlanItemFullUrl}/${id}`;
+        return this.http
+            .delete(url, { headers: appHeaders })
+            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
 }

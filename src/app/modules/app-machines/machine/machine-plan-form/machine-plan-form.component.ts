@@ -134,7 +134,8 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
   private getPlan(): MachinePlan {
     const { productType } = this.planForm.value;
-    const plan = this.isUpdating ? this.current : new MachinePlan();
+    const plan = new MachinePlan();
+    plan.id = this.isUpdating ? this.current.id : null;
     plan.machineNumber = this.machineNumber;
     plan.productTypeId = productType;
     plan.timeStart = moment(this.currentStartTime).format(this.DATE_TIME_FORMAT);
@@ -147,7 +148,11 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     return this.rollTable.planItems
       .filter(i => i.rollAmount > 0)
       .map(i => {
+        const currItem = this.isUpdating
+          ? this.current.planItems.find(currentItem => currentItem.rollTypeId === i.roll.id)
+          : null;
         const item = new MachinePlanItem();
+        item.id = currItem ? currItem.id : null;
         item.rollTypeId = i.roll.id;
         item.rollAmount = i.rollAmount;
         item.productAmount = i.productAmount;
@@ -194,7 +199,6 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     }
     this.validateStartTime();
     this.updateFinishTime();
-    // console.log(this.currentStartTime);
   }
 
   changeCurrentStartTime() {

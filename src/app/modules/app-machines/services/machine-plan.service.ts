@@ -10,7 +10,6 @@ import { MachineModuleUrlService } from './machine-module-url.service';
 import { MachinePlanItemService } from './machine-plan-item.service';
 import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
 import { MachineModuleCasheService } from './machine-module-cashe.service';
-import { MachineModuleStoreDataService } from './machine-module-store-data.service';
 
 @Injectable()
 export class MachinePlanService {
@@ -46,6 +45,20 @@ export class MachinePlanService {
             .catch(err => this.httpErrorService.openHttpErrorWindow(err));
     }
 
+    update(plan: MachinePlan): Observable<MachinePlan> {
+        const url = `${this.urlService.machinePlanUrl}/${plan.id}`;
+        return this.http
+            .put(url, plan, { headers: appHeaders })
+            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
+    delete(id: number) {
+        const url = `${this.urlService.machinePlanUrl}/${id}`;
+        return this.http
+            .delete(url, { headers: appHeaders })
+            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    }
+
     saveWithItems(plan: MachinePlan): Observable<MachinePlan> {
         return this.save(plan)
             .flatMap(planResp =>
@@ -55,12 +68,36 @@ export class MachinePlanService {
             );
     }
 
-    delete(id: number) {
-        const url = `${this.urlService.machinePlanUrl}/${id}`;
-        return this.http
-            .delete(url, { headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+    updateWithItems(oldPlan: MachinePlan, newPlan: MachinePlan): Observable<MachinePlan> {
+        const addObs = newPlan.planItems
+            .filter(item => !item.id)
+            .map(item => this.planItemService.save(newPlan.id, item));
+        const updObs = newPlan.planItems
+            .filter(item => oldPlan.planItems.find(i => i.id === item.id) !== undefined)
+            .map(item => this.planItemService.update(item));
+        const delObs = oldPlan.planItems
+            .filter(item => newPlan.planItems.find(i => i.id === item.id) === undefined)
+            .map(item => this.planItemService.delete(item.id));
+        return this.update(newPlan)
+            .flatMap(planResp =>
+                Observable
+                    .forkJoin(
+                        (addObs.length) ? Observable.forkJoin(addObs) : Observable.of([]),
+                        (updObs.length) ? Observable.forkJoin(updObs) : Observable.of([]),
+                        (delObs.length) ? Observable.forkJoin(delObs) : Observable.of([]),
+                    )
+                    .flatMap(data =>
+                        this.getOne(planResp.id)
+                            .map(newPlanResp => {
+                                newPlanResp.planItems = data[0].concat(data[1]);
+                                newPlanResp.planItems = data[0];
+                                return newPlanResp;
+                            })
+
+                    )
+            );
     }
+
 
     addProductTypes(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
         return plans$.flatMap(plans => {

@@ -73,7 +73,7 @@ export class MachineComponent implements OnInit, OnDestroy {
   }
 
   submitlMachinePlanForm(plan: MachinePlan) {
-    this.addPlan(plan);
+    (plan.id) ? this.updatePlan(plan) : this.addPlan(plan);
   }
 
   private addPlan(plan: MachinePlan) {
@@ -84,6 +84,19 @@ export class MachineComponent implements OnInit, OnDestroy {
         this.machinePlans.sort((p1, p2) => compareDateTimes(p1.timeStart, p2.timeStart));
         this.machinePlansSubject.next(this.machinePlans);
         this.dataService.updateDailyPlan(null, res);
+        this.isMachinePlanFormVisible = false;
+      });
+  }
+
+  private updatePlan(plan: MachinePlan) {
+    const i = this.machinePlans.findIndex(p => p.id === plan.id);
+    const oldPlan = this.machinePlans[i];
+    this.machinePlanService
+      .updateWithItems(oldPlan, plan)
+      .subscribe(res => {
+        this.machinePlans[i] = res;
+        this.machinePlansSubject.next(this.machinePlans);
+        this.dataService.updateDailyPlan(oldPlan, res);
         this.isMachinePlanFormVisible = false;
       });
   }
