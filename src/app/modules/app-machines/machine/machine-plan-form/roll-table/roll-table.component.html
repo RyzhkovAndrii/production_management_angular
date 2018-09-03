@@ -3,7 +3,7 @@
   <div *ngIf="tableData$ | async as tableData; else loading" id="rolls-container">
     <div class="row bordered-top my-2">
       <div class="col-12">
-        <span>Укажите количество рулонов (норматив - {{ standard.norm | exponent }} тыс.шт. / рул.)</span>
+        <span>Количество рулонов (норматив - {{ standard.norm | exponent }} тыс.шт. / рул.)</span>
       </div>
     </div>
     <div *ngFor="let data of tableData; let i = index" class="row d-flex mt-1">
