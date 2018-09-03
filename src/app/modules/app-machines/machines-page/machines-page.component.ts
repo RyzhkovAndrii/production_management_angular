@@ -1,16 +1,15 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ModalDialogService } from '../../../../../node_modules/ngx-modal-dialog';
 import { Observable } from '../../../../../node_modules/rxjs';
 import * as moment from 'moment';
 
 import { StandardsService } from '../../app-standards/services/standards.service';
 import { ProductsPlanService } from '../../app-products-plan/services/products-plan.service';
 import { formatDateBrowserToServer, formatDateServerToBrowser, getDate } from '../../../app-utils/app-date-utils';
-import { AppModalService } from '../../app-shared/services/app-modal.service';
 import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
 import { MachineModuleCasheService } from '../services/machine-module-cashe.service';
 import { compareProductTypes } from '../../../app-utils/app-comparators';
+import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
 
 @Component({
   selector: 'app-machines-page',
@@ -30,18 +29,18 @@ export class MachinesPageComponent implements OnInit {
     private productPlanSerivce: ProductsPlanService,
     private casheService: MachineModuleCasheService,
     private dataService: MachineModuleStoreDataService,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
+    private httpErrorService: AppHttpErrorService
   ) { }
 
   ngOnInit() {
-    this.dataService.getCurrentDate().subscribe(date => {
-      this.selectedDate = date;
-      this.dateForm = new FormGroup({
-        'date': new FormControl(formatDateServerToBrowser(date), [Validators.required])
+    this.dataService
+      .getCurrentDate()
+      .subscribe(date => {
+        this.selectedDate = date;
+        this.dateForm = new FormGroup({
+          'date': new FormControl(formatDateServerToBrowser(date), [Validators.required])
+        });
       });
-    });
     this.fetchData();
   }
 
@@ -62,11 +61,8 @@ export class MachinesPageComponent implements OnInit {
       .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
       .do(productPlans => this.dataService.setDailyPlan(productPlans))
       .flatMap(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
-      .subscribe(
-        () => this.isFetched = true,
-        // todo added auto open error window
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      );
+      .catch(err => this.httpErrorService.openHttpErrorWindow(err))
+      .subscribe(() => this.isFetched = true);
   }
 
   private fetchDailyStandards(dailyPlans: ProductPlanBatchResponse[]): Observable<Standard[]> {
@@ -81,7 +77,7 @@ export class MachinesPageComponent implements OnInit {
 
   private fetchDailyProductPlans(dailyPlans: ProductPlanBatchResponse[]): Observable<ProductTypeResponse[]> {
     return dailyPlans.length === 0
-      ? Observable.of([])
+      ? Observable.of([]).do(() => this.dataService.setDailyProductTypes([]))
       : Observable
         .forkJoin(
           dailyPlans.map(plan => this.casheService.getProductType(plan.productTypeId))
