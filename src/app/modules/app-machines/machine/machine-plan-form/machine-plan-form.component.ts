@@ -122,6 +122,8 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
   private initForm() {
     const productTypeId = this.isUpdating ? this.current.productTypeId : null;
+    const productType = this.isUpdating ? this.current.productType : null;
+    this.productTypeSubject.next(productType);
     this.planForm = new FormGroup(
       {
         'productType': new FormControl(productTypeId, [Validators.required]),

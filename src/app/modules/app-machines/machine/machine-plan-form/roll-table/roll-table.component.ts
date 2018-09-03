@@ -80,6 +80,8 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   private setInitAmount(tableData: TableData[]) {
+    this._planItems = [];
+    this.commonRollAmount = 0;
     let productAmount = 0;
     if (tableData !== null) {
       tableData.forEach(data => {
