@@ -18,7 +18,10 @@
                 </app-product-select>
               </div>
             </div>
-            <app-roll-table #rollTable [productType$]="productType$" (changeData)="updateAmount($event)"></app-roll-table>
+            <app-roll-table #rollTable [productType$]="productType$"
+                            (changeData)="updateAmount($event)"
+                            (isLoaded)="isTableLoaded = $event">
+            </app-roll-table>
             <div class="form-group row my-2 bordered-top">
               <label for="amount" class="col-5 col-form-label">Количество продукции</label>
               <div class="col-7">
@@ -26,10 +29,10 @@
                        type="text"
                        readonly
                        [ngModel]="currentAmount | exponent"
-                       [ngClass]="{ 'is-invalid': !currentAmount && (productType$ | async) }"
+                       [ngClass]="{ 'is-invalid': !currentAmount && (productType$ | async) && isTableLoaded }"
                        formControlName="amount"
                        id="amount">
-                <span *ngIf="!currentAmount && (productType$ | async)" class="invalid-feedback">
+                <span *ngIf="!currentAmount && (productType$ | async) && isTableLoaded" class="invalid-feedback">
                   <span>кол-во продукции должно быть больше 0</span>
                 </span>
               </div>

@@ -55,6 +55,7 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
 
   isFetched = false;
   isTable = false;
+  isTableLoaded = false;
 
   startTimeError: string;
   finishTimeError: string;

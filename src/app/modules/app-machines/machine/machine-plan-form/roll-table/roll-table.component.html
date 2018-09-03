@@ -1,4 +1,5 @@
 <div *ngIf="productType$ | async as type">
+  <div *ngIf="!tableLoading; else loading">
   <div *ngIf="tableData$ | async as tableData; else loading" id="rolls-container">
     <div class="row bordered-top my-2">
       <div class="col-12">
@@ -24,6 +25,7 @@
         <input class="form-control" type="text" readonly value="{{ data.operation.rollAmount }}">
       </div>
     </div>
+  </div>
   </div>
   <ng-template #loading>
     <p>Загрузка...</p>

@@ -30,6 +30,7 @@ export class RollTableComponent implements OnInit, OnDestroy {
   @Input() productType$: Observable<ProductTypeResponse>;
 
   @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
+  @Output() isLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   tableData$: Observable<TableData[]>;
   private _planItems: PlanItem[] = [];
@@ -39,6 +40,8 @@ export class RollTableComponent implements OnInit, OnDestroy {
   standard: Standard; // todo make standard async
 
   private ngUnsubscribe: Subject<any> = new Subject();
+
+  tableLoading = false;
 
   constructor(
     private dataService: MachineModuleStoreDataService,
@@ -51,6 +54,12 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.productType$.takeUntil(this.ngUnsubscribe).subscribe(() => {
+      this.tableLoading = true;
+      this.changeData.emit(0);
+      this.isLoaded.emit(false);
+    });
+    this.getTableData(this.productType$).takeUntil(this.ngUnsubscribe).subscribe(() => this.tableLoading = false);
     this.standard$ = this.getStandard(this.productType$);
     this.tableData$ = this.getTableData(this.productType$).do(data => this.setInitAmount(data));
     this.standard$.takeUntil(this.ngUnsubscribe).subscribe(s => this.standard = s);
@@ -93,6 +102,7 @@ export class RollTableComponent implements OnInit, OnDestroy {
       productAmount = this.commonRollAmount * this.standard.norm;
     }
     this.changeData.emit(productAmount);
+    this.isLoaded.emit(true);
   }
 
   private getStandard(type$: Observable<ProductTypeResponse>): Observable<Standard> {
