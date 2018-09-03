@@ -20,7 +20,6 @@ export class MachineModuleStoreDataService {
         this.dailyPlanSource.next(dailyPlan);
     }
 
-    // todo should to be in this service ???
     updateDailyPlan(oldPlan: MachinePlan, newPlan: MachinePlan) {
         const dailyPlan = this.dailyPlanSource.value;
         if (oldPlan) {
