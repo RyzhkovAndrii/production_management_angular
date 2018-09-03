@@ -17,8 +17,9 @@ export class AppHttpErrorService {
 
     openHttpErrorWindow(error: any): ErrorObservable {
         const handle = httpErrorHandle(error);
-        this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.getRootViewContainerRef(), handle.error);
-        return Observable.throw(handle.error);
+        const message = handle ? handle.error : error;
+        this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.getRootViewContainerRef(), message);
+        return Observable.throw(message);
     }
 
     private getRootViewContainerRef(): ViewContainerRef {
