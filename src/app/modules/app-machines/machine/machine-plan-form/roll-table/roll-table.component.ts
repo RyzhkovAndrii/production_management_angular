@@ -1,21 +1,18 @@
 import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { MachineModuleStoreDataService } from '../../../services/machine-module-store-data.service';
 import { MachineModuleCasheService } from '../../../services/machine-module-cashe.service';
 import { ProductsPlanService } from '../../../../app-products-plan/services/products-plan.service';
 import { formatDateBrowserToServer } from '../../../../../app-utils/app-date-utils';
-import { Subject } from 'rxjs/Subject';
+import { MachinePlan } from '../../../models/machine-plan.model';
+import { MachinePlanItem } from '../../../models/machine-plan-item.model';
 
 interface TableData {
   roll: RollType;
   operation: ProductPlanOperationResponse;
-}
-
-interface PlanItem {
-  roll: RollType;
-  rollAmount: number;
-  productAmount: number;
+  item: MachinePlanItem;
 }
 
 @Component({
@@ -28,16 +25,18 @@ export class RollTableComponent implements OnInit, OnDestroy {
   @ViewChildren('rollAmount') rollAmountInputs: QueryList<ElementRef>;
 
   @Input() productType$: Observable<ProductTypeResponse>;
+  @Input() current: MachinePlan;
 
   @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
   @Output() isLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   tableData$: Observable<TableData[]>;
-  private _planItems: PlanItem[] = [];
+  private _planItems: MachinePlanItem[] = [];
   private standard$: Observable<Standard>;
 
   private commonRollAmount = 0;
-  standard: Standard; // todo make standard async
+  standard: Standard;
+  productType: ProductTypeResponse;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -54,14 +53,15 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.productType$.takeUntil(this.ngUnsubscribe).subscribe(() => {
+    this.productType$.takeUntil(this.ngUnsubscribe).subscribe(type => {
+      this.productType = type;
       this.tableLoading = true;
       this.changeData.emit(0);
       this.isLoaded.emit(false);
     });
-    this.getTableData(this.productType$).takeUntil(this.ngUnsubscribe).subscribe(() => this.tableLoading = false);
     this.standard$ = this.getStandard(this.productType$);
     this.tableData$ = this.getTableData(this.productType$).do(data => this.setInitAmount(data));
+    this.tableData$.takeUntil(this.ngUnsubscribe).subscribe(() => this.tableLoading = false);
     this.standard$.takeUntil(this.ngUnsubscribe).subscribe(s => this.standard = s);
   }
 
@@ -83,8 +83,10 @@ export class RollTableComponent implements OnInit, OnDestroy {
     this.changeData.emit(productAmount);
   }
 
-  getDiffAmount(operation: ProductPlanOperationResponse): number {
-    const amount = operation.rollAmount - operation.rollToMachinePlane;
+  getDiffAmount(data: TableData): number {
+    const amount = this.current.productTypeId && this.current.productTypeId === this.productType.id
+      ? data.item.rollAmount
+      : data.operation.rollAmount - data.operation.rollToMachinePlane;
     return amount > 0 ? amount : 0;
   }
 
@@ -94,9 +96,12 @@ export class RollTableComponent implements OnInit, OnDestroy {
     let productAmount = 0;
     if (tableData !== null) {
       tableData.forEach(data => {
-        const diffAmount = this.getDiffAmount(data.operation);
+        const diffAmount = this.getDiffAmount(data);
         this.commonRollAmount += diffAmount;
-        const planItem = { roll: data.roll, rollAmount: diffAmount, productAmount: diffAmount * this.standard.norm };
+        const planItem = new MachinePlanItem();
+        planItem.rollType = data.roll;
+        planItem.rollAmount = diffAmount;
+        planItem.productAmount = diffAmount * this.standard.norm;
         this._planItems.push(planItem);
       });
       productAmount = this.commonRollAmount * this.standard.norm;
@@ -149,6 +154,9 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   private getTableRow(roll: RollType, operations: ProductPlanOperationResponse[]): TableData {
+    const item = this.current.productTypeId && this.current.productTypeId === this.productType.id
+      ? this.current.planItems.find(i => i.rollTypeId === roll.id)
+      : null;
     const operation = operations.find(oper => oper.rollTypeId === roll.id);
     const nullOperation = {
       date: null,
@@ -158,9 +166,13 @@ export class RollTableComponent implements OnInit, OnDestroy {
       productAmount: 0,
       rollToMachinePlane: 0
     };
+    const nullItem = new MachinePlanItem();
+    nullItem.rollAmount = 0;
+    nullItem.productAmount = 0;
     return {
       roll: roll,
-      operation: operation ? operation : nullOperation
+      operation: operation ? operation : nullOperation,
+      item: item ? item : nullItem
     };
   }
 

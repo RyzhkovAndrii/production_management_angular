@@ -25,6 +25,7 @@
               </div>
             </div>
             <app-roll-table #rollTable [productType$]="productType$"
+                            [current]="current"
                             (changeData)="updateAmount($event)"
                             (isLoaded)="isTableLoaded = $event">
             </app-roll-table>

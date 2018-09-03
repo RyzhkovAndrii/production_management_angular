@@ -154,11 +154,11 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
       .filter(i => i.rollAmount > 0)
       .map(i => {
         const currItem = this.isUpdating
-          ? this.current.planItems.find(currentItem => currentItem.rollTypeId === i.roll.id)
+          ? this.current.planItems.find(currentItem => currentItem.rollTypeId === i.rollType.id)
           : null;
         const item = new MachinePlanItem();
         item.id = currItem ? currItem.id : null;
-        item.rollTypeId = i.roll.id;
+        item.rollTypeId = i.rollType.id;
         item.rollAmount = i.rollAmount;
         item.productAmount = i.productAmount;
         return item;
