@@ -84,10 +84,15 @@ export class RollTableComponent implements OnInit, OnDestroy {
     this.changeData.emit(productAmount);
   }
 
-  getDiffAmount(data: TableData): number {
+  getCurrentAmount(data: TableData): number {
     const amount = this.current.productTypeId && this.current.productTypeId === this.productType.id
       ? data.item.rollAmount
       : data.operation.rollAmount - data.operation.rollToMachinePlane;
+    return amount > 0 ? amount : 0;
+  }
+
+  getDiff(n1: number, n2: number) {
+    const amount = n1 - n2;
     return amount > 0 ? amount : 0;
   }
 
@@ -97,7 +102,7 @@ export class RollTableComponent implements OnInit, OnDestroy {
     let productAmount = 0;
     if (tableData !== null) {
       tableData.forEach(data => {
-        const diffAmount = this.getDiffAmount(data);
+        const diffAmount = this.getCurrentAmount(data);
         this.commonRollAmount += diffAmount;
         const planItem = new MachinePlanItem();
         planItem.rollType = data.roll;
