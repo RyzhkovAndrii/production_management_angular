@@ -221,8 +221,12 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     return time.toDate();
   }
 
-  getDateTimeDiffMinutes(d1: Date, d2: Date): number {
+  private getDateTimeDiffMinutes(d1: Date, d2: Date): number {
     return Math.round((d2.valueOf() - d1.valueOf()) / 1000 / 60);
+  }
+
+  private getDateTimeDiff(d1: Date, d2: Date): number {
+    return (d2.valueOf() - d1.valueOf()) / 1000;
   }
 
   private validateStartTime() {
@@ -238,10 +242,11 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
   private validateFinishTime() {
     this.finishTimeError = null;
     this.finishTimeWarning = null;
-    const diff = this.getDateTimeDiffMinutes(this.currentFinishTime, this.maxTime);
+    const diff = this.getDateTimeDiff(this.currentFinishTime, this.maxTime);
+    const diffMin = this.getDateTimeDiffMinutes(this.minTime, this.currentStartTime);
     this.finishTimeError = diff < 0 ? 'время окончания выходит за границы выбранного периода' : null;
-    this.finishTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.after
-      ? `перерыв между текущим и последующим планами составляет ${diff} мин.`
+    this.finishTimeWarning = diffMin < this.machineRestMinutes && diff >= 0 && this.after
+      ? `перерыв между текущим и последующим планами составляет ${diffMin} мин.`
       : null;
   }
 
