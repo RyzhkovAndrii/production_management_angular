@@ -116,15 +116,16 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.currentStartTime = this.isUpdating ? this.getTime(this.current.timeStart) : this.minTime;
     this.currentFinishTime = this.isUpdating ? this.getTime(this.current.timeStart, this.current.duration) : this.currentStartTime;
     this.currentAmount = this.current ? this.current.productAmount : 0;
+    const productType = this.isUpdating ? this.current.productType : null;
+    this.productTypeSubject.next(productType);
+    this.currentStandard = productType ? this.standards.find(standard => standard.productTypeId === productType.id) : null;
     this.validateStartTime();
     this.validateFinishTime();
   }
 
   private initForm() {
     const productTypeId = this.isUpdating ? this.current.productTypeId : null;
-    const productType = this.isUpdating ? this.current.productType : null;
     const important = this.isUpdating ? this.current.isImportant : false;
-    this.productTypeSubject.next(productType);
     this.planForm = new FormGroup(
       {
         'important': new FormControl(important),
