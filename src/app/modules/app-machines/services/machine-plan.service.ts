@@ -64,7 +64,13 @@ export class MachinePlanService {
             .flatMap(planResp =>
                 Observable
                     .forkJoin(plan.planItems.map(item => this.planItemService.save(planResp.id, item)))
-                    .flatMap(() => this.getOne(planResp.id))
+                    .flatMap(items =>
+                        this.getOne(planResp.id)
+                            .map(newPlanResp => {
+                                newPlanResp.planItems = items;
+                                return newPlanResp;
+                            })
+                    )
             );
     }
 
@@ -90,7 +96,6 @@ export class MachinePlanService {
                         this.getOne(planResp.id)
                             .map(newPlanResp => {
                                 newPlanResp.planItems = data[0].concat(data[1]);
-                                newPlanResp.planItems = data[0];
                                 return newPlanResp;
                             })
 
@@ -121,7 +126,9 @@ export class MachinePlanService {
                 ? Observable.of([])
                 : Observable.forkJoin(
                     plans.map(plan => {
-                        return this.planItemService
+                        return plan.planItems
+                        ? Observable.of(plan)
+                        : this.planItemService
                             .getAll(plan.id)
                             .map(items => {
                                 plan.planItems = items;
