@@ -65,7 +65,6 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
   productTypeSubject = new BehaviorSubject<ProductTypeResponse>(null);
   productType$ = this.productTypeSubject.asObservable();
 
-  // todo check all components on unsubscribe
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -199,6 +198,7 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
         .toDate();
     } else {
       this.currentStartTime = this.minTime;
+      this.planForm.get('startTime').setValue(moment(this.minTime).format(this.TIME_FORMAT));
     }
     this.validateStartTime();
     this.updateFinishTime();
@@ -226,7 +226,7 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.startTimeError = null;
     this.startTimeWarning = null;
     const diff = this.getDateTimeDiffMinutes(this.minTime, this.currentStartTime);
-    this.startTimeError = diff < 0 ? 'время начала текущего плана выходит за границы выбранного периода' : null;
+    this.startTimeError = diff < 0 ? 'время начала выходит за границы выбранного периода' : null;
     this.startTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.before
       ? `перерыв между предыдущим и текущим планами составляет ${diff} мин.`
       : null;
@@ -236,7 +236,7 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.finishTimeError = null;
     this.finishTimeWarning = null;
     const diff = this.getDateTimeDiffMinutes(this.currentFinishTime, this.maxTime);
-    this.finishTimeError = diff < 0 ? 'время окончания текущего плана выходит за границы выбранного периода' : null;
+    this.finishTimeError = diff < 0 ? 'время окончания выходит за границы выбранного периода' : null;
     this.finishTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.after
       ? `перерыв между текущим и последующим планами составляет ${diff} мин.`
       : null;
