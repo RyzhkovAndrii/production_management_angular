@@ -44,9 +44,9 @@ export class MachinesPageComponent implements OnInit {
     this.fetchData();
   }
 
-  changeDate(daysChange: number) {
+  changeDate(daysChange = 0) {
     const { date } = this.dateForm.value;
-    this.selectedDate = (daysChange === null)
+    this.selectedDate = (daysChange === 0)
       ? getDate(date)
       : moment(date, 'YYYY-MM-DD').add(daysChange, 'days').toDate();
     this.dateForm.get('date').patchValue(formatDateServerToBrowser(this.selectedDate));
