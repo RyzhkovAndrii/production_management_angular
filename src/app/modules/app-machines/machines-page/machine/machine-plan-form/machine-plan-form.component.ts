@@ -111,8 +111,16 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.isUpdating = (this.current.productTypeId !== undefined);
     const dayStart = moment(this.date).startOf('days').add(8, 'hours').toDate();
     const dayEnd = moment(this.date).endOf('days').add(8, 'hours').toDate();
-    this.minTime = this.before ? this.getTime(this.before.timeStart, this.before.duration) : dayStart;
-    this.maxTime = this.after ? this.getTime(this.after.timeStart) : dayEnd;
+    this.minTime = this.before
+      ? this.isUpdating
+        ? this.getTime(this.before.timeStart)
+        : this.getTime(this.before.timeStart, this.before.duration)
+      : dayStart;
+    this.maxTime = this.after
+      ? this.isUpdating
+        ? this.getTime(this.getTime(this.current.timeStart, this.current.duration), this.after.duration)
+        : this.getTime(this.after.timeStart)
+      : dayEnd;
     this.currentStartTime = this.isUpdating ? this.getTime(this.current.timeStart) : this.minTime;
     this.currentFinishTime = this.isUpdating ? this.getTime(this.current.timeStart, this.current.duration) : this.currentStartTime;
     this.currentAmount = this.current ? this.current.productAmount : 0;
@@ -234,7 +242,7 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.startTimeWarning = null;
     const diff = this.getDateTimeDiffMinutes(this.minTime, this.currentStartTime);
     this.startTimeError = diff < 0 ? 'время начала выходит за границы выбранного периода' : null;
-    this.startTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.before
+    this.startTimeWarning = diff < this.machineRestMinutes && diff >= 0 && this.before && !this.isDayStart(this.minTime)
       ? `перерыв между предыдущим и текущим планами составляет ${diff} мин.`
       : null;
   }
@@ -243,9 +251,9 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
     this.finishTimeError = null;
     this.finishTimeWarning = null;
     const diff = this.getDateTimeDiff(this.currentFinishTime, this.maxTime);
-    const diffMin = this.getDateTimeDiffMinutes(this.minTime, this.currentStartTime);
+    const diffMin = this.getDateTimeDiffMinutes(this.currentFinishTime, this.maxTime);
     this.finishTimeError = diff < 0 ? 'время окончания выходит за границы выбранного периода' : null;
-    this.finishTimeWarning = diffMin < this.machineRestMinutes && diff >= 0 && this.after
+    this.finishTimeWarning = diffMin < this.machineRestMinutes && diff >= 0 && this.after && !this.isDayEnd(this.maxTime)
       ? `перерыв между текущим и последующим планами составляет ${diffMin} мин.`
       : null;
   }
@@ -259,6 +267,16 @@ export class MachinePlanFormComponent implements OnInit, OnDestroy {
       && !this.finishTimeError
       && this.isProductTypeSelectedValid()
       && this.currentAmount > 0;
+  }
+
+  private isDayStart(dateTime: Date) {
+    const dayStart = moment(this.date).startOf('days').add(8, 'hours');
+    return moment(dateTime).isSame(dayStart);
+  }
+
+  private isDayEnd(dateTime: Date) {
+    const dayEnd = moment(this.date).endOf('days').add(8, 'hours');
+    return moment(dateTime).isSame(dayEnd);
   }
 
 }

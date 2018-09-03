@@ -10,14 +10,18 @@ import { MachineModuleUrlService } from './machine-module-url.service';
 import { MachinePlanItemService } from './machine-plan-item.service';
 import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
 import { MachineModuleCasheService } from './machine-module-cashe.service';
+import { MachineModuleStoreDataService } from './machine-module-store-data.service';
 
 @Injectable()
 export class MachinePlanService {
+
+    private readonly DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm:ss';
 
     constructor(
         private http: HttpClient,
         private planItemService: MachinePlanItemService,
         private casheService: MachineModuleCasheService,
+        private dataService: MachineModuleStoreDataService,
         private urlService: MachineModuleUrlService,
         private httpErrorService: AppHttpErrorService
     ) { }
@@ -127,13 +131,13 @@ export class MachinePlanService {
                 : Observable.forkJoin(
                     plans.map(plan => {
                         return plan.planItems
-                        ? Observable.of(plan)
-                        : this.planItemService
-                            .getAll(plan.id)
-                            .map(items => {
-                                plan.planItems = items;
-                                return plan;
-                            });
+                            ? Observable.of(plan)
+                            : this.planItemService
+                                .getAll(plan.id)
+                                .map(items => {
+                                    plan.planItems = items;
+                                    return plan;
+                                });
                     })
                 );
         });
@@ -165,19 +169,23 @@ export class MachinePlanService {
     }
 
     addEmptyPlans(plans$: Observable<MachinePlan[]>): Observable<MachinePlan[]> {
-        return plans$.map(plans => this._addEmptyPlans(plans));
+        return this.dataService
+            .getCurrentDate()
+            .flatMap(date => plans$.map(plans => this._addEmptyPlans(date, plans)));
     }
 
-    private _addEmptyPlans(plans: MachinePlan[]): MachinePlan[] {
+    private _addEmptyPlans(date: Date, plans: MachinePlan[]): MachinePlan[] {
+        const dateTimeFormat = 'DD-MM-YYYY HH:mm:SS';
         const plansWithEmplty: MachinePlan[] = [];
+        const dayStart = moment(date).startOf('days').add(8, 'hours').format(dateTimeFormat);
         if (plans.length === 0) {
-            const empty = this.getEmptyPlan(24);
+            const empty = this.getEmptyPlan(dayStart, 24);
             plansWithEmplty.push(empty);
             return plansWithEmplty;
         }
         let diff = this.getDiff(null, plans[0]);
         if (diff > 0) {
-            const empty = this.getEmptyPlan(diff);
+            const empty = this.getEmptyPlan(dayStart, diff);
             plansWithEmplty.push(empty);
         }
         for (let i = 0; i < plans.length; i++) {
@@ -185,29 +193,36 @@ export class MachinePlanService {
             const p2 = i === plans.length - 1 ? null : plans[i + 1];
             plansWithEmplty.push(plans[i]);
             diff = this.getDiff(p1, p2);
+            const startTime = this.getFromattedTime(p1.timeStart, p1.duration);
             if (diff > 0) {
-                const empty = this.getEmptyPlan(diff);
+                const empty = this.getEmptyPlan(startTime, diff);
                 plansWithEmplty.push(empty);
             }
         }
         return plansWithEmplty;
     }
 
-    private getEmptyPlan(duration: number) {
+    private getEmptyPlan(timeStart: string, duration: number) {
         const empty = new MachinePlan();
+        empty.timeStart = timeStart;
         empty.duration = duration;
         return empty;
     }
 
     private getDiff(p1: MachinePlan, p2: MachinePlan): number {
-        const dateTimeFormat = 'DD-MM-YYYY HH:mm:ss';
         const before = p1
-            ? moment(p1.timeStart, dateTimeFormat).add(p1.duration, 'hour')
-            : moment(p2.timeStart, dateTimeFormat).startOf('days').add(8, 'hours');
+            ? moment(p1.timeStart, this.DATE_TIME_FORMAT).add(p1.duration, 'hour')
+            : moment(p2.timeStart, this.DATE_TIME_FORMAT).startOf('days').add(8, 'hours');
         const after = p2
-            ? moment(p2.timeStart, dateTimeFormat)
-            : moment(p1.timeStart, dateTimeFormat).endOf('days').add(8, 'hours');
+            ? moment(p2.timeStart, this.DATE_TIME_FORMAT)
+            : moment(p1.timeStart, this.DATE_TIME_FORMAT).endOf('days').add(8, 'hours');
         return moment.duration(after.diff(before)).asHours();
     }
+
+    private getFromattedTime(startTime: string | Date, hourInterval = 0) {
+        const time = (startTime instanceof Date) ? moment(startTime) : moment(startTime, this.DATE_TIME_FORMAT);
+        time.add(hourInterval, 'hours');
+        return time.format(this.DATE_TIME_FORMAT);
+      }
 
 }
