@@ -71,8 +71,9 @@ export class StandardModalComponent implements OnInit, IModalDialog {
       const standard: Standard = {
         productTypeId: this.data.standardInfo.productType.id,
         rollTypeIds: ( < RollType[] > this.form.value.rollTypes).map(x => x.id),
-        norm: this.form.value.standard
-      }
+        norm: this.form.value.standard,
+        normForDay: 0 // todo add form field
+      };
       const resolve = Promise.resolve(standard);
       this.data.func(resolve);
       return resolve;
