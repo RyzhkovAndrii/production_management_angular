@@ -109,7 +109,6 @@ export class ProductsPlanService {
     const params = new HttpParams()
       .set('id', String(productPlanId))
       .set('date', formattedDate);
-      console.log(params);
     return this.http
       .put(this.urls.equalizeUrl, null, { params, headers: appHeaders })
       .catch(httpErrorHandle);
