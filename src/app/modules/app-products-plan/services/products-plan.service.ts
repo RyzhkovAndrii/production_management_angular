@@ -104,7 +104,6 @@ export class ProductsPlanService {
   }
 
   equalizePlanToMachinePlan(productPlanId: number, date: Date | string) {
-    console.log(date);
     const formattedDate = (date instanceof Date) ? formatDate(date) : date;
     const params = new HttpParams()
       .set('id', String(productPlanId))
