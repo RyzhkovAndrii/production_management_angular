@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { MachinePlan } from '../../models/machine-plan.model';
+import { MachinePlan } from '../../../models/machine-plan.model';
+
 
 @Component({
   selector: 'app-machine-plan',

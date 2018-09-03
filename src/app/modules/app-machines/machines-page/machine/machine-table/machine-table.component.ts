@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
-import { MachinePlan } from '../../models/machine-plan.model';
-import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
+import { MachinePlan } from '../../../models/machine-plan.model';
+import { MachineModuleStoreDataService } from '../../../services/machine-module-store-data.service';
+
 
 interface TableData {
   plan: MachinePlan;

@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-import { MachinePlanService } from '../services/machine-plan.service';
-import { MachinePlan } from '../models/machine-plan.model';
-import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
-import { compareDateTimes } from '../../../app-utils/app-comparators';
 import { Subject } from 'rxjs/Subject';
+
+import { MachinePlan } from '../../models/machine-plan.model';
+import { MachinePlanService } from '../../services/machine-plan.service';
+import { MachineModuleStoreDataService } from '../../services/machine-module-store-data.service';
+import { compareDateTimes } from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-machine',

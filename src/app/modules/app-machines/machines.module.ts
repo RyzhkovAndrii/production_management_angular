@@ -6,26 +6,26 @@ import { ContextMenuModule } from 'ngx-contextmenu';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { NgDatepickerModule } from 'ng2-datepicker';
 
-import { AppSharedModule } from '../app-shared/app-shared.module';
 import { MachinesRoutingModule } from './machines-routing.module';
-import { MachineComponent } from './machine/machine.component';
-import { MachinePlanService } from './services/machine-plan.service';
+import { AppSharedModule } from '../app-shared/app-shared.module';
+import { MachineComponent } from './machines-page/machine/machine.component';
 import { MachinesPageComponent } from './machines-page/machines-page.component';
-import { ProductsService } from '../app-products/services/products.service';
-import { MachinePlanComponent } from './machine/machine-plan/machine-plan.component';
-import { MachineModuleUrlService } from './services/machine-module-url.service';
-import { MachineTableComponent } from './machine/machine-table/machine-table.component';
-import { MachinePlanFormComponent } from './machine/machine-plan-form/machine-plan-form.component';
+import { MachinePlanComponent } from './machines-page/machine/machine-plan/machine-plan.component';
+import { MachineTableComponent } from './machines-page/machine/machine-table/machine-table.component';
+import { MachinePlanFormComponent } from './machines-page/machine/machine-plan-form/machine-plan-form.component';
 import { DailyPlanTableComponent } from './machines-page/daily-plan-table/daily-plan-table.component';
-import { MachineModuleCasheService } from './services/machine-module-cashe.service';
-import { MachinePlanItemService } from './services/machine-plan-item.service';
-import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
-import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
-import { ProductSelectComponent } from './machine/machine-plan-form/product-select/product-select.component';
+import { ProductSelectComponent } from './machines-page/machine/machine-plan-form/product-select/product-select.component';
 import { ProductNameComponent } from './machines-page/product-name/product-name.component';
 import { TimeLineComponent } from './machines-page/time-line/time-line.component';
 import { RollNameComponent } from './machines-page/roll-name/roll-name.component';
-import { RollTableComponent } from './machine/machine-plan-form/roll-table/roll-table.component';
+import { RollTableComponent } from './machines-page/machine/machine-plan-form/roll-table/roll-table.component';
+import { MachinePlanService } from './services/machine-plan.service';
+import { MachinePlanItemService } from './services/machine-plan-item.service';
+import { ProductsService } from '../app-products/services/products.service';
+import { MachineModuleUrlService } from './services/machine-module-url.service';
+import { MachineModuleCasheService } from './services/machine-module-cashe.service';
+import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
+import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
 
 @NgModule({
     imports: [
