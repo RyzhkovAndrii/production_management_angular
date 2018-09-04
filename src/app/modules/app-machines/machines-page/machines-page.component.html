@@ -27,7 +27,7 @@
         <app-time-line></app-time-line>
       </div>
     </div>
-    <div *ngFor="let machineNumber of [1, 2, 3]" class="row mt-2 flex-nowrap">
+    <div *ngFor="let machineNumber of machines" class="row mt-2 flex-nowrap">
       <div class="col-12 m-0 p-0">
         <app-machine [machineNumber]="machineNumber"></app-machine>
       </div>

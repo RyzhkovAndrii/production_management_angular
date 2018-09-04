@@ -18,6 +18,9 @@ import { AppHttpErrorService } from '../../app-shared/services/app-http-error.se
 })
 export class MachinesPageComponent implements OnInit {
 
+  private readonly machinesAmount = 3;
+  machines: number[];
+
   selectedDate: Date;
 
   dateForm: FormGroup;
@@ -30,7 +33,9 @@ export class MachinesPageComponent implements OnInit {
     private casheService: MachineModuleCasheService,
     private dataService: MachineModuleStoreDataService,
     private httpErrorService: AppHttpErrorService
-  ) { }
+  ) {
+    this.machines = Array(this.machinesAmount).fill(0).map((x, i) => i + 1);
+  }
 
   ngOnInit() {
     this.dataService
