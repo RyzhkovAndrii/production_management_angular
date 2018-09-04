@@ -18,6 +18,9 @@ import {
 import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
+import {
+  compareColors
+} from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -65,6 +68,17 @@ export class ProductsPlanPageComponent implements OnInit {
         this.secondMonthIndex = i;
       }
     }
+  }
+
+  sortProductsInfo(productsPlanInfo: ProductPlanInfo[]): ProductPlanInfo[] {
+    return productsPlanInfo.sort((a, b) => {
+      let sort = compareColors(a.productType.colorCode, b.productType.colorCode);
+      sort = sort == 0 ?
+        a.productType.name.localeCompare(b.productType.name) != 0 ? a.productType.name.localeCompare(b.productType.name) :
+        a.productType.weight - b.productType.weight == 0 ? a.productType.id - b.productType.id : a.productType.weight - b.productType.weight :
+        sort;
+      return sort;
+    });
   }
 
   isFirstInOneMonth() {
