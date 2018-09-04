@@ -20,6 +20,9 @@ import {
 import {
   AppSharedModule
 } from '../app-shared/app-shared.module';
+import {
+  ProductPlanOperationSelectModalComponent
+} from './components/modals/product-plan-operation-select-modal/product-plan-operation-select-modal.component';
 
 @NgModule({
   imports: [
@@ -32,6 +35,6 @@ import {
     }),
 
   ],
-  declarations: [ProductsPlanPageComponent]
+  declarations: [ProductsPlanPageComponent, ProductPlanOperationSelectModalComponent]
 })
 export class ProductsPlanModule {}
