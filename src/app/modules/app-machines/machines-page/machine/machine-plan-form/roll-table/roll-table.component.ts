@@ -31,9 +31,8 @@ export class RollTableComponent implements OnInit, OnDestroy {
   @Output() changeData: EventEmitter<number> = new EventEmitter<number>();
   @Output() isLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  tableData$: Observable<TableData[]>;
+  tableData: TableData[];
   private _planItems: MachinePlanItem[] = [];
-  private standard$: Observable<Standard>;
 
   private commonRollAmount = 0;
   standard: Standard;
@@ -54,16 +53,23 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.productType$.takeUntil(this.ngUnsubscribe).subscribe(type => {
-      this.productType = type;
-      this.tableLoading = true;
-      this.changeData.emit(0);
-      this.isLoaded.emit(false);
-    });
-    this.standard$ = this.getStandard(this.productType$);
-    this.tableData$ = this.getTableData(this.productType$).do(data => this.setInitAmount(data));
-    this.tableData$.takeUntil(this.ngUnsubscribe).subscribe(() => this.tableLoading = false);
-    this.standard$.takeUntil(this.ngUnsubscribe).subscribe(s => this.standard = s);
+    this.productType$
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(type => {
+        this.productType = type;
+        this.tableLoading = true;
+        this.changeData.emit(0);
+        this.isLoaded.emit(false);
+      });
+    this.getTableData(this.productType$)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(data => {
+        this.setInitAmount(data);
+        this.tableLoading = false;
+        this.tableData = data;
+        this.isLoaded.emit(true);
+      });
+    this.getStandard(this.productType$).takeUntil(this.ngUnsubscribe).subscribe(s => this.standard = s);
   }
 
   ngOnDestroy() {
@@ -113,7 +119,6 @@ export class RollTableComponent implements OnInit, OnDestroy {
       productAmount = this.commonRollAmount * this.standard.norm;
     }
     this.changeData.emit(productAmount);
-    this.isLoaded.emit(true);
   }
 
   private getStandard(type$: Observable<ProductTypeResponse>): Observable<Standard> {

@@ -1,6 +1,6 @@
 <div *ngIf="productType$ | async as type">
   <div *ngIf="!tableLoading; else loading">
-  <div *ngIf="tableData$ | async as tableData; else loading" id="rolls-container">
+  <div id="rolls-container">
     <div class="row bordered-top my-2">
       <div class="col-12">
         <span>Количество рулонов (норматив - {{ standard.norm | exponent }} тыс.шт. / рул.)</span>
