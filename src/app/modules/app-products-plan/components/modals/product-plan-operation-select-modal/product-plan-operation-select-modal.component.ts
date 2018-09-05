@@ -1,17 +1,22 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ComponentRef
 } from '@angular/core';
+import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 
 @Component({
   selector: 'app-product-plan-operation-select-modal',
   templateUrl: './product-plan-operation-select-modal.component.html',
   styleUrls: ['./product-plan-operation-select-modal.component.css']
 })
-export class ProductPlanOperationSelectModalComponent implements OnInit {
-
+export class ProductPlanOperationSelectModalComponent implements OnInit, IModalDialog {
+  
   constructor() {}
-
+  
   ngOnInit() {}
-
+  
+  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<OperationSelectModalData>>) {
+    
+  }
 }
