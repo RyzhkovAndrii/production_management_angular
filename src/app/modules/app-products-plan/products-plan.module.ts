@@ -26,6 +26,9 @@ import {
 import {
   ProductsPlanRoutingModule
 } from './products-plan-routing.module';
+import {
+  ProductPlanOperationModalComponent
+} from './components/modals/product-plan-operation-modal/product-plan-operation-modal.component';
 
 
 @NgModule({
@@ -41,7 +44,7 @@ import {
     }),
 
   ],
-  declarations: [ProductsPlanPageComponent, ProductPlanOperationSelectModalComponent],
-  entryComponents: [ProductPlanOperationSelectModalComponent]
+  declarations: [ProductsPlanPageComponent, ProductPlanOperationSelectModalComponent, ProductPlanOperationModalComponent],
+  entryComponents: [ProductPlanOperationSelectModalComponent, ProductPlanOperationModalComponent]
 })
 export class ProductsPlanModule {}
