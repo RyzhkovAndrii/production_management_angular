@@ -5,8 +5,7 @@ import {
 } from '@angular/core';
 import {
   IModalDialog,
-  IModalDialogOptions,
-  IModalDialogButton
+  IModalDialogOptions
 } from 'ngx-modal-dialog';
 
 @Component({
