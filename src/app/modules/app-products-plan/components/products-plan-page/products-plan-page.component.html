@@ -50,7 +50,8 @@
           <td class="w-8">
             {{ info.currentProductLeftover.amount }}
           </td>
-          <td class="w-6" *ngFor="let batch of getBatches(info.planBatches)" [contextMenu]="plansMenu" [contextMenuSubject]="batch">
+          <td class="w-6" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
+            [contextMenuSubject]="{product: info.productType, batch: batch, index: i}">
             {{ batch?.manufacturedAmount | empty }}
           </td>
           <td class="w-8">

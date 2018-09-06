@@ -77,6 +77,13 @@ export class StandardsService {
     }).catch(httpErrorHandle);
   }
 
+  getStandardWithRolls(standardId: number): Observable < StandardWithRolls > {
+    return this.http.get(this.urls.standardsUrl, {
+      headers: appHeaders,
+      params: new HttpParams().set('id', String(standardId))
+    }).catch(httpErrorHandle);
+  }
+
   getStandardByRollTypeId(rollTypeId: number): Observable < StandardWithRolls > {
     const params = new HttpParams()
       .set('rollTypeId', String(rollTypeId));

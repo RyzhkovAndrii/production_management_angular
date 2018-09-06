@@ -4,7 +4,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  ModalDialogService
+  ModalDialogService,
+  IModalDialogOptions
 } from 'ngx-modal-dialog';
 
 import {
@@ -13,7 +14,8 @@ import {
 import {
   midnightDate,
   addDays,
-  getIndex
+  getIndex,
+  formatDate
 } from '../../../../app-utils/app-date-utils';
 import {
   AppModalService
@@ -21,6 +23,12 @@ import {
 import {
   compareColors
 } from '../../../../app-utils/app-comparators';
+import {
+  StandardsService
+} from '../../../app-standards/services/standards.service';
+import {
+  ProductPlanOperationModalComponent
+} from '../modals/product-plan-operation-modal/product-plan-operation-modal.component';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -40,6 +48,7 @@ export class ProductsPlanPageComponent implements OnInit {
 
   constructor(
     private productsPlanService: ProductsPlanService,
+    private standardService: StandardsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private appModalService: AppModalService
@@ -91,8 +100,34 @@ export class ProductsPlanPageComponent implements OnInit {
     return result;
   }
 
-  openCreatePlanModal(planBatch: ProductPlanBatchResponse) {
-    console.log(planBatch);
+  openCreatePlanModal(data: {
+    product: ProductTypeResponse,
+    batch: ProductPlanBatchResponse,
+    index: number
+  }) {
+    const func: (result: Promise < ProductPlanOperationRequest > ) => void = result => {
+      result.then(resolve => {
+        this.productsPlanService.postOperation(resolve).subscribe(operation => {
+          this.initData();
+        });
+      }, reject => {});
+    }
+    this.standardService.getStandardWithRolls(data.product.id)
+      .subscribe(standardWithRolls => {
+        const modalData: OperationModalData = {
+          productType: data.product,
+          batch: data.batch,
+          date: formatDate(this.headerDates[data.index]),
+          stadard: standardWithRolls,
+          func
+        };
+        const options: Partial < IModalDialogOptions < OperationModalData >> = {
+          data: modalData,
+          title: 'Создание планового производства',
+          childComponent: ProductPlanOperationModalComponent
+        }
+        this.ngxModalService.openDialog(this.viewRef, options);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   openEditPlanModal(planBatch: ProductPlanBatchResponse) {
