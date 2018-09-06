@@ -12,13 +12,13 @@ import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 })
 export class ProductPlanOperationSelectModalComponent implements OnInit, IModalDialog {
 
-  data: OperationSelectModalData;
+  data: ProductPlanOperationSelectModalData;
   
   constructor() {}
   
   ngOnInit() {}
   
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<OperationSelectModalData>>) {
+  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<ProductPlanOperationSelectModalData>>) {
     this.data = options.data;    
   }
 }

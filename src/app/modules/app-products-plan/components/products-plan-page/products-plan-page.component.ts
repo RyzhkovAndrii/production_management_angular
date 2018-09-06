@@ -114,14 +114,14 @@ export class ProductsPlanPageComponent implements OnInit {
     }
     this.standardService.getStandardWithRolls(data.product.id)
       .subscribe(standardWithRolls => {
-        const modalData: OperationModalData = {
+        const modalData: ProductPlanOperationModalData = {
           productType: data.product,
           batch: data.batch,
           date: formatDate(this.headerDates[data.index]),
           stadard: standardWithRolls,
           func
         };
-        const options: Partial < IModalDialogOptions < OperationModalData >> = {
+        const options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> = {
           data: modalData,
           title: 'Создание планового производства',
           childComponent: ProductPlanOperationModalComponent

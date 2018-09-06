@@ -19,7 +19,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
 
   ngOnInit() {}
 
-  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
+  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
 
   }
 }

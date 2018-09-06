@@ -1,4 +1,4 @@
-interface OperationModalData {
+interface ProductPlanOperationModalData {
     productType: ProductTypeResponse;
     batch?: ProductPlanBatchResponse;
     date: string;
