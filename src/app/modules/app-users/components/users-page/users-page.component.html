@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <div class="row h-100">
     <div class="col-3">
-      <div id="user-list-container"
+      <div *ngIf="userList$ | async let userList"
+           id="user-list-container"
            class="p-2 pr-1 pt-1 h-100">
         <div id="user-list-container-overflow"
              class="h-100 pr-2">
@@ -13,36 +14,16 @@
               </div>
             </div>
           </div>
-          <div class="card mt-1"
-               *ngFor="let user of userList, let i = index">
-            <div class="btn p-0"
-                 (click)="setCurrentUser(i)">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-3 p-0">
-                    <img src="https://www.gigansk.ru/local/templates/gigansk/img/pers_icon.png"
-                         alt="Пользователь"
-                         class="img-fluid my-auto ml-3">
-                  </div>
-                  <div class="col-9 text-center p-0">
-                    <strong>{{user.firstName}}</strong>
-                    <br>
-                    <strong>{{user.lastName}}</strong>
-                    <br>
-                    <small>{{user.username}}</small>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div *ngFor="let user of userList, let i = index">
+            <app-user-card [user]="user" (click)="setCurrentUser($event)"></app-user-card>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-9">
-      <div id="user-container"
-           class="h-100 w-100">
-        CurrentUser : {{currentUser?.firstName}}
+      <div class="col-9">
+        <div id="user-container"
+             class="h-100 w-100">
+          CurrentUser : {{currentUser?.firstName}}
+        </div>
       </div>
     </div>
   </div>
-</div>

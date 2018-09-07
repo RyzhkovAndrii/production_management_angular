@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ModalDialogService } from 'ngx-modal-dialog';
+import { Observable } from 'rxjs/Observable';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -12,15 +13,12 @@ import { AppModalService } from '../../../app-shared/services/app-modal.service'
 })
 export class UsersPageComponent implements OnInit {
 
-  userList: User[];
+  userList$: Observable<User[]>;
 
   currentUser = null;
 
   constructor(
-    private userService: UserService,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -28,16 +26,11 @@ export class UsersPageComponent implements OnInit {
   }
 
   private fetchUserData() {
-    this.userService
-      .getAll()
-      .subscribe(
-        response => this.userList = response,
-        error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-    )
+    this.userList$ = this.userService.getAll();
   }
 
-  setCurrentUser(i: number) {
-    this.currentUser = i === -1 ? null : this.userList[i];
+  setCurrentUser(user: User) {
+    this.currentUser = user;
   }
 
 }

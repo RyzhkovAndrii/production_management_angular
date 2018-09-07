@@ -14,7 +14,7 @@
     margin-top: 0.7rem;
 }
 
-#user-list-container, #user-container, .card {
+#user-list-container, #user-container {
     border-radius: 10px;   
 }
 
