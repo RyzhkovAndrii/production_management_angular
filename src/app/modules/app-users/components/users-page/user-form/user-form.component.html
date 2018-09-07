@@ -1,1 +1,79 @@
-{{ user?.username }}
+<form [formGroup]="userForm">
+    <div class="form-group row mt-3">
+        <label for="username" class="col-2 col-form-label">Логин</label>
+        <div class="col-6">
+            <input class="form-control" type="text" id="username" formControlName="username" [readOnly]="user"
+                   placeholder="Введите уникальный логин"
+                   [ngClass]="{ 'is-invalid': userForm.get('username').invalid && userForm.get('username').touched,
+                              'is-valid': !userForm.get('username').invalid && userForm.get('username').touched }">
+            <span *ngIf="userForm.get('username').invalid && userForm.get('username').touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('username').hasError('required')">Обязательное поле!</span>
+                <span *ngIf="userForm.get('username').hasError('uniqueUsername')">Имя пользователя не уникально!</span>
+                <span *ngIf="userForm.get('username').hasError('pattern')">Неверный формат! (разрешены только символы латиницы и числа)</span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="firstName" class="col-2 col-form-label">Имя</label>
+        <div class="col-6">
+            <input class="form-control" type="text" id="firstName" formControlName="firstName" placeholder="Введите имя сотрудника"
+                   [ngClass]="{ 'is-invalid': userForm.get('firstName').invalid && userForm.get('firstName').touched,
+                                'is-valid': !userForm.get('firstName').invalid && userForm.get('firstName').touched }">
+            <span *ngIf="userForm.get('firstName').invalid && userForm.get('firstName').touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('firstName').hasError('required')">Обязательное поле!</span>
+                <span *ngIf="userForm.get('firstName').hasError('pattern')">Неверный формат! (разрешены только символы кириллицы)</span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="lastName" class="col-2 col-form-label">Фамилия</label>
+        <div class="col-6">
+            <input class="form-control" type="text" id="lastName" formControlName="lastName" placeholder="Введите фамилию сотрудника"
+                   [ngClass]="{ 'is-invalid': userForm.get('lastName').invalid && userForm.get('lastName').touched,
+                                'is-valid': !userForm.get('lastName').invalid && userForm.get('lastName').touched }">
+            <span *ngIf="userForm.get('lastName').invalid && userForm.get('lastName').touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('lastName').hasError('required')">Обязательное поле!</span>
+                <span *ngIf="userForm.get('lastName').hasError('pattern')">Неверный формат! (разрешены только символы кириллицы)</span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="roles" class="col-2 col-form-label">Роли</label>
+        <div class="col-6">
+            <select multiple class="form-control" id="roles" formControlName="roles"
+                    [ngClass]="{ 'is-invalid': userForm.get('roles').invalid && userForm.get('roles').touched,
+                              'is-valid': !userForm.get('roles').invalid && userForm.get('roles').touched }">
+                <option disabled="true">----Выберите одну или несколько ролей----</option>
+                <option [value]="roles.ROLE_ADMIN">Администратор</option>
+                <option [value]="roles.ROLE_CEO">Директор (CEO)</option>
+                <option [value]="roles.ROLE_CTO">Технический директор (CTO)</option>
+                <option [value]="roles.ROLE_CMO">Коммерческий директор (CMO)</option>
+                <option [value]="roles.ROLE_TECHNOLOGIST">Технолог</option>
+                <option [value]="roles.ROLE_MANAGER">Менеджер</option>
+                <option [value]="roles.ROLE_ECONOMIST">Экономист</option>
+                <option [value]="roles.ROLE_ACCOUNTER">Учетчик</option>
+                <option [value]="roles.ROLE_STOREKEEPER">Кладовщик</option>
+            </select>
+            <span *ngIf="userForm.get('roles').invalid && userForm.get('roles').touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('roles').hasError('required')">Необходимо выбрать хотя бы одну роль!</span>
+            </span>
+        </div>
+    </div>
+    <div *ngIf="!user" class="form-group row">
+        <div class="col-2"></div>
+        <div class="col-6">
+            <div class="alert alert-warning"> начальный пароль равен логину </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-8 d-flex flex-column">
+            <div class="align-self-end">
+            <button class="btn btn-outline-dark" (click)="onClear()">Очистить</button>
+            <button class="btn btn-outline-dark" [disabled]="!userForm.valid" (click)="onSubmit()">
+                <span *ngIf="!user">Сохранить</span>
+                <span *ngIf="user">Изменить</span>
+            </button>
+        </div>
+        </div>
+    </div>
+</form>

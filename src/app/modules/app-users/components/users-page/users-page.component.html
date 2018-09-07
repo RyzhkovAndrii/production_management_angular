@@ -1,7 +1,7 @@
 <div class="container-fluid">
-  <div class="row h-100">
+  <div *ngIf="userList$ | async let userList" class="row h-100">
     <div class="col-3">
-      <div *ngIf="userList$ | async let userList" id="user-list-container" class="p-2 pr-1 pt-1 h-100">
+      <div id="user-list-container" class="p-2 pr-1 pt-1 h-100">
         <div id="user-list-container-overflow" class="h-100 pr-2">
           <div class="card mb-3">
             <div class="btn p-0" (click)="setCurrentUser()">
@@ -18,7 +18,7 @@
     </div>
     <div class="col-9">
       <div id="user-container" class="h-100 w-100">
-        <app-user-form [user$]="currentUser$"></app-user-form>
+        <app-user-form [user$]="currentUser$" [users]="userList" (userSubmit)="userFormSubmit($event)"></app-user-form>
       </div>
     </div>
   </div>
