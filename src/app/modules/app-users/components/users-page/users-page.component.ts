@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { ModalDialogService } from 'ngx-modal-dialog';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
-import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-users-page',
@@ -15,7 +14,8 @@ export class UsersPageComponent implements OnInit {
 
   userList$: Observable<User[]>;
 
-  currentUser = null;
+  private currentUserSource = new BehaviorSubject<User>(null);
+  currentUser$ = this.currentUserSource.asObservable();
 
   constructor(
     private userService: UserService
@@ -29,8 +29,8 @@ export class UsersPageComponent implements OnInit {
     this.userList$ = this.userService.getAll();
   }
 
-  setCurrentUser(user: User) {
-    this.currentUser = user;
+  setCurrentUser(user: User = null) {
+    this.currentUserSource.next(user);
   }
 
 }
