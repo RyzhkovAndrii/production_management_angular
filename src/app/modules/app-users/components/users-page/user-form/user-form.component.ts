@@ -42,7 +42,10 @@ export class UserFormComponent implements OnInit {
   }
 
   onClear() {
-    this.user ? this.updateForm() : this.clearForm();
+    this.userForm.reset();
+    if (this.user) {
+      this.updateForm();
+    }
   }
 
   private initForm() {
@@ -65,10 +68,6 @@ export class UserFormComponent implements OnInit {
     this.userForm.get('roles').setValue(roles);
   }
 
-  private clearForm() {
-    this.userForm.reset();
-  }
-
   private uniqueNameValidator(control: AbstractControl) {
     const currentId = this.user ? this.user.id : -1;
     const username = control.value;
@@ -80,14 +79,5 @@ export class UserFormComponent implements OnInit {
     }
     return null;
   }
-
-  // private onlyLetterValidator(control: AbstractControl) {
-  //   const str = control.value;
-  //     if ((String(username).toUpperCase() === String(user.username).toUpperCase()) && (currentId !== user.id)) {
-  //       return { 'uniqueUsername': true };
-  //     }
-  //   }
-  //   return null;
-  // }
 
 }
