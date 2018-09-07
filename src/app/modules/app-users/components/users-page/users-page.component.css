@@ -6,16 +6,8 @@
     background-color: #ddd;
 }
 
-#user-container {
-    border: 2px solid #ddd;
-}
-
 #user-list-container, #user-container {
     margin-top: 0.7rem;
-}
-
-#user-list-container, #user-container {
-    border-radius: 10px;   
 }
 
 #user-list-container-overflow {
