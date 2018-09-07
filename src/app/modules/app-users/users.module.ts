@@ -9,6 +9,7 @@ import { UserService } from './services/user.service';
 import { UsersPageComponent } from './components/users-page/users-page.component';
 import { UserModuleUrlService } from './services/user-module-url.serivce';
 import { UserCardComponent } from './components/users-page/user-card/user-card.component';
+import { UserFormComponent } from './components/users-page/user-form/user-form.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { UserCardComponent } from './components/users-page/user-card/user-card.c
     ],
     declarations: [
         UsersPageComponent,
-        UserCardComponent
+        UserCardComponent,
+        UserFormComponent
     ],
     providers: [
         UserService,

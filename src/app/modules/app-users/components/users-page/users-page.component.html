@@ -15,15 +15,15 @@
             </div>
           </div>
           <div *ngFor="let user of userList, let i = index">
-            <app-user-card [user]="user" (click)="setCurrentUser($event)"></app-user-card>
+            <app-user-card [user]="user" (cardClick)="setCurrentUser($event)"></app-user-card>
           </div>
         </div>
       </div>
-      <div class="col-9">
-        <div id="user-container"
-             class="h-100 w-100">
-          CurrentUser : {{currentUser?.firstName}}
-        </div>
+    </div>
+    <div class="col-9">
+      <div id="user-container" class="h-100 w-100">
+        <app-user-form [user]="currentUser"></app-user-form>
       </div>
     </div>
   </div>
+</div>

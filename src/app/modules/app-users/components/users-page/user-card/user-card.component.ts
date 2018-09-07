@@ -9,7 +9,7 @@ import { User } from '../../../models/user.model';
 export class UserCardComponent implements OnInit {
 
   @Input() user: User;
-  @Output() click = new EventEmitter<User>();
+  @Output() cardClick = new EventEmitter<User>();
 
   constructor() { }
 
@@ -17,7 +17,7 @@ export class UserCardComponent implements OnInit {
   }
 
   onClick() {
-    this.click.emit(this.user);
+    this.cardClick.emit(this.user);
   }
 
 }
