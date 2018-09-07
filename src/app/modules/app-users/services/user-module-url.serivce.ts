@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import { RestDetailsService } from "../../../services/rest-details-service";
+import { RestDetailsService } from '../../../services/rest-details-service';
 
 @Injectable()
 export class UserModuleUrlService {

@@ -1,4 +1,4 @@
-import { Role } from "../../app-security/enums/role.enum";
+import { Role } from '../../app-security/enums/role.enum';
 
 export class User {
 

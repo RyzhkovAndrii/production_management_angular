@@ -1,20 +1,16 @@
 <div class="container-fluid">
   <div class="row h-100">
     <div class="col-3">
-      <div *ngIf="userList$ | async let userList"
-           id="user-list-container"
-           class="p-2 pr-1 pt-1 h-100">
-        <div id="user-list-container-overflow"
-             class="h-100 pr-2">
+      <div *ngIf="userList$ | async let userList" id="user-list-container" class="p-2 pr-1 pt-1 h-100">
+        <div id="user-list-container-overflow" class="h-100 pr-2">
           <div class="card mb-3">
-            <div class="btn p-0"
-                 (click)="setCurrentUser(-1)">
+            <div class="btn p-0" (click)="setCurrentUser(-1)">
               <div class="card-body text-center py-3">
                 <strong>Новый пользователь</strong>
               </div>
             </div>
           </div>
-          <div *ngFor="let user of userList, let i = index">
+          <div *ngFor="let user of userList">
             <app-user-card [user]="user" (cardClick)="setCurrentUser($event)"></app-user-card>
           </div>
         </div>
