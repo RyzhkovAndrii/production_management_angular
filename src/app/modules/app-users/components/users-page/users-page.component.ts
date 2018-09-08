@@ -12,7 +12,9 @@ import { UserService } from '../../services/user.service';
 })
 export class UsersPageComponent implements OnInit {
 
-  userList$: Observable<User[]>;
+  private usersSource = new BehaviorSubject<User[]>([]);
+  users$ = this.usersSource.asObservable();
+  users: User[];
 
   private currentUserSource = new BehaviorSubject<User>(null);
   currentUser$ = this.currentUserSource.asObservable();
@@ -26,11 +28,33 @@ export class UsersPageComponent implements OnInit {
   }
 
   private fetchUserData() {
-    this.userList$ = this.userService.getAll();
+    this.userService.getAll().subscribe(resp => {
+      this.users = resp;
+      this.usersSource.next(resp);
+    });
   }
 
   setCurrentUser(user: User = null) {
     this.currentUserSource.next(user);
+  }
+
+  userFormSubmit(user: User) {
+    const i = this.users.findIndex(u => u.username === user.username);
+    const obs$ = user.id
+      ? this.userService.update(user, user.id)
+      : this.userService.save(user);
+    obs$.subscribe(userResp => (i === -1) ? this.users.push(userResp) : this.users[i] = userResp);
+    this.usersSource.next(this.users);
+  }
+
+  userRemove(user: User) {
+    this.userService
+      .delete(user.id)
+      .subscribe(() => {
+        const i = this.users.findIndex(u => u.username === user.username);
+        this.users.splice(i, 1);
+        this.usersSource.next(this.users);
+      });
   }
 
 }
