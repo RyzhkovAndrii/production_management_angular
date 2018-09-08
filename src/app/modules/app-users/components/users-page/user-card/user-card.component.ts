@@ -10,6 +10,7 @@ export class UserCardComponent implements OnInit {
 
   @Input() user: User;
   @Output() cardClick = new EventEmitter<User>();
+  @Output() cardRemove = new EventEmitter<User>();
 
   constructor() { }
 
@@ -18,6 +19,10 @@ export class UserCardComponent implements OnInit {
 
   onClick() {
     this.cardClick.emit(this.user);
+  }
+
+  onRemove() {
+    this.cardRemove.emit(this.user);
   }
 
 }
