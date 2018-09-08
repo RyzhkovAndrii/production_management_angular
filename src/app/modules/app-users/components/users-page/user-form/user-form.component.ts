@@ -58,6 +58,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private updateForm() {
+    this.userForm.reset();
     const username = this.user ? this.user.username : null;
     const firstName = this.user ? this.user.firstName : null;
     const lastName = this.user ? this.user.lastName : null;

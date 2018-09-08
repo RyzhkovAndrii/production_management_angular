@@ -1,6 +1,6 @@
 <form [formGroup]="userForm">
     <div class="form-group row mt-3">
-        <label for="username" class="col-2 col-form-label">Логин</label>
+        <label for="username" class="col-2 col-form-label text-right">Логин</label>
         <div class="col-6">
             <input class="form-control" type="text" id="username" formControlName="username" [readOnly]="user"
                    placeholder="Введите уникальный логин"
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="firstName" class="col-2 col-form-label">Имя</label>
+        <label for="firstName" class="col-2 col-form-label text-right">Имя</label>
         <div class="col-6">
             <input class="form-control" type="text" id="firstName" formControlName="firstName" placeholder="Введите имя сотрудника"
                    [ngClass]="{ 'is-invalid': userForm.get('firstName').invalid && userForm.get('firstName').touched,
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="lastName" class="col-2 col-form-label">Фамилия</label>
+        <label for="lastName" class="col-2 col-form-label text-right">Фамилия</label>
         <div class="col-6">
             <input class="form-control" type="text" id="lastName" formControlName="lastName" placeholder="Введите фамилию сотрудника"
                    [ngClass]="{ 'is-invalid': userForm.get('lastName').invalid && userForm.get('lastName').touched,
@@ -38,12 +38,12 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="roles" class="col-2 col-form-label">Роли</label>
+        <label for="roles" class="col-2 col-form-label text-right">Роли</label>
         <div class="col-6">
             <select multiple class="form-control" id="roles" formControlName="roles"
                     [ngClass]="{ 'is-invalid': userForm.get('roles').invalid && userForm.get('roles').touched,
                               'is-valid': !userForm.get('roles').invalid && userForm.get('roles').touched }">
-                <option disabled="true">----Выберите одну или несколько ролей----</option>
+                <option disabled="true">---- Выберите одну или несколько ролей ----</option>
                 <option [value]="roles.ROLE_ADMIN">Администратор</option>
                 <option [value]="roles.ROLE_CEO">Директор (CEO)</option>
                 <option [value]="roles.ROLE_CTO">Технический директор (CTO)</option>
@@ -62,7 +62,7 @@
     <div *ngIf="!user" class="form-group row">
         <div class="col-2"></div>
         <div class="col-6">
-            <div class="alert alert-warning"> начальный пароль равен логину </div>
+            <div class="alert alert-warning"> для новых учетных записей пароль совпадает с логином </div>
         </div>
     </div>
     <div class="form-group row">
