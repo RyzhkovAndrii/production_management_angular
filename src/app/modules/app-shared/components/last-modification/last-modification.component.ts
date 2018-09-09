@@ -48,7 +48,7 @@ export class LastModificationComponent implements OnInit {
             );
         },
         error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-      )
+      );
   }
 
   reload() {
@@ -57,7 +57,6 @@ export class LastModificationComponent implements OnInit {
 
   private formatDateTime(dateTime: string) {
     const modificationDate: moment.Moment = moment(dateTime, 'DD-MM-YYYY HH:mm:ss');
-    console.log(moment().diff(modificationDate, 'days'));
     if (moment().diff(modificationDate, 'days') === 0) {
       return modificationDate.format('сегодня в HH:mm').toString();
     }
