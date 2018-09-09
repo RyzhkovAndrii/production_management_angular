@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
 
-import { User } from "../../app-users/models/user.model";
-import { SecurityModuleUrlService } from "./security-module-url.service";
-import { Observable } from "../../../../../node_modules/rxjs";
-import { httpErrorHandle } from "../../../app-utils/app-http-error-handler";
+import { User } from '../../app-users/models/user.model';
+import { SecurityModuleUrlService } from './security-module-url.service';
+import { Observable } from '../../../../../node_modules/rxjs';
+import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 
 @Injectable()
 export class AuthenticationService {
@@ -20,7 +20,7 @@ export class AuthenticationService {
 
     login(username: string, password: string): Observable<string> {
         let headers = new HttpHeaders();
-        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded')
+        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
         const body = `username=${username}&password=${password}`;
         return this.http
             .post(this.urlService.loginUrl, body, {
@@ -52,18 +52,25 @@ export class AuthenticationService {
 
     getTokenExpirationDate(token: string): Date {
         const decoded = jwt_decode(token);
-        if (decoded.exp === undefined) return null;
+        if (!decoded.exp) {
+            return null;
+        }
         const date = new Date(0);
         date.setUTCSeconds(decoded.exp);
         return date;
     }
 
-    isTokenExpired(token?: string): boolean {
-        if (!token) token = this.getToken();
-        if (!token) return true;
+    isTokenExpired(token: string): boolean {
+        if (!token) {
+            return true;
+        }
         const date = this.getTokenExpirationDate(token);
-        if (date === undefined) return false;
-        return !(date.valueOf() > new Date().valueOf());
+        return date ? date.valueOf() < new Date().valueOf() : true;
+    }
+
+    isAuthenticated(): boolean {
+        const token = this.getToken();
+        return !this.isTokenExpired(token);
     }
 
     getCurrentUser(): User {
@@ -76,7 +83,7 @@ export class AuthenticationService {
 
     changeCurrentUserPassword(password: string): Observable<any> {
         let headers = new HttpHeaders();
-        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded')
+        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
         const body = `password=${password}`;
         return this.http
             .post(this.urlService.changePasswordUrl, body, {

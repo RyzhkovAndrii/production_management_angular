@@ -19,6 +19,7 @@ import { AuthenticationService } from './modules/app-security/services/authentic
 import { SecurityModuleUrlService } from './modules/app-security/services/security-module-url.service';
 import { TokenInterceptor } from './modules/app-security/interceptors/token.interceptor';
 import { RoleGuard } from './modules/app-security/guards/role.guard';
+import { AuthGuard } from './modules/app-security/guards/auth.guard';
 import { SystemModule } from './modules/app-system/system.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +49,7 @@ import { AppComponent } from './app.component';
     AuthenticationService,
     SecurityModuleUrlService,
     RoleGuard,
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
