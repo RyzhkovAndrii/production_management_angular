@@ -48,9 +48,9 @@ export class LoginComponent implements OnInit {
             .subscribe(
               user => {
                 this.authService.setCurrentUser(user);
-                this.login.emit();
+                this.router.navigate(['/']);
               }
-            )
+            );
         },
         (err: HttpErrorResponse) => {
           this.toggleErrMessages(JSON.parse(err.error).message);
