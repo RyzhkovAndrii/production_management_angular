@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from '../../../../../node_modules/rxjs';
 
 import { User } from '../models/user.model';
-import { UserModuleUrlService } from './user-module-url.serivce';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+import { UserModuleUrlService } from './user-module-url.service';
 
 @Injectable()
 export class UserService {
