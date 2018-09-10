@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-users-page',
@@ -20,7 +20,8 @@ export class UsersPageComponent implements OnInit {
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private modalService: AppModalService
   ) { }
 
   ngOnInit() {
@@ -43,11 +44,22 @@ export class UsersPageComponent implements OnInit {
     const obs$ = user.id
       ? this.userService.update(user, user.id)
       : this.userService.save(user);
-    obs$.subscribe(userResp => (i === -1) ? this.users.push(userResp) : this.users[i] = userResp);
-    this.usersSource.next(this.users);
+    obs$.subscribe(userResp => {
+      (i === -1) ? this.users.push(userResp) : this.users[i] = userResp;
+      this.usersSource.next(this.users);
+      const title = (i === -1) ? 'Пользователь успешно добавлен' : 'Пользователь успешно обновлен';
+      this.modalService.openInformation(title);
+    });
   }
 
-  userRemove(user: User) {
+  onRemove(user: User) {
+    const title = 'Удаление пользователя';
+    const message = `Вы действительно хотите удалить пользователя: ${user.firstName} ${user.lastName} (${user.username})?`;
+    const remove = () => this.userRemove(user);
+    this.modalService.openDeletConfirm(title, remove, message);
+  }
+
+  private userRemove(user: User) {
     this.userService
       .delete(user.id)
       .subscribe(() => {
