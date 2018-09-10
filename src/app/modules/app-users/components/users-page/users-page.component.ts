@@ -54,6 +54,7 @@ export class UsersPageComponent implements OnInit {
         const i = this.users.findIndex(u => u.username === user.username);
         this.users.splice(i, 1);
         this.usersSource.next(this.users);
+        this.setCurrentUser();
       });
   }
 
