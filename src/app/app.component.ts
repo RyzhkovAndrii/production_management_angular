@@ -6,7 +6,9 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  constructor(public viewContainerRef: ViewContainerRef) { }
+  constructor(
+    public viewContainerRef: ViewContainerRef // Need to get root view container.
+  ) { }
 
   ngOnInit() {
   }
