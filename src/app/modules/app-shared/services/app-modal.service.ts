@@ -23,7 +23,7 @@ export class AppModalService {
     ngxModalService.openDialog(viewRef, modalOptions);
   }
 
-  openHttpErrorWindow(error: any): ErrorObservable {
+  openHttpError(error: any): ErrorObservable {
     const handle = httpErrorHandle(error);
     const message = handle ? handle.error : error;
     this.openHttpErrorModal(this.ngxModalDialogService, this.getRootViewContainerRef(), message);

@@ -66,7 +66,7 @@ export class MachinesPageComponent implements OnInit {
       .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
       .do(productPlans => this.dataService.setDailyPlan(productPlans))
       .flatMap(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
-      .catch(err => this.modalService.openHttpErrorWindow(err))
+      .catch(err => this.modalService.openHttpError(err))
       .subscribe(() => this.isFetched = true);
   }
 

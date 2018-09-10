@@ -20,28 +20,28 @@ export class MachinePlanItemService {
         const url = `${this.urlService.machinePlanUrl}/${machinePlanId}/${this.urlService.machinePlanItemUrl}`;
         return this.http
             .get(url, { headers: appHeaders })
-            .catch(err => this.modalService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpError(err));
     }
 
     save(machinePlanId: number, planItem: MachinePlanItem): Observable<MachinePlanItem> {
         const url = `${this.urlService.machinePlanUrl}/${machinePlanId}/${this.urlService.machinePlanItemUrl}`;
         return this.http
             .post(url, planItem, { headers: appHeaders })
-            .catch(err => this.modalService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpError(err));
     }
 
     update(planItem: MachinePlanItem): Observable<MachinePlanItem> {
         const url = `${this.urlService.machinePlanItemFullUrl}/${planItem.id}`;
         return this.http
             .put(url, planItem, { headers: appHeaders })
-            .catch(err => this.modalService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpError(err));
     }
 
     delete(id: number) {
         const url = `${this.urlService.machinePlanItemFullUrl}/${id}`;
         return this.http
             .delete(url, { headers: appHeaders })
-            .catch(err => this.modalService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpError(err));
     }
 
 }

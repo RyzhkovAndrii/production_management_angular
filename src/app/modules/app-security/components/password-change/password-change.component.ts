@@ -74,7 +74,7 @@ export class PasswordChangeComponent {
         break;
       }
       default: {
-        this.appModalService.openHttpErrorWindow(messages);
+        this.appModalService.openHttpError(messages);
       }
     }
   }

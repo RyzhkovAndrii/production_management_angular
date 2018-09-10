@@ -39,7 +39,7 @@ export class AuthenticationService {
         headers = headers.set('Authorization', 'Bearer ' + this.getToken());
         return this.http
             .get(this.urlService.currentUserUrl, { headers: headers })
-            .catch(err => this.appModalService.openHttpErrorWindow(err));
+            .catch(err => this.appModalService.openHttpError(err));
     }
 
     logout() {
@@ -95,7 +95,7 @@ export class AuthenticationService {
                 headers: headers,
                 responseType: 'text'
             })
-            .catch(err => this.appModalService.openHttpErrorWindow(err));
+            .catch(err => this.appModalService.openHttpError(err));
     }
 
     setStorage(storage: Storage) {

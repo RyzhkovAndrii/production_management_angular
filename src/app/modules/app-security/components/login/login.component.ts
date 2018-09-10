@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
         break;
       }
       default: {
-        this.appModalService.openHttpErrorWindow(messages);
+        this.appModalService.openHttpError(messages);
       }
     }
   }
