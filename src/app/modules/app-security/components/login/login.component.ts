@@ -1,9 +1,10 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,10 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private viewRef: ViewContainerRef,
+    private ngxModalDialogService: ModalDialogService,
+    private appModalService: AppModalService
   ) { }
 
   ngOnInit() {
@@ -56,17 +60,16 @@ export class LoginComponent implements OnInit {
               user => {
                 this.authService.setCurrentUser(user);
                 this.router.navigate(['/']);
-              }
+              },
+              err => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, err)
             );
         },
-        (err: HttpErrorResponse) => {
-          this.toggleErrMessages(JSON.parse(err.error).message);
-        }
+        err => this.toggleErrMessages(err)
       );
   }
 
-  private toggleErrMessages(message: string) {
-    switch (message) {
+  private toggleErrMessages(messages: string[]) {
+    switch (messages[1]) {
       case 'User does not exist': {
         this.showUserNotFound = true;
         break;
@@ -74,6 +77,9 @@ export class LoginComponent implements OnInit {
       case 'Password is incorrect': {
         this.showPassIncorrect = true;
         break;
+      }
+      default: {
+        this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, messages);
       }
     }
   }

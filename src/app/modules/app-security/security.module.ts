@@ -7,13 +7,15 @@ import { CanAccessDirective } from './directives/can-access.directive';
 import { LoginComponent } from './components/login/login.component';
 import { PasswordChangeComponent } from './components/password-change/password-change.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
+import { AppSharedModule } from '../app-shared/app-shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        SecurityRoutingModule
+        SecurityRoutingModule,
+        AppSharedModule
     ],
     declarations: [
         CanAccessDirective,

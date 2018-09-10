@@ -28,7 +28,8 @@ export class AuthenticationService {
             .post(this.urlService.loginUrl, body, {
                 headers: headers,
                 responseType: 'text'
-            });
+            })
+            .catch(httpErrorHandle);
     }
 
     recieveCurrentUserInfo(): Observable<User> {
