@@ -1,0 +1,59 @@
+<div class="row mt-2">
+  <div class="col-8">
+    <div *ngIf="tableData$ | async as tableData; else loading">
+      <table class="table table-sm align-top table-fit">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Продукция</th>
+            <th>Кол-во</th>
+            <th>Норм.&nbsp;время</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Длит.</th>
+            <th>Норм.&nbsp;рулон</th>
+            <th>Рулон</th>
+            <th>Кол-во</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of tableData; let i = index">
+            <td [ngClass]="{ 'important': data.plan.isImportant }">{{ i + 1 }}</td>
+            <td>
+              <app-product-name [productType]="data.plan.productType"></app-product-name>
+            </td>
+            <td>{{ data.plan.productAmount | exponent }}</td>
+            <td>{{ data.standard.normForDay | exponent }}</td>
+            <td>{{ data.startTime | date: 'HH:mm' }}</td>
+            <td>{{ data.finishTime | date: 'HH:mm' }}</td>
+            <td>{{ data.plan.duration | number: '1.1-1' }} ч.</td>
+            <td>{{ data.standard.norm | exponent }}</td>
+            <td>
+              <div class="row" *ngFor="let planItem of data.plan.planItems">
+                <div class="col-12">
+                  <app-roll-name [rollType]="planItem.rollType"></app-roll-name>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="row" *ngFor="let planItem of data.plan.planItems">
+                <div class="col-12">
+                  {{ planItem.rollAmount }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger no-borders" style="font-size: 0.6rem" (click)="onRemovePlan(data.plan)">
+                <i class="material-icons mi-sm">clear</i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #loading>
+      <p>Загрузка...</p>
+    </ng-template>
+  </div>
+</div>

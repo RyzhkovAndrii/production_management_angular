@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div class="row mt-1">
+    <div class="col-12 d-flex flex-column">
+      <form [formGroup]="dateForm" class="form-inline align-self-center mr-2 pb-2" style="border-bottom: 2px solid #ddd">
+        <button class="btn btn-outline-secondary btn-sm no-borders px-0 mr-1" (click)="changeDate(-1)">
+          <i class="material-icons">keyboard_arrow_left</i>
+        </button>
+        <input class="form-control form-control-sm" type="date" formControlName="date">
+        <button class="btn btn-outline-secondary btn-sm px-0 no-borders mr-2 ml-1" (click)="changeDate(1)">
+          <i class="material-icons">keyboard_arrow_right</i>
+        </button>
+        <button class="btn btn-outline-dark btn-sm" (click)="changeDate()" [disabled]="dateForm.invalid">Изменить</button>
+      </form>
+    </div>
+  </div>
+  <ng-template #loading>
+    <div class="row">
+      <div class="col-12">
+        <p class="text-center">Загрузка...</p>
+      </div>
+    </div>
+  </ng-template>
+  <div *ngIf="isFetched; else loading">
+    <div class="row mt-2 flex-nowrap">
+      <div class="col-1 p-0"></div>
+      <div class="col-11 m-0 p-0">
+        <app-time-line></app-time-line>
+      </div>
+    </div>
+    <div *ngFor="let machineNumber of machines" class="row mt-2 flex-nowrap">
+      <div class="col-12 m-0 p-0">
+        <app-machine [machineNumber]="machineNumber"></app-machine>
+      </div>
+    </div>
+    <div class="row m-0">
+      <div class="col-1 p-0"></div>
+      <div class="col-11 pl-0">
+          <app-daily-plan-table></app-daily-plan-table>
+      </div>
+  </div>
+</div>

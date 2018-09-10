@@ -1,0 +1,33 @@
+<div *ngIf="productType$ | async as type">
+  <div *ngIf="!tableLoading; else loading">
+  <div id="rolls-container">
+    <div class="row bordered-top my-2">
+      <div class="col-12">
+        <span>Количество рулонов (норматив - {{ standard.norm | exponent }} тыс.шт. / рул.)</span>
+      </div>
+    </div>
+    <div *ngFor="let data of tableData; let i = index" class="row d-flex mt-1">
+      <div class="col-5 align-self-center">
+        <app-roll-name [rollType]="data.roll"></app-roll-name>
+      </div>
+      <div class="col-3 align-self-center">
+        <input #rollAmount
+               class="form-control"
+               type="number"
+               min="0"
+               value="{{ getCurrentAmount(data) }}"
+               (change)="onChange(i)">
+      </div>
+      <div class="col-2 align-self-center bordered-left">
+        <input class="form-control" type="text" readonly value="{{ getDiff(data.operation.rollToMachinePlane, data.item.rollAmount) }}">
+      </div>
+      <div class="col-2 align-self-center bordered-left">
+        <input class="form-control" type="text" readonly value="{{ data.operation.rollAmount }}">
+      </div>
+    </div>
+  </div>
+  </div>
+  <ng-template #loading>
+    <p>Загрузка...</p>
+  </ng-template>
+</div>

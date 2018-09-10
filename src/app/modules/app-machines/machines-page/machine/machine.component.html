@@ -1,0 +1,38 @@
+<div id="machine-container" *ngIf="isFetched" [hidden]="isRemoving">
+  <div class="row h-100 m-0">
+    <div class="col-1 d-flex flex-column justify-content-center p-0 br-right"
+         (dblclick)="toggleTableVisible()">
+      <strong style="font-size: 1.1rem"
+              class="text-center">
+        <span class="d-none d-md-inline">ТМ-</span>{{machineNumber}}
+      </strong>
+    </div>
+    <div class="col-11 h-100 d-inline-flex p-0">
+      <div *ngFor="let machinePlan of machinePlansWithEmpty$ | async; let i = index" (dblclick)="openMachinePlanForm(i)">
+        <app-machine-plan [plan]="machinePlan"></app-machine-plan>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="wasTableOpened" [hidden]="!isTableVisible || isRemoving" class="row m-0">
+  <div class="col-1 p-0"></div>
+  <div class="col-11 pl-0">
+    <app-machine-table [machinePlans$]="machinePlansWithItems$" (planRemove)="removePlan($event)"></app-machine-table>
+  </div>
+</div>
+<div *ngIf="isRemoving" class="row">
+  <div class="col-1"></div>
+  <div class="col-11">
+    <p>Удаление...</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isMachinePlanFormVisible">
+  <app-machine-plan-form [machinePlans$]="machinePlansWithItemsWithEmpty$"
+                         [currentIndex]="currentMachinePlan"
+                         [machineNumber]="machineNumber"
+                         (cancel)="cancelMachinePlanForm()"
+                         (submit)="submitlMachinePlanForm($event)">
+  </app-machine-plan-form>
+</div>

@@ -75,6 +75,13 @@ export function compareDates(d1: string, d2: string, format: string = 'DD-MM-YYY
   return result;
 }
 
+export function compareDateTimes(d1: string | Date, d2: string | Date, format: string = 'DD-MM-YYYY HH:mm') {
+  const m1 = (d1 instanceof Date) ? moment(d1) : moment(d1, format);
+  const m2 = (d2 instanceof Date) ? moment(d2) : moment(d2, format);
+  const result = m1.diff(m2, 'seconds');
+  return result;
+}
+
 export function compareProductTypes(first: ProductTypeResponse, second: ProductTypeResponse): number {
   const comparedColor = compareColors(first.colorCode, second.colorCode);
   if (comparedColor === 0) {

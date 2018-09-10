@@ -60,6 +60,15 @@ const routes: Routes = [
                 }
             },
             {
+                path: 'machines',
+                loadChildren: '../app-machines/machines.module#MachinesModule',
+                canActivate: [RoleGuard],
+                canActivateChild: [RoleGuard],
+                data: {
+                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
+                }
+            },
+            {
                 path: 'users',
                 loadChildren: '../app-users/users.module#UsersModule',
                 canActivate: [RoleGuard],

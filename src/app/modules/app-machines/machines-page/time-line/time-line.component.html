@@ -1,0 +1,13 @@
+<div *ngFor="let hour of hours, let i = index"
+     class="d-inline-block text-left date-bordered"
+     style="background-color: #eee; width: 3.75vw; line-height: 80%">
+  <small *ngIf="i === 0">&nbsp;
+    <br>
+    <small>&nbsp;</small>
+  </small>
+  <span *ngIf="i !== 0">
+    <small [ngClass]="{'neg-ml-10': hour<10, 'neg-ml-18': hour>=10}">{{hour}}</small>
+    <br>
+    <span style="margin-left: -5%; font-size: 0.5rem">|</span>
+  </span>
+</div>

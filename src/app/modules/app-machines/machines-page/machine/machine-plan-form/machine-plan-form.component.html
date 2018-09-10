@@ -1,0 +1,106 @@
+<div class="modal in modal-backdrop">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" *ngIf="isFetched">
+      <div class="modal-header">
+        <h4 *ngIf="!isUpdating" class="modal-title">Добавить план</h4>
+        <h4 *ngIf="isUpdating" class="modal-title">Редактировать план</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form [formGroup]="planForm">
+            <div class="form-check row">
+              <div class="col-12">
+                <input id="important" class="form-check-input custom-checkbox" type="checkbox" formControlName="important">
+                <label for="important" class="form-check-label">план важен</label>
+              </div>
+            </div>
+            <div class="form-group row my-2 bordered-top">
+              <div class="col-12">
+                <app-product-select [formGroup]="planForm"
+                                    formControlName="productType"
+                                    [items]="dailyProductTypes"
+                                    (change)="setProductType()"
+                                    ngDefaultControl>
+                </app-product-select>
+              </div>
+            </div>
+            <app-roll-table #rollTable [productType$]="productType$"
+                            [current]="current"
+                            (changeData)="updateAmount($event)"
+                            (isLoaded)="isTableLoaded = $event">
+            </app-roll-table>
+            <div class="form-group row my-2 bordered-top">
+              <label for="amount" class="col-5 col-form-label">Количество продукции</label>
+              <div class="col-7">
+                <input class="form-control"
+                       type="text"
+                       readonly
+                       [ngModel]="currentAmount | exponent"
+                       [ngClass]="{ 'is-invalid': !currentAmount && (productType$ | async) && isTableLoaded }"
+                       formControlName="amount"
+                       id="amount">
+                <span *ngIf="!currentAmount && (productType$ | async) && isTableLoaded" class="invalid-feedback">
+                  <span>кол-во продукции должно быть больше 0</span>
+                </span>
+              </div>
+            </div>
+            <div class="form-group row bordered-top pt-2 mb-0 d-flex">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-12">
+                      Время выполнения плана
+                      <span *ngIf="currentStandard">(норматив - {{ currentStandard.normForDay| exponent }} тыс.шт. / день)</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4 pr-1">
+                      <label for="startTime" class="col-form-label">Начало</label>
+                      <input class="form-control" type="time" formControlName="startTime"
+                             [ngModel]="currentStartTime | date: 'HH:mm'"
+                             [ngClass]="{ 'is-invalid': startTimeError }"
+                             (change)="updateStartTime()">
+                    </div>
+                    <div class="col-1 align-self-end mx-0 px-0">
+                      <button type="button" class="btn btn-outline-secondary btn-sm btn-outline" (click)="changeCurrentStartTime()">
+                        <i class="material-icons">add</i>
+                      </button>
+                    </div>
+                    <div class="col-2 align-self-end pl-0">
+                      <input class="form-control" type="number" formControlName="startChange">
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-4">
+                      <label for="finishTime" class="col-form-label">Окончание</label>
+                      <input class="form-control" type="time" formControlName="finishTime" readonly
+                             [ngModel]="currentFinishTime | date: 'HH:mm'"
+                             [ngClass]="{ 'is-invalid': finishTimeError }">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="from-group row pt-2">
+              <div class="col-12">
+                <div *ngIf="startTimeWarning" class="alert alert-warning text-center">
+                  <small>{{ startTimeWarning }}</small>
+                </div>
+                <div *ngIf="startTimeError" class="alert alert-danger text-center">
+                  <small>{{ startTimeError }}</small>
+                </div>
+                <div *ngIf="finishTimeWarning" class="alert alert-warning text-center">
+                  <small>{{ finishTimeWarning }}</small>
+                </div>
+                <div *ngIf="finishTimeError" class="alert alert-danger text-center">
+                  <small>{{ finishTimeError }}</small>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-dark" (click)="onSubmit()" [disabled]="!isFormValid()">Сохранить</button>
+        <button class="btn btn-outline-dark" (click)="onCancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>

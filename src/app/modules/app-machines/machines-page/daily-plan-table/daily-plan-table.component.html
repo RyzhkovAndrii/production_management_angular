@@ -1,0 +1,37 @@
+<div class="row mt-5">
+  <div class="col-5 d-flex flex-column">
+    <h6 class="align-self-center">План по продукции на день</h6>
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Продукция</th>
+          <th>План</th>
+          <th>Распределено</th>
+          <th>Остаток</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of tableData$ | async; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td><app-product-name [productType]="data.type"></app-product-name></td>
+          <td>{{ data.plan.manufacturedAmount | exponent }}</td>
+          <td>{{ data.plan.productToMachinePlane | exponent }}</td>
+          <td *ngIf="data.plan.manufacturedAmount - data.plan.productToMachinePlane; let diff; else zero">
+            <button *ngIf="diff !== 0"
+                    class="btn btn-sm w-100"
+                    [ngClass]="{ 'btn-outline-danger': diff > 0, 'btn-outline-success': diff < 0 }"
+                    style="font-size: 0.7rem"
+                    (click)="equalizePlanAmount(data.plan)">
+              <span *ngIf="diff > 0">- {{ diff | exponent }}</span>
+              <span *ngIf="diff < 0">+ {{ (-1)*diff | exponent}}</span>
+            </button>
+          </td>
+          <ng-template #zero>
+            <td> 0.000 </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

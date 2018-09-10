@@ -1,0 +1,25 @@
+.important {
+    background-color: #de3163;
+}
+
+.mi-sm {
+    font-size: 18px;
+}
+
+.no-borders {
+    border: none;
+}
+
+table.align-middle>tbody>tr>td {
+    vertical-align: middle;
+}
+
+.table-fit td, .table-fit th {
+    white-space: nowrap;
+    width: 1%;
+}
+
+td>.row div {
+    display: inline-block;
+    float: none
+}

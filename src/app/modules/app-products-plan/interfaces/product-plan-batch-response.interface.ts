@@ -1,5 +1,7 @@
 interface ProductPlanBatchResponse {
     date: string;
     productTypeId: number;
-    amount: number;
+    manufacturedAmount: number;
+    soldAmount: number;
+    productToMachinePlane: number;
 }

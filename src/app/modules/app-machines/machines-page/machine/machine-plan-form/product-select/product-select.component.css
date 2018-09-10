@@ -1,0 +1,48 @@
+.modal.in {
+    display: block;
+}
+
+.modal.modal-backdrop {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-dialog {
+    min-width: 42vw;
+}
+
+.btn-sm {
+    height: 2.4rem;
+}
+
+.btn-outline {
+    border: none;
+}
+
+.border-left {
+    border-left: 1px dashed #333;
+}
+
+.input-sm.ng-select {
+    margin: 0;
+    padding: 0;
+}
+
+ng-select.no-borders>div {
+    border: 0;
+    outline: none;
+}
+
+.bordered-top {
+    border-top: solid 1px #ddd;
+    padding-top: 0.5rem;
+}
+
+.bordered-left {
+    border-left: solid 2px #ddd;
+    padding-left: 1rem;
+}

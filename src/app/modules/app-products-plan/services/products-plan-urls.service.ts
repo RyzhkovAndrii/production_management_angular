@@ -10,4 +10,5 @@ export class ProductsPlanUrlsService {
   constructor(private restDetails: RestDetailsService) {}
   batchesUrl = `${this.restDetails.host}/product-plan-batches`;
   operationsUrl = `${this.restDetails.host}/product-plan-operations`;
+  equalizeUrl = `${this.batchesUrl}/equalize`;
 }
