@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -24,13 +24,18 @@ export class LoginComponent implements OnInit {
     'remember': new FormControl(false)
   });
 
+  message: string;
+  msgClass: string;
+
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.authService.logout();
+    this.checkRouteMessage();
   }
 
   submit() {
@@ -69,6 +74,20 @@ export class LoginComponent implements OnInit {
         break;
       }
     }
+  }
+
+  private checkRouteMessage() {
+    this.message = null;
+    this.route.queryParams
+      .subscribe(params => {
+        if (params['authError']) {
+          this.message = 'Ошибка авторизации';
+          this.msgClass = 'alert-danger';
+        } else if (params['passChange']) {
+          this.message = 'Пароль успешно изменен';
+          this.msgClass = 'alert-success';
+        }
+      });
   }
 
   resetFormShowErr() {

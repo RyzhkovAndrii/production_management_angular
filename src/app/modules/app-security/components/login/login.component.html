@@ -7,6 +7,7 @@
             <h5 class="card-title text-center mb-0">Войдите для работы</h5>
           </div>
           <div class="card-body">
+            <div *ngIf="message" class="alert text-center" [ngClass]="msgClass">{{ message }}</div>
             <form [formGroup]="form">
               <div class="row">
                 <div class="col-12">

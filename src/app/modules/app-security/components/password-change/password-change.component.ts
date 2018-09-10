@@ -15,8 +15,6 @@ export class PasswordChangeComponent {
   readonly MIN_PASS_LENGTH = 6;
   readonly MAX_PASS_LENGTH = 30;
 
-  @Output() login = new EventEmitter<any>();
-
   showValidErr = false;
   showUserNotFound = false;
   showPassIncorrect = false;
@@ -38,7 +36,7 @@ export class PasswordChangeComponent {
     'confirmPassword': new FormControl(null, [Validators.required]),
   });
 
-  submit() {
+  onSubmit() {
     if (!this.form.valid) {
       this.showValidErr = true;
       return;
@@ -54,13 +52,13 @@ export class PasswordChangeComponent {
             .changeCurrentUserPassword(newPassword)
             .subscribe(() => {
               this.authService.logout();
-              this.goToLoginPage();
+              this.router.navigate(['/auth/login'], { queryParams: { passChange: true } });
             });
         },
         (err: HttpErrorResponse) => {
           this.toggleErrMessages(JSON.parse(err.error).message);
         }
-      )
+      );
   }
 
   private toggleErrMessages(message: string) {
@@ -82,8 +80,8 @@ export class PasswordChangeComponent {
     this.showPassIncorrect = false;
   }
 
-  goToLoginPage() {
-    this.router.navigate(['/auth/login'])
+  onCancel() {
+    this.router.navigate(['/auth/login']);
   }
 
   private checkNewPasswordMatch() {
