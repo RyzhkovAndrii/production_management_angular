@@ -32,7 +32,7 @@ export class AppModalService {
     return Observable.throw(message);
   }
 
-  openDeletConfirm(title: string, fuct: Function, message?: string) {
+  openDeletConfirm(title: string, func: Function, message?: string) {
     const cancel = {
       text: 'Отменить',
       buttonClass: 'btn btn-outline-dark',
@@ -41,7 +41,10 @@ export class AppModalService {
     const confirm = {
       text: 'Удалить',
       buttonClass: 'btn btn-danger',
-      onAction: () => Function.call(fuct)
+      onAction: () => {
+        func.call(this);
+        return true;
+      }
     };
     const buttons = [cancel, confirm];
     this.openModal(title, buttons, message);
