@@ -1,10 +1,12 @@
 import { Injectable, ViewContainerRef, ApplicationRef } from '@angular/core';
-import { IModalDialogOptions, ModalDialogService } from 'ngx-modal-dialog';
+import { IModalDialogOptions, ModalDialogService, IModalDialogButton } from 'ngx-modal-dialog';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { HttpErrorModalComponent } from '../components/http-error-modal/http-error-modal.component';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+import { SimpleConfirmModalComponent } from '../components/simple-confirm-modal/simple-confirm-modal.component';
+import { TextConfirmModalComponent } from '../components/text-confirm-modal/text-confirm-modal.component';
 
 @Injectable()
 export class AppModalService {
@@ -28,6 +30,42 @@ export class AppModalService {
     const message = handle ? handle.error : error;
     this.openHttpErrorModal(this.ngxModalDialogService, this.getRootViewContainerRef(), message);
     return Observable.throw(message);
+  }
+
+  openDeletConfirm(title: string, fuct: Function, message?: string) {
+    const cancel = {
+      text: 'Отменить',
+      buttonClass: 'btn btn-outline-dark',
+      onAction: () => true
+    };
+    const confirm = {
+      text: 'Удалить',
+      buttonClass: 'btn btn-danger',
+      onAction: () => Function.call(fuct)
+    };
+    const buttons = [cancel, confirm];
+    this.openModal(title, buttons, message);
+  }
+
+  openInformation(title: string, message?: string) {
+    const confirm = {
+      text: 'OK',
+      buttonClass: 'btn btn-outline-dark',
+      onAction: () => true
+    };
+    const buttons = [confirm];
+    this.openModal(title, buttons, message);
+  }
+
+  private openModal(title: string, buttons: IModalDialogButton[], message?: string) {
+    const component = message ? TextConfirmModalComponent : SimpleConfirmModalComponent;
+    const options = {
+      title: title,
+      childComponent: component,
+      actionButtons: buttons,
+      data: message
+    };
+    this.ngxModalDialogService.openDialog(this.getRootViewContainerRef(), options);
   }
 
   private getRootViewContainerRef(): ViewContainerRef {
