@@ -43,11 +43,13 @@ export class LoginComponent implements OnInit {
       this.showValidErr = true;
       return;
     }
-    const { username, password } = this.form.value;
+    const { username, password, remember } = this.form.value;
+    const storage = remember ? localStorage : sessionStorage;
     this.authService
       .login(username, password)
       .subscribe(
         token => {
+          this.authService.setStorage(storage);
           this.authService.setToken(token);
           this.authService.recieveCurrentUserInfo()
             .subscribe(

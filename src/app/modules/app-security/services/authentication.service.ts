@@ -10,6 +10,8 @@ import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 @Injectable()
 export class AuthenticationService {
 
+    private storage: Storage = localStorage;
+
     constructor(
         private http: HttpClient,
         private urlService: SecurityModuleUrlService
@@ -38,16 +40,16 @@ export class AuthenticationService {
     }
 
     logout() {
-        localStorage.removeItem(this.TOKEN_NAME);
-        localStorage.removeItem(this.USER_NAME);
+        localStorage.clear();
+        sessionStorage.clear();
     }
 
     getToken(): string {
-        return localStorage.getItem(this.TOKEN_NAME);
+        return this.storage.getItem(this.TOKEN_NAME);
     }
 
     setToken(token: string): void {
-        localStorage.setItem(this.TOKEN_NAME, token);
+        this.storage.setItem(this.TOKEN_NAME, token);
     }
 
     getTokenExpirationDate(token: string): Date {
@@ -74,11 +76,11 @@ export class AuthenticationService {
     }
 
     getCurrentUser(): User {
-        return JSON.parse(localStorage.getItem(this.USER_NAME));
+        return JSON.parse(this.storage.getItem(this.USER_NAME));
     }
 
     setCurrentUser(user: User) {
-        localStorage.setItem(this.USER_NAME, JSON.stringify(user));
+        this.storage.setItem(this.USER_NAME, JSON.stringify(user));
     }
 
     changeCurrentUserPassword(password: string): Observable<any> {
@@ -90,6 +92,10 @@ export class AuthenticationService {
                 headers: headers,
                 responseType: 'text'
             });
+    }
+
+    setStorage(storage: Storage) {
+        this.storage = storage;
     }
 
 }
