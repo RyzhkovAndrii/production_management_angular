@@ -6,6 +6,7 @@ import { User } from '../../app-users/models/user.model';
 import { SecurityModuleUrlService } from './security-module-url.service';
 import { Observable } from '../../../../../node_modules/rxjs';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
+import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +15,8 @@ export class AuthenticationService {
 
     constructor(
         private http: HttpClient,
-        private urlService: SecurityModuleUrlService
+        private urlService: SecurityModuleUrlService,
+        private appModalService: AppModalService
     ) { }
 
     readonly TOKEN_NAME = 'jwt_token';
@@ -37,7 +39,7 @@ export class AuthenticationService {
         headers = headers.set('Authorization', 'Bearer ' + this.getToken());
         return this.http
             .get(this.urlService.currentUserUrl, { headers: headers })
-            .catch(httpErrorHandle);
+            .catch(err => this.appModalService.openHttpErrorWindow(err));
     }
 
     logout() {
@@ -92,7 +94,8 @@ export class AuthenticationService {
             .post(this.urlService.changePasswordUrl, body, {
                 headers: headers,
                 responseType: 'text'
-            });
+            })
+            .catch(err => this.appModalService.openHttpErrorWindow(err));
     }
 
     setStorage(storage: Storage) {

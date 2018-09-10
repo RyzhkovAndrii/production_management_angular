@@ -1,7 +1,6 @@
-import { Component, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ModalDialogService } from 'ngx-modal-dialog';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
@@ -32,8 +31,6 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,
-    private viewRef: ViewContainerRef,
-    private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService
   ) { }
 
@@ -56,13 +53,10 @@ export class LoginComponent implements OnInit {
           this.authService.setStorage(storage);
           this.authService.setToken(token);
           this.authService.recieveCurrentUserInfo()
-            .subscribe(
-              user => {
-                this.authService.setCurrentUser(user);
-                this.router.navigate(['/']);
-              },
-              err => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, err)
-            );
+            .subscribe(user => {
+              this.authService.setCurrentUser(user);
+              this.router.navigate(['/']);
+            });
         },
         err => this.toggleErrMessages(err)
       );
@@ -79,23 +73,22 @@ export class LoginComponent implements OnInit {
         break;
       }
       default: {
-        this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, messages);
+        this.appModalService.openHttpErrorWindow(messages);
       }
     }
   }
 
   private checkRouteMessage() {
     this.message = null;
-    this.route.queryParams
-      .subscribe(params => {
-        if (params['authError']) {
-          this.message = 'Ошибка авторизации';
-          this.msgClass = 'alert-danger';
-        } else if (params['passChange']) {
-          this.message = 'Пароль успешно изменен';
-          this.msgClass = 'alert-success';
-        }
-      });
+    this.route.queryParams.subscribe(params => {
+      if (params['authError']) {
+        this.message = 'Ошибка авторизации';
+        this.msgClass = 'alert-danger';
+      } else if (params['passChange']) {
+        this.message = 'Пароль успешно изменен';
+        this.msgClass = 'alert-success';
+      }
+    });
   }
 
   resetFormShowErr() {

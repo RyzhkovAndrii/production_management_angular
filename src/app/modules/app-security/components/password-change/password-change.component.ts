@@ -1,9 +1,9 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import { AppModalService } from '../../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-password-change',
@@ -22,7 +22,8 @@ export class PasswordChangeComponent {
 
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private appModalService: AppModalService
   ) { }
 
   form: FormGroup = new FormGroup({
@@ -41,7 +42,10 @@ export class PasswordChangeComponent {
       this.showValidErr = true;
       return;
     }
-    this.checkNewPasswordMatch();
+    if (!this.isNewPasswordMatch()) {
+      this.showPassNotMatch = true;
+      return;
+    }
     const { username, password, newPassword } = this.form.value;
     this.authService
       .login(username, password)
@@ -55,14 +59,12 @@ export class PasswordChangeComponent {
               this.router.navigate(['/auth/login'], { queryParams: { passChange: true } });
             });
         },
-        (err: HttpErrorResponse) => {
-          this.toggleErrMessages(JSON.parse(err.error).message);
-        }
+        err => this.toggleErrMessages(err)
       );
   }
 
-  private toggleErrMessages(message: string) {
-    switch (message) {
+  private toggleErrMessages(messages: string[]) {
+    switch (messages[1]) {
       case 'User does not exist': {
         this.showUserNotFound = true;
         break;
@@ -70,6 +72,9 @@ export class PasswordChangeComponent {
       case 'Password is incorrect': {
         this.showPassIncorrect = true;
         break;
+      }
+      default: {
+        this.appModalService.openHttpErrorWindow(messages);
       }
     }
   }
@@ -84,9 +89,9 @@ export class PasswordChangeComponent {
     this.router.navigate(['/auth/login']);
   }
 
-  private checkNewPasswordMatch() {
+  private isNewPasswordMatch() {
     const { newPassword, confirmPassword } = this.form.value;
-    this.showPassNotMatch = newPassword.localeCompare(confirmPassword) !== 0;
+    return  newPassword.localeCompare(confirmPassword) === 0;
   }
 
 }
