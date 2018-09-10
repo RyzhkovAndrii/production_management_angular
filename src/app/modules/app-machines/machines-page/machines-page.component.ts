@@ -9,7 +9,7 @@ import { formatDateBrowserToServer, formatDateServerToBrowser, getDate } from '.
 import { MachineModuleStoreDataService } from '../services/machine-module-store-data.service';
 import { MachineModuleCasheService } from '../services/machine-module-cashe.service';
 import { compareProductTypes } from '../../../app-utils/app-comparators';
-import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
+import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Component({
   selector: 'app-machines-page',
@@ -32,7 +32,7 @@ export class MachinesPageComponent implements OnInit {
     private productPlanSerivce: ProductsPlanService,
     private casheService: MachineModuleCasheService,
     private dataService: MachineModuleStoreDataService,
-    private httpErrorService: AppHttpErrorService
+    private modalService: AppModalService
   ) {
     this.machines = Array(this.machinesAmount).fill(0).map((x, i) => i + 1);
   }
@@ -66,7 +66,7 @@ export class MachinesPageComponent implements OnInit {
       .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
       .do(productPlans => this.dataService.setDailyPlan(productPlans))
       .flatMap(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
-      .catch(err => this.httpErrorService.openHttpErrorWindow(err))
+      .catch(err => this.modalService.openHttpErrorWindow(err))
       .subscribe(() => this.isFetched = true);
   }
 

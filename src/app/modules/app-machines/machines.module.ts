@@ -25,7 +25,6 @@ import { ProductsService } from '../app-products/services/products.service';
 import { MachineModuleUrlService } from './services/machine-module-url.service';
 import { MachineModuleCasheService } from './services/machine-module-cashe.service';
 import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
-import { AppHttpErrorService } from '../app-shared/services/app-http-error.service';
 
 @NgModule({
     imports: [
@@ -60,8 +59,7 @@ import { AppHttpErrorService } from '../app-shared/services/app-http-error.servi
         ProductsService,
         MachineModuleUrlService,
         MachineModuleCasheService,
-        MachineModuleStoreDataService,
-        AppHttpErrorService
+        MachineModuleStoreDataService
     ],
     entryComponents: []
 })

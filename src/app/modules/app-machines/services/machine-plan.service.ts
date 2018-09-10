@@ -8,9 +8,9 @@ import { formatDate } from '../../../app-utils/app-date-utils';
 import { MachinePlan } from '../models/machine-plan.model';
 import { MachineModuleUrlService } from './machine-module-url.service';
 import { MachinePlanItemService } from './machine-plan-item.service';
-import { AppHttpErrorService } from '../../app-shared/services/app-http-error.service';
 import { MachineModuleCasheService } from './machine-module-cashe.service';
 import { MachineModuleStoreDataService } from './machine-module-store-data.service';
+import { AppModalService } from '../../app-shared/services/app-modal.service';
 
 @Injectable()
 export class MachinePlanService {
@@ -23,7 +23,7 @@ export class MachinePlanService {
         private casheService: MachineModuleCasheService,
         private dataService: MachineModuleStoreDataService,
         private urlService: MachineModuleUrlService,
-        private httpErrorService: AppHttpErrorService
+        private modalService: AppModalService
     ) { }
 
     getAll(date: Date, machineNumber: number): Observable<MachinePlan[]> {
@@ -33,34 +33,34 @@ export class MachinePlanService {
             .set('date', formatDate(date));
         return this.http
             .get(this.urlService.machinePlanUrl, { params, headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpErrorWindow(err));
     }
 
     getOne(id: number): Observable<MachinePlan> {
         const url = `${this.urlService.machinePlanUrl}/${id}`;
         return this.http
             .get(url, { headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpErrorWindow(err));
     }
 
     save(plan: MachinePlan): Observable<MachinePlan> {
         return this.http
             .post(this.urlService.machinePlanUrl, plan, { headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpErrorWindow(err));
     }
 
     update(plan: MachinePlan): Observable<MachinePlan> {
         const url = `${this.urlService.machinePlanUrl}/${plan.id}`;
         return this.http
             .put(url, plan, { headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpErrorWindow(err));
     }
 
     delete(id: number) {
         const url = `${this.urlService.machinePlanUrl}/${id}`;
         return this.http
             .delete(url, { headers: appHeaders })
-            .catch(err => this.httpErrorService.openHttpErrorWindow(err));
+            .catch(err => this.modalService.openHttpErrorWindow(err));
     }
 
     saveWithItems(plan: MachinePlan): Observable<MachinePlan> {
