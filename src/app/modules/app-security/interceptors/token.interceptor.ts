@@ -17,7 +17,7 @@ export class TokenInterceptor implements HttpInterceptor {
         if (this.isNotLogginUrl(request.url)) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${this.authService.getToken()}`
+                    Authorization: `Bearer ${this.authService.getAccessToken()}`
                 }
             });
         }

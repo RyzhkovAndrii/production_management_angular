@@ -7,6 +7,7 @@ import { SecurityModuleUrlService } from './security-module-url.service';
 import { Observable } from '../../../../../node_modules/rxjs';
 import { httpErrorHandle } from '../../../app-utils/app-http-error-handler';
 import { AppModalService } from '../../app-shared/services/app-modal.service';
+import { TokenResponse } from '../models/token-response.model';
 
 @Injectable()
 export class AuthenticationService {
@@ -19,24 +20,24 @@ export class AuthenticationService {
         private appModalService: AppModalService
     ) { }
 
-    readonly TOKEN_NAME = 'jwt_token';
+    readonly ACCESS_TOKEN_NAME = 'access_token';
+    readonly REFRESH_TOKEN_NAME = 'refresh_token';
     readonly USER_NAME = 'user';
 
-    login(username: string, password: string): Observable<string> {
+    login(username: string, password: string): Observable<TokenResponse> {
         let headers = new HttpHeaders();
         headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
         const body = `username=${username}&password=${password}`;
         return this.http
             .post(this.urlService.loginUrl, body, {
-                headers: headers,
-                responseType: 'text'
+                headers: headers
             })
             .catch(httpErrorHandle);
     }
 
     recieveCurrentUserInfo(): Observable<User> {
         let headers = new HttpHeaders();
-        headers = headers.set('Authorization', 'Bearer ' + this.getToken());
+        headers = headers.set('Authorization', 'Bearer ' + this.getAccessToken());
         return this.http
             .get(this.urlService.currentUserUrl, { headers: headers })
             .catch(err => this.appModalService.openHttpError(err));
@@ -47,12 +48,18 @@ export class AuthenticationService {
         sessionStorage.clear();
     }
 
-    getToken(): string {
-        return this.storage.getItem(this.TOKEN_NAME);
+    getAccessToken(): string {
+        console.log(this.storage.getItem(this.ACCESS_TOKEN_NAME));
+        return this.storage.getItem(this.ACCESS_TOKEN_NAME);
     }
 
-    setToken(token: string): void {
-        this.storage.setItem(this.TOKEN_NAME, token);
+    getRefreshToken(): string {
+        return this.storage.getItem(this.REFRESH_TOKEN_NAME);
+    }
+
+    setToken(tokenResp: TokenResponse): void {
+        this.storage.setItem(this.ACCESS_TOKEN_NAME, tokenResp.accessToken);
+        this.storage.setItem(this.REFRESH_TOKEN_NAME, tokenResp.refreshToken);
     }
 
     getTokenExpirationDate(token: string): Date {
@@ -74,7 +81,7 @@ export class AuthenticationService {
     }
 
     isAuthenticated(): boolean {
-        const token = this.getToken();
+        const token = this.getAccessToken();
         return !this.isTokenExpired(token);
     }
 
