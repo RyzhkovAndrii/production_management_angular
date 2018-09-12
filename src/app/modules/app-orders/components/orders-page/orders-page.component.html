@@ -8,12 +8,10 @@
   <div *ngIf="isDataLoaded">
     <div class="row">
       <div class="col-1 btn-group">
-        <button class="btn btn-outline-dark btn-sm"
-                (click)="openOrderCreate()">
+        <button *appCanAccess="['ROLE_MANAGER']" class="btn btn-outline-dark btn-sm mr-2" (click)="openOrderCreate()">
           <i class="material-icons">add</i>
         </button>
-        <button class="btn btn-outline-dark btn-sm ml-2"
-                (click)="openClientList()">
+        <button class="btn btn-outline-dark btn-sm" (click)="openClientList()">
           <i class="material-icons">list</i>
         </button>
       </div>
