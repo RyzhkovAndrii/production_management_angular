@@ -9,6 +9,15 @@ import { User } from '../../app-users/models/user.model';
 })
 export class NavigationComponent implements OnInit {
 
+  rollsCanAcces = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER'];
+  productsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER'];
+  ordersCanAccess = ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST'];
+  standardsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
+  productPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER'];
+  rollPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
+  machinePlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
+  usersCanAccess = ['ROLE_ADMIN'];
+
   title = 'app';
   isCollapsed = false;
 

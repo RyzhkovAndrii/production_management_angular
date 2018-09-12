@@ -9,13 +9,15 @@
   </button>
   <div class="collapse navbar-collapse " id="navbarNavAltMarkup" [ngbCollapse]="!isCollapsed">
     <ul class="navbar-nav">
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls">Рулоны</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products">Продукция</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/orders">Заказы</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/standards">Нормативы</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-plan">Планы продукции</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/machines">Планы по машинам</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/users">Пользователи</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls" *appCanAccess="rollsCanAcces">Рулоны</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products" *appCanAccess="productsCanAccess">Продукция</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/orders" *appCanAccess="ordersCanAccess">Заказы</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/standards" *appCanAccess="standardsCanAccess">Нормативы</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-plan" *appCanAccess="productPlansCanAccess">Планы по продукции</a></li>
+      <!-- todo add module -->
+      <!-- <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls-plan" *appCanAccess="rollPlansCanAccess">Планы по рулонам</a></li> -->
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/machines" *appCanAccess="machinePlansCanAccess">Планы по машинам</a></li>
+      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/users" *appCanAccess="usersCanAccess">Пользователи</a></li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li><span class="navbar-text"> Здравствуйте, {{ currentUser?.firstName }} </span></li>

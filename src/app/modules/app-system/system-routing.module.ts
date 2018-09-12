@@ -59,6 +59,16 @@ const routes: Routes = [
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER']
                 }
             },
+            // todo add module
+            // {
+            //     path: 'rolls-plan',
+            //     loadChildren: '../app-rolls-plan/rolls-plan.module#RollsPlanModule',
+            //     canActivate: [RoleGuard],
+            //     canActivateChild: [RoleGuard],
+            //     data: {
+            //         roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
+            //     }
+            // },
             {
                 path: 'machines',
                 loadChildren: '../app-machines/machines.module#MachinesModule',
