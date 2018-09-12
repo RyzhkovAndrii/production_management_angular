@@ -18,7 +18,11 @@
           <td>{{ data.plan.manufacturedAmount | exponent }}</td>
           <td>{{ data.plan.productToMachinePlane | exponent }}</td>
           <td *ngIf="data.plan.manufacturedAmount - data.plan.productToMachinePlane; let diff; else zero">
-            <button *ngIf="diff !== 0"
+            <span *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_ECONOMIST']">
+              <span *ngIf="diff > 0" style="color: #dc3545">- {{ diff | exponent }}</span>
+              <span *ngIf="diff < 0" style="color:#28a745">+ {{ (-1)*diff | exponent}}</span>
+            </span>
+            <button *appCanAccess="['ROLE_CMO', 'ROLE_CTO']"
                     class="btn btn-sm w-100"
                     [ngClass]="{ 'btn-outline-danger': diff > 0, 'btn-outline-success': diff < 0 }"
                     style="font-size: 0.7rem"

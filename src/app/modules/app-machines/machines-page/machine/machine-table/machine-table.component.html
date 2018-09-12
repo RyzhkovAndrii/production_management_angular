@@ -14,7 +14,7 @@
             <th>Норм.&nbsp;рулон</th>
             <th>Рулон</th>
             <th>Кол-во</th>
-            <th></th>
+            <th *appCanAccess="['ROLE_CMO', 'ROLE_CTO']"></th>
           </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
                 </div>
               </div>
             </td>
-            <td>
+            <td *appCanAccess="['ROLE_CMO', 'ROLE_CTO']">
               <button class="btn btn-sm btn-outline-danger no-borders" style="font-size: 0.6rem" (click)="onRemovePlan(data.plan)">
                 <i class="material-icons mi-sm">clear</i>
               </button>

@@ -8,9 +8,10 @@
       </strong>
     </div>
     <div class="col-11 h-100 d-inline-flex p-0">
-      <div *ngFor="let machinePlan of machinePlansWithEmpty$ | async; let i = index" (dblclick)="openMachinePlanForm(i)">
-        <app-machine-plan [plan]="machinePlan"></app-machine-plan>
-      </div>
+        <div *ngFor="let machinePlan of machinePlansWithEmpty$ | async; let i = index">
+          <app-machine-plan *appCanAccess="['ROLE_CMO', 'ROLE_CTO']" [plan]="machinePlan" (dblclick)="openMachinePlanForm(i)"></app-machine-plan>
+          <app-machine-plan *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_ECONOMIST']" [plan]="machinePlan"></app-machine-plan>
+        </div>
     </div>
   </div>
 </div>

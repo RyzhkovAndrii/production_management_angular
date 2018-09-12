@@ -25,6 +25,7 @@ import { ProductsService } from '../app-products/services/products.service';
 import { MachineModuleUrlService } from './services/machine-module-url.service';
 import { MachineModuleCasheService } from './services/machine-module-cashe.service';
 import { MachineModuleStoreDataService } from './services/machine-module-store-data.service';
+import { SecurityModule } from '../app-security/security.module';
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { MachineModuleStoreDataService } from './services/machine-module-store-d
         }),
         ModalDialogModule.forRoot(),
         AppSharedModule,
-        NgDatepickerModule
+        NgDatepickerModule,
+        SecurityModule
     ],
     declarations: [
         MachineComponent,
