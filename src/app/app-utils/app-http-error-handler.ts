@@ -14,15 +14,15 @@ export function httpErrorHandle(error: HttpErrorResponse) {
   } else if (error.status >= 400 && error.status < 500) {
     // The backend returned an unsuccessful response code.
     // The response body may contain clues as to what went wrong
-    const message = JSON.parse(error.error).message;
+    const message = (error.error && error.error.message) ? error.error.message : error.message;
     return new ErrorObservable([
       `Код ошибки: ${error.status}`,
       message
     ]);
   } else if (error.status >= 500) {
-    const message = JSON.parse(error.error).message;
     // The backend returned an unsuccessful response code.
     // The response body may contain clues as to what went wrong
+    const message = (error.error && error.error.message) ? error.error.message : error.message;
     return new ErrorObservable([
       `Код ошибки: ${error.status}`,
       'Серверная ошибка, обратитесь к системному администратору',
