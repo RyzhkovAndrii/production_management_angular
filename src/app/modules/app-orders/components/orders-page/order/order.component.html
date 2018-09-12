@@ -44,35 +44,37 @@
 
 
 <!-- Context menu -->
-<context-menu *appCanAccess="['ROLE_MANAGER']" #orderMenu>
-  <ng-template *ngIf="!orderDetails.isDelivered"
-               contextMenuItem
-               let-item
-               (execute)="openOrderEditForm()">
-    Редактировать заказ
-  </ng-template>
-  <ng-template *ngIf="!orderDetails.isDelivered"
-               contextMenuItem
-               divider="true">
-  </ng-template>
-  <ng-template contextMenuItem
-               let-item
-               (execute)="openOrderDelConfirm()">
-    Удалить заказ
-  </ng-template>
-  <ng-template contextMenuItem
-               divider="true">
-  </ng-template>
-  <ng-template *ngIf="!orderDetails.isDelivered"
-               contextMenuItem
-               let-item
-               (execute)="openOrderDeliveryConfirm()">
-    Заказ доставлен
-  </ng-template>
-  <ng-template *ngIf="orderDetails.isDelivered"
-               contextMenuItem
-               let-item
-               (execute)="returnOrder()">
-    Вернуть из доставки
-  </ng-template>
+<context-menu #orderMenu>
+  <div *appCanAccess="['ROLE_MANAGER']">
+    <ng-template *ngIf="!orderDetails.isDelivered"
+                 contextMenuItem
+                 let-item
+                 (execute)="openOrderEditForm()">
+      Редактировать заказ
+    </ng-template>
+    <ng-template *ngIf="!orderDetails.isDelivered"
+                 contextMenuItem
+                 divider="true">
+    </ng-template>
+    <ng-template contextMenuItem
+                 let-item
+                 (execute)="openOrderDelConfirm()">
+      Удалить заказ
+    </ng-template>
+    <ng-template contextMenuItem
+                 divider="true">
+    </ng-template>
+    <ng-template *ngIf="!orderDetails.isDelivered"
+                 contextMenuItem
+                 let-item
+                 (execute)="openOrderDeliveryConfirm()">
+      Заказ доставлен
+    </ng-template>
+    <ng-template *ngIf="orderDetails.isDelivered"
+                 contextMenuItem
+                 let-item
+                 (execute)="returnOrder()">
+      Вернуть из доставки
+    </ng-template>
+  </div>
 </context-menu>
