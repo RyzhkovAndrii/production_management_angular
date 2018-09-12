@@ -29,10 +29,16 @@ export class AuthenticationService {
         headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
         const body = `username=${username}&password=${password}`;
         return this.http
-            .post(this.urlService.loginUrl, body, {
-                headers: headers
-            })
+            .post(this.urlService.loginUrl, body, { headers: headers })
             .catch(httpErrorHandle);
+    }
+
+    refreshToken(): Observable<TokenResponse> {
+        let headers = new HttpHeaders();
+        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
+        const token = this.getRefreshToken();
+        const body = `refreshToken=${token}`;
+        return this.http.post<any>(this.urlService.refreshUrl, body, { headers: headers });
     }
 
     recieveCurrentUserInfo(): Observable<User> {
@@ -49,7 +55,6 @@ export class AuthenticationService {
     }
 
     getAccessToken(): string {
-        console.log(this.storage.getItem(this.ACCESS_TOKEN_NAME));
         return this.storage.getItem(this.ACCESS_TOKEN_NAME);
     }
 

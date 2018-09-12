@@ -35,11 +35,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authService.logout();
     this.checkRouteMessage();
   }
 
   submit() {
+    this.authService.logout();
     if (!this.form.valid) {
       this.showValidErr = true;
       return;
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
     this.message = null;
     this.route.queryParams.subscribe(params => {
       if (params['authError']) {
-        this.message = 'Ошибка авторизации';
+        this.message = 'Вы не авторизованы';
         this.msgClass = 'alert-danger';
       } else if (params['passChange']) {
         this.message = 'Пароль успешно изменен';
