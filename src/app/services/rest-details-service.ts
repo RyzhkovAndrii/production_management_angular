@@ -1,8 +1,6 @@
-import {
-  Injectable
-} from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class RestDetailsService {
-  host = `http://localhost:8080`;
+  host = `http://localhost:8080/api`;
 }
