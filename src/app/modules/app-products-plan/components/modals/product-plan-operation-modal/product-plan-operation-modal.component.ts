@@ -4,6 +4,11 @@ import {
   ComponentRef
 } from '@angular/core';
 import {
+  FormGroup,
+  FormControl,
+  Validators
+} from '@angular/forms';
+import {
   IModalDialog,
   IModalDialogOptions,
   IModalDialogButton
@@ -16,8 +21,12 @@ import {
 })
 export class ProductPlanOperationModalComponent implements OnInit, IModalDialog {
 
+  readonly MIN_AMOUNT = 0.001;
+
   actionButtons: IModalDialogButton[];
   data: ProductPlanOperationModalData;
+  form: FormGroup;
+  amountByStandard: number;
 
   private btnClass = 'btn btn-outline-dark';
 
@@ -35,13 +44,27 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
     ];
   }
 
-  ngOnInit() {}
-
-  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
-    this.data = options.data;  
+  ngOnInit() {
+    this.form = new FormGroup({
+      desiredAmount: new FormControl(0, [Validators.required]),
+      rollTypes: new FormControl(this.data.standard.rollTypes, [Validators.required])
+    })
   }
 
-  onSubmit(): Promise<ProductPlanOperationRequest> {
+  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
+    this.data = options.data;
+  }
+
+  onSubmit(): Promise < ProductPlanOperationRequest > {
     return null;
- }
+  }
+
+  compareRolls(a: RollType, b: RollType): boolean {
+    return a.id == b.id;
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return control.invalid && control.touched;
+  }
 }

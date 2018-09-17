@@ -1,3 +1,56 @@
-<p>
-  product-plan-operation-modal works!
-</p>
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="desiredAmount">Необходимое количество продукции:</label>
+    <input type="number" min="0.001" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount" [ngClass]="{'is-invalid': isInvalid('desiredAmount'),
+        'is-valid': !isInvalid('desiredAmount') && form.get('desiredAmount').touched}">
+    <div class="invalid-feedback" *ngIf="isInvalid('desiredAmount')">
+      <span *ngIf="form.get('desiredAmount').errors['required']">Обязательное поле</span>
+      <span *ngIf="form.get('desiredAmount').errors['min']">Минимальное значение: {{ MIN_AMOUNT }}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="rollTypes">Рулон:</label>
+    <ng-select id="rollTypes" [items]="data.standard.rollTypes" [multiple]="false" [hideSelected]="false"
+      formControlName="rollTypes" [compareWith]="compareRolls" [closeOnSelect]="true" notFoundText="Рулоны не найдены">
+      <ng-template ng-header-tmp>
+        <div class="row">
+          <div class="col-3 text-center t-75">Толщина</div>
+          <div class="col-3 text-center t-75">Вес</div>
+          <div class="col-3 text-center t-75">Длина</div>
+          <div class="col-3 text-center t-75">Цвет</div>
+          <div class="col-12 text-center t-75">Примечание</div>
+        </div>
+      </ng-template>
+      <ng-template ng-label-tmp let-item="item" let-items="items">
+
+        <div class="row">
+          <div class="col-3 text-center t-75">
+            {{ item.thickness }}
+          </div>
+          <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
+          <div class="col-3 text-center t-75">{{ item.length }}</div>
+          <div class="col-2 text-center t-75">
+            <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
+          </div>
+          <div class="col-12 text-center t-75">
+            {{ item.note }}
+          </div>
+        </div>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+        <div class="row">
+          <div class="col-3 text-center t-75">{{ item.thickness }}</div>
+          <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
+          <div class="col-3 text-center t-75">{{ item.length }}</div>
+          <div class="col-3 text-center t-75">
+            <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
+          </div>
+          <div class="col-12 text-center t-75">{{ item.note }}</div>
+        </div>
+      </ng-template>
+    </ng-select>
+    <div *ngIf="isInvalid('rollTypes')">
+      <span class="invalid">Обязательное поле</span>
+    </div>
+  </div>
+</form>

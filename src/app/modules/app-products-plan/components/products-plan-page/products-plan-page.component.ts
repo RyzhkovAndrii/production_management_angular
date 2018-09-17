@@ -118,7 +118,7 @@ export class ProductsPlanPageComponent implements OnInit {
           productType: data.product,
           batch: data.batch,
           date: formatDate(this.headerDates[data.index]),
-          stadard: standardWithRolls,
+          standard: standardWithRolls,
           func
         };
         const options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> = {

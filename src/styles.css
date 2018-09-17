@@ -87,6 +87,10 @@ td:hover,
   width: 8% !important; 
 }
 
+.t-75 {
+  font-size: 0.75rem !important;
+}
+
 @media screen and (max-width: 1400px) {
   table {
     font-size: 0.8rem !important;

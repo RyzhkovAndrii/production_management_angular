@@ -15,6 +15,10 @@ import {
   ModalDialogModule
 } from 'ngx-modal-dialog';
 import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+
+import {
   AppSharedModule
 } from '../app-shared/app-shared.module';
 import {
@@ -37,6 +41,7 @@ import {
     ProductsPlanRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     ModalDialogModule.forRoot(),
     AppSharedModule,
     ContextMenuModule.forRoot({
