@@ -73,8 +73,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
     return control.invalid && control.touched;
   }
 
-  recalculateAmount(event: any) {
-    console.log(event);
+  recalculateAmount() {
     const norm = this.data.standard.norm;
     const value: number = this.form.get('desiredAmount').value;
     const remaining = value % norm;

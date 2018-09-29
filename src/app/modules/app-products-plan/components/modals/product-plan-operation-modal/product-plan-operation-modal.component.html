@@ -4,7 +4,7 @@
     <input type="number" min="1" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount"
       [ngClass]="{'is-invalid': isInvalid('desiredAmount'),
         'is-valid': !isInvalid('desiredAmount') && form.get('desiredAmount').touched}"
-      (change)="recalculateAmount($event)">
+      (change)="recalculateAmount()">
     <div class="invalid-feedback" *ngIf="isInvalid('desiredAmount')">
       <span *ngIf="form.get('desiredAmount').errors['required']">Обязательное поле</span>
       <span *ngIf="form.get('desiredAmount').errors['min']">Минимальное значение: {{ MIN_AMOUNT }}</span>
