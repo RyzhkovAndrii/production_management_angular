@@ -11,7 +11,7 @@
   <div class="form-group">
     <label for="rollTypes">Рулон:</label>
     <ng-select id="rollTypes" [items]="data.standard.rollTypes" [multiple]="false" [hideSelected]="false"
-      formControlName="rollTypes" [compareWith]="compareRolls" [closeOnSelect]="true" notFoundText="Рулоны не найдены">
+      formControlName="rollType" [compareWith]="compareRolls" [closeOnSelect]="true" notFoundText="Рулоны не найдены">
       <ng-template ng-header-tmp>
         <div class="row">
           <div class="col-3 text-center t-75">Толщина</div>

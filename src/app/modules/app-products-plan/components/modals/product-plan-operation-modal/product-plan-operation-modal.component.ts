@@ -47,12 +47,13 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   ngOnInit() {
     this.form = new FormGroup({
       desiredAmount: new FormControl(0, [Validators.required]),
-      rollTypes: new FormControl(this.data.standard.rollTypes, [Validators.required])
+      rollType: new FormControl(undefined, [Validators.required])
     })
   }
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
     this.data = options.data;
+    console.log(this.data);
   }
 
   onSubmit(): Promise < ProductPlanOperationRequest > {
@@ -65,6 +66,9 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
 
   isInvalid(controlName: string): boolean {
     const control = this.form.get(controlName);
+    if (control == undefined) {
+      return false;
+    }
     return control.invalid && control.touched;
   }
 }
