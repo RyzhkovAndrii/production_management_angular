@@ -27,6 +27,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   data: ProductPlanOperationModalData;
   form: FormGroup;
   amountByStandard: number;
+  recalculatedAmount: number = 0;
 
   private btnClass = 'btn btn-outline-dark';
 
@@ -70,5 +71,17 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
       return false;
     }
     return control.invalid && control.touched;
+  }
+
+  recalculateAmount(event: any) {
+    console.log(event);
+    const norm = this.data.standard.norm;
+    const value: number = this.form.get('desiredAmount').value;
+    const remaining = value % norm;
+    if (remaining == 0) {
+      this.recalculatedAmount = value;
+    } else {
+      this.recalculatedAmount = norm * (Math.ceil(value / norm));
+    }
   }
 }

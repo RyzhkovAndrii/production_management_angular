@@ -1,11 +1,19 @@
 <form [formGroup]="form">
   <div class="form-group">
     <label for="desiredAmount">Необходимое количество продукции:</label>
-    <input type="number" min="0.001" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount" [ngClass]="{'is-invalid': isInvalid('desiredAmount'),
-        'is-valid': !isInvalid('desiredAmount') && form.get('desiredAmount').touched}">
+    <input type="number" min="1" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount"
+      [ngClass]="{'is-invalid': isInvalid('desiredAmount'),
+        'is-valid': !isInvalid('desiredAmount') && form.get('desiredAmount').touched}"
+      (change)="recalculateAmount($event)">
     <div class="invalid-feedback" *ngIf="isInvalid('desiredAmount')">
       <span *ngIf="form.get('desiredAmount').errors['required']">Обязательное поле</span>
       <span *ngIf="form.get('desiredAmount').errors['min']">Минимальное значение: {{ MIN_AMOUNT }}</span>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12">
+      <label for="recalculatedAmount">Пересчитанное количество:</label>
+      <input type="number" class="form-control" id="recalculatedAmount" disabled="true" [value]="recalculatedAmount">
     </div>
   </div>
   <div class="form-group">
