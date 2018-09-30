@@ -22,13 +22,14 @@ import {
 export class ProductPlanOperationModalComponent implements OnInit, IModalDialog {
 
   readonly MIN_AMOUNT = 0.001;
-
+  
   actionButtons: IModalDialogButton[];
   data: ProductPlanOperationModalData;
+  norm: number;
   form: FormGroup;
   amountByStandard: number;
   recalculatedAmount: number = 0;
-
+  
   private btnClass = 'btn btn-outline-dark';
 
   constructor() {
@@ -55,10 +56,25 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
     this.data = options.data;
     console.log(this.data);
+    this.norm = this.data.standard.norm;
   }
 
   onSubmit(): Promise < ProductPlanOperationRequest > {
-    return null;
+    let result: Promise<any>;
+    if (this.form.invalid) {
+      result = Promise.reject('invalid');
+    } else {
+      const operation: ProductPlanOperationRequest = {
+        date: this.data.date,
+        productTypeId: this.data.productType.id,
+        rollTypeId: this.form.get('rollType').value.id,
+        rollAmount: Math.ceil(this.recalculatedAmount/this.norm),
+        productAmount: this.recalculatedAmount 
+      }
+      result = Promise.resolve(operation);
+    }
+    this.data.func(result);
+    return result;
   }
 
   compareRolls(a: RollType, b: RollType): boolean {
@@ -74,13 +90,12 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   }
 
   recalculateAmount() {
-    const norm = this.data.standard.norm;
     const value: number = this.form.get('desiredAmount').value;
-    const remaining = value % norm;
+    const remaining = value % this.norm;
     if (remaining == 0) {
       this.recalculatedAmount = value;
     } else {
-      this.recalculatedAmount = norm * (Math.ceil(value / norm));
+      this.recalculatedAmount = this.norm * (Math.ceil(value / this.norm));
     }
   }
 }
