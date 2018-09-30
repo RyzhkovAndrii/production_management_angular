@@ -72,7 +72,7 @@ export class ProductsPlanPageComponent implements OnInit {
     this.fromDate = addDays(this.currentDate, 1);
     this.toDate = addDays(this.currentDate, this.DATE_HEADER_SIZE);
     for (let i = 0; i < this.DATE_HEADER_SIZE; i++) {
-      this.headerDates.push(addDays(this.currentDate, i + 1));
+      this.headerDates[i] = addDays(this.currentDate, i + 1);
       if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.headerDates[i].getMonth()) {
         this.secondMonthIndex = i;
       }
