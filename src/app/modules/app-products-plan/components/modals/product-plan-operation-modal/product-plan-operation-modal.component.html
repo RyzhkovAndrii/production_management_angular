@@ -8,6 +8,9 @@
     <div class="invalid-feedback" *ngIf="isInvalid('desiredAmount')">
       <span *ngIf="form.get('desiredAmount').errors['required']">Обязательное поле</span>
       <span *ngIf="form.get('desiredAmount').errors['min']">Минимальное значение: {{ MIN_AMOUNT }}</span>
+      <span *ngIf="form.get('desiredAmount').errors['decimalPlacesError']">
+        Максимальное количество знаков после запятой: {{ DECIMAL_PLACES }}
+      </span>
     </div>
   </div>
   <div class="form-row">
@@ -57,7 +60,7 @@
         </div>
       </ng-template>
     </ng-select>
-    <div *ngIf="isInvalid('rollTypes')">
+    <div *ngIf="isInvalid('rollType')">
       <span class="invalid">Обязательное поле</span>
     </div>
   </div>

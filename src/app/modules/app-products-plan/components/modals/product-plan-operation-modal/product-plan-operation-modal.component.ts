@@ -14,6 +14,9 @@ import {
   IModalDialogButton
 } from 'ngx-modal-dialog';
 import Decimal from 'decimal.js';
+import {
+  newDecimalPlacesValidator
+} from '../../../../../app-utils/app-validators';
 
 @Component({
   selector: 'app-product-plan-operation-modal',
@@ -23,6 +26,7 @@ import Decimal from 'decimal.js';
 export class ProductPlanOperationModalComponent implements OnInit, IModalDialog {
 
   readonly MIN_AMOUNT = 0.001;
+  readonly DECIMAL_PLACES = 3;
 
   actionButtons: IModalDialogButton[];
   data: ProductPlanOperationModalData;
@@ -30,6 +34,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   form: FormGroup;
   amountByStandard: number;
   recalculatedAmount: number = 0;
+  submitPressed: boolean = false;
 
   private btnClass = 'btn btn-outline-dark';
 
@@ -49,7 +54,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
 
   ngOnInit() {
     this.form = new FormGroup({
-      desiredAmount: new FormControl(0, [Validators.required]),
+      desiredAmount: new FormControl(0, [Validators.required, Validators.min(this.MIN_AMOUNT), newDecimalPlacesValidator(this.DECIMAL_PLACES)]),
       rollType: new FormControl(undefined, [Validators.required])
     })
   }
@@ -61,6 +66,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   }
 
   onSubmit(): Promise < ProductPlanOperationRequest > {
+    this.submitPressed = true;
     let result: Promise < any > ;
     if (this.form.invalid) {
       result = Promise.reject('invalid');
@@ -87,7 +93,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
     if (control == undefined) {
       return false;
     }
-    return control.invalid && control.touched;
+    return control.invalid && (control.touched || this.submitPressed);
   }
 
   recalculateAmount() {
