@@ -48,17 +48,17 @@
             <span class="filled-circle" [ngStyle]="{ 'background-color':info.productType.colorCode }"></span>
           </th>
           <td class="w-8">
-            {{ info.currentProductLeftover.amount }}
-          </td>
+            {{ info.currentProductLeftover.amount | exponent }}
+          </td>   
           <td class="w-6" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
             [contextMenuSubject]="{product: info.productType, batch: batch, index: i}">
-            {{ batch?.manufacturedAmount | empty }}
+            {{ batch?.manufacturedAmount | empty | exponent }}
           </td>
           <td class="w-8">
-            {{ info.weeklyLeftoverWithoutPlans.amount }}
+            {{ info.weeklyLeftoverWithoutPlans.amount | exponent }}
           </td>
           <td class="w-8">
-            {{ info.weeklyLeftoverTotal.amount }}
+            {{ info.weeklyLeftoverTotal.amount | exponent }}
           </td>
         </tr>
       </tbody>
