@@ -13,6 +13,7 @@ import {
   IModalDialogOptions,
   IModalDialogButton
 } from 'ngx-modal-dialog';
+import Decimal from 'decimal.js';
 
 @Component({
   selector: 'app-product-plan-operation-modal',
@@ -22,14 +23,14 @@ import {
 export class ProductPlanOperationModalComponent implements OnInit, IModalDialog {
 
   readonly MIN_AMOUNT = 0.001;
-  
+
   actionButtons: IModalDialogButton[];
   data: ProductPlanOperationModalData;
   norm: number;
   form: FormGroup;
   amountByStandard: number;
   recalculatedAmount: number = 0;
-  
+
   private btnClass = 'btn btn-outline-dark';
 
   constructor() {
@@ -60,7 +61,7 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   }
 
   onSubmit(): Promise < ProductPlanOperationRequest > {
-    let result: Promise<any>;
+    let result: Promise < any > ;
     if (this.form.invalid) {
       result = Promise.reject('invalid');
     } else {
@@ -68,8 +69,8 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
         date: this.data.date,
         productTypeId: this.data.productType.id,
         rollTypeId: this.form.get('rollType').value.id,
-        rollAmount: Math.ceil(this.recalculatedAmount/this.norm),
-        productAmount: this.recalculatedAmount 
+        rollAmount: Math.ceil(this.recalculatedAmount / this.norm),
+        productAmount: this.recalculatedAmount
       }
       result = Promise.resolve(operation);
     }
@@ -90,12 +91,12 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
   }
 
   recalculateAmount() {
-    const value: number = this.form.get('desiredAmount').value;
+    const value: number = new Decimal(this.form.get('desiredAmount').value).times(1000).toNumber();
     const remaining = value % this.norm;
     if (remaining == 0) {
       this.recalculatedAmount = value;
     } else {
-      this.recalculatedAmount = this.norm * (Math.ceil(value / this.norm));
+      this.recalculatedAmount = new Decimal(this.norm).times(new Decimal(value).dividedBy(this.norm).ceil()).toNumber();
     }
   }
 }

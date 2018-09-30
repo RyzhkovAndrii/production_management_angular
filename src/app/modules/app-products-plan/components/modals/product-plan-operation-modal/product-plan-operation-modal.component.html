@@ -1,7 +1,7 @@
 <form [formGroup]="form">
   <div class="form-group">
     <label for="desiredAmount">Необходимое количество продукции:</label>
-    <input type="number" min="1" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount"
+    <input type="number" min="0" step="1" class="form-control" id="desiredAmount" formControlName="desiredAmount"
       [ngClass]="{'is-invalid': isInvalid('desiredAmount'),
         'is-valid': !isInvalid('desiredAmount') && form.get('desiredAmount').touched}"
       (change)="recalculateAmount()">
@@ -12,8 +12,8 @@
   </div>
   <div class="form-row">
     <div class="form-group col-12">
-      <label for="recalculatedAmount">Количество по нормативу {{ norm }}:</label>
-      <input type="number" class="form-control" id="recalculatedAmount" disabled="true" [value]="recalculatedAmount">
+      <label for="recalculatedAmount">Количество по нормативу {{ norm | exponent }}:</label>
+      <input type="number" class="form-control" id="recalculatedAmount" disabled="true" [value]="recalculatedAmount | exponent">
     </div>
   </div>
   <div class="form-group">
