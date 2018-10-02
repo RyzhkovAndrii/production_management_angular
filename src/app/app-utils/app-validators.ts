@@ -21,6 +21,7 @@ export function validateDateNotAfterCurrent(control: FormControl) {
   }
   return null;
 }
+
 export function newDecimalPlacesValidator(decimalPlaces: number): (control: FormControl) => any {
   const validator = (control: FormControl) => {
     if (control.value && !new Decimal(control.value).times(Math.pow(10, decimalPlaces)).isInteger()) {
