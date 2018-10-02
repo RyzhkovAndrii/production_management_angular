@@ -5,7 +5,8 @@ import {
 } from '@angular/core';
 import {
   ModalDialogService,
-  IModalDialogOptions
+  IModalDialogOptions,
+  SimpleModalComponent
 } from 'ngx-modal-dialog';
 
 import {
@@ -127,7 +128,12 @@ export class ProductsPlanPageComponent implements OnInit {
           childComponent: ProductPlanOperationModalComponent
         }
         this.ngxModalService.openDialog(this.viewRef, options);
-      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+      }, (error: string[]) => {
+        if (error.length > 0 && error[0].endsWith('404') && error[1].toLowerCase().includes('norm')) {
+          error = ['Для данной продукции не создан норматив!']
+        }
+        this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
+      });
   }
 
   openEditPlanModal(planBatch: ProductPlanBatchResponse) {
