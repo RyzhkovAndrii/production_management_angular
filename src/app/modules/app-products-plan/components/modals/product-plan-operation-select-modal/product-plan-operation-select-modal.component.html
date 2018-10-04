@@ -1,3 +1,21 @@
-<p>
-  product-plan-operation-select-modal works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3">
+      Продукции
+    </div>
+    <div class="col-1">
+      Рулонов
+    </div>
+  </div>
+  <div class="row" *ngFor="let item of data.operations">
+    <div class="col-3">
+      {{ item.productAmount | exponent }}
+    </div>
+    <div class="col-1">
+      {{ item.rollAmount }}
+    </div>
+    <div class="col-8">
+      {{ item.rollType.colorCode }}
+    </div>
+  </div>
+</div>

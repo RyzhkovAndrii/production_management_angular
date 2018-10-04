@@ -1,4 +1,4 @@
 interface ProductPlanOperationSelectModalData {
-    operations: ProductPlanOperationResponse[];
-    action(operation: ProductPlanOperationResponse);
+    operations: ProductPlanOperationWithRoll[];
+    action(p: Promise < ProductPlanOperationWithRoll >);
 }

@@ -3,7 +3,14 @@ import {
   OnInit,
   ComponentRef
 } from '@angular/core';
-import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
+import {
+  IModalDialog,
+  IModalDialogOptions,
+  IModalDialogButton
+} from 'ngx-modal-dialog';
+import {
+  RollsService
+} from '../../../../app-rolls/services/rolls.service';
 
 @Component({
   selector: 'app-product-plan-operation-select-modal',
@@ -13,12 +20,21 @@ import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 export class ProductPlanOperationSelectModalComponent implements OnInit, IModalDialog {
 
   data: ProductPlanOperationSelectModalData;
-  
-  constructor() {}
-  
+  actionButtons: IModalDialogButton[];
+  private btnClass = 'btn btn-outline-dark';
+
+
+  constructor() {
+    this.actionButtons = [{
+      text: 'Закрыть',
+      buttonClass: this.btnClass,
+      onAction: () => true
+    }];
+  }
+
   ngOnInit() {}
-  
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<ProductPlanOperationSelectModalData>>) {
-    this.data = options.data;    
+
+  dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationSelectModalData >> ) {
+    this.data = options.data;
   }
 }
