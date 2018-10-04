@@ -70,11 +70,11 @@
     Создать
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem (execute)="openEditPlanModal($event.item)">
+  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)">
     Редактировать
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem let-item (execute)="openDeletePlanModal($event.item)">
+  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)">
     Удалить
   </ng-template>
 </context-menu>

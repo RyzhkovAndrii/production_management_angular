@@ -29,6 +29,9 @@ import {
 import {
   ProductPlanOperationModalComponent
 } from '../modals/product-plan-operation-modal/product-plan-operation-modal.component';
+import {
+  ProductPlanOperationSelectModalComponent
+} from '../modals/product-plan-operation-select-modal/product-plan-operation-select-modal.component';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -100,11 +103,7 @@ export class ProductsPlanPageComponent implements OnInit {
     return result;
   }
 
-  openCreatePlanModal(data: {
-    product: ProductTypeResponse,
-    batch: ProductPlanBatchResponse,
-    index: number
-  }) {
+  openCreatePlanModal(data: ProductPlanModalPrefetchData) {
     const func: (result: Promise < ProductPlanOperationRequest > ) => void = result => {
       result.then(resolve => {
         this.productsPlanService.postOperation(resolve).subscribe(operation => {
@@ -135,11 +134,39 @@ export class ProductsPlanPageComponent implements OnInit {
       });
   }
 
-  openEditPlanModal(planBatch: ProductPlanBatchResponse) {
-    console.log(planBatch);
+  openSelectEditPlanModal(data: ProductPlanModalPrefetchData) {
+    const func: (p: Promise < ProductPlanOperationWithRoll > ) => void = p => {
+      p.then(resolve => {
+        console.log(resolve);
+      }, reject => {});
+    }
+    this.openSelectPlanModal(data, 'Выбор операции для редактирования', func.bind(this));
   }
 
-  openDeletePlanModal(planBatch: ProductPlanBatchResponse) {
-    console.log(planBatch);
+  openSelectPlanModal(data: ProductPlanModalPrefetchData, title: string,
+    action: (p: Promise < ProductPlanOperationWithRoll > ) => void) {
+    const date = formatDate(this.headerDates[data.index]);
+    this.productsPlanService.getOperationsByProductWithRoll(data.product.id, date)
+      .subscribe(operations => {
+        const data: ProductPlanOperationSelectModalData = {
+          operations,
+          action
+        }
+        const options: Partial < IModalDialogOptions < ProductPlanOperationSelectModalData >> = {
+          data,
+          title,
+          childComponent: ProductPlanOperationSelectModalComponent
+        }
+        this.ngxModalService.openDialog(this.viewRef, options);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+  }
+
+  openSelectDeletePlanModal(data: ProductPlanModalPrefetchData) {
+    const func: (p: Promise < ProductPlanOperationWithRoll > ) => void = p => {
+      p.then(resolve => {
+        console.log(resolve);
+      }, reject => {});
+    }
+    this.openSelectPlanModal(data, 'Выбор операции для удаления', func.bind(this));
   }
 }
