@@ -1,21 +1,42 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-3">
-      Продукции
-    </div>
-    <div class="col-1">
-      Рулонов
-    </div>
-  </div>
-  <div class="row" *ngFor="let item of data.operations">
-    <div class="col-3">
-      {{ item.productAmount | exponent }}
-    </div>
-    <div class="col-1">
-      {{ item.rollAmount }}
-    </div>
-    <div class="col-8">
-      {{ item.rollType.colorCode }}
-    </div>
-  </div>
+  <table class="table table-bordered table-sm">
+    <thead>
+      <th>
+        Продукции
+      </th>
+      <th>
+        Рулонов
+      </th>
+      <th>
+        Рулон
+      </th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data.operations">
+        <td class="text-center t-75">
+          {{ item.productAmount | exponent }}
+        </td>
+        <td class="text-center t-75">
+          {{ item.rollAmount }}
+        </td>
+        <td class="w-75">
+          <div class="row">
+            <div class="col-3 text-center t-75">
+              {{ item.rollType.thickness }}
+            </div>
+            <div class="col-3 text-center t-75">{{ item.rollType.minWeight }}-{{ item.rollType.maxWeight }}</div>
+            <div class="col-2 text-center t-75">{{ item.rollType.length }}</div>
+            <div class="col-3 text-center t-75">
+              <svg height="20" width="20">
+                <circle cx="10" cy="10" r="9" stroke="black" stroke-width="1" [attr.fill]="item.rollType.colorCode" />
+              </svg>
+            </div>
+            <div class="col-12 text-center t-75">
+              {{ item.rollType.note }}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
