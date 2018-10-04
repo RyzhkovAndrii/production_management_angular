@@ -27,13 +27,17 @@ import {
   formatDate,
   midnightDate
 } from '../../../app-utils/app-date-utils';
+import {
+  RollsService
+} from '../../app-rolls/services/rolls.service';
 
 @Injectable()
 export class ProductsPlanService {
 
   constructor(private urls: ProductsPlanUrlsService,
     private http: HttpClient,
-    private productsService: ProductsService) {}
+    private productsService: ProductsService,
+    private rollsService: RollsService) {}
 
   getProductPlanInfo(fromDate: Date, toDate: Date): Observable < ProductPlanInfo[] > {
     const weeklyDate = formatDate(addDays(fromDate, 7));
@@ -92,6 +96,23 @@ export class ProductsPlanService {
       params
     }).catch(httpErrorHandle);
   }
+
+  getOperationsByProductWithRoll(productTypeId: number, date: string): Observable < ProductPlanOperationWithRoll[] > {
+    return this.getOperationsByProduct(productTypeId, date, date)
+      .flatMap(operationResponses => from(operationResponses)
+        .flatMap(operation => this.rollsService.getRollType(operation.rollTypeId)
+          .map(rollType => {
+            const operationWithRoll: ProductPlanOperationWithRoll = {
+              date: operation.date,
+              productTypeId: operation.productTypeId,
+              rollType,
+              rollAmount: operation.rollAmount,
+              productAmount: operation.productAmount,
+              rollToMachinePlane: operation.rollToMachinePlane
+            };
+            return operationWithRoll;
+          }))).toArray();
+  } 
 
   getOperationsByProduct(productTypeId: number, fromDate: string, toDate: string): Observable < ProductPlanOperationResponse[] > {
     const params = new HttpParams()
