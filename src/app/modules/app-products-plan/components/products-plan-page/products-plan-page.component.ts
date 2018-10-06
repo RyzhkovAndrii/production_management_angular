@@ -32,6 +32,9 @@ import {
 import {
   ProductPlanOperationSelectModalComponent
 } from '../modals/product-plan-operation-select-modal/product-plan-operation-select-modal.component';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -164,9 +167,35 @@ export class ProductsPlanPageComponent implements OnInit {
   openSelectDeletePlanModal(data: ProductPlanModalPrefetchData) {
     const func: (p: Promise < ProductPlanOperationWithRoll > ) => void = p => {
       p.then(resolve => {
-        console.log(resolve);
+        this.openDeletePlanOperationModal(resolve.id);
       }, reject => {});
     }
     this.openSelectPlanModal(data, 'Выбор операции для удаления', func.bind(this));
+  }
+
+  openDeletePlanOperationModal(operationId: number) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any > > = {
+      title: 'Подтвердите удаление операции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.productsPlanService.deleteOperation(operationId)
+              .subscribe(data => {
+                this.initData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    }
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
 }
