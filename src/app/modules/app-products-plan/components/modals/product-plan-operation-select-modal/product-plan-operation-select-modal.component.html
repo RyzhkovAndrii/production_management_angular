@@ -1,25 +1,25 @@
 <div class="container-fluid">
-  <table class="table table-bordered table-sm">
+  <table class="table table-bordered table-sm border-0">
     <thead>
-      <th>
+      <th class="border-top-0 border-left-0">
         Продукции
       </th>
-      <th>
+      <th class="border-top-0">
         Рулонов
       </th>
-      <th>
+      <th class="border-top-0 border-right-0">
         Рулон
       </th>
     </thead>
     <tbody>
-      <tr *ngFor="let item of data.operations">
-        <td class="text-center t-75">
+      <tr *ngFor="let item of data.operations; last as isLast">
+        <td class="text-center t-75 border-left-0" [ngClass]="{'border-bottom-0': isLast}">
           {{ item.productAmount | exponent }}
         </td>
-        <td class="text-center t-75">
+        <td class="text-center t-75" [ngClass]="{'border-bottom-0': isLast}">
           {{ item.rollAmount }}
         </td>
-        <td class="w-75">
+        <td class="w-75 border-right-0" [ngClass]="{'border-bottom-0': isLast}">
           <div class="row">
             <div class="col-3 text-center t-75">
               {{ item.rollType.thickness }}
