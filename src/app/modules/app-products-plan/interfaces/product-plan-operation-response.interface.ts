@@ -1,4 +1,5 @@
 interface ProductPlanOperationResponse {
+    id: number;
     date: string;
     productTypeId: number;
     rollTypeId: number;

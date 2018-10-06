@@ -103,6 +103,7 @@ export class ProductsPlanService {
         .flatMap(operation => this.rollsService.getRollType(operation.rollTypeId)
           .map(rollType => {
             const operationWithRoll: ProductPlanOperationWithRoll = {
+              id: operation.id,
               date: operation.date,
               productTypeId: operation.productTypeId,
               rollType,

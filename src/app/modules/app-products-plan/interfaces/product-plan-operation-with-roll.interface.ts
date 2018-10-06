@@ -1,4 +1,5 @@
 interface ProductPlanOperationWithRoll {
+  id:number;
   date: string;
   productTypeId: number;
   rollType: RollType;
