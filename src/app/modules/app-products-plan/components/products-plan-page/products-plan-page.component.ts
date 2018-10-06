@@ -151,16 +151,20 @@ export class ProductsPlanPageComponent implements OnInit {
     const date = formatDate(this.headerDates[data.index]);
     this.productsPlanService.getOperationsByProductWithRoll(data.product.id, date)
       .subscribe(operations => {
-        const data: ProductPlanOperationSelectModalData = {
-          operations,
-          action
+        if (operations.length == 1) {
+          action(Promise.resolve(operations[0]));
+        } else {
+          const data: ProductPlanOperationSelectModalData = {
+            operations,
+            action
+          }
+          const options: Partial < IModalDialogOptions < ProductPlanOperationSelectModalData >> = {
+            data,
+            title,
+            childComponent: ProductPlanOperationSelectModalComponent
+          }
+          this.ngxModalService.openDialog(this.viewRef, options);
         }
-        const options: Partial < IModalDialogOptions < ProductPlanOperationSelectModalData >> = {
-          data,
-          title,
-          childComponent: ProductPlanOperationSelectModalComponent
-        }
-        this.ngxModalService.openDialog(this.viewRef, options);
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
@@ -197,5 +201,9 @@ export class ProductsPlanPageComponent implements OnInit {
       ]
     }
     this.ngxModalService.openDialog(this.viewRef, modalOptions);
+  }
+
+  isBatchExist = (item: ProductPlanModalPrefetchData): boolean => {
+    return item.batch ? true : false;
   }
 }
