@@ -23,7 +23,6 @@ export class ProductPlanOperationSelectModalComponent implements OnInit, IModalD
   actionButtons: IModalDialogButton[];
   private btnClass = 'btn btn-outline-dark';
 
-
   constructor() {
     this.actionButtons = [{
       text: 'Закрыть',
@@ -36,5 +35,9 @@ export class ProductPlanOperationSelectModalComponent implements OnInit, IModalD
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationSelectModalData >> ) {
     this.data = options.data;
+  }
+
+  onSelect(operation: ProductPlanOperationWithRoll) {
+    this.data.action(Promise.resolve(operation));
   }
 }
