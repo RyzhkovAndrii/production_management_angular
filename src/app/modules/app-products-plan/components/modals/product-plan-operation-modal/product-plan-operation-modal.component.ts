@@ -54,14 +54,15 @@ export class ProductPlanOperationModalComponent implements OnInit, IModalDialog 
 
   ngOnInit() {
     this.form = new FormGroup({
-      desiredAmount: new FormControl(0, [Validators.required, Validators.min(this.MIN_AMOUNT), newDecimalPlacesValidator(this.DECIMAL_PLACES)]),
-      rollType: new FormControl(undefined, [Validators.required])
+      desiredAmount: new FormControl(
+        this.data.operation ? new Decimal(this.data.operation.productAmount).dividedBy(1000).toNumber() : 0,
+        [Validators.required, Validators.min(this.MIN_AMOUNT), newDecimalPlacesValidator(this.DECIMAL_PLACES)]),
+      rollType: new FormControl(this.data.operation ? this.data.operation.rollType : undefined, [Validators.required])
     })
   }
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < ProductPlanOperationModalData >> ) {
     this.data = options.data;
-    console.log(this.data);
     this.norm = this.data.standard.norm;
   }
 

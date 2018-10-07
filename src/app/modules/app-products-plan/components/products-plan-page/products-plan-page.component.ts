@@ -111,7 +111,7 @@ export class ProductsPlanPageComponent implements OnInit {
       result.then(resolve => {
         this.productsPlanService.postOperation(resolve).subscribe(operation => {
           this.initData();
-        });
+        }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, reject => {});
     }
     this.standardService.getStandardWithRolls(data.product.id)
@@ -140,10 +140,42 @@ export class ProductsPlanPageComponent implements OnInit {
   openSelectEditPlanModal(data: ProductPlanModalPrefetchData) {
     const func: (p: Promise < ProductPlanOperationWithRoll > ) => void = p => {
       p.then(resolve => {
-        console.log(resolve);
+        this.openEditPlanModal(data, resolve);
       }, reject => {});
     }
     this.openSelectPlanModal(data, 'Выбор операции для редактирования', func.bind(this));
+  }
+
+  openEditPlanModal(data: ProductPlanModalPrefetchData, operation: ProductPlanOperationWithRoll) {
+    const func: (result: Promise < ProductPlanOperationRequest > ) => void = result => {
+      result.then(resolve => {
+        this.productsPlanService.putOperation(operation.id, {
+          productTypeId: operation.productTypeId,
+          date: operation.date,
+          rollTypeId: operation.rollType.id,
+          rollAmount: operation.rollAmount,
+          productAmount: operation.productAmount
+        }).subscribe(updatedOperation => {
+          this.initData();
+        }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+      }, reject => {});
+    }
+    this.standardService.getStandardWithRolls(data.product.id).subscribe(standard => {
+      const modalData: ProductPlanOperationModalData = {
+        productType: data.product,
+        batch: data.batch,
+        operation,
+        date: formatDate(this.headerDates[data.index]),
+        standard,
+        func
+      }
+      const modalOptions: Partial < IModalDialogOptions < ProductPlanOperationModalData >> = {
+        data: modalData,
+        title: 'Редактирование планового производства',
+        childComponent: ProductPlanOperationModalComponent
+      };
+      this.ngxModalService.openDialog(this.viewRef, modalOptions);
+    }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   openSelectPlanModal(data: ProductPlanModalPrefetchData, title: string,
