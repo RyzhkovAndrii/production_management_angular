@@ -149,15 +149,10 @@ export class ProductsPlanPageComponent implements OnInit {
   openEditPlanModal(data: ProductPlanModalPrefetchData, operation: ProductPlanOperationWithRoll) {
     const func: (result: Promise < ProductPlanOperationRequest > ) => void = result => {
       result.then(resolve => {
-        this.productsPlanService.putOperation(operation.id, {
-          productTypeId: operation.productTypeId,
-          date: operation.date,
-          rollTypeId: operation.rollType.id,
-          rollAmount: operation.rollAmount,
-          productAmount: operation.productAmount
-        }).subscribe(updatedOperation => {
-          this.initData();
-        }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+        this.productsPlanService.putOperation(operation.id, resolve)
+          .subscribe(updatedOperation => {
+            this.initData();
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, reject => {});
     }
     this.standardService.getStandardWithRolls(data.product.id).subscribe(standard => {
