@@ -204,6 +204,6 @@ export class ProductsPlanPageComponent implements OnInit {
   }
 
   isBatchExist = (item: ProductPlanModalPrefetchData): boolean => {
-    return item.batch ? true : false;
+    return item.batch && item.batch.manufacturedAmount != 0 ? true : false;
   }
 }
