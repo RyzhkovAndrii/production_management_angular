@@ -75,10 +75,10 @@ export class ProductsPlanPageComponent implements OnInit {
 
   private initDateHeaders() {
     this.currentDate = midnightDate();
-    this.fromDate = addDays(this.currentDate, 1);
-    this.toDate = addDays(this.currentDate, this.DATE_HEADER_SIZE);
+    this.fromDate = midnightDate();
+    this.toDate = addDays(this.currentDate, this.DATE_HEADER_SIZE - 1);
     for (let i = 0; i < this.DATE_HEADER_SIZE; i++) {
-      this.headerDates[i] = addDays(this.currentDate, i + 1);
+      this.headerDates[i] = addDays(this.currentDate, i);
       if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.headerDates[i].getMonth()) {
         this.secondMonthIndex = i;
       }
@@ -103,6 +103,7 @@ export class ProductsPlanPageComponent implements OnInit {
   getBatches(planBatches: ProductPlanBatchResponse[]): ProductPlanBatchResponse[] {
     const result = new Array(this.DATE_HEADER_SIZE);
     planBatches.forEach(item => result[getIndex(midnightDate(item.date), result.length, (24 * 60 * 60 * 1000), this.toDate)] = item);
+    console.log(planBatches);
     return result;
   }
 
