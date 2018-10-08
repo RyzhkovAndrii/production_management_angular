@@ -103,7 +103,6 @@ export class ProductsPlanPageComponent implements OnInit {
   getBatches(planBatches: ProductPlanBatchResponse[]): ProductPlanBatchResponse[] {
     const result = new Array(this.DATE_HEADER_SIZE);
     planBatches.forEach(item => result[getIndex(midnightDate(item.date), result.length, (24 * 60 * 60 * 1000), this.toDate)] = item);
-    console.log(planBatches);
     return result;
   }
 

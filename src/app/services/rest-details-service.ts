@@ -4,5 +4,5 @@ import {
 
 @Injectable()
 export class RestDetailsService {
-  host = `http://localhost:8080`;
+  host = `http://${window.location.host}`;
 }
