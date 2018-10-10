@@ -27,9 +27,7 @@
             <div class="col-3 text-center t-75">{{ item.rollType.minWeight }}-{{ item.rollType.maxWeight }}</div>
             <div class="col-2 text-center t-75">{{ item.rollType.length }}</div>
             <div class="col-3 text-center t-75">
-              <svg height="20" width="20">
-                <circle cx="10" cy="10" r="9" stroke="black" stroke-width="1" [attr.fill]="item.rollType.colorCode" />
-              </svg>
+              <app-circle [color]="item.rollType.colorCode"></app-circle>
             </div>
             <div class="col-12 text-center t-75">
               {{ item.rollType.note }}

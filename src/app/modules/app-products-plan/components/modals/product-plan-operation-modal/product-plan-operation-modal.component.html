@@ -41,7 +41,7 @@
           <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
           <div class="col-3 text-center t-75">{{ item.length }}</div>
           <div class="col-2 text-center t-75">
-            <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
+            <app-circle [color]="item.colorCode"></app-circle>
           </div>
           <div class="col-12 text-center t-75">
             {{ item.note }}
@@ -54,7 +54,7 @@
           <div class="col-3 text-center t-75">{{ item.minWeight }}-{{ item.maxWeight }}</div>
           <div class="col-3 text-center t-75">{{ item.length }}</div>
           <div class="col-3 text-center t-75">
-            <span class="filled-circle" [ngStyle]="{'background-color': item.colorCode}"></span>
+            <app-circle [color]="item.colorCode"></app-circle>
           </div>
           <div class="col-12 text-center t-75">{{ item.note }}</div>
         </div>
