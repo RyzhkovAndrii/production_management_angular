@@ -5,6 +5,13 @@ import {
   CommonModule
 } from '@angular/common';
 import {
+  FormsModule
+} from '@angular/forms';
+import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+
+import {
   HttpErrorModalComponent
 } from './components/http-error-modal/http-error-modal.component';
 import {
@@ -26,14 +33,11 @@ import {
   CheckSelectComponent
 } from './components/check-select/check-select.component';
 import {
-  NgSelectModule
-} from '@ng-select/ng-select';
-import {
-  FormsModule
-} from '@angular/forms';
-import {
    TextConfirmModalComponent
 } from './components/text-confirm-modal/text-confirm-modal.component';
+import {
+  CircleComponent
+} from './components/circle/circle.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,8 @@ import {
     EmptyPipe,
     MomentPipe,
     CheckSelectComponent,
-    TextConfirmModalComponent
+    TextConfirmModalComponent,
+    CircleComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +62,8 @@ import {
     ExponentPipe,
     EmptyPipe,
     MomentPipe,
-    CheckSelectComponent
+    CheckSelectComponent,
+    CircleComponent
   ],
   entryComponents: [
     HttpErrorModalComponent,

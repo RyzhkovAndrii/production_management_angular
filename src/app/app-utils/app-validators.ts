@@ -1,16 +1,18 @@
-import { FormControl } from "@angular/forms";
+import {
+  FormControl
+} from "@angular/forms";
 import * as moment from "moment";
 import Decimal from "decimal.js";
 
 const DECIMAL_PLACES = 3; // todo common option
 
 export function integerValidator(control: FormControl) {
-    if (control.value % 1 != 0) {
-        return {
-            'notIntegerError': true
-        };
-    }
-    return null;
+  if (control.value % 1 != 0) {
+    return {
+      'notIntegerError': true
+    };
+  }
+  return null;
 }
 
 export function validateDateNotAfterCurrent(control: FormControl) {
@@ -30,3 +32,15 @@ export function validateDecimalPlaces(control: FormControl) {
     }
     return null;
   }
+
+export function newDecimalPlacesValidator(decimalPlaces: number): (control: FormControl) => any {
+  const validator = (control: FormControl) => {
+    if (control.value && !new Decimal(control.value).times(Math.pow(10, decimalPlaces)).isInteger()) {
+      return {
+        'decimalPlacesError': true
+      };
+    }
+    return null;
+  }
+  return validator;
+}

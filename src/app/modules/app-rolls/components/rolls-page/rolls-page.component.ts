@@ -26,8 +26,6 @@ import {
   addDays,
   formatDate,
   getIndex,
-  getDifferenceInDays,
-  getDate
 } from '../../../../app-utils/app-date-utils';
 import {
   RollsService

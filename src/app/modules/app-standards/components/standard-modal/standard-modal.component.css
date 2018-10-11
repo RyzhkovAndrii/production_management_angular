@@ -1,7 +1,3 @@
-.t-75 {
-  font-size: 0.75rem;
-}
-
 #rollTypes::ng-deep .ng-value {
     width: 25rem;
 }
