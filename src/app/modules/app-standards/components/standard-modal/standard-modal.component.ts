@@ -68,6 +68,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
   onSubmit(): Promise < Standard > {
     this.form.controls['rollTypes'].markAsTouched();
     this.form.controls['standard'].markAsTouched();
+    this.form.controls['standardForDay'].markAsTouched();
     if (this.form.valid) {
       const standard: Standard = {
         productTypeId: this.data.standardInfo.productType.id,
