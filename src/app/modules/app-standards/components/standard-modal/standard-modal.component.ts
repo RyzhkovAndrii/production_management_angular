@@ -79,7 +79,6 @@ export class StandardModalComponent implements OnInit, IModalDialog {
       this.data.func(resolve);
       return resolve;
     } else {
-
       const reject = Promise.reject('invalid');
       this.data.func(reject);
       return reject;
