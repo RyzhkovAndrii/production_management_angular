@@ -71,7 +71,7 @@ export class StandardsPageComponent implements OnInit {
         this.standardsService.postStandard(resolve)
           .subscribe(data => {
             this.fetchData();
-          });
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, reject => {});
     };
     this.openStandardModal(item, title, func);
@@ -84,7 +84,7 @@ export class StandardsPageComponent implements OnInit {
         this.standardsService.putStandard(resolve.productTypeId, resolve)
           .subscribe(data => {
             this.fetchData();
-          });
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, reject => {});
     };
     this.openStandardModal(item, title, func);
@@ -105,7 +105,7 @@ export class StandardsPageComponent implements OnInit {
           data
         };
         this.ngxModalService.openDialog(this.viewRef, modalOptions);
-      });
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
 
   }
 
