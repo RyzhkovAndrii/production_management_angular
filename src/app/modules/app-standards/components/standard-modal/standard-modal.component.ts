@@ -51,7 +51,8 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     const rollTypes = this.data.standardInfo.rollTypes;
     this.form = new FormGroup({
       rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : [], [Validators.required]),
-      standard: new FormControl(this.data.standardInfo.standardResponse.norm, [Validators.required, Validators.min(this.MIN_NORM)])
+      standard: new FormControl(this.data.standardInfo.standardResponse.norm, [Validators.required, Validators.min(this.MIN_NORM)]),
+      standardForDay: new FormControl(this.data.standardInfo.standardResponse.normForDay, [Validators.required, Validators.min(this.MIN_NORM)])
     });
   }
 
@@ -72,7 +73,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
         productTypeId: this.data.standardInfo.productType.id,
         rollTypeIds: ( < RollType[] > this.form.value.rollTypes).map(x => x.id),
         norm: this.form.value.standard,
-        normForDay: undefined
+        normForDay: this.form.value.standardForDay
       }
       const resolve = Promise.resolve(standard);
       this.data.func(resolve);
@@ -93,5 +94,4 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     const control = this.form.get(controlName);
     return control.invalid && control.touched;
   }
-
 }
