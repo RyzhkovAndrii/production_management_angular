@@ -49,7 +49,7 @@
   </div>
   <div class="form-group">
     <label for="standard">Норматив из рулона тыс.шт.</label>
-    <input type="number" min="1" step="1" class="form-control" id="standard" formControlName="standard" [ngClass]="{'is-invalid': isInvalid('standard'),
+    <input type="number" min="0" step="1" class="form-control" id="standard" formControlName="standard" [ngClass]="{'is-invalid': isInvalid('standard'),
     'is-valid': !isInvalid('standard') && form.get('standard').touched}">
     <div class="invalid-feedback" *ngIf="isInvalid('standard')">
       <span *ngIf="form.get('standard').errors['required']">Обязательное поле</span>
@@ -58,7 +58,8 @@
   </div>
   <div class="form-group">
     <label for="standardForDay">Норматив за день/машину тыс.шт.</label>
-    <input type="number" min="1" step="1" class="form-control" id="standardForDay" formControlName="standardForDay" [ngClass]="{'is-invalid': isInvalid('standardForDay'),
+    <input type="number" min="0" step="1" class="form-control" id="standardForDay" formControlName="standardForDay"
+      [ngClass]="{'is-invalid': isInvalid('standardForDay'),
     'is-valid': !isInvalid('standardForDay') && form.get('standardForDay').touched}">
     <div class="invalid-feedback" *ngIf="isInvalid('standardForDay')">
       <span *ngIf="form.get('standardForDay').errors['required']">Обязательное поле</span>

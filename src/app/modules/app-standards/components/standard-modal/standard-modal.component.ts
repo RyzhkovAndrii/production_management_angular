@@ -13,6 +13,9 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
+import {
+  Decimal
+} from 'decimal.js';
 
 @Component({
   selector: 'app-standard-modal',
@@ -26,7 +29,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
   data: StandardModalData;
   form: FormGroup;
 
-  readonly MIN_NORM = 1;
+  readonly MIN_NORM = 0.001;
 
   constructor() {
     this.actionButtons = [{
@@ -51,8 +54,10 @@ export class StandardModalComponent implements OnInit, IModalDialog {
     const rollTypes = this.data.standardInfo.rollTypes;
     this.form = new FormGroup({
       rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : [], [Validators.required]),
-      standard: new FormControl(this.data.standardInfo.standardResponse.norm, [Validators.required, Validators.min(this.MIN_NORM)]),
-      standardForDay: new FormControl(this.data.standardInfo.standardResponse.normForDay, [Validators.required, Validators.min(this.MIN_NORM)])
+      standard: new FormControl(new Decimal(this.data.standardInfo.standardResponse.norm).dividedBy(1000).toNumber(),
+        [Validators.required, Validators.min(this.MIN_NORM)]),
+      standardForDay: new FormControl(new Decimal(this.data.standardInfo.standardResponse.normForDay).dividedBy(1000).toNumber(),
+        [Validators.required, Validators.min(this.MIN_NORM)])
     });
   }
 
@@ -73,8 +78,8 @@ export class StandardModalComponent implements OnInit, IModalDialog {
       const standard: Standard = {
         productTypeId: this.data.standardInfo.productType.id,
         rollTypeIds: ( < RollType[] > this.form.value.rollTypes).map(x => x.id),
-        norm: this.form.value.standard,
-        normForDay: this.form.value.standardForDay
+        norm: new Decimal(this.form.value.standard).times(1000).toNumber(),
+        normForDay: new Decimal(this.form.value.standardForDay).times(1000).toNumber()
       }
       const resolve = Promise.resolve(standard);
       this.data.func(resolve);
