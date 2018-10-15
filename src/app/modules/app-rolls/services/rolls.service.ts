@@ -35,7 +35,7 @@ export class RollsService {
 
   constructor(private urls: RollsUrlService, private http: HttpClient) {}
 
-  postRollOperation(rollOperation: RollOperation) {
+  postRollOperation(rollOperation: RollOperationRequest) {
     return this.http.post(this.urls.rollOperationUrl, rollOperation, {
       headers: appHeaders
     }).catch(httpErrorHandle);
@@ -230,7 +230,7 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
-  putOperation(operationId: number, operation: RollOperation) {
+  putOperation(operationId: number, operation: RollOperationRequest) {
     const url = `${this.urls.rollOperationUrl}/${operationId}`;
     return this.http.put(url, operation, {
       headers: appHeaders

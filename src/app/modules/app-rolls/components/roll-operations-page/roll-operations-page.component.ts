@@ -139,9 +139,9 @@ export class RollOperationsPageComponent implements OnInit {
   openEditRollOperationModal(operation: RollOperationResponse) {
     this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
       .subscribe((batch) => {
-        const func = (result: Promise < RollOperation > ) => {
+        const func = (result: Promise < RollOperationRequest > ) => {
           result
-            .then((resolve: RollOperation) => {
+            .then((resolve: RollOperationRequest) => {
               this.rollsService.putOperation(operation.id, resolve).subscribe(data => {
                 this.fetchData();
               }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));

@@ -224,9 +224,9 @@ export class RollsPageComponent implements OnInit {
   }
 
   openCreateRollOperationModal(batch: RollBatch, index: number, rollTypeId: number) {
-    const func = (result: Promise < RollOperation > ) => {
+    const func = (result: Promise < RollOperationRequest > ) => {
       result
-        .then((resolve: RollOperation) => {
+        .then((resolve: RollOperationRequest) => {
           this.rollsService.postRollOperation(resolve).subscribe(data => {
             this.fetchData();
           }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));

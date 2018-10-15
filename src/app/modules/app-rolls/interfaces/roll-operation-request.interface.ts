@@ -1,4 +1,4 @@
-interface RollOperation {
+interface RollOperationRequest {
     operationDate: string;
     operationType: string;
     manufacturedDate: string;
