@@ -1,0 +1,33 @@
+#rollTypes::ng-deep .ng-value {
+  width: 25rem;
+}
+
+#rollTypes::ng-deep .ng-select-container {
+  width: 29.125rem;
+}
+
+#rollTypes .filled-circle {
+  padding: 0.1rem 0.57rem;
+}
+
+.remove-icon-center {
+  -ms-transform: translateY(50%);
+  transform: translateY(50%);
+}
+
+::ng-deep.ng-select.ng-select-single .ng-select-container .ng-value-container,
+::ng-deep.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+  overflow: visible !important;
+}
+
+::ng-deep.ng-select.ng-invalid.ng-touched .ng-select-container,
+::ng-deep.ng-select.ng-invalid.ng-touched.ng-select-focused .ng-select-container {
+  border: 1px solid #dc3545 !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+
+::ng-deep.ng-select.ng-valid.ng-touched .ng-select-container,
+::ng-deep.ng-select.ng-valid.ng-touched.ng-select-focused .ng-select-container {
+  border: 1px solid #28a745 !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}

@@ -3,5 +3,5 @@ interface RollOperationModalData {
   operation?: RollOperationResponse;
   rollTypeId: number;
   manufacturedDate: Date;
-  func(result: Promise < RollOperation > );
+  func(result: Promise < RollOperationRequest > );
 }

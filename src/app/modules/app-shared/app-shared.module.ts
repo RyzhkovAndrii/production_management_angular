@@ -8,9 +8,6 @@ import {
   HttpErrorModalComponent
 } from './components/http-error-modal/http-error-modal.component';
 import {
-  AppModalService
-} from './services/app-modal.service';
-import {
   SimpleConfirmModalComponent
 } from './components/simple-confirm-modal/simple-confirm-modal.component';
 import {
@@ -46,6 +43,9 @@ import {
 import {
   UsersModule
 } from '../app-users/users.module';
+import {
+  CircleComponent
+} from './components/circle/circle.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +55,8 @@ import {
     EmptyPipe,
     MomentPipe,
     CheckSelectComponent,
+    TextConfirmModalComponent,
+    CircleComponent,
     TextConfirmModalComponent,
     LastModificationComponent
   ],
@@ -71,6 +73,8 @@ import {
     ExponentPipe,
     EmptyPipe,
     MomentPipe,
+    CheckSelectComponent,
+    CircleComponent,
     CheckSelectComponent,
     LastModificationComponent
   ],

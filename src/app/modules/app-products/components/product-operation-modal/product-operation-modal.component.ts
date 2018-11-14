@@ -21,7 +21,7 @@ import {
   ProductOperationType
 } from '../../enums/product-operation-type.enum';
 import {
-  integerValidator
+  integerValidator, newDecimalPlacesValidator
 } from '../../../../app-utils/app-validators';
 
 @Component({
@@ -75,7 +75,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
       amount: new FormControl(undefined, [
         Validators.required,
         Validators.min(this.MIN_PRODUCT_AMOUNT),
-        this.validateDecimalPlaces.bind(this),
+        newDecimalPlacesValidator(this.DECIMAL_PLACES),
         this.validateLeftover.bind(this)
       ])
     });
@@ -102,15 +102,6 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
 
   isTouched(controlName: string) {
     return this.form.get(controlName).touched || this.submitPressed;
-  }
-
-  validateDecimalPlaces(control: FormControl) {
-    if (control.value && !new Decimal(control.value).times(Math.pow(10, this.DECIMAL_PLACES)).isInteger()) {
-      return {
-        'decimalPlacesError': true
-      };
-    }
-    return null;
   }
 
   validateLeftover(control: FormControl) {

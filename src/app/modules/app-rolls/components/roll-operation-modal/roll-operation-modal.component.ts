@@ -98,7 +98,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     }
   }
 
-  onSubmit(): Promise < RollOperation > {
+  onSubmit(): Promise < RollOperationRequest > {
     if (this.form.invalid) {
       this.submitPressed = true;
       const reject = Promise.reject('invalid');
@@ -106,7 +106,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       return reject;
     }
 
-    const rollOperation: RollOperation = {
+    const rollOperation: RollOperationRequest = {
       operationDate: formatDateBrowserToServer(this.form.value.operationDate),
       operationType: this.form.get('operationType').value,
       manufacturedDate: formatDate(this.manufacturedDate),

@@ -5,7 +5,7 @@
         <tr class="table-header">
           <th scope="col" colspan="3">Продукция</th>
           <th scope="col" colspan="5">Рулон</th>
-          <th scope="col" colspan="1">Норматив</th>
+          <th scope="col" colspan="2">Норматив</th>
         </tr>
         <tr class="table-header">
           <th scope="col">Наименование</th>
@@ -18,17 +18,21 @@
           <th scope="col">Длина</th>
           <th scope="col">Цвет</th>
 
-          <th scope="col"></th>
+          <th scope="col">из рулона</th>
+          <th scope="col">за день</th>
         </tr>
       </thead>
 
-      <tbody *ngFor="let info of sortStandardsInfo(); odd as isOdd" class="table-border" [contextMenu]="standardsMenu" [contextMenuSubject]="info">
+      <tbody *ngFor="let info of sortStandardsInfo(); odd as isOdd" class="table-border" [contextMenu]="standardsMenu"
+        [contextMenuSubject]="info">
         <tr *ngFor="let roll of info.rollTypes; first as isFirst" [ngClass]="{
           'even': isOdd,
           'odd': !isOdd
         }">
-          <th scope="row" class="row-name align-middle w-5" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.name }}</th>
-          <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{ info.productType.weight }}</th>
+          <th scope="row" class="row-name align-middle w-5" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{
+            info.productType.name }}</th>
+          <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">{{
+            info.productType.weight }}</th>
           <th scope="row" class="row-name align-middle w-3" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
             <span class="filled-circle" [ngStyle]="{'background-color': info.productType.colorCode}" *ngIf="isFirst"></span>
           </th>
@@ -42,7 +46,10 @@
             <span *ngIf="roll.colorCode" class="filled-circle" [ngStyle]="{'background-color': roll.colorCode}"></span>
           </td>
           <td class="align-middle" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
-            {{ info.standardResponse.norm }}
+            {{ info.standardResponse.norm | exponent }}
+          </td>
+          <td class="align-middle" [attr.rowspan]="info.rollTypes.length" *ngIf="isFirst">
+            {{ info.standardResponse.normForDay | exponent }}
           </td>
         </tr>
       </tbody>

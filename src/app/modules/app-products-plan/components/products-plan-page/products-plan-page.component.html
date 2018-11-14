@@ -1,3 +1,80 @@
-<p>
-  products-plan-page works!
-</p>
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" class="align-middle" colspan="2"></th>
+          <th scope="col" class="align-middle">
+            <small>с не отгруженными заказами</small>
+          </th>
+          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMonth() ? DATE_HEADER_SIZE : secondMonthIndex">
+            <small>{{ headerDates[0] | moment:'MMM YY' }}</small>
+          </th>
+          <th *ngIf="!isFirstInOneMonth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
+            <small>{{ headerDates[secondMonthIndex] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle">
+            <small>с заказами</small>
+          </th>
+          <th scope="col" class="align-middle">
+            <small>с заказами и планом</small>
+          </th>
+        </tr>
+        <tr class="table-header">
+          <th scope="col" class="align-middle">
+            Продукция
+          </th>
+          <th scope="col" class="align-middle">Цвет</th>
+          <th scope="col" class="align-middle">
+            Текущий остаток
+          </th>
+          <th scope="col" *ngFor="let item of headerDates" class="align-middle">
+            {{ item | moment:'DD' }}
+          </th>
+          <th scope="col" class="align-middle">
+            Остаток через неделю
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через неделю
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let info of sortProductsInfo(productsPlanInfo)">
+          <th scope="row">{{ info.productType.name }} {{ info.productType.weight }}</th>
+          <th scope="row" class="row-name">
+            <span class="filled-circle" [ngStyle]="{ 'background-color':info.productType.colorCode }"></span>
+          </th>
+          <td class="w-8">
+            {{ info.currentProductLeftover.amount | exponent }}
+          </td>   
+          <td class="w-6" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
+            [contextMenuSubject]="{product: info.productType, batch: batch, index: i}">
+            {{ batch?.manufacturedAmount | empty | exponent }}
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverWithoutPlans.amount | exponent }}
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverTotal.amount | exponent }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<context-menu #plansMenu>
+  <ng-template contextMenuItem let-item (execute)="openCreatePlanModal($event.item)">
+    Создать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)" [enabled]="isBatchExist">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)" [enabled]="isBatchExist">
+    Удалить
+  </ng-template>
+</context-menu>

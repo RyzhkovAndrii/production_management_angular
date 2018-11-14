@@ -98,9 +98,11 @@ export function getDateLastDayOfMotth(date: Date) {
 }
 
 export function isSameMonthYear(a: Date, b: Date): boolean {
-  const aMoment = moment(a);
-  const bMoment = moment(b);
-  return aMoment.isSame(bMoment, 'months') && aMoment.isSame(bMoment, 'year');
+  return moment(a).isSame(b, 'month');
+}
+
+export function isSameDate(a: Date, b: Date): boolean {
+  return moment(a).isSame(b, 'day');
 }
 
 export function isBeforeDate(value: string, date: string, valueFormat: string = 'YYYY-MM-DD', format: string = 'DD-MM-YYYY') {
