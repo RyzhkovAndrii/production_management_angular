@@ -4,4 +4,5 @@ interface RollOperationRequest {
     manufacturedDate: string;
     rollTypeId: number;
     rollAmount: number;
+    productTypeIdForUseOperation: number;
 }
