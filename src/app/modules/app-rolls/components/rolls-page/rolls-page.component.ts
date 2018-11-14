@@ -37,9 +37,6 @@ import {
   RollOperationModalComponent
 } from '../roll-operation-modal/roll-operation-modal.component';
 import {
-  HttpErrorModalComponent
-} from '../../../app-shared/components/http-error-modal/http-error-modal.component';
-import {
   CheckStatus
 } from '../../../app-shared/enums/check-status.enum';
 import {
