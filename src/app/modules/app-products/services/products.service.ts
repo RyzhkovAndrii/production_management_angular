@@ -11,8 +11,6 @@ import {
 import {
   from
 } from 'rxjs/observable/from';
-import { of
-} from 'rxjs/observable/of';
 
 import {
   ProductsUrlsService
@@ -75,11 +73,18 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getSortedProductTypes(): Observable< ProductTypeResponse[] > {
+  getProductTypesByRollInNorms(rollTypeId: number): Observable < ProductTypeResponse[] > {
+    return this.http.get(this.urls.productTypesUrl, {
+      headers: appHeaders,
+      params: new HttpParams().set('rollTypeId', String(rollTypeId))
+    }).catch(httpErrorHandle);
+  }
+
+  getSortedProductTypes(): Observable < ProductTypeResponse[] > {
     return this.getProductTypes().map(data => data.sort(compareProductTypes));
   }
 
-  getLastProductsLeftOvers(): Observable< ProductLeftoverResponse[] > {
+  getLastProductsLeftOvers(): Observable < ProductLeftoverResponse[] > {
     const url = `${this.urls.productLeftoverUrl}?latest`
     return this.http.get(url, {
       headers: appHeaders
