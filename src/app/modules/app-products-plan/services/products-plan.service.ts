@@ -1,35 +1,13 @@
-import {
-  Injectable
-} from '@angular/core';
-import {
-  HttpClient,
-  HttpParams
-} from '@angular/common/http';
-import {
-  Observable
-} from 'rxjs';
-import {
-  from
-} from 'rxjs/observable/from';
-import {
-  ProductsPlanUrlsService
-} from './products-plan-urls.service';
-import {
-  ProductsService
-} from '../../app-products/services/products.service';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {from} from 'rxjs/observable/from';
+import {ProductsPlanUrlsService} from './products-plan-urls.service';
+import {ProductsService} from '../../app-products/services/products.service';
 import appHeaders from '../../../app-utils/app-headers';
-import {
-  httpErrorHandle
-} from '../../../app-utils/app-http-error-handler';
-import {
-  formatDate,
-  addDays,
-  formatDate,
-  midnightDate
-} from '../../../app-utils/app-date-utils';
-import {
-  RollsService
-} from '../../app-rolls/services/rolls.service';
+import {httpErrorHandle} from '../../../app-utils/app-http-error-handler';
+import {addDays, formatDate, midnightDate} from '../../../app-utils/app-date-utils';
+import {RollsService} from '../../app-rolls/services/rolls.service';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ProductsPlanService {
@@ -189,12 +167,12 @@ export class ProductsPlanService {
   }
 
   equalizePlanToMachinePlan(productPlanId: number, date: Date | string) {
-    const formattedDate = (date instanceof Date) ? formatDate(date) : date;
+    const formattedDate = (typeof date === 'string') ? date : formatDate(date);
     const params = new HttpParams()
       .set('id', String(productPlanId))
       .set('date', formattedDate);
     return this.http
-      .put(this.urls.equalizeUrl, null, { params, headers: appHeaders })
+      .put(this.urls.equalizeUrl, null, {params, headers: appHeaders})
       .catch(httpErrorHandle);
   }
 

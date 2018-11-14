@@ -16,15 +16,13 @@ import {
 export class SimpleConfirmModalComponent implements OnInit, IModalDialog {
 
   constructor() {
-    
+
   }
 
   ngOnInit() {}
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
-    options.settings = {
-      bodyClass: 'modal-body p-0',
-      footerClass: 'modal-footer border-top-0'
-    };
-  };
+    options.settings.bodyClass = 'modal-body p-0';
+    options.settings.footerClass = 'modal-footer border-top-0';
+  }
 }

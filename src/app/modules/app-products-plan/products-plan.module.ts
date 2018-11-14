@@ -17,7 +17,6 @@ import {
 import {
   NgSelectModule
 } from '@ng-select/ng-select';
-
 import {
   AppSharedModule
 } from '../app-shared/app-shared.module';

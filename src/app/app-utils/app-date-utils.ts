@@ -24,10 +24,9 @@ export function addDays(date: Date, days: number): Date {
  * @param date optional date value to get new Date from its value with resetted time to midnight,
  * if ommited returns current midnight date
  */
-export function midnightDate(date ? : string | Date): Date {
+export function midnightDate(date ?: string | Date): Date {
   let result: Date;
-  if (date) result = getDate(date);
-  else result = new Date();
+  result = date ? getDate(date) : new Date();
   result.setHours(0, 0, 0, 0);
   return result;
 }
