@@ -9,9 +9,6 @@ import {
   ActivatedRoute
 } from '@angular/router';
 import {
-  NgbModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
   ContextMenuComponent
 } from 'ngx-contextmenu';
 import {
