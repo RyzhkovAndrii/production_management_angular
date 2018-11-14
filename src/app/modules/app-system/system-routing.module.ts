@@ -19,7 +19,7 @@ const routes: Routes = [
                 canActivateChild: [RoleGuard],
                 data: {
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO',
-                        'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
+                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
                 }
             },
             {
@@ -29,7 +29,7 @@ const routes: Routes = [
                 canActivateChild: [RoleGuard],
                 data: {
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO',
-                        'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
+                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
                 }
             },
             {
