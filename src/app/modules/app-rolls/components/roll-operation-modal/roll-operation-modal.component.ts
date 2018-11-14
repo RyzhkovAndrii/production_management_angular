@@ -4,9 +4,6 @@ import {
   ComponentRef
 } from '@angular/core';
 import {
-  NgbActiveModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
   IModalDialog,
   IModalDialogOptions,
   IModalDialogButton
