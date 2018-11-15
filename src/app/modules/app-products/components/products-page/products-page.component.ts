@@ -1,7 +1,8 @@
 import {
   Component,
   OnInit,
-  ViewContainerRef
+  ViewContainerRef,
+  ViewChild
 } from '@angular/core';
 import {
   FormGroup,
@@ -66,6 +67,8 @@ export class ProductsPageComponent implements OnInit {
 
   form: FormGroup;
 
+  @ViewChild('modification') modification;
+
   private readonly COLLATOR = new Intl.Collator([], {
     sensitivity: "base"
   });
@@ -109,6 +112,7 @@ export class ProductsPageComponent implements OnInit {
     this.productsService.getProductsInfo(this.daylyDate, this.fromDate, this.toDate)
       .subscribe(data => {
         this.productsInfo = data;
+        this.modification.reload();
       }, error => {
         this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error);
       });

@@ -77,6 +77,8 @@ export class RollsPageComponent implements OnInit {
 
   @ViewChild(ContextMenuComponent) public rollsMenu: ContextMenuComponent;
 
+  @ViewChild('modification') modification;
+
   constructor(
     private rollsService: RollsService,
     private standardsService: StandardsService,
@@ -120,7 +122,6 @@ export class RollsPageComponent implements OnInit {
     this.rollsService.getTotalLeftover(this.toDate)
       .subscribe(data => this.totalLeftover = data, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
-
 
   showPreviousPeriod() {
     this.initTableHeader(substructDays(this.toDate, this.daysInTable));
@@ -178,6 +179,7 @@ export class RollsPageComponent implements OnInit {
           this.rollsService.postRollType(resolve, this.daysInTable, this.restDate, this.toDate)
             .subscribe(rollInfo => {
               this.rollsInfo.push(rollInfo);
+              this.modification.reload();
             }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
     };
@@ -207,6 +209,7 @@ export class RollsPageComponent implements OnInit {
                   rollType.minWeight = x.minWeight;
                   rollType.maxWeight = x.maxWeight;
                   rollType.length = x.length;
+                  this.modification.reload();
                 }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
             }, reject => {});
         };
@@ -229,10 +232,10 @@ export class RollsPageComponent implements OnInit {
         .then((resolve: RollOperationRequest) => {
           this.rollsService.postRollOperation(resolve).subscribe(data => {
             this.fetchData();
+            this.modification.reload();
           }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
-    }
-
+    };
     const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
       title: 'Операция над рулонами',
       childComponent: RollOperationModalComponent,
@@ -294,6 +297,7 @@ export class RollsPageComponent implements OnInit {
             this.rollsService.deleteRollType(item.id)
               .subscribe(data => {
                 this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != item.id);
+                this.modification.reload();
               }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
             return true;
           }
