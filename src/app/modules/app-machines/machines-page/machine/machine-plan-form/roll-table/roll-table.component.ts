@@ -170,6 +170,7 @@ export class RollTableComponent implements OnInit, OnDestroy {
       : null;
     const operation = operations.find(oper => oper.rollTypeId === roll.id);
     const nullOperation = {
+      id: null,
       date: null,
       productTypeId: null,
       rollTypeId: roll.id,

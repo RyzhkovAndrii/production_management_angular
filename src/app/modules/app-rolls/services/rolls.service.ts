@@ -110,12 +110,6 @@ export class RollsService {
       ).toArray();
   }
 
-  getRollType(id: number): Observable < RollType > {
-    return this.http.get(`${this.urls.rollTypesUrl}/${id}`, {
-      headers: appHeaders
-    }).catch(httpErrorHandle);
-  }
-
   getRollTypes(): Observable < RollType[] > {
     return this.http.get(this.urls.rollTypesUrl, {
       headers: appHeaders
