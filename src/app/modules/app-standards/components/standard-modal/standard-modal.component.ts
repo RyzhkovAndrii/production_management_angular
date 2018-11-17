@@ -47,16 +47,17 @@ export class StandardModalComponent implements OnInit, IModalDialog {
 
   dialogInit(reference: ComponentRef < IModalDialog > , options: Partial < IModalDialogOptions < any >> ) {
     this.data = options.data;
-  };
+  }
 
   ngOnInit() {
-    console.log(this.data.rollTypes);
     const rollTypes = this.data.standardInfo.rollTypes;
+    const standard = this.data.standardInfo.standardResponse.norm ? this.data.standardInfo.standardResponse.norm : 0;
+    const standardForDay = this.data.standardInfo.standardResponse.normForDay ? this.data.standardInfo.standardResponse.normForDay : 0;
     this.form = new FormGroup({
       rollTypes: new FormControl(rollTypes.length > 0 && rollTypes[0].id ? rollTypes : [], [Validators.required]),
-      standard: new FormControl(new Decimal(this.data.standardInfo.standardResponse.norm).dividedBy(1000).toNumber(),
+      standard: new FormControl(new Decimal(standard).dividedBy(1000).toNumber(),
         [Validators.required, Validators.min(this.MIN_NORM)]),
-      standardForDay: new FormControl(new Decimal(this.data.standardInfo.standardResponse.normForDay).dividedBy(1000).toNumber(),
+      standardForDay: new FormControl(new Decimal(standardForDay).dividedBy(1000).toNumber(),
         [Validators.required, Validators.min(this.MIN_NORM)])
     });
   }
@@ -80,7 +81,7 @@ export class StandardModalComponent implements OnInit, IModalDialog {
         rollTypeIds: ( < RollType[] > this.form.value.rollTypes).map(x => x.id),
         norm: new Decimal(this.form.value.standard).times(1000).toNumber(),
         normForDay: new Decimal(this.form.value.standardForDay).times(1000).toNumber()
-      }
+      };
       const resolve = Promise.resolve(standard);
       this.data.func(resolve);
       return resolve;
