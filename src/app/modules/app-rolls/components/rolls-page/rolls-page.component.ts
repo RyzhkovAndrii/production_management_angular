@@ -9,9 +9,6 @@ import {
   ActivatedRoute
 } from '@angular/router';
 import {
-  NgbModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
   ContextMenuComponent
 } from 'ngx-contextmenu';
 import {
@@ -40,9 +37,6 @@ import {
   RollOperationModalComponent
 } from '../roll-operation-modal/roll-operation-modal.component';
 import {
-  HttpErrorModalComponent
-} from '../../../app-shared/components/http-error-modal/http-error-modal.component';
-import {
   CheckStatus
 } from '../../../app-shared/enums/check-status.enum';
 import {
@@ -54,6 +48,9 @@ import {
 import {
   StandardsService
 } from '../../../app-standards/services/standards.service';
+import {
+  ProductsService
+} from '../../../app-products/services/products.service';
 
 
 @Component({
@@ -86,7 +83,8 @@ export class RollsPageComponent implements OnInit {
     private viewRef: ViewContainerRef,
     private router: Router,
     private route: ActivatedRoute,
-    private appModalService: AppModalService) {}
+    private appModalService: AppModalService,
+    private productsService: ProductsService) {}
 
   ngOnInit() {
     this.showCurrentPeriod();
@@ -235,18 +233,22 @@ export class RollsPageComponent implements OnInit {
             this.modification.reload();
           }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
-    };
-    const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
-      title: 'Операция над рулонами',
-      childComponent: RollOperationModalComponent,
-      data: {
-        batch,
-        rollTypeId,
-        manufacturedDate: this.daysHeader[index],
-        func: func.bind(this)
-      }
-    };
-    this.ngxModalService.openDialog(this.viewRef, modalOptions);
+    }
+    this.productsService.getProductTypesByRollInNorms(rollTypeId)
+      .subscribe(products => {
+        const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
+          title: 'Операция над рулонами',
+          childComponent: RollOperationModalComponent,
+          data: {
+            batch,
+            rollTypeId,
+            manufacturedDate: this.daysHeader[index],
+            productsByRollInNorms: products,
+            func: func.bind(this)
+          }
+        };
+        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   isReady(batch: RollBatch) {

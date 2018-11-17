@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  ViewChild,
   ViewContainerRef
 } from '@angular/core';
 import {
@@ -26,9 +25,6 @@ import {
   RollOperationType
 } from '../../enums/roll-operation-type.enum';
 import {
-  HttpErrorModalComponent
-} from '../../../app-shared/components/http-error-modal/http-error-modal.component';
-import {
   AppModalService
 } from '../../../app-shared/services/app-modal.service';
 import {
@@ -45,6 +41,9 @@ import {
 import {
   RollOperationModalComponent
 } from '../roll-operation-modal/roll-operation-modal.component';
+import {
+  ProductsService
+} from '../../../app-products/services/products.service';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -68,7 +67,8 @@ export class RollOperationsPageComponent implements OnInit {
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
-    private appModalService: AppModalService) {
+    private appModalService: AppModalService,
+    private productsService: ProductsService) {
     this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.rollTypeId = this.queryParams['roll_type_id'];
   }
@@ -148,18 +148,22 @@ export class RollOperationsPageComponent implements OnInit {
             }, reject => {});
         }
 
-        const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
-          title: 'Редактирование операции',
-          childComponent: RollOperationModalComponent,
-          data: {
-            batch,
-            operation: operation,
-            rollTypeId: operation.rollTypeId,
-            manufacturedDate: getDate(operation.manufacturedDate),
-            func: func.bind(this)
-          }
-        };
-        this.ngxModalService.openDialog(this.viewRef, modalOptions);
+        this.productsService.getProductTypesByRollInNorms(operation.rollTypeId)
+          .subscribe(products => {
+            const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
+              title: 'Редактирование операции',
+              childComponent: RollOperationModalComponent,
+              data: {
+                batch,
+                operation: operation,
+                rollTypeId: operation.rollTypeId,
+                manufacturedDate: getDate(operation.manufacturedDate),
+                productsByRollInNorms: products,
+                func: func.bind(this)
+              }
+            };
+            this.ngxModalService.openDialog(this.viewRef, modalOptions);
+          }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
@@ -174,7 +178,7 @@ export class RollOperationsPageComponent implements OnInit {
             batch.leftOverAmount += operation.rollAmount;
             break;
         }
-        if(batch.leftOverAmount >= 0) {
+        if (batch.leftOverAmount >= 0) {
           this.openDeleteRollOperationModal(operation);
         } else {
           this.openUnableDeleteRollOperationModal(batch.leftOverAmount);
@@ -185,40 +189,39 @@ export class RollOperationsPageComponent implements OnInit {
 
   private openDeleteRollOperationModal(operation: RollOperationResponse) {
     const buttonClass = 'btn btn-outline-dark';
-    const modalOptions: Partial<IModalDialogOptions<any>> = {
+    const modalOptions: Partial < IModalDialogOptions < any >> = {
       title: 'Подтвердите удаление операции',
       childComponent: SimpleConfirmModalComponent,
       actionButtons: [{
-        text: 'Отменить',
-        buttonClass,
-        onAction: () => true
-      },
-      {
-        text: 'Удалить',
-        buttonClass,
-        onAction: () => {
-          this.rollsService.deleteRollOperation(operation.id)
-            .subscribe(data => {
-              this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
-            }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
-          return true;
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.rollsService.deleteRollOperation(operation.id)
+              .subscribe(data => {
+                this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            return true;
+          }
         }
-      }
       ]
     };
     this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }
   openUnableDeleteRollOperationModal(leftOverAmount: number) {
     const buttonClass = 'btn btn-outline-dark';
-    const modalOptions: Partial<IModalDialogOptions<any>> = {
+    const modalOptions: Partial < IModalDialogOptions < any >> = {
       title: `Невозможно удалить операцию! Остаток будет ${leftOverAmount}`,
       childComponent: SimpleConfirmModalComponent,
       actionButtons: [{
         text: 'Ok',
         buttonClass,
         onAction: () => true
-      }
-      ]
+      }]
     };
     this.ngxModalService.openDialog(this.viewRef, modalOptions);
   }

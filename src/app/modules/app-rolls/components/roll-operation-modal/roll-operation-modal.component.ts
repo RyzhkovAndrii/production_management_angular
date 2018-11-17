@@ -4,9 +4,6 @@ import {
   ComponentRef
 } from '@angular/core';
 import {
-  NgbActiveModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
   IModalDialog,
   IModalDialogOptions,
   IModalDialogButton
@@ -111,7 +108,8 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       operationType: this.form.get('operationType').value,
       manufacturedDate: formatDate(this.manufacturedDate),
       rollTypeId: this.rollTypeId,
-      rollAmount: this.form.get('rollAmount').value
+      rollAmount: this.form.get('rollAmount').value,
+      productTypeIdForUseOperation: undefined
     }
     const resolve = Promise.resolve(rollOperation);
     this.options.data.func(resolve);
