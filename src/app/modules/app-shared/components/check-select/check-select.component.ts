@@ -17,6 +17,7 @@ import {
 export class CheckSelectComponent implements OnInit {
 
   @Input() checkStatus: CheckStatus;
+  @Input() disabled = false;
   @Output() changeCheckStatus = new EventEmitter < CheckStatus > ();
   selectedModel: AppSelect;
   items: AppSelect[] = [{

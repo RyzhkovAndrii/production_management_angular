@@ -1,5 +1,5 @@
-<div class="check-select"><ng-select [(ngModel)]="selectedModel" [items]="items" [searchable]="false" [clearable]="false" bindLabel="label"
-appendTo="ng-select" (change)="changeRollCheck($event)">
+<div class="check-select" [ngClass]="{'no-arrow': disabled}"><ng-select [(ngModel)]="selectedModel" [items]="items" [searchable]="false" [clearable]="false" bindLabel="label"
+appendTo="ng-select" [disabled]="disabled" (change)="changeRollCheck($event)">
 <ng-template ng-label-tmp let-item="item">
 <span class="material-icons" [ngClass]="item.clazz">{{ item.label }}</span>
 </ng-template>
