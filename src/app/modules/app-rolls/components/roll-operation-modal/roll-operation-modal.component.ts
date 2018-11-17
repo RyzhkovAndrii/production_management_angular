@@ -110,7 +110,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       rollTypeId: this.rollTypeId,
       rollAmount: this.form.get('rollAmount').value,
       productTypeIdForUseOperation: undefined
-    }
+    };
     const resolve = Promise.resolve(rollOperation);
     this.options.data.func(resolve);
     return resolve;
@@ -118,7 +118,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
 
   validateAmount(control: FormControl) {
     if (this.batch && control.value > this.batch.leftOverAmount) {
-      if (this.form && this.form.value.operationType == RollOperationType.USE) {
+      if (this.form && this.form.value.operationType === RollOperationType.USE) {
         return {
           'greaterThanLeftError': true
         };
@@ -137,7 +137,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   }
 
   validateDateUseBeforeManufacture(control: FormControl) {
-    if (this.form && this.batch && this.form.value.operationType == RollOperationType.USE) {
+    if (this.form && this.batch && this.form.value.operationType === RollOperationType.USE) {
       if (control && isBeforeDate(control.value, this.batch.dateManufactured)) {
         return {
           'beforeManufacturedError': true

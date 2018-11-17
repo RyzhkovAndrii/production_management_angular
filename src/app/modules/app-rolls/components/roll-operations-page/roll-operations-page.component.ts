@@ -95,12 +95,14 @@ export class RollOperationsPageComponent implements OnInit {
   }
 
   getOperationType(operationType: RollOperationType) {
-    return operationType == RollOperationType.USE ? 'Списание' : 'Производство';
+    return operationType === RollOperationType.USE ? 'Списание' : 'Производство';
   }
 
   showOperations(): boolean {
-    if (!this.rollOperations) return true;
-    return this.rollOperations.length != 0;
+    if (!this.rollOperations) {
+      return true;
+    }
+    return this.rollOperations.length !== 0;
   }
 
   onSubmit() {
@@ -112,7 +114,7 @@ export class RollOperationsPageComponent implements OnInit {
       queryParams: this.queryParams,
       replaceUrl: true
     });
-    this.fetchData()
+    this.fetchData();
   }
 
   fromDateSmallerValidator(control: FormControl) {
@@ -146,7 +148,7 @@ export class RollOperationsPageComponent implements OnInit {
                 this.fetchData();
               }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
             }, reject => {});
-        }
+        };
 
         this.productsService.getProductTypesByRollInNorms(operation.rollTypeId)
           .subscribe(products => {
@@ -203,7 +205,7 @@ export class RollOperationsPageComponent implements OnInit {
           onAction: () => {
             this.rollsService.deleteRollOperation(operation.id)
               .subscribe(data => {
-                this.rollOperations = this.rollOperations.filter((value, index, array) => value.id != operation.id);
+                this.rollOperations = this.rollOperations.filter((value, index, array) => value.id !== operation.id);
               }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
             return true;
           }

@@ -30,10 +30,10 @@ export class ProductsService {
 
   constructor(private urls: ProductsUrlsService, private http: HttpClient) {}
 
-  getProductsInfo(daylyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[][] > {
+  getProductsInfo(dailyDate: Date, fromDate: Date, toDate: Date): Observable < ProductInfo[][] > {
     return this.getProductsLeftovers(fromDate)
       .map(restOvers => new Map(restOvers.map(x => [x.productTypeId, x] as[number, ProductLeftoverResponse])))
-      .flatMap(restOversMap => this.getDaylyBatches(daylyDate)
+      .flatMap(restOversMap => this.getDailyBatches(dailyDate)
         .map(dayBatches => new Map(dayBatches.map(x => [x.productTypeId, x] as[number, ProductBatchResponse])))
         .flatMap(dayBatchesMap => this.getMonthlyBatches(fromDate, toDate)
           .map(monthBatches => new Map(monthBatches.map(x => [x.productTypeId, x] as[number, ProductBatchResponse])))
@@ -51,12 +51,15 @@ export class ProductsService {
                       monthBatch: monthBatchesMap.get(type.id) || < ProductBatchResponse > {},
                       currentLeftover: currentOversMap.get(type.id) || < ProductLeftoverResponse > {},
                       productCheck: checksMap.get(type.id) || < ProductCheckResponse > {}
-                    }
+                    };
                     return info;
                   })
                 ).reduce((acc, value, index) => {
-                  if (acc.has(value.type.colorCode.toLowerCase())) acc.get(value.type.colorCode.toLocaleLowerCase()).push(value);
-                  else acc.set(value.type.colorCode.toLocaleLowerCase(), [value]);
+                  if (acc.has(value.type.colorCode.toLowerCase())) {
+                    acc.get(value.type.colorCode.toLocaleLowerCase()).push(value);
+                  } else {
+                    acc.set(value.type.colorCode.toLocaleLowerCase(), [value]);
+                  }
                   return acc;
                 }, new Map < string, ProductInfo[] > ())
                 .flatMap(infoMap => Array.from(infoMap.values())))
@@ -72,6 +75,13 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
+  getProductType(id: number): Observable< ProductTypeResponse > {
+    const url = `${this.urls.productTypesUrl}/${id}`;
+    return this.http.get(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
   getProductTypesByRollInNorms(rollTypeId: number): Observable < ProductTypeResponse[] > {
     return this.http.get(this.urls.productTypesUrl, {
       headers: appHeaders,
@@ -83,15 +93,8 @@ export class ProductsService {
     return this.getProductTypes().map(data => data.sort(compareProductTypes));
   }
 
-  getProductType(id: number): Observable< ProductTypeResponse > {
-    const url = `${this.urls.productTypesUrl}/${id}`;
-    return this.http.get(url, {
-      headers: appHeaders
-    }).catch(httpErrorHandle);
-  }
-
   getLastProductsLeftOvers(): Observable < ProductLeftoverResponse[] > {
-    const url = `${this.urls.productLeftoverUrl}?latest`
+    const url = `${this.urls.productLeftoverUrl}?latest`;
     return this.http.get(url, {
       headers: appHeaders
     }).catch(httpErrorHandle);
@@ -116,7 +119,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getDaylyBatches(date: Date): Observable < ProductBatchResponse[] > {
+  getDailyBatches(date: Date): Observable < ProductBatchResponse[] > {
     const params = new HttpParams()
       .set('date', formatDate(date));
     return this.http.get(this.urls.productBatchUrl, {
@@ -125,7 +128,7 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
-  getDaylyBatch(productTypeId: number, date: Date): Observable < ProductBatchResponse > {
+  getDailyBatch(productTypeId: number, date: Date): Observable < ProductBatchResponse > {
     const params = new HttpParams()
       .set('product-type-id', String(productTypeId))
       .set('date', formatDate(date));
@@ -219,4 +222,5 @@ export class ProductsService {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }
+
 }

@@ -118,7 +118,8 @@ export class RollsPageComponent implements OnInit {
         }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
     }
     this.rollsService.getTotalLeftover(this.toDate)
-      .subscribe(data => this.totalLeftover = data, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+      .subscribe(data => this.totalLeftover = data,
+          error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
   showPreviousPeriod() {
@@ -147,8 +148,7 @@ export class RollsPageComponent implements OnInit {
   }
 
   getBatch(rollBatch: RollBatch): number | string {
-    if (rollBatch) return rollBatch.leftOverAmount;
-    else return '';
+    return rollBatch ? rollBatch.leftOverAmount : '';
   }
 
   getBatches(rollBatches: RollBatch[]) {
@@ -158,15 +158,15 @@ export class RollsPageComponent implements OnInit {
   }
 
   getWeight(rollType: RollType): string | number {
-    return rollType.minWeight == rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
+    return rollType.minWeight === rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
   }
 
   sortByColorThicknessRollId(rollsInfo: RollInfo[]): RollInfo[] {
     return rollsInfo.sort((a, b) => {
       const colorSortValue = compareColors(a.rollType.colorCode, b.rollType.colorCode);
       const thicknessSort = a.rollType.thickness - b.rollType.thickness;
-      return colorSortValue != 0 ? colorSortValue :
-        thicknessSort != 0 ? thicknessSort : a.rollType.id - b.rollType.id;
+      return colorSortValue !== 0 ? colorSortValue :
+        thicknessSort !== 0 ? thicknessSort : a.rollType.id - b.rollType.id;
     });
   }
 
@@ -208,7 +208,7 @@ export class RollsPageComponent implements OnInit {
                   rollType.maxWeight = x.maxWeight;
                   rollType.length = x.length;
                   this.modification.reload();
-                }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error))
+                }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
             }, reject => {});
         };
         const modalOptions: Partial < IModalDialogOptions < RollTypeModalData >> = {
@@ -233,7 +233,7 @@ export class RollsPageComponent implements OnInit {
             this.modification.reload();
           }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
         }, reject => {});
-    }
+    };
     this.productsService.getProductTypesByRollInNorms(rollTypeId)
       .subscribe(products => {
         const modalOptions: Partial < IModalDialogOptions < RollOperationModalData >> = {
@@ -252,7 +252,9 @@ export class RollsPageComponent implements OnInit {
   }
 
   isReady(batch: RollBatch) {
-    if (!batch) return false;
+    if (!batch) {
+      return false;
+    }
     return batch.readyToUse;
   }
 
@@ -264,7 +266,7 @@ export class RollsPageComponent implements OnInit {
   submitRollChecks() {
     this.rollsService.putRollChecks(Array.from(this.rollChecks.values()))
       .subscribe(data => {
-        if (data.length != 0) {
+        if (data.length !== 0) {
           this.fetchData();
           this.rollChecks.clear();
         }
@@ -298,7 +300,7 @@ export class RollsPageComponent implements OnInit {
           onAction: () => {
             this.rollsService.deleteRollType(item.id)
               .subscribe(data => {
-                this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id != item.id);
+                this.rollsInfo = this.rollsInfo.filter((value, index, array) => value.rollType.id !== item.id);
                 this.modification.reload();
               }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
             return true;
