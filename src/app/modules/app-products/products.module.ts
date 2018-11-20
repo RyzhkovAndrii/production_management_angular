@@ -45,6 +45,9 @@ import {
 import {
   ProductOperationModalComponent
 } from './components/product-operation-modal/product-operation-modal.component';
+import {
+  SecurityModule
+} from '../app-security/security.module';
 
 
 @NgModule({
@@ -60,7 +63,8 @@ import {
       useBootstrap4: true
     }),
     ModalDialogModule.forRoot(),
-    AppSharedModule
+    AppSharedModule,
+    SecurityModule
   ],
   declarations: [
     ProductsPageComponent, ProductTypeModalComponent, ProductOperationModalComponent
