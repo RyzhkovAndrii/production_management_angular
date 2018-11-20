@@ -1,0 +1,7 @@
+.container-fluid {
+    height: calc(100% - 68px);
+}
+
+img {
+    height: 100%;
+}
