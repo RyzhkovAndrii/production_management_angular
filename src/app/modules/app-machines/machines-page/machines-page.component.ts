@@ -10,6 +10,7 @@ import { MachineModuleStoreDataService } from '../services/machine-module-store-
 import { MachineModuleCasheService } from '../services/machine-module-cashe.service';
 import { compareProductTypes } from '../../../app-utils/app-comparators';
 import { AppModalService } from '../../app-shared/services/app-modal.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-machines-page',
@@ -32,8 +33,10 @@ export class MachinesPageComponent implements OnInit {
     private productPlanSerivce: ProductsPlanService,
     private casheService: MachineModuleCasheService,
     private dataService: MachineModuleStoreDataService,
-    private modalService: AppModalService
+    private modalService: AppModalService,
+    private title: Title
   ) {
+    this.title.setTitle('Планы по машинам');
     this.machines = Array(this.machinesAmount).fill(0).map((x, i) => i + 1);
   }
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
@@ -23,8 +24,11 @@ export class PasswordChangeComponent {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private appModalService: AppModalService
-  ) { }
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Смена пароля');
+  }
 
   form: FormGroup = new FormGroup({
     'username': new FormControl(null, [Validators.required]),

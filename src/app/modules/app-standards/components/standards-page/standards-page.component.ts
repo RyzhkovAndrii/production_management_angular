@@ -26,6 +26,9 @@ import {
 import {
   RollsService
 } from '../../../app-rolls/services/rolls.service';
+import {
+  Title
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-standards-page',
@@ -39,8 +42,11 @@ export class StandardsPageComponent implements OnInit {
     private rollsService: RollsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
-    private appModalService: AppModalService
-  ) {}
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Нормативы');
+  }
 
   ngOnInit() {
     this.fetchData();

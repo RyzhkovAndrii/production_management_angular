@@ -51,7 +51,9 @@ import {
 import {
   ProductsService
 } from '../../../app-products/services/products.service';
-
+import {
+  Title
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-rolls-page',
@@ -84,7 +86,11 @@ export class RollsPageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private appModalService: AppModalService,
-    private productsService: ProductsService) {}
+    private productsService: ProductsService,
+    private title: Title
+  ) {
+    this.title.setTitle('Рулоны');
+  }
 
   ngOnInit() {
     this.showCurrentPeriod();

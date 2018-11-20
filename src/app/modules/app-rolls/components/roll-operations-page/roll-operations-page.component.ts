@@ -44,6 +44,9 @@ import {
 import {
   ProductsService
 } from '../../../app-products/services/products.service';
+import {
+  Title
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-roll-operations-page',
@@ -68,7 +71,10 @@ export class RollOperationsPageComponent implements OnInit {
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private appModalService: AppModalService,
-    private productsService: ProductsService) {
+    private productsService: ProductsService,
+    private title: Title
+  ) {
+    this.title.setTitle('Операции по рулонам');
     this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.rollTypeId = this.queryParams['roll_type_id'];
   }

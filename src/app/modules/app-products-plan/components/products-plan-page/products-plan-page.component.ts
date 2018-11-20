@@ -35,6 +35,9 @@ import {
 import {
   SimpleConfirmModalComponent
 } from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
+import {
+  Title
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-products-plan-page',
@@ -57,8 +60,11 @@ export class ProductsPlanPageComponent implements OnInit {
     private standardService: StandardsService,
     private ngxModalService: ModalDialogService,
     private viewRef: ViewContainerRef,
-    private appModalService: AppModalService
-  ) {}
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Планы по продукции');
+  }
 
   ngOnInit() {
     this.initData();

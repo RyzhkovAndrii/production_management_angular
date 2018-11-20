@@ -10,6 +10,7 @@ import { Order } from '../../models/order.model';
 import { Client } from '../../models/client.model';
 import { OrderDetails } from '../../models/order-details.model';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-orders-page',
@@ -43,8 +44,11 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
     private productsService: ProductsService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService
-  ) { }
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Заказы');
+  }
 
   ngOnInit() {
     this.fetchInitData();

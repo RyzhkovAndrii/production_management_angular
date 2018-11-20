@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Title } from '@angular/platform-browser';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -21,8 +22,11 @@ export class UsersPageComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private modalService: AppModalService
-  ) { }
+    private modalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Администрирование');
+  }
 
   ngOnInit() {
     this.fetchUserData();

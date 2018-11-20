@@ -50,6 +50,9 @@ import {
 import {
   StandardsService
 } from '../../../app-standards/services/standards.service';
+import {
+  Title
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-products-page',
@@ -73,11 +76,16 @@ export class ProductsPageComponent implements OnInit {
     sensitivity: "base"
   });
 
-  constructor(private productsService: ProductsService,
+  constructor(
+    private productsService: ProductsService,
     private standardsService: StandardsService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService) {}
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Продукция');
+  }
 
   ngOnInit() {
     this.form = new FormGroup({

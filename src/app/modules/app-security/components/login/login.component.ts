@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { AppModalService } from '../../../app-shared/services/app-modal.service';
@@ -31,8 +32,11 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,
-    private appModalService: AppModalService
-  ) { }
+    private appModalService: AppModalService,
+    private title: Title
+  ) {
+    this.title.setTitle('Вход в систему');
+  }
 
   ngOnInit() {
     this.checkRouteMessage();
