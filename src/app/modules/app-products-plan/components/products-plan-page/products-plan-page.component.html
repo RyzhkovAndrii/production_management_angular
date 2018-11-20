@@ -65,7 +65,7 @@
     </table>
   </div>
 </div>
-<context-menu #plansMenu>
+<context-menu *appCanAccess="['ROLE_CMO', 'ROLE_CTO']" #plansMenu>
   <ng-template contextMenuItem let-item (execute)="openCreatePlanModal($event.item)">
     Создать
   </ng-template>

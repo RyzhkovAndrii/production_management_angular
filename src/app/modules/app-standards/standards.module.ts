@@ -22,18 +22,17 @@ import {
   StandardsRouting
 } from './standards-routing.module';
 import {
-  StandardsUrlsService
-} from './services/standards-urls.service';
-import {
-  StandardsService
-} from './services/standards.service';
-import {
   AppSharedModule
 } from '../app-shared/app-shared.module';
 import {
   StandardModalComponent
 } from './components/standard-modal/standard-modal.component';
-import { NgSelectModule } from '@ng-select/ng-select';
+import {
+  NgSelectModule
+} from '@ng-select/ng-select';
+import {
+  SecurityModule
+} from '../app-security/security.module';
 
 @NgModule({
   imports: [
@@ -46,7 +45,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
       useBootstrap4: true
     }),
     ModalDialogModule.forRoot(),
-    AppSharedModule
+    AppSharedModule,
+    SecurityModule
   ],
   declarations: [
     StandardsPageComponent,

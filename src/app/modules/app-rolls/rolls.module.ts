@@ -45,6 +45,9 @@ import {
 import {
   RollOperationsPageComponent
 } from './components/roll-operations-page/roll-operations-page.component';
+import {
+  SecurityModule
+} from "../app-security/security.module";
 
 @NgModule({
   declarations: [
@@ -64,7 +67,8 @@ import {
       useBootstrap4: true
     }),
     ModalDialogModule.forRoot(),
-    AppSharedModule
+    AppSharedModule,
+    SecurityModule
   ],
   entryComponents: [
     RollTypeModalComponent,

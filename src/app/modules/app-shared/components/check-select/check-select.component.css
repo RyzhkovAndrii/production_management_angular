@@ -27,3 +27,7 @@
     display: flex;
     justify-content: center;
   }
+
+.no-arrow.check-select::ng-deep .ng-arrow-wrapper {
+    display: none;
+}
