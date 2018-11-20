@@ -32,6 +32,9 @@ import {
 import {
   ProductPlanOperationModalComponent
 } from './components/modals/product-plan-operation-modal/product-plan-operation-modal.component';
+import {
+  SecurityModule
+} from '../app-security/security.module';
 
 
 @NgModule({
@@ -46,7 +49,7 @@ import {
     ContextMenuModule.forRoot({
       useBootstrap4: true
     }),
-
+    SecurityModule
   ],
   declarations: [ProductsPlanPageComponent, ProductPlanOperationSelectModalComponent, ProductPlanOperationModalComponent],
   entryComponents: [ProductPlanOperationSelectModalComponent, ProductPlanOperationModalComponent]
