@@ -1,6 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewContainerRef } from '@angular/core';
+import {
+  Component, OnInit, Input, EventEmitter, Output, ViewContainerRef, ViewChild,
+  ChangeDetectorRef, AfterViewInit
+} from '@angular/core';
 import * as moment from 'moment';
 import { ModalDialogService } from 'ngx-modal-dialog';
+import { ContextMenuComponent } from 'ngx-contextmenu';
 
 import { Order } from '../../../models/order.model';
 import { OrderDetails } from '../../../models/order-details.model';
@@ -17,7 +21,7 @@ import { OrderDeliveryConfirmComponent } from './order-delivery-confirm/order-de
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, AfterViewInit {
 
   orderDetails: OrderDetails;
 
@@ -29,20 +33,30 @@ export class OrderComponent implements OnInit {
   @Output() onChange = new EventEmitter<any>();
   @Output() onEditOpen = new EventEmitter<OrderDetails>();
 
+  // without this field build --prod throw error and don't build
+  @ViewChild('orderMenu') orderMenu: ContextMenuComponent;
+
   constructor(
     private orderService: OrdersService,
     private clientService: ClientsService,
     private orderItemService: OrderItemService,
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
-    private appModalService: AppModalService) { }
+    private appModalService: AppModalService,
+    private cdRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.orderDetails = this.convert(this.order);
   }
 
+  // orderMenu field throw error Expression has changed after it was checked, this method fix it
+  // todo remove redundant fields and methods
+  ngAfterViewInit() {
+    this.cdRef.detectChanges();
+  }
+
   private convert(order: Order): OrderDetails {
-    let orderDetails = new OrderDetails();
+    const orderDetails = new OrderDetails();
     orderDetails.id = order.id;
     orderDetails.city = order.city;
     orderDetails.creationDate = order.creationDate;
@@ -70,7 +84,7 @@ export class OrderComponent implements OnInit {
     const sortedOrderItemList: OrderItem[] = [];
     for (const productType of this.productTypeList) {
       let sortedItem = null;
-      for (let item of itemList) {
+      for (const item of itemList) {
         if (item.productTypeId === productType.id) {
           sortedItem = item;
           continue;
