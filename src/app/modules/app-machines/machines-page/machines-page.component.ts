@@ -27,6 +27,7 @@ export class MachinesPageComponent implements OnInit {
   dateForm: FormGroup;
 
   isFetched = false;
+  isDailyPlansEmpty = false;
 
   constructor(
     private standardService: StandardsService,
@@ -68,6 +69,7 @@ export class MachinesPageComponent implements OnInit {
       .getBatches(formatDateBrowserToServer(this.selectedDate))
       .map(productPlans => productPlans.filter(productPlan => productPlan.manufacturedAmount !== 0))
       .do(productPlans => this.dataService.setDailyPlan(productPlans))
+      .do(productPlans => this.isDailyPlansEmpty = (productPlans.length === 0))
       .flatMap(productPlans => Observable.forkJoin(this.fetchDailyStandards(productPlans), this.fetchDailyProductPlans(productPlans)))
       .catch(err => this.modalService.openHttpError(err))
       .subscribe(() => this.isFetched = true);

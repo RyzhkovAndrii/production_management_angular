@@ -14,28 +14,38 @@
     </div>
   </div>
   <ng-template #loading>
-    <div class="row">
+    <div class="row mt-5">
       <div class="col-12">
         <p class="text-center">Загрузка...</p>
       </div>
     </div>
   </ng-template>
+  <ng-template #emptyPlans>
+    <div class="row mt-5">
+      <div class="col-12">
+        <h2 class="text-center">Планы по производству продукции на указанную дату отсутствуют.</h2>
+      </div>
+    </div>
+  </ng-template>
   <div *ngIf="isFetched; else loading">
-    <div class="row mt-2 flex-nowrap">
-      <div class="col-1 p-0"></div>
-      <div class="col-11 m-0 p-0">
-        <app-time-line></app-time-line>
+    <div *ngIf="!isDailyPlansEmpty; else emptyPlans">
+      <div class="row mt-2 flex-nowrap">
+        <div class="col-1 p-0"></div>
+        <div class="col-11 m-0 p-0">
+          <app-time-line></app-time-line>
+        </div>
       </div>
-    </div>
-    <div *ngFor="let machineNumber of machines" class="row mt-2 flex-nowrap">
-      <div class="col-12 m-0 p-0">
-        <app-machine [machineNumber]="machineNumber"></app-machine>
+      <div *ngFor="let machineNumber of machines" class="row mt-2 flex-nowrap">
+        <div class="col-12 m-0 p-0">
+          <app-machine [machineNumber]="machineNumber"></app-machine>
+        </div>
       </div>
-    </div>
-    <div class="row m-0">
-      <div class="col-1 p-0"></div>
-      <div class="col-11 pl-0">
+      <div class="row m-0">
+        <div class="col-1 p-0"></div>
+        <div class="col-11 pl-0">
           <app-daily-plan-table></app-daily-plan-table>
+        </div>
       </div>
+    </div>
   </div>
 </div>
