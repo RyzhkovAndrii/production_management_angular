@@ -43,6 +43,7 @@ export class UserFormComponent implements OnInit {
 
   onClear() {
     this.userForm.reset();
+    this.userForm.get('roles').setValue('');
     if (this.user) {
       this.updateForm();
     }

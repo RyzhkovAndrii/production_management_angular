@@ -40,10 +40,10 @@
     <div class="form-group row">
         <label for="roles" class="col-2 col-form-label text-right">Роли</label>
         <div class="col-6">
-            <select multiple class="form-control" id="roles" formControlName="roles"
+            <select class="form-control" id="roles" formControlName="roles"
                     [ngClass]="{ 'is-invalid': userForm.get('roles').invalid && userForm.get('roles').touched,
                               'is-valid': !userForm.get('roles').invalid && userForm.get('roles').touched }">
-                <option disabled="true">---- Выберите одну или несколько ролей ----</option>
+                <option disabled [selected]="true" value="">---- Выберите роль ----</option>
                 <option [value]="roles.ROLE_ADMIN">Администратор</option>
                 <option [value]="roles.ROLE_CEO">Директор (CEO)</option>
                 <option [value]="roles.ROLE_CTO">Технический директор (CTO)</option>
@@ -55,7 +55,7 @@
                 <option [value]="roles.ROLE_STOREKEEPER">Кладовщик</option>
             </select>
             <span *ngIf="userForm.get('roles').invalid && userForm.get('roles').touched" class="invalid-feedback">
-                <span *ngIf="userForm.get('roles').hasError('required')">Необходимо выбрать хотя бы одну роль!</span>
+                <span *ngIf="userForm.get('roles').hasError('required')">Необходимо выбрать роль!</span>
             </span>
         </div>
     </div>
