@@ -12,26 +12,26 @@ export class OrderDeliveredShowComponent implements OnInit {
 
   form: FormGroup;
 
-  @Output() onStartDateChange = new EventEmitter<Date>();
+  @Output() startDateChange = new EventEmitter<Date>();
 
-  isDeliveredOrdersVisible: boolean = false;
+  isDeliveredOrdersVisible = false;
 
-  readonly now: string = moment(new Date()).format("YYYY-MM-DD");
+  readonly now: string = moment(new Date()).format('YYYY-MM-DD');
   startDate: Date;
 
   constructor() { }
 
   ngOnInit() {
     this.form = new FormGroup({
-      "startDate": new FormControl(null, [Validators.required])
-    })
+      'startDate': new FormControl(null, [Validators.required])
+    });
   }
 
   submit() {
     const { startDate } = this.form.value;
     if (this.startDate !== startDate) {
       this.startDate = startDate;
-      this.onStartDateChange.emit(this.startDate);
+      this.startDateChange.emit(this.startDate);
     }
   }
 
@@ -39,11 +39,11 @@ export class OrderDeliveredShowComponent implements OnInit {
     this.isDeliveredOrdersVisible = event.target.checked;
     if (this.isDeliveredOrdersVisible) {
       this.startDate = new Date();
-      this.startDate.setMonth(this.startDate.getMonth() - 1);
-      this.form.get("startDate").patchValue(moment(this.startDate).format("YYYY-MM-DD"));
-      this.onStartDateChange.emit(this.startDate);
+      this.startDate.setDate(this.startDate.getDate() - 5);
+      this.form.get('startDate').patchValue(moment(this.startDate).format('YYYY-MM-DD'));
+      this.startDateChange.emit(this.startDate);
     } else {
-      this.onStartDateChange.emit(null);
+      this.startDateChange.emit(null);
     }
   }
 
