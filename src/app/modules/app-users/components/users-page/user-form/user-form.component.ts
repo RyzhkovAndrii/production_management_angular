@@ -37,7 +37,8 @@ export class UserFormComponent implements OnInit {
     user.username = username;
     user.firstName = firstName;
     user.lastName = lastName;
-    user.roles = roles;
+    user.roles = [];
+    user.roles.push(roles);
     this.userSubmit.emit(user);
   }
 
@@ -63,7 +64,7 @@ export class UserFormComponent implements OnInit {
     const username = this.user ? this.user.username : null;
     const firstName = this.user ? this.user.firstName : null;
     const lastName = this.user ? this.user.lastName : null;
-    const roles = this.user ? this.user.roles : null;
+    const roles = this.user ? this.user.roles : '';
     this.userForm.get('username').setValue(username);
     this.userForm.get('firstName').setValue(firstName);
     this.userForm.get('lastName').setValue(lastName);
