@@ -1,7 +1,7 @@
 <div class="container-fluid mt-2">
   <div class="row">
     <div class="col-md-1">
-      <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO']" class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
+      <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
         <span class="material-icons">add</span>
       </button>
     </div>
@@ -48,7 +48,7 @@
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
           <th scope="col" rowspan="1" *ngIf="isCurrentPeriod()">
-            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitProductChecks()">
+            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitProductChecks()">
               <span class="material-icons">save</span>
             </button>
           </th>
@@ -75,7 +75,7 @@
           <td class="w-12">
             {{ (productInfo.restLeftover.amount) | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_MANAGER']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
+          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
             {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
           </td>
           <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']" class="w-12">
@@ -84,7 +84,7 @@
           <td class="w-12">
             {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_MANAGER']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
+          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
             {{ productInfo.dayBatch.soldAmount | empty | exponent }}
           </td>
           <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']" class="w-12">
@@ -97,7 +97,7 @@
             {{ productInfo.currentLeftover.amount | exponent }}
           </td>
           <td *ngIf="isCurrentPeriod()">
-            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER']" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
+            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
             <check-select *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']" [disabled]="true" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
           </td>
         </tr>
@@ -123,7 +123,7 @@
   </div>
 </div>
 
-<context-menu *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO']" #productsMenu>
+<context-menu *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" #productsMenu>
   <ng-template contextMenuItem let-item (execute)="openEditProductTypeModal($event.item)">
     Редактировать продукцию
   </ng-template>

@@ -57,7 +57,7 @@
   </div>
 </div>
 
-<context-menu #standardsMenu *appCanAccess="['ROLE_TECHNOLOGIST']">
+<context-menu #standardsMenu *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_FULL_ACCESS']">
   <ng-template contextMenuItem let-item (execute)="openCreateStandardModal($event.item)" [enabled]="isStandardMissing">
     Создать норматив
   </ng-template>

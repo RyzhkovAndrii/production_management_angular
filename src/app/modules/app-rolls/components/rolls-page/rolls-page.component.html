@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
+  <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" class="btn btn-outline-dark btn-sm" (click)="openAddRollTypeModal()">
     <span class="material-icons">add</span>
   </button>
   <button type="button" class="btn btn-outline-dark btn-sm" (click)="showPreviousPeriod()">
@@ -24,7 +24,7 @@
             <small>{{ monthYear }}</small>
           </th>
           <th scope="col" *ngIf="!isPreviousPeriod()">
-            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
+            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitRollChecks()">
               <span class="material-icons">save</span>
             </button>
           </th>
@@ -65,7 +65,7 @@
             {{ rollInfo.restRollLeftover.amount }}
           </td>
           <td style="height: 0; padding: 0;" *ngFor="let batch of getBatches(rollInfo.rollBatches); index as i">
-            <div style="height: 100%; padding: 0.3rem;" *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)" [ngClass]="{'roll-ready': isReady(batch), 'roll-not-ready': !isReady(batch)}">
+            <div style="height: 100%; padding: 0.3rem;" *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" (click)="openCreateRollOperationModal(batch, i, rollInfo.rollType.id)" [ngClass]="{'roll-ready': isReady(batch), 'roll-not-ready': !isReady(batch)}">
               {{ getBatch(batch) }}
             </div>
             <div style="height: 100%; padding: 0.3rem;" *appCanAccess="['ROLE_CMO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']" [ngClass]="{'roll-ready': isReady(batch), 'roll-not-ready': !isReady(batch)}">
@@ -76,7 +76,7 @@
             {{ rollInfo.totalRollLeftover.amount }}
           </td>
           <td *ngIf="!isPreviousPeriod()">
-            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER']" [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
+            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
             <check-select *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']" [disabled]="true" [checkStatus]="rollInfo.rollCheck.rollLeftOverCheckStatus" (changeCheckStatus)="onChangeRollCheck($event, rollInfo.rollCheck)"></check-select>
           </td>
         </tr>
@@ -99,12 +99,12 @@
   <ng-template contextMenuItem let-item (execute)="openRollOperationsPage($event.item)">
     Список операций
   </ng-template>
-  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" contextMenuItem divider="true"></ng-template>
-  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" contextMenuItem (execute)="openEditRollTypeModal($event.item)">
+  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" contextMenuItem divider="true"></ng-template>
+  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" contextMenuItem (execute)="openEditRollTypeModal($event.item)">
     Редактировать рулон
   </ng-template>
-  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" contextMenuItem divider="true"></ng-template>
-  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']" contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
+  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" contextMenuItem divider="true"></ng-template>
+  <ng-template *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" contextMenuItem let-item (execute)="openDeleteRollTypeModal($event.item)">
     Удалить рулон
   </ng-template>
 </context-menu>

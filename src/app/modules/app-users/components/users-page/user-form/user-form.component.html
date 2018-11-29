@@ -53,6 +53,7 @@
                 <option [value]="roles.ROLE_ECONOMIST">Экономист</option>
                 <option [value]="roles.ROLE_ACCOUNTANT">Учетчик</option>
                 <option [value]="roles.ROLE_STOREKEEPER">Кладовщик</option>
+                <option [value]="roles.ROLE_FULL_ACCESS">Полный доступ!</option>
             </select>
             <span *ngIf="userForm.get('roles').invalid && userForm.get('roles').touched" class="invalid-feedback">
                 <span *ngIf="userForm.get('roles').hasError('required')">Необходимо выбрать роль!</span>

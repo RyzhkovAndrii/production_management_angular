@@ -9,15 +9,16 @@ import { User } from '../../app-users/models/user.model';
 })
 export class NavigationComponent implements OnInit {
 
-  rollsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER'];
+  rollsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST',
+    'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS'];
   productsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT',
-    'ROLE_ECONOMIST', 'ROLE_STOREKEEPER'];
-  ordersCanAccess = ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST'];
-  standardsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
-  productPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER'];
-  rollPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
-  machinePlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST'];
-  usersCanAccess = ['ROLE_ADMIN'];
+    'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS'];
+  ordersCanAccess = ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
+  standardsCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
+  productPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER', 'ROLE_FULL_ACCESS'];
+  rollPlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
+  machinePlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
+  usersCanAccess = ['ROLE_ADMIN', 'ROLE_FULL_ACCESS'];
 
   title = 'app';
   isCollapsed = false;

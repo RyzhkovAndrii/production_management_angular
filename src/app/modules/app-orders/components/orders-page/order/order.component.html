@@ -44,7 +44,7 @@
 
 
 <!-- Context menu -->
-<context-menu #orderMenu *appCanAccess="['ROLE_MANAGER']">
+<context-menu #orderMenu *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']">
   <div>
     <ng-template *ngIf="!orderDetails.isDelivered"
                  contextMenuItem

@@ -19,7 +19,7 @@ const routes: Routes = [
                 canActivateChild: [RoleGuard],
                 data: {
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO',
-                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
+                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -29,7 +29,7 @@ const routes: Routes = [
                 canActivateChild: [RoleGuard],
                 data: {
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO',
-                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']
+                        'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -38,7 +38,7 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST']
+                    roles: ['ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -47,7 +47,7 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
+                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -56,7 +56,8 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER']
+                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST',
+                        'ROLE_MANAGER', 'ROLE_FULL_ACCESS']
                 }
             },
             // todo add module
@@ -66,7 +67,7 @@ const routes: Routes = [
             //     canActivate: [RoleGuard],
             //     canActivateChild: [RoleGuard],
             //     data: {
-            //         roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
+            //         roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
             //     }
             // },
             {
@@ -75,7 +76,7 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']
+                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -84,7 +85,7 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: ['ROLE_ADMIN', 'ROLE_FULL_ACCESS']
                 }
             }
         ]

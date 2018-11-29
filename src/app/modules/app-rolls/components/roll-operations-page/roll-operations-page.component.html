@@ -67,7 +67,7 @@
   </h2>
 </div>
 
-<context-menu #operationsMenu *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO']">
+<context-menu #operationsMenu *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS']">
   <ng-template contextMenuItem (execute)="openEditRollOperationModal($event.item)">
     Редактировать
   </ng-template>

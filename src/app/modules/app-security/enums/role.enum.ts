@@ -8,6 +8,7 @@ export enum Role {
     ROLE_CMO = 'ROLE_CMO',
     ROLE_CTO = 'ROLE_CTO',
     ROLE_ECONOMIST = 'ROLE_ECONOMIST',
-    ROLE_CEO = 'ROLE_CEO'
+    ROLE_CEO = 'ROLE_CEO',
+    ROLE_FULL_ACCESS = 'ROLE_FULL_ACCESS'
 
 }
