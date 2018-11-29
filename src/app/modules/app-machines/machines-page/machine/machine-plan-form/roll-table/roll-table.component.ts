@@ -133,12 +133,12 @@ export class RollTableComponent implements OnInit, OnDestroy {
   }
 
   private getRollTypes(type$: Observable<ProductTypeResponse>): Observable<RollType[]> {
-    const standard$ = this.getStandard(type$);
-    return standard$.flatMap(standard => {
-      return standard.rollTypeIds.length === 0
+    const operations$ = this.getOperations(type$);
+    return operations$.flatMap(operations => {
+      return operations.length === 0
         ? Observable.of([])
         : Observable.forkJoin(
-          standard.rollTypeIds.map(id => this.casheService.getRollType(id))
+          operations.map(operation => this.casheService.getRollType(operation.rollTypeId))
         );
     });
   }
@@ -169,21 +169,12 @@ export class RollTableComponent implements OnInit, OnDestroy {
       ? this.current.planItems.find(i => i.rollTypeId === roll.id)
       : null;
     const operation = operations.find(oper => oper.rollTypeId === roll.id);
-    const nullOperation = {
-      id: null,
-      date: null,
-      productTypeId: null,
-      rollTypeId: roll.id,
-      rollAmount: 0,
-      productAmount: 0,
-      rollToMachinePlane: 0
-    };
     const nullItem = new MachinePlanItem();
     nullItem.rollAmount = 0;
     nullItem.productAmount = 0;
     return {
       roll: roll,
-      operation: operation ? operation : nullOperation,
+      operation: operation,
       item: item ? item : nullItem
     };
   }
