@@ -167,7 +167,8 @@ export class RollOperationsPageComponent implements OnInit {
                 rollTypeId: operation.rollTypeId,
                 manufacturedDate: getDate(operation.manufacturedDate),
                 productsByRollInNorms: products,
-                func: func.bind(this)
+                func: func.bind(this),
+                openErrorModal: error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
               }
             };
             this.ngxModalService.openDialog(this.viewRef, modalOptions);

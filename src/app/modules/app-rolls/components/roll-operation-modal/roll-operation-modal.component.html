@@ -1,18 +1,57 @@
-<div *ngIf="batch">
-  <h6>
-    <span *ngIf="!operation">Текущий остаток: </span>
-    <span *ngIf="operation">Остаток без текущей операции: </span>{{ batch.leftOverAmount }}
-  </h6>
-  <hr>
+<div class="row">
+  <div class="col-6">
+    {{ manufacturedDate | moment }}
+  </div>
+  <div class="col-6">
+    <div *ngIf="batch">
+      <h6>
+        <span *ngIf="!operation">Остаток: </span>
+        <span *ngIf="operation">Остаток без текущей операции: </span>{{ batch.leftOverAmount }}
+      </h6>
+    </div>
+  </div>
+  <hr class="col-12">
 </div>
 <form [formGroup]="form">
+
+
   <div class="form-group">
     <label for="operation-type">Тип операции:</label>
-    <select class="form-control" id="operation-type" formControlName="operationType" (change)="revalidateAmount()">
+    <select class="form-control" id="operation-type" formControlName="operationType" (change)="revalidateForm()">
       <option value="MANUFACTURE" selected>Производство</option>
       <option value="USE">Списание</option>
     </select>
   </div>
+
+  <div class="form-group" *ngIf="isProductSelectEnabled()">
+    <label for="productForUse">Списание на продукцию:</label>
+    <ng-select id="productForUse" [items]="productsByRollInNorms" [multiple]="false" [hideSelected]="false"
+      formControlName="productForUse" [compareWith]="compareProducts" [closeOnSelect]="true" notFoundText="Рулон не используется в нормативах продукции">
+      <ng-template ng-header-tmp>
+        <div class="row">
+          <div class="col-4 text-center t-75">Наименование</div>
+          <div class="col-4 text-center t-75">Вес</div>
+          <div class="col-4 text-center t-75">Цвет</div>
+        </div>
+      </ng-template>
+
+      <ng-template ng-option-tmp ng-label-tmp let-item="item" let-items="items">
+        <div class="row">
+          <div class="col-4 text-center t-75">
+            {{ item.name }}
+          </div>
+          <div class="col-4 text-center t-75">{{ item.weight}}</div>
+          <div class="col-4 text-center t-75">
+            <app-circle [color]="item.colorCode" *ngIf="item.colorCode"></app-circle>
+          </div>
+        </div>
+      </ng-template>
+    </ng-select>
+    <div *ngIf="isInvalid('productForUse')">
+      <span *ngIf="form.get('productForUse').errors['requiredProductUse']" class="invalid">Обязательное поле</span>
+    </div>
+  </div>
+
   <div class="form-group">
     <label for="operation-date">Дата операции:</label>
     <input type="date" class="form-control" id="operation-date" formControlName="operationDate" [ngClass]="{
@@ -20,7 +59,8 @@
       'is-valid': form.get('operationDate').valid && isTouched('operationDate')
     }">
     <div class="invalid-feedback" *ngIf="form.get('operationDate').invalid && isTouched('operationDate')">
-      <span *ngIf="form.get('operationDate').errors['beforeManufacturedError']">Списание возможно только с {{ batch.dateManufactured | moment }}</span>
+      <span *ngIf="form.get('operationDate').errors['beforeManufacturedError']">Списание возможно только с {{
+        batch.dateManufactured | moment }}</span>
       <span *ngIf="form.get('operationDate').errors['required']">Обязательное поле!</span>
     </div>
   </div>

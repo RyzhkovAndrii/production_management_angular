@@ -27,7 +27,9 @@ import {
   formatDateBrowserToServer,
   isBeforeDate
 } from '../../../../app-utils/app-date-utils';
-
+import {
+  ProductsService
+} from '../../../app-products/services/products.service';
 
 @Component({
   selector: 'app-roll-operation-modal',
@@ -42,6 +44,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   operation: RollOperationResponse;
   rollTypeId: number;
   manufacturedDate: Date;
+  productsByRollInNorms: ProductTypeResponse[];
 
   form: FormGroup;
   operationType = RollOperationType.MANUFACTURE;
@@ -51,7 +54,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   private btnClass = 'btn btn-outline-dark';
   submitPressed = false;
 
-  constructor() {
+  constructor(private productsService: ProductsService) {
     this.actionButtons = [{
         text: 'Отмена',
         buttonClass: this.btnClass,
@@ -72,7 +75,13 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
         disabled: !this.batch || this.batch.leftOverAmount <= 0
       }),
       operationDate: new FormControl(formatDateServerToBrowser(midnightDate()), [this.validateDateUseBeforeManufacture.bind(this), Validators.required]),
-      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)])
+      rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)]),
+      productForUse: new FormControl({
+          disabled: this.isProductSelectEnabled()
+        },
+        [
+          this.validateRequiredProductUse.bind(this)
+        ])
     });
   }
 
@@ -83,6 +92,13 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.manufacturedDate = options.data.manufacturedDate;
     this.operation = options.data.operation;
     if (this.operation) {
+      if (this.operation.productTypeIdForUseOperation) {
+        this.productsService.getProductType(this.operation.productTypeIdForUseOperation)
+          .subscribe(product => {
+              this.form.get('productForUse').setValue(product)
+            },
+            error => options.data.openErrorModal(error));
+      }
       switch (this.operation.operationType) {
         case RollOperationType.MANUFACTURE:
           this.batch.leftOverAmount -= this.operation.rollAmount;
@@ -93,6 +109,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       }
       this.operationType = RollOperationType[this.operation.operationType];
     }
+    this.productsByRollInNorms = options.data.productsByRollInNorms;
   }
 
   onSubmit(): Promise < RollOperationRequest > {
@@ -103,17 +120,27 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       return reject;
     }
 
+    const operationType = this.form.get('operationType').value;
     const rollOperation: RollOperationRequest = {
       operationDate: formatDateBrowserToServer(this.form.value.operationDate),
-      operationType: this.form.get('operationType').value,
+      operationType,
       manufacturedDate: formatDate(this.manufacturedDate),
       rollTypeId: this.rollTypeId,
       rollAmount: this.form.get('rollAmount').value,
-      productTypeIdForUseOperation: undefined
+      productTypeIdForUseOperation: operationType == RollOperationType.USE ? this.form.get('productForUse').value.id : undefined
     };
     const resolve = Promise.resolve(rollOperation);
     this.options.data.func(resolve);
     return resolve;
+  }
+
+  validateRequiredProductUse(control: FormControl) {
+    if (this.form && (!control.value || !control.value.id) && this.form.get('operationType').value === RollOperationType.USE) {
+      return {
+        'requiredProductUse': true
+      };
+    }
+    return null;
   }
 
   validateAmount(control: FormControl) {
@@ -147,9 +174,10 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     return null;
   }
 
-  revalidateAmount() {
+  revalidateForm() {
     this.revalidateOperationDate();
     this.form.get('rollAmount').updateValueAndValidity();
+    this.form.get('productForUse').updateValueAndValidity();
   }
 
   revalidateOperationDate() {
@@ -158,5 +186,19 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
 
   isTouched(controlName: string) {
     return this.form.get(controlName).touched || this.submitPressed;
+  }
+
+  compareProducts(a: ProductTypeResponse, b: ProductTypeResponse): boolean {
+    return a.id == b.id;
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return control.invalid && this.isTouched(controlName);
+  }
+
+  isProductSelectEnabled(): boolean {
+    const control = this.form ? this.form.get('operationType') : undefined;
+    return control ? control.value == RollOperationType.USE : false;
   }
 }

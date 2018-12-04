@@ -5,4 +5,5 @@ interface RollOperationResponse {
     manufacturedDate: string;
     rollTypeId: number;
     rollAmount: number;
+    productTypeIdForUseOperation: number;
 }

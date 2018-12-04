@@ -20,6 +20,9 @@ import {
 import {
   ModalDialogModule
 } from "ngx-modal-dialog";
+import {
+  NgSelectModule
+} from "@ng-select/ng-select";
 
 import {
   RollsPageComponent
@@ -33,12 +36,6 @@ import {
 import {
   RollsRouting
 } from "./rolls-routing.module";
-import {
-  RollsService
-} from "./services/rolls.service";
-import {
-  RollsUrlService
-} from "./services/rolls-url.service";
 import {
   AppSharedModule
 } from "../app-shared/app-shared.module";
@@ -63,6 +60,7 @@ import {
     ColorPickerModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     ContextMenuModule.forRoot({
       useBootstrap4: true
     }),

@@ -5,4 +5,5 @@ interface RollOperationModalData {
   manufacturedDate: Date;
   productsByRollInNorms: ProductTypeResponse[];
   func(result: Promise < RollOperationRequest > );
+  openErrorModal(error: string[]);
 }
