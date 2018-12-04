@@ -54,6 +54,7 @@ import {
 })
 export class RollOperationsPageComponent implements OnInit {
   rollOperations: RollOperationResponse[];
+  rollType: RollType;
 
   rollTypeId: number;
   fromDateValue: string;
@@ -80,6 +81,8 @@ export class RollOperationsPageComponent implements OnInit {
 
   ngOnInit() {
     this.fetchData();
+    this.rollsService.getRollType(this.rollTypeId)
+      .subscribe(rollType => this.rollType = rollType, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
     this.form = new FormGroup({
       fromDate: new FormControl(formatDateServerToBrowser(this.fromDateValue), [Validators.required, this.fromDateSmallerValidator.bind(this)]),
       toDate: new FormControl(formatDateServerToBrowser(this.toDateValue), [Validators.required, this.toDateBiggerValidator.bind(this)])

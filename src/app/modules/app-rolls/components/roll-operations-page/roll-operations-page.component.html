@@ -1,7 +1,14 @@
-<div class="container-fluid mt-2">
+<div class="container-fluid mt-2 ml-2 mr-2">
   <form [formGroup]="form">
     <div class="form-row">
-      <div class="col-md-3 offset-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
+      <div class="col-12 col-md-3 small border rounded d-flex justify-content-around align-items-center">
+        <span>{{ rollType?.note }}</span>
+        <span>{{ rollType?.thickness }}</span>
+        <span>{{ rollType?.minWeight }}-{{ rollType?.maxWeight }}</span>
+        <span>{{ rollType?.length }}</span>
+        <app-circle [color]="rollType?.colorCode"></app-circle>
+      </div>
+      <div class="col-md-3 pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
         <div class="input-group input-group-sm">
           <div class="input-group-prepend">
             <div class="input-group-text">от</div>
