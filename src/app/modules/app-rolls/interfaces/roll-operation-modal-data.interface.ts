@@ -1,9 +1,8 @@
 interface RollOperationModalData {
   batch: RollBatch;
-  operation?: RollOperationResponse;
+  operation?: RollOperationResponseWithProduct;
   rollTypeId: number;
   manufacturedDate: Date;
   productsByRollInNorms: ProductTypeResponse[];
   func(result: Promise < RollOperationRequest > );
-  openErrorModal(error: string[]);
 }

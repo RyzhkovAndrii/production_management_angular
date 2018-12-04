@@ -53,6 +53,7 @@
           <th scope="col">Тип операции</th>
           <th scope="col">Дата операции</th>
           <th scope="col">Дата производства</th>
+          <th scope="col">Продукция</th>
           <th scope="col">Количество</th>
         </tr>
       </thead>
@@ -61,6 +62,12 @@
           <td>{{ getOperationType(operation.operationType) }}</td>
           <td>{{ operation.operationDate }}</td>
           <td>{{ operation.manufacturedDate }}</td>
+          <td>
+            <span *ngIf="!operation.productType">&mdash;</span>
+            <span>{{ operation.productType?.name }}</span>
+            <span>{{ operation.productType?.weight }}</span>
+            <app-circle [color]="operation.productType?.colorCode" *ngIf="operation.productType"></app-circle>
+          </td>
           <td>{{ operation.rollAmount }}</td>
         </tr>
       </tbody>

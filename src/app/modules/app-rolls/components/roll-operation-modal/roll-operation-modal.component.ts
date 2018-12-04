@@ -27,9 +27,6 @@ import {
   formatDateBrowserToServer,
   isBeforeDate
 } from '../../../../app-utils/app-date-utils';
-import {
-  ProductsService
-} from '../../../app-products/services/products.service';
 
 @Component({
   selector: 'app-roll-operation-modal',
@@ -41,7 +38,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   actionButtons: IModalDialogButton[];
   options: Partial < IModalDialogOptions < RollOperationModalData >> ;
   batch: RollBatch;
-  operation: RollOperationResponse;
+  operation: RollOperationResponseWithProduct;
   rollTypeId: number;
   manufacturedDate: Date;
   productsByRollInNorms: ProductTypeResponse[];
@@ -54,7 +51,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
   private btnClass = 'btn btn-outline-dark';
   submitPressed = false;
 
-  constructor(private productsService: ProductsService) {
+  constructor() {
     this.actionButtons = [{
         text: 'Отмена',
         buttonClass: this.btnClass,
@@ -77,6 +74,7 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
       operationDate: new FormControl(formatDateServerToBrowser(midnightDate()), [this.validateDateUseBeforeManufacture.bind(this), Validators.required]),
       rollAmount: new FormControl(this.operation ? this.operation.rollAmount : undefined, [Validators.required, Validators.min(this.MIN_ROLL_AMOUNT), this.validateAmount.bind(this), integerValidator, this.validateNegativeAmount.bind(this)]),
       productForUse: new FormControl({
+          value: this.operation ? this.operation.productType : undefined,
           disabled: this.isProductSelectEnabled()
         },
         [
@@ -92,13 +90,6 @@ export class RollOperationModalComponent implements OnInit, IModalDialog {
     this.manufacturedDate = options.data.manufacturedDate;
     this.operation = options.data.operation;
     if (this.operation) {
-      if (this.operation.productTypeIdForUseOperation) {
-        this.productsService.getProductType(this.operation.productTypeIdForUseOperation)
-          .subscribe(product => {
-              this.form.get('productForUse').setValue(product)
-            },
-            error => options.data.openErrorModal(error));
-      }
       switch (this.operation.operationType) {
         case RollOperationType.MANUFACTURE:
           this.batch.leftOverAmount -= this.operation.rollAmount;

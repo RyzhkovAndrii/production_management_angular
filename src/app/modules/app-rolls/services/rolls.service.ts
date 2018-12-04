@@ -238,7 +238,7 @@ export class RollsService {
     }).catch(httpErrorHandle);
   }
 
-  getRollOperations(rollTypeId: number, from: string, to: string) {
+  getRollOperations(rollTypeId: number, from: string, to: string): Observable < RollOperationResponseWithProduct[] > {
     const params = new HttpParams()
       .set('roll_type_id', String(rollTypeId))
       .set('from_manuf', from)

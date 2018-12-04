@@ -250,8 +250,7 @@ export class RollsPageComponent implements OnInit {
             rollTypeId,
             manufacturedDate: this.daysHeader[index],
             productsByRollInNorms: products,
-            func: func.bind(this),
-            openErrorModal: error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
+            func: func.bind(this)
           }
         };
         this.ngxModalService.openDialog(this.viewRef, modalOptions);

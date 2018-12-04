@@ -53,7 +53,7 @@ import {
   styleUrls: ['./roll-operations-page.component.css']
 })
 export class RollOperationsPageComponent implements OnInit {
-  rollOperations: RollOperationResponse[];
+  rollOperations: RollOperationResponseWithProduct[];
   rollType: RollType;
 
   rollTypeId: number;
@@ -92,7 +92,8 @@ export class RollOperationsPageComponent implements OnInit {
     this.fromDateValue = this.queryParams['from'];
     this.toDateValue = this.queryParams['to'];
     this.rollsService.getRollOperations(this.rollTypeId, this.fromDateValue, this.toDateValue)
-      .subscribe((data: RollOperationResponse[]) => {
+      .subscribe(data => {
+        console.log(data);
         this.rollOperations = data.sort((a, b) => {
           return compareDates(a.manufacturedDate, b.manufacturedDate);
         });
@@ -146,7 +147,7 @@ export class RollOperationsPageComponent implements OnInit {
     return null;
   }
 
-  openEditRollOperationModal(operation: RollOperationResponse) {
+  openEditRollOperationModal(operation: RollOperationResponseWithProduct) {
     this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
       .subscribe((batch) => {
         const func = (result: Promise < RollOperationRequest > ) => {
@@ -169,8 +170,7 @@ export class RollOperationsPageComponent implements OnInit {
                 rollTypeId: operation.rollTypeId,
                 manufacturedDate: getDate(operation.manufacturedDate),
                 productsByRollInNorms: products,
-                func: func.bind(this),
-                openErrorModal: error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
+                func: func.bind(this)
               }
             };
             this.ngxModalService.openDialog(this.viewRef, modalOptions);
@@ -178,7 +178,7 @@ export class RollOperationsPageComponent implements OnInit {
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
   }
 
-  deleteRollOperation(operation: RollOperationResponse) {
+  deleteRollOperation(operation: RollOperationResponseWithProduct) {
     this.rollsService.getRollBatch(operation.rollTypeId, operation.manufacturedDate)
       .subscribe(batch => {
         switch (operation.operationType) {
@@ -198,7 +198,7 @@ export class RollOperationsPageComponent implements OnInit {
     this.openDeleteRollOperationModal(operation);
   }
 
-  private openDeleteRollOperationModal(operation: RollOperationResponse) {
+  private openDeleteRollOperationModal(operation: RollOperationResponseWithProduct) {
     const buttonClass = 'btn btn-outline-dark';
     const modalOptions: Partial < IModalDialogOptions < any >> = {
       title: 'Подтвердите удаление операции',
