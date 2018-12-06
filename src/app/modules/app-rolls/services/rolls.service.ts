@@ -9,9 +9,6 @@ import {
   HttpParams
 } from '@angular/common/http';
 import {
-  flatMap
-} from 'rxjs/operators';
-import {
   from
 } from 'rxjs/observable/from';
 import { of
