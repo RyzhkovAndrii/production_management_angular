@@ -87,4 +87,8 @@ export class RollsPlanPageComponentComponent implements OnInit {
   findBatch(batches: RollPlanBatchResponse[], colDate: Date): RollPlanBatchResponse {
     return batches.find(x => isSameDate(colDate, getDate(x.date)));
   }
+
+  getWeight(rollType: RollType): string | number {
+    return rollType.minWeight === rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
+  }
 }
