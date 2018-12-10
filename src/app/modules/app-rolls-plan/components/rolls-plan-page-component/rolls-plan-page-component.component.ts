@@ -18,6 +18,7 @@ import {
   isSameDate,
   getDate
 } from '../../../../app-utils/app-date-utils';
+import { compareColors } from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-rolls-plan-page-component',
@@ -90,5 +91,13 @@ export class RollsPlanPageComponentComponent implements OnInit {
 
   getWeight(rollType: RollType): string | number {
     return rollType.minWeight === rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
+  }
+  sortByColorThicknessRollId(rollsInfo: RollPlanInfo[]): RollPlanInfo[] {
+    return rollsInfo.sort((a, b) => {
+      const colorSortValue = compareColors(a.rollType.colorCode, b.rollType.colorCode);
+      const thicknessSort = a.rollType.thickness - b.rollType.thickness;
+      return colorSortValue !== 0 ? colorSortValue :
+        thicknessSort !== 0 ? thicknessSort : a.rollType.id - b.rollType.id;
+    });
   }
 }

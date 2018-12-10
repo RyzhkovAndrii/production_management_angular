@@ -67,7 +67,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let info of rollssPlanInfo">
+        <tr *ngFor="let info of sortByColorThicknessRollId(rollssPlanInfo)">
           <th scope="row" class="row-name">{{ info.rollType.note }}</th>
           <th scope="row" class="row-name">
             {{ info.rollType.thickness }}
