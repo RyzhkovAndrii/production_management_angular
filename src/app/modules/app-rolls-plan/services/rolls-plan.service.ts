@@ -52,12 +52,12 @@ export class RollsPlanService {
                     .map(roll => {
                       const info: RollPlanInfo = {
                         rollType: roll,
-                        currentRollLeftover: currentOversMap[roll.id],
+                        currentRollLeftover: currentOversMap.get(roll.id),
                         planBatches: batches[roll.id],
-                        weeklyLeftoverWithoutPlans: weeklyOversMap[roll.id],
-                        weeklyLeftoverTotal: weeklyTotalOversMap[roll.id],
-                        inTwoWeeksLeftoverWithoutPlans: toOversMap[roll.id],
-                        inTwoWeeksLeftoverTotal: toTotalOversMap[roll.id]
+                        weeklyLeftoverWithoutPlans: weeklyOversMap.get(roll.id),
+                        weeklyLeftoverTotal: weeklyTotalOversMap.get(roll.id),
+                        inTwoWeeksLeftoverWithoutPlans: toOversMap.get(roll.id),
+                        inTwoWeeksLeftoverTotal: toTotalOversMap.get(roll.id)
                       }
                       return info;
                     })
