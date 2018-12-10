@@ -18,7 +18,9 @@ import {
   isSameDate,
   getDate
 } from '../../../../app-utils/app-date-utils';
-import { compareColors } from '../../../../app-utils/app-comparators';
+import {
+  compareColors
+} from '../../../../app-utils/app-comparators';
 
 @Component({
   selector: 'app-rolls-plan-page-component',
