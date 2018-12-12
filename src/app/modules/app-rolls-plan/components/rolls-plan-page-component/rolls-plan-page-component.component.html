@@ -86,7 +86,7 @@
           </td>
           <td class="w-3" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
             [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
-            {{ batch?.manufacturedAmount | empty}}
+            {{ batch?.manufacturedAmount | empty}} <span *ngIf="batch?.usedAmount > 0">/</span> {{ batch?.usedAmount | empty }}
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverWithoutPlans.amount }}
@@ -96,7 +96,7 @@
           </td>
           <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
             [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
-            {{ batch?.manufacturedAmount | empty}}
+            {{ batch?.manufacturedAmount | empty}} <span *ngIf="batch?.usedAmount > 0">/</span> {{ batch?.usedAmount | empty }}
           </td>
           <td class="w-8">
             {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}
