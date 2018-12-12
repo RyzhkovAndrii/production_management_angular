@@ -141,6 +141,15 @@ export class RollsService {
       .catch(httpErrorHandle);
   }
 
+  getLeftovers(date: string): Observable < RollLeftover[] > {
+    const params = new HttpParams()
+      .set('date', date);
+    return this.http.get(this.urls.rollLeftoverUrl, {
+      headers: appHeaders,
+      params: params
+    }).catch(httpErrorHandle);
+  }
+
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
     return this.http.post(this.urls.rollTypesUrl, rollType, {
       headers: appHeaders

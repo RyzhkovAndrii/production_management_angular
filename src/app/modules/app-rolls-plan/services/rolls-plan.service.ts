@@ -43,7 +43,7 @@ export class RollsPlanService {
 
     return this.rollsService.getRollTypes()
       .flatMap(rolls => this.getBatchesByRange(beginDate, endDate)
-        .flatMap(batches => this.getRollPlanLeftoversWithoutPlan(currentDate).map(this.convertOversToMap)
+        .flatMap(batches => this.rollsService.getLeftovers(currentDate).map(this.convertOversToMap)
           .flatMap(currentOversMap => this.getRollPlanLeftoversWithoutPlan(weeklyDate).map(this.convertOversToMap)
             .flatMap(weeklyOversMap => this.getRollPlanLeftoversTotal(weeklyDate).map(this.convertOversToMap)
               .flatMap(weeklyTotalOversMap => this.getRollPlanLeftoversWithoutPlan(endDate).map(this.convertOversToMap)
