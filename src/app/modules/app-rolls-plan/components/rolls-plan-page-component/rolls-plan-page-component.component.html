@@ -93,9 +93,10 @@
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverTotal.amount }}
-            <td> <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
-              [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
-              {{ batch?.manufacturedAmount | empty}}
+          <td>
+          <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
+            [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
+            {{ batch?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
             {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}
@@ -114,11 +115,11 @@
     Создать
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)">
+  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)" [enabled]="isEmptyBatch">
     Редактировать
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)">
+  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)" [enabled]="isEmptyBatch">
     Удалить
   </ng-template>
 </context-menu>

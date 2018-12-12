@@ -118,4 +118,8 @@ export class RollsPlanPageComponentComponent implements OnInit {
   openSelectDeletePlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
   }
+
+  isEmptyBatch = (item: RollPlanModalPrefetchData): boolean => {
+    return item.batch && item.batch.manufacturedAmount != 0;
+  }
 }
