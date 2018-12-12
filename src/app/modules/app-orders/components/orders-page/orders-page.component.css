@@ -1,3 +1,13 @@
+#top-menu {
+    position: fixed;
+    top: 57px;
+    z-index: 1000;
+    height: 3.2rem;
+    width: 100%;
+    background-color: #fff;
+    padding: 0.5rem 0;
+}
+
 table {
     empty-cells: show;
 }
@@ -22,6 +32,8 @@ table td:hover, table th:hover {
 
 #table-container {
     display: flex;
+    position: relative;
+    top: 3.2rem;
 }
 
 #product-table-container {

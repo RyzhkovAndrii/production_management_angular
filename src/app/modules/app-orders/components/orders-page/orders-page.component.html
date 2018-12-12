@@ -1,12 +1,11 @@
 <div class="container-fluid">
-  <div *ngIf="!isDataLoaded"
-       class="row">
+  <div *ngIf="!isDataLoaded" class="row">
     <div class="col-12">
       <p class="text-center">Загрузка...</p>
     </div>
   </div>
   <div *ngIf="isDataLoaded">
-    <div class="row">
+    <div class="row" id="top-menu">
       <div class="col-1 btn-group">
         <button *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="btn btn-outline-dark btn-sm mr-2" (click)="openOrderCreate()">
           <i class="material-icons">add</i>
@@ -16,21 +15,19 @@
         </button>
       </div>
       <div class="col-md-1"></div>
-      <div class="col-5 my-auto">
+      <div class="col-6 my-auto">
         <app-order-delivered-show (startDateChange)="toggleDeliveredOrderVisibility($event)"></app-order-delivered-show>
       </div>
-      <div class="col-5">
+      <div class="col-4">
         <app-last-modification #modification [tableType]="'ORDERS'" class="float-right"></app-last-modification>
       </div>
     </div>
-    <div *ngIf="isOrderListEmpty()"
-         class="row mt-5">
+    <div *ngIf="isOrderListEmpty()" class="row mt-5">
       <div class="col-12">
         <h2 class="text-center">Активные заказы отсутствуют.</h2>
       </div>
     </div>
-    <div *ngIf="!isOrderListEmpty()"
-         class="row">
+    <div *ngIf="!isOrderListEmpty()" class="row">
       <div class="col-12">
         <div id="table-container">
           <div id="product-table-container">
@@ -51,13 +48,11 @@
                 <tr style="height: 0.2rem;"></tr>
                 <div *ngIf="productTypes"></div>
                 <tbody>
-                  <tr *ngFor="let productType of productTypes"
-                      class="table-header">
+                  <tr *ngFor="let productType of productTypes" class="table-header">
                     <th style="min-width: 8rem;">{{productType.name}}</th>
                     <th>{{productType.weight}}</th>
                     <th>
-                      <i class="filled-circle"
-                         [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+                      <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
                     </th>
                   </tr>
                 </tbody>
@@ -72,20 +67,15 @@
           <div id="orders-table-container">
             <div id="orders-table-content">
               <div *ngFor="let order of orderList">
-                <app-order [order]="order"
-                           [productTypeList]="productTypes"
-                           [ordersPageViewRef]="ordersPageViewRef"
-                           (onChange)="reloadPage()"
-                           (onEditOpen)="openOrderEdit($event)">
+                <app-order [order]="order" [productTypeList]="productTypes" [ordersPageViewRef]="ordersPageViewRef"
+                  (onChange)="reloadPage()" (onEditOpen)="openOrderEdit($event)">
                 </app-order>
               </div>
             </div>
           </div>
           <div id="orders-leftover-container">
             <div id="orders-leftover-content">
-              <app-order-leftover-product #lastLeftover
-                                          [isLastLeftOver]="true"
-                                          [producTypeList]="productTypes">
+              <app-order-leftover-product #lastLeftover [isLastLeftOver]="true" [producTypeList]="productTypes">
               </app-order-leftover-product>
             </div>
           </div>
@@ -98,28 +88,20 @@
 
 <!-- Modal -->
 <div *ngIf="isOrderCreateVisible">
-  <app-order-create [clientList]="clientList"
-                    [productTypeList]="productTypes"
-                    (onSubmit)="onOrderCreateApply($event)"
-                    (onCancel)="onOrderCreateCancel()">
+  <app-order-create [clientList]="clientList" [productTypeList]="productTypes" (onSubmit)="onOrderCreateApply($event)"
+    (onCancel)="onOrderCreateCancel()">
   </app-order-create>
 </div>
 
 <!-- Modal -->
 <div *ngIf="isOrderEditVisible">
-  <app-order-edit [clientList]="clientList"
-                  [productTypeList]="productTypes"
-                  [order]="editedOrder"
-                  [ordersPageViewRef]="ordersPageViewRef"
-                  (onSubmit)="onOrderEditApply($event)"
-                  (onCancel)="onOrderEditCancel()">
+  <app-order-edit [clientList]="clientList" [productTypeList]="productTypes" [order]="editedOrder" [ordersPageViewRef]="ordersPageViewRef"
+    (onSubmit)="onOrderEditApply($event)" (onCancel)="onOrderEditCancel()">
   </app-order-edit>
 </div>
 
 <!-- Modal -->
 <div *ngIf="isClientListVisible">
-  <app-client-list [clientList]="clientList"
-                   (onClientListChange)="reloadPage()"
-                   (onCancel)="onClientListCancel()">
+  <app-client-list [clientList]="clientList" (onClientListChange)="reloadPage()" (onCancel)="onClientListCancel()">
   </app-client-list>
 </div>
