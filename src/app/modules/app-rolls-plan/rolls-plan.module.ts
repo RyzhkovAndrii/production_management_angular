@@ -30,6 +30,9 @@ import {
 import {
   RollPlanOperationModalComponent
 } from './components/modals/roll-plan-operation-modal/roll-plan-operation-modal.component';
+import {
+  RollPlanOperationSelectModalComponent
+} from './components/modals/roll-plan-operation-select-modal/roll-plan-operation-select-modal.component';
 
 @NgModule({
   imports: [
@@ -46,10 +49,12 @@ import {
   ],
   declarations: [
     RollsPlanPageComponentComponent,
-    RollPlanOperationModalComponent
+    RollPlanOperationModalComponent,
+    RollPlanOperationSelectModalComponent
   ],
   entryComponents: [
-    RollPlanOperationModalComponent
+    RollPlanOperationModalComponent,
+    RollPlanOperationSelectModalComponent
   ]
 })
 export class RollsPlanModule {}

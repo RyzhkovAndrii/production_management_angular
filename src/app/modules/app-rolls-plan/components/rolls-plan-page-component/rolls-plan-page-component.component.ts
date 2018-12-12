@@ -137,6 +137,48 @@ export class RollsPlanPageComponentComponent implements OnInit {
 
   openSelectEditPlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
+    this.rollsPlanService.getOperationsByRoll(item.batch.rollTypeId, item.batch.date, item.batch.date)
+      .subscribe(operations => {
+        console.log(operations);
+        if (operations.length > 1) {
+
+          const data: RollPlanOperationSelectModalData = {
+            operations,
+            action: (result: Promise < RollPlanOperationResponse > ) => result.then(operation => this.openEditPlanModal(operation, item))
+          }
+        } else {
+          this.openEditPlanModal(operations[0], item);
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+  }
+
+  openEditPlanModal(operation: RollPlanOperationResponse, item: RollPlanModalPrefetchData) {
+    const request: RollPlanOperationRequest = {
+      date: operation.date,
+      rollTypeId: operation.rollTypeId,
+      rollAmount: operation.rollAmount
+    };
+
+    const func: (result: Promise < RollPlanOperationRequest > ) => void = result => {
+      result.then(request => {
+        this.rollsPlanService.putOperation(operation.id, request)
+          .subscribe(
+            response => this.initData(),
+            error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
+          );
+      }, reject => {})
+    };
+    const planData: RollPlanOperationModalData = {
+      batch: item.batch,
+      operation,
+      func
+    }
+    const options: Partial < IModalDialogOptions < RollPlanOperationModalData >> = {
+      data: planData,
+      title: 'Редактирование плановой операции',
+      childComponent: RollPlanOperationModalComponent
+    }
+    this.ngxModalService.openDialog(this.viewRef, options);
   }
 
   openSelectDeletePlanModal(item: RollPlanModalPrefetchData) {
