@@ -66,13 +66,13 @@ export class RollsPlanPageComponentComponent implements OnInit {
     this.fromDate = addDays(this.currentDate, 1);
     this.toDate = addDays(this.currentDate, 14);
     for (let i = 0; i < this.DATE_HEADER_SIZE; i++) {
-      this.firstWeekHeaderDates.push(addDays(this.currentDate, i + 1));
+      this.firstWeekHeaderDates.push(addDays(this.currentDate, i));
       if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.firstWeekHeaderDates[i].getMonth()) {
         this.secondMonthIndex = i;
       }
     }
     for (let i = this.DATE_HEADER_SIZE; i < this.DATE_HEADER_SIZE * 2; i++) {
-      this.secondWeekHeaderDates.push(addDays(this.currentDate, i + 1));
+      this.secondWeekHeaderDates.push(addDays(this.currentDate, i));
       if (this.secondMonthIndex == -1 && this.firstWeekHeaderDates[this.firstWeekHeaderDates.length - 1].getMonth() < this.secondWeekHeaderDates[i - this.DATE_HEADER_SIZE].getMonth()) {
         this.secondMonthIndex = i;
       }
@@ -91,6 +91,11 @@ export class RollsPlanPageComponentComponent implements OnInit {
     return batches.find(x => isSameDate(colDate, getDate(x.date)));
   }
 
+  getBatches(batches: RollPlanBatchResponse[], offset: number = 0): RollPlanBatchResponse[] {
+    const result = batches.slice(offset, offset + this.DATE_HEADER_SIZE);
+    return result;
+  }
+
   getWeight(rollType: RollType): string | number {
     return rollType.minWeight === rollType.maxWeight ? rollType.minWeight : `${rollType.minWeight}–${rollType.maxWeight}`;
   }
@@ -102,15 +107,15 @@ export class RollsPlanPageComponentComponent implements OnInit {
         thicknessSort !== 0 ? thicknessSort : a.rollType.id - b.rollType.id;
     });
   }
-  openCreatePlanModal(item) {
+  openCreatePlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
   }
 
-  openSelectEditPlanModal(item) {
+  openSelectEditPlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
   }
 
-  openSelectDeletePlanModal(item) {
+  openSelectDeletePlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
   }
 }

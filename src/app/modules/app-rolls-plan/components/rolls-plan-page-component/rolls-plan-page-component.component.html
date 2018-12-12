@@ -84,17 +84,18 @@
           <td class="w-8">
             {{ info.currentRollLeftover.amount }}
           </td>
-          <td class="w-3" *ngFor="let date of firstWeekHeaderDates" [contextMenu]="plansMenu" [contextMenuSubject]="date">
-            {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
+          <td class="w-3" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
+            [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
+            {{ batch?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverWithoutPlans.amount }}
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverTotal.amount }}
-          </td>
-          <td class="w-3" *ngFor="let date of secondWeekHeaderDates" [contextMenu]="plansMenu" [contextMenuSubject]="date">
-            {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
+            <td> <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
+              [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
+              {{ batch?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
             {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}
