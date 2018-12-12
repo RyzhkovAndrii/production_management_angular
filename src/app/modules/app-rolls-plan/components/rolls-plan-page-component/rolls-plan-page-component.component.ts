@@ -102,4 +102,15 @@ export class RollsPlanPageComponentComponent implements OnInit {
         thicknessSort !== 0 ? thicknessSort : a.rollType.id - b.rollType.id;
     });
   }
+  openCreatePlanModal(item) {
+    console.log(item);
+  }
+
+  openSelectEditPlanModal(item) {
+    console.log(item);
+  }
+
+  openSelectDeletePlanModal(item) {
+    console.log(item);
+  }
 }

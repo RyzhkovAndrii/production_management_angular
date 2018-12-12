@@ -84,7 +84,7 @@
           <td class="w-8">
             {{ info.currentRollLeftover.amount }}
           </td>
-          <td class="w-3" *ngFor="let date of firstWeekHeaderDates">
+          <td class="w-3" *ngFor="let date of firstWeekHeaderDates" [contextMenu]="plansMenu" [contextMenuSubject]="date">
             {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
@@ -93,7 +93,7 @@
           <td class="w-8">
             {{ info.weeklyLeftoverTotal.amount }}
           </td>
-          <td class="w-3" *ngFor="let date of secondWeekHeaderDates">
+          <td class="w-3" *ngFor="let date of secondWeekHeaderDates" [contextMenu]="plansMenu" [contextMenuSubject]="date">
             {{ findBatch(info.planBatches, date)?.manufacturedAmount | empty}}
           </td>
           <td class="w-8">
@@ -107,3 +107,17 @@
     </table>
   </div>
 </div>
+
+<context-menu *appCanAccess="['ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" #plansMenu>
+  <ng-template contextMenuItem let-item (execute)="openCreatePlanModal($event.item)">
+    Создать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)">
+    Удалить
+  </ng-template>
+</context-menu>
