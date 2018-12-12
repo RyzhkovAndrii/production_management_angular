@@ -93,7 +93,7 @@
           </td>
           <td class="w-8">
             {{ info.weeklyLeftoverTotal.amount }}
-          <td>
+          </td>
           <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
             [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
             {{ batch?.manufacturedAmount | empty}}

@@ -27,6 +27,9 @@ import {
 import {
   SecurityModule
 } from '../app-security/security.module';
+import {
+  RollPlanOperationModalComponent
+} from './components/modals/roll-plan-operation-modal/roll-plan-operation-modal.component';
 
 @NgModule({
   imports: [
@@ -41,6 +44,12 @@ import {
     }),
     SecurityModule
   ],
-  declarations: [RollsPlanPageComponentComponent]
+  declarations: [
+    RollsPlanPageComponentComponent,
+    RollPlanOperationModalComponent
+  ],
+  entryComponents: [
+    RollPlanOperationModalComponent
+  ]
 })
 export class RollsPlanModule {}

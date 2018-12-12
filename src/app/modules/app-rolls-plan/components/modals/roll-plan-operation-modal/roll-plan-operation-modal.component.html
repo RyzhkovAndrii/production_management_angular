@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-6">
+    {{ manufacturedDate | moment }}
+  </div>
+  <hr class="col-12">
+</div>
+<form [formGroup]="form">
+
+  <div class="form-group">
+    <label for="roll-amount">Количество рулонов:</label>
+    <input type="number" min="0" step="1" class="form-control" id="roll-amount" formControlName="rollAmount" [ngClass]="{
+        'is-invalid': form.get('rollAmount').invalid && isTouched('rollAmount'),
+        'is-valid': form.get('rollAmount').valid && isTouched('rollAmount')
+      }">
+    <div class="invalid-feedback" *ngIf="form.get('rollAmount').invalid && isTouched('rollAmount')">
+      <span *ngIf="form.get('rollAmount').errors['required']">
+        Количество рулонов не может быть пустым!
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['min']">
+        Минимальное количество рулонов для операции: {{ MIN_ROLL_AMOUNT }}
+      </span>
+      <span *ngIf="form.get('rollAmount').errors['notIntegerError']">
+        Количество рулонов должно быть целым числом!
+      </span>
+    </div>
+  </div>
+</form>

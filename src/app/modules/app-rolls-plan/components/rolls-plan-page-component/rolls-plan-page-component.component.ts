@@ -4,7 +4,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  ModalDialogService
+  ModalDialogService,
+  IModalDialogOptions
 } from 'ngx-modal-dialog';
 import {
   RollsPlanService
@@ -21,6 +22,9 @@ import {
 import {
   compareColors
 } from '../../../../app-utils/app-comparators';
+import {
+  RollPlanOperationModalComponent
+} from '../modals/roll-plan-operation-modal/roll-plan-operation-modal.component';
 
 @Component({
   selector: 'app-rolls-plan-page-component',
@@ -63,8 +67,10 @@ export class RollsPlanPageComponentComponent implements OnInit {
 
   private initDateHeaders() {
     this.currentDate = midnightDate();
-    this.fromDate = addDays(this.currentDate, 1);
+    this.fromDate = this.currentDate;
     this.toDate = addDays(this.currentDate, 14);
+    this.firstWeekHeaderDates = [];
+    this.secondWeekHeaderDates = [];
     for (let i = 0; i < this.DATE_HEADER_SIZE; i++) {
       this.firstWeekHeaderDates.push(addDays(this.currentDate, i));
       if (this.secondMonthIndex == -1 && this.fromDate.getMonth() < this.firstWeekHeaderDates[i].getMonth()) {
@@ -108,7 +114,25 @@ export class RollsPlanPageComponentComponent implements OnInit {
     });
   }
   openCreatePlanModal(item: RollPlanModalPrefetchData) {
-    console.log(item);
+    const func: (result: Promise < RollPlanOperationRequest > ) => void = result => {
+      result.then(request => {
+        this.rollsPlanService.postOperation(request)
+          .subscribe(
+            response => this.initData(),
+            error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
+          );
+      }, reject => {})
+    };
+    const planData: RollPlanOperationModalData = {
+      batch: item.batch,
+      func
+    }
+    const options: Partial < IModalDialogOptions < RollPlanOperationModalData >> = {
+      data: planData,
+      title: 'Создание плановой операции',
+      childComponent: RollPlanOperationModalComponent
+    }
+    this.ngxModalService.openDialog(this.viewRef, options);
   }
 
   openSelectEditPlanModal(item: RollPlanModalPrefetchData) {
