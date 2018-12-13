@@ -1,6 +1,6 @@
 import {
   Component, OnInit, Input, EventEmitter, Output, ViewContainerRef, ViewChild,
-  ChangeDetectorRef, AfterViewInit
+  ChangeDetectorRef, AfterViewInit, HostListener, ComponentFactoryResolver, ElementRef, TemplateRef
 } from '@angular/core';
 import * as moment from 'moment';
 import { ModalDialogService } from 'ngx-modal-dialog';
@@ -8,7 +8,7 @@ import { ContextMenuComponent } from 'ngx-contextmenu';
 
 import { Order } from '../../../models/order.model';
 import { OrderDetails } from '../../../models/order-details.model';
-import { OrdersService } from '../../../services/orders.service';
+import { OrdersService, FIXED_HEADER_TOP_POSITION } from '../../../services/orders.service';
 import { OrderItem } from '../../../models/order-item.model';
 import { ClientsService } from '../../../services/client.service';
 import { OrderItemService } from '../../../services/order-item.service';
@@ -36,6 +36,13 @@ export class OrderComponent implements OnInit, AfterViewInit {
   // without this field build --prod throw error and don't build
   @ViewChild('orderMenu') orderMenu: ContextMenuComponent;
 
+  @ViewChild('table') table: ElementRef;
+  @ViewChild('tableHeader') header: TemplateRef<any>;
+  @ViewChild('fixedContainer', { read: ViewContainerRef }) fixedContainer: ViewContainerRef;
+
+  xPos: number;
+  hideFixedHeader = true;
+
   constructor(
     private orderService: OrdersService,
     private clientService: ClientsService,
@@ -43,7 +50,8 @@ export class OrderComponent implements OnInit, AfterViewInit {
     private viewRef: ViewContainerRef,
     private ngxModalDialogService: ModalDialogService,
     private appModalService: AppModalService,
-    private cdRef: ChangeDetectorRef) { }
+    private cdRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     this.orderDetails = this.convert(this.order);
@@ -52,7 +60,21 @@ export class OrderComponent implements OnInit, AfterViewInit {
   // orderMenu field throw error Expression has changed after it was checked, this method fix it
   // todo remove redundant fields and methods
   ngAfterViewInit() {
+    this.fixedContainer.createEmbeddedView(this.header);
     this.cdRef.detectChanges();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const tableOffset = this.table.nativeElement.getBoundingClientRect().top;
+    this.hideFixedHeader = (tableOffset > FIXED_HEADER_TOP_POSITION);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    const tableOffset = this.table.nativeElement.getBoundingClientRect().top;
+    this.hideFixedHeader = (tableOffset > FIXED_HEADER_TOP_POSITION);
+    this.xPos = this.table.nativeElement.getBoundingClientRect().left;
   }
 
   private convert(order: Order): OrderDetails {

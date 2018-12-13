@@ -29,3 +29,10 @@ table tr {
     position: absolute;
     z-index: 100;
 }
+
+#header-fixed-table {
+    position: fixed;
+    top: 40px; 
+    background-color:white;
+    z-index: 1000;
+}
