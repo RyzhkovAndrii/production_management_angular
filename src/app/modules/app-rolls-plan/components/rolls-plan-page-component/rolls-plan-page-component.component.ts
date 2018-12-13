@@ -28,6 +28,9 @@ import {
 import {
   RollPlanOperationSelectModalComponent
 } from '../modals/roll-plan-operation-select-modal/roll-plan-operation-select-modal.component';
+import {
+  SimpleConfirmModalComponent
+} from '../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 
 @Component({
   selector: 'app-rolls-plan-page-component',
@@ -142,7 +145,6 @@ export class RollsPlanPageComponentComponent implements OnInit {
     this.rollsPlanService.getOperationsByRoll(item.batch.rollTypeId, item.batch.date, item.batch.date)
       .subscribe(operations => {
         if (operations.length > 1) {
-
           const data: RollPlanOperationSelectModalData = {
             operations,
             action: (result: Promise < RollPlanOperationResponse > ) => result.then(operation => this.openEditPlanModal(operation, item))
@@ -160,12 +162,6 @@ export class RollsPlanPageComponentComponent implements OnInit {
   }
 
   openEditPlanModal(operation: RollPlanOperationResponse, item: RollPlanModalPrefetchData) {
-    const request: RollPlanOperationRequest = {
-      date: operation.date,
-      rollTypeId: operation.rollTypeId,
-      rollAmount: operation.rollAmount
-    };
-
     const func: (result: Promise < RollPlanOperationRequest > ) => void = result => {
       result.then(request => {
         this.rollsPlanService.putOperation(operation.id, request)
@@ -190,6 +186,50 @@ export class RollsPlanPageComponentComponent implements OnInit {
 
   openSelectDeletePlanModal(item: RollPlanModalPrefetchData) {
     console.log(item);
+    this.rollsPlanService.getOperationsByRoll(item.batch.rollTypeId, item.batch.date, item.batch.date)
+      .subscribe(operations => {
+        if (operations.length > 1) {
+          const data: RollPlanOperationSelectModalData = {
+            operations,
+            action: (result: Promise < RollPlanOperationResponse > ) => result.then(operation => this.openDeletePlanModal(operation))
+          };
+          const options: Partial < IModalDialogOptions < RollPlanOperationSelectModalData >> = {
+            data,
+            title: 'Выбор операции для удаления',
+            childComponent: RollPlanOperationSelectModalComponent
+          }
+          this.ngxModalService.openDialog(this.viewRef, options);
+        } else {
+          this.openDeletePlanModal(operations[0]);
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+  }
+
+  openDeletePlanModal(operation: RollPlanOperationResponse) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any > > = {
+      title: 'Подтвердите удаление операции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.rollsPlanService.deleteOperation(operation.id)
+              .subscribe(data => {
+                this.initData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    }
+    this.ngxModalService.openDialog(this.viewRef, modalOptions);
+
   }
 
   isEmptyBatch = (item: RollPlanModalPrefetchData): boolean => {
