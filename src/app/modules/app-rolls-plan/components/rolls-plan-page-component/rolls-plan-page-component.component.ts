@@ -25,6 +25,9 @@ import {
 import {
   RollPlanOperationModalComponent
 } from '../modals/roll-plan-operation-modal/roll-plan-operation-modal.component';
+import {
+  RollPlanOperationSelectModalComponent
+} from '../modals/roll-plan-operation-select-modal/roll-plan-operation-select-modal.component';
 
 @Component({
   selector: 'app-rolls-plan-page-component',
@@ -145,7 +148,13 @@ export class RollsPlanPageComponentComponent implements OnInit {
           const data: RollPlanOperationSelectModalData = {
             operations,
             action: (result: Promise < RollPlanOperationResponse > ) => result.then(operation => this.openEditPlanModal(operation, item))
+          };
+          const options: Partial < IModalDialogOptions < RollPlanOperationSelectModalData >> = {
+            data,
+            title: 'Выбор операции для редактирования',
+            childComponent: RollPlanOperationSelectModalComponent
           }
+          this.ngxModalService.openDialog(this.viewRef, options);
         } else {
           this.openEditPlanModal(operations[0], item);
         }
