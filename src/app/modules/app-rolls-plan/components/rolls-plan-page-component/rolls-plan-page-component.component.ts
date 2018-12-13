@@ -139,10 +139,8 @@ export class RollsPlanPageComponentComponent implements OnInit {
   }
 
   openSelectEditPlanModal(item: RollPlanModalPrefetchData) {
-    console.log(item);
     this.rollsPlanService.getOperationsByRoll(item.batch.rollTypeId, item.batch.date, item.batch.date)
       .subscribe(operations => {
-        console.log(operations);
         if (operations.length > 1) {
 
           const data: RollPlanOperationSelectModalData = {
