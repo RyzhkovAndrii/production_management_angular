@@ -63,10 +63,7 @@ export class RollsPlanPageComponentComponent implements OnInit {
     this.initDateHeaders();
     this.rollsPlanService.getRollPlansInfo(this.currentDate, this.toDate)
       .subscribe(
-        data => {
-          console.log(data);
-          this.rollssPlanInfo = data
-        },
+        data => this.rollssPlanInfo = data,
         error => this.appModalService.openHttpErrorModal(this.ngxModalService, this.viewRef, error)
       );
   }
@@ -185,7 +182,6 @@ export class RollsPlanPageComponentComponent implements OnInit {
   }
 
   openSelectDeletePlanModal(item: RollPlanModalPrefetchData) {
-    console.log(item);
     this.rollsPlanService.getOperationsByRoll(item.batch.rollTypeId, item.batch.date, item.batch.date)
       .subscribe(operations => {
         if (operations.length > 1) {
