@@ -104,7 +104,6 @@
                           class="col-4 pt-1 pb-0">
                         <input class="form-control input-sm"
                                type="number"
-                               value="{{oldItemDetails.amount | exponent}}"
                                formControlName="editedItemAmount"
                                [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
                         <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
@@ -155,7 +154,6 @@
                           class="col-4 pt-1 pb-0">
                         <input class="form-control input-sm"
                                type="number"
-                               value="{{newItemDetails.amount | exponent}}"
                                formControlName="editedItemAmount"
                                [ngClass]="{'is-invalid': form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine}">
                         <span *ngIf="form.get('editedItemAmount').invalid && form.get('editedItemAmount').pristine"
