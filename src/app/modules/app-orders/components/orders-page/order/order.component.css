@@ -16,7 +16,8 @@
 
 table {
     empty-cells: show;
-    max-width: 8vw;
+    max-width: 8rem;
+    min-width: 8rem;
 }
 
 table th {
@@ -24,8 +25,8 @@ table th {
 }
 
 table td, table th {
-    max-width: 8vw;
-    min-width: 7rem;
+    max-width: 8rem;
+    min-width: 8rem;
 }
 
 table tr {
