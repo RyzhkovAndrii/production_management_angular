@@ -12,6 +12,8 @@
     top: 40px; 
     background-color:white;
     z-index: 900;
+    max-width: 8rem;
+    min-width: 8rem;
 }
 
 table {
