@@ -29,11 +29,13 @@
     </div>
     <div *ngIf="!isOrderListEmpty()" id="page-name" class="row text-center sticky-top mt-0">
       <div class="col-12 align-self-center">
-        <button class="btn btn-outline-secondary btn-sm px-0 no-borders mr-2 ml-1" [hidden]="!showOrderTableScrollButtons" (click)="changeLeft()">
+        <button class="btn btn-outline-secondary btn-sm px-0 no-borders mr-2 ml-1" [hidden]="!showOrderTableScrollButtons"
+          (click)="changeLeft()">
           <i class="material-icons">keyboard_arrow_left</i>
         </button>
         <span class="align-middle">Список заказов</span>
-        <button class="btn btn-outline-secondary btn-sm px-0 no-borders mr-2 ml-1" [hidden]="!showOrderTableScrollButtons" (click)="changeRight()">
+        <button class="btn btn-outline-secondary btn-sm px-0 no-borders mr-2 ml-1" [hidden]="!showOrderTableScrollButtons"
+          (click)="changeRight()">
           <i class="material-icons">keyboard_arrow_right</i>
         </button>
       </div>
@@ -41,43 +43,46 @@
     <div *ngIf="!isOrderListEmpty()" class="row">
       <div class="col-12">
         <div id="table-container">
+          <div id="background-filled-container" style="margin-left: -15px;">
+            <div id="background-filled-head"></div>
+            <div *ngFor="let product of productTypes" id="background-filled-body"></div>
+          </div>
           <div id="product-table-container">
-            <div id="product-table-content">
-              <table class="table-bordered" #table>
-                <thead>
-                  <tr class="table-header">
-                    <th colspan="3">Клиент</th>
-                  </tr>
-                  <tr class="table-header">
-                    <th colspan="3">Город</th>
-                  </tr>
-                  <tr class="table-header">
-                    <th colspan="3">Дата доставки</th>
-                  </tr>
-                  <tr class="table-header">
-                    <th colspan="3">Статус</th>
-                  </tr>
-                  <tr style="height: 0.2rem;"></tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let productType of productTypes" class="table-header">
-                    <th style="width: 10rem; min-width: 10rem;">{{productType.name}}</th>
-                    <th>{{productType.weight}}</th>
-                    <th>
-                      <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <!-- <div id="product-table-content"> -->
+            <table class="table-bordered" #table>
+              <thead>
+                <tr class="table-header">
+                  <th colspan="3">Клиент</th>
+                </tr>
+                <tr class="table-header">
+                  <th colspan="3">Город</th>
+                </tr>
+                <tr class="table-header">
+                  <th colspan="3">Дата доставки</th>
+                </tr>
+                <tr class="table-header">
+                  <th colspan="3">Статус</th>
+                </tr>
+                <tr style="height: 0.2rem;"></tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let productType of productTypes" class="table-header">
+                  <th style="width: 10rem; min-width: 10rem;">{{productType.name}}</th>
+                  <th>{{productType.weight}}</th>
+                  <th>
+                    <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+            <!-- </div> -->
           </div>
           <div id="orders-leftover-container">
-            <div id="orders-leftover-content">
-              <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
-            </div>
+            <!-- <div id="orders-leftover-content"> -->
+            <app-order-leftover-product [producTypeList]="productTypes"></app-order-leftover-product>
+            <!-- </div> -->
           </div>
-          <div id="orders-table-container" (scroll)="onOrderTableScroll($event)" #orderTableContainer
-            [style.left.px]="xPosOrderTableContainer">
+          <div id="orders-table-container" (scroll)="onOrderTableScroll($event)" #orderTableContainer [style.left.px]="xPosOrderTableContainer">
             <div id="orders-table-content">
               <div *ngFor="let order of orderList">
                 <app-order [order]="order" [productTypeList]="productTypes" [ordersPageViewRef]="ordersPageViewRef"
@@ -87,15 +92,18 @@
             </div>
           </div>
           <div id="orders-leftover-container">
-            <div id="orders-leftover-content">
-              <app-order-leftover-product #lastLeftover [isLastLeftOver]="true" [producTypeList]="productTypes">
-              </app-order-leftover-product>
-            </div>
+            <!-- <div id="orders-leftover-content"> -->
+            <app-order-leftover-product #lastLeftover [isLastLeftOver]="true" [producTypeList]="productTypes">
+            </app-order-leftover-product>
+            <!-- </div> -->
+          </div>
+          <div id="background-filled-container" style="margin-right: -15px;">
+            <div id="background-filled-head"></div>
+            <div *ngFor="let product of productTypes" id="background-filled-body"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row"></div>
   </div>
   <table class="table-bordered" id="header-fixed-table" [hidden]="isOrderListEmpty() || hideFixedHeader">
     <thead>
