@@ -19,7 +19,7 @@ import { compareProductTypes } from '../../../../../app-utils/app-comparators';
   styleUrls: ['./order-create.component.css']
 })
 export class OrderCreateComponent implements OnInit {
-  
+
   readonly MIN_PRODUCT_AMOUNT = 0.001;
   readonly DECIMAL_PLACES = 3; // todo common option
   readonly NAME_MAX_LENGTH = 50;
@@ -37,18 +37,18 @@ export class OrderCreateComponent implements OnInit {
   @Output() onCancel = new EventEmitter<any>();
 
   form: FormGroup = new FormGroup({
-    "client": new FormControl(null, [Validators.required]),
-    "city": new FormControl(null, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
-    "date": new FormControl(null, [Validators.required]),
-    "important": new FormControl(false, []),
-    "productType": new FormControl(null, [Validators.required]),
-    "itemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
-    "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+    'client': new FormControl(null, [Validators.required]),
+    'city': new FormControl(null, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
+    'date': new FormControl(null, [Validators.required]),
+    'important': new FormControl(false, []),
+    'productType': new FormControl(null, [Validators.required]),
+    'itemAmount': new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+    'editedItemAmount': new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
   });
 
-  isCreated: boolean = false;
+  isCreated = false;
   showAddOrderItemErrors = false;
-  editedNewItemIndex: number = -1;
+  editedNewItemIndex = -1;
 
   constructor(
     private orderService: OrdersService,
@@ -64,17 +64,17 @@ export class OrderCreateComponent implements OnInit {
 
   submit() {
     const { client, city, date, important } = this.form.value;
-    let order = new Order(client, city, date, important, null);
-    let newItemList: OrderItem[] = [];
+    const order = new Order(client, city, date, important, null);
+    const newItemList: OrderItem[] = [];
     this.orderService
       .save(order)
       .subscribe(
-        order => {
+        respOrder => {
           this.newItemDetailsList
             .forEach(itemDetails => {
-              const item: OrderItem = new OrderItem(order.id, itemDetails.productType.id, itemDetails.amount);
+              const item: OrderItem = new OrderItem(respOrder.id, itemDetails.productType.id, itemDetails.amount);
               newItemList.push(item);
-            })
+            });
           this.orderItemService
             .saveOrderItemList(newItemList)
             .subscribe(
@@ -83,7 +83,7 @@ export class OrderCreateComponent implements OnInit {
                 this.newItemDetailsList = [];
                 this.productTypeListForSelect = this.productTypeList;
                 this.showCreateMessage();
-                this.onSubmit.emit(order);
+                this.onSubmit.emit(respOrder);
               },
               error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
             );
@@ -105,7 +105,7 @@ export class OrderCreateComponent implements OnInit {
       const { productType, itemAmount } = this.form.value;
       const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === productType);
       const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
-      const itemDetails = { "productType": productTypeDetails, "amount": integerItemAmount };
+      const itemDetails = { 'productType': productTypeDetails, 'amount': integerItemAmount };
       this.newItemDetailsList.push(itemDetails);
       this.removeOptionFromProductTypeSelect(itemDetails);
       this.resetAddOrderItemForm();
@@ -114,12 +114,15 @@ export class OrderCreateComponent implements OnInit {
 
   editNewItem(i: number) {
     this.editedNewItemIndex = i;
-    this.form.get("editedItemAmount").markAsDirty();
+    this.form.get('editedItemAmount').markAsDirty();
+    const integerAmount = this.newItemDetailsList[this.editedNewItemIndex].amount;
+    const exponent = new Decimal(integerAmount).times(Math.pow(10, (-1) * this.DECIMAL_PLACES));
+    this.form.get('editedItemAmount').patchValue(exponent.toFixed(this.DECIMAL_PLACES));
   }
 
   submitEditNewItem() {
-    if (this.form.get("editedItemAmount").invalid) {
-      this.form.get("editedItemAmount").markAsPristine();
+    if (this.form.get('editedItemAmount').invalid) {
+      this.form.get('editedItemAmount').markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
       const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
@@ -150,17 +153,17 @@ export class OrderCreateComponent implements OnInit {
   }
 
   private resetAddOrderItemForm() {
-    this.form.get("productType").reset();
-    this.form.get("itemAmount").reset();
+    this.form.get('productType').reset();
+    this.form.get('itemAmount').reset();
   }
 
   private setAddOrderItemFormPristine() {
-    this.form.get("productType").markAsPristine();
-    this.form.get("itemAmount").markAsPristine();
+    this.form.get('productType').markAsPristine();
+    this.form.get('itemAmount').markAsPristine();
   }
 
   private isAddOrderItemFormInvalid() {
-    return this.form.get("productType").invalid || this.form.get("itemAmount").invalid;
+    return this.form.get('productType').invalid || this.form.get('itemAmount').invalid;
   }
 
   private showCreateMessage() {

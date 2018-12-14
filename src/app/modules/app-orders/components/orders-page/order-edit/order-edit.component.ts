@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ViewContainerRef, OnDestroy } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ModalDialogService } from 'ngx-modal-dialog';
+import { Observable } from 'rxjs/Observable';
 import Decimal from 'decimal.js';
 
 import { Client } from '../../../models/client.model';
@@ -12,7 +13,6 @@ import { OrderItemService } from '../../../services/order-item.service';
 import { OrderItem } from '../../../models/order-item.model';
 import { validateDecimalPlaces } from '../../../../../app-utils/app-validators';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs';
 import { AppModalService } from '../../../../app-shared/services/app-modal.service';
 import { SimpleConfirmModalComponent } from '../../../../app-shared/components/simple-confirm-modal/simple-confirm-modal.component';
 import { compareProductTypes } from '../../../../../app-utils/app-comparators';
@@ -22,7 +22,7 @@ import { compareProductTypes } from '../../../../../app-utils/app-comparators';
   templateUrl: './order-edit.component.html',
   styleUrls: ['./order-edit.component.css']
 })
-export class OrderEditComponent implements OnInit {
+export class OrderEditComponent implements OnInit, OnDestroy {
 
   readonly MIN_PRODUCT_AMOUNT = 0.001;
   readonly DECIMAL_PLACES = 3; // todo common option
@@ -49,7 +49,7 @@ export class OrderEditComponent implements OnInit {
 
   form: FormGroup;
 
-  isEdited: boolean = false;
+  isEdited = false;
   showAddOrderItemErrors = false;
   editedNewItemIndex = -1;
   editedOldItemIndex = -1;
@@ -67,13 +67,13 @@ export class OrderEditComponent implements OnInit {
   ngOnInit() {
     this.productTypeListForSelect = this.productTypeList;
     this.form = new FormGroup({
-      "client": new FormControl(this.order.client.id, [Validators.required]),
-      "city": new FormControl(this.order.city, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
-      "date": new FormControl(this.order.deliveryDate, [Validators.required]),
-      "important": new FormControl(this.order.isImportant, []),
-      "productType": new FormControl(null, [Validators.required]),
-      "itemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
-      "editedItemAmount": new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
+      'client': new FormControl(this.order.client.id, [Validators.required]),
+      'city': new FormControl(this.order.city, [Validators.required, Validators.maxLength(this.NAME_MAX_LENGTH)]),
+      'date': new FormControl(this.order.deliveryDate, [Validators.required]),
+      'important': new FormControl(this.order.isImportant, []),
+      'productType': new FormControl(null, [Validators.required]),
+      'itemAmount': new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces]),
+      'editedItemAmount': new FormControl(null, [Validators.required, Validators.min(this.MIN_PRODUCT_AMOUNT), validateDecimalPlaces])
     });
     this.fillOldOrderItemList();
   }
@@ -108,7 +108,7 @@ export class OrderEditComponent implements OnInit {
                       this.onSubmit.emit(order);
                     },
                     error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
-                  )
+                  );
               },
               error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
             );
@@ -130,7 +130,7 @@ export class OrderEditComponent implements OnInit {
       const { productType, itemAmount } = this.form.value;
       const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === productType);
       const integerItemAmount = new Decimal(itemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
-      const itemDetails = { "productType": productTypeDetails, "amount": integerItemAmount };
+      const itemDetails = { 'productType': productTypeDetails, 'amount': integerItemAmount };
       this.newItemDetailsList.push(itemDetails);
       this.removeOptionFromProductTypeSelect(itemDetails.productType);
       this.resetAddOrderItemForm();
@@ -140,13 +140,19 @@ export class OrderEditComponent implements OnInit {
   editNewItemOnForm(i: number) {
     this.editedNewItemIndex = i;
     this.editedOldItemIndex = -1;
-    this.form.get("editedItemAmount").markAsDirty();
+    this.form.get('editedItemAmount').markAsDirty();
+    const integerAmount = this.newItemDetailsList[this.editedNewItemIndex].amount;
+    const exponent = new Decimal(integerAmount).times(Math.pow(10, (-1) * this.DECIMAL_PLACES));
+    this.form.get('editedItemAmount').patchValue(exponent.toFixed(this.DECIMAL_PLACES));
   }
 
   editOldItemOnForm(i: number) {
     this.editedOldItemIndex = i;
-    this.editedNewItemIndex = -1
-    this.form.get("editedItemAmount").markAsDirty();
+    this.editedNewItemIndex = -1;
+    this.form.get('editedItemAmount').markAsDirty();
+    const integerAmount = this.oldItemDetailsList[this.editedOldItemIndex].amount;
+    const exponent = new Decimal(integerAmount).times(Math.pow(10, (-1) * this.DECIMAL_PLACES));
+    this.form.get('editedItemAmount').patchValue(exponent.toFixed(this.DECIMAL_PLACES));
   }
 
   removeNewItemFromForm(i: number) {
@@ -161,8 +167,8 @@ export class OrderEditComponent implements OnInit {
   }
 
   submitEditNewItem() {
-    if (this.form.get("editedItemAmount").invalid) {
-      this.form.get("editedItemAmount").markAsPristine();
+    if (this.form.get('editedItemAmount').invalid) {
+      this.form.get('editedItemAmount').markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
       const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
@@ -172,8 +178,8 @@ export class OrderEditComponent implements OnInit {
   }
 
   submitEditOldItem() {
-    if (this.form.get("editedItemAmount").invalid) {
-      this.form.get("editedItemAmount").markAsPristine();
+    if (this.form.get('editedItemAmount').invalid) {
+      this.form.get('editedItemAmount').markAsPristine();
     } else {
       const { editedItemAmount } = this.form.value;
       const integerItemAmount = new Decimal(editedItemAmount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
@@ -208,10 +214,10 @@ export class OrderEditComponent implements OnInit {
       this.order.orderItemList.forEach(orderItem => {
         if (orderItem !== null) {
           const productTypeDetails: ProductTypeResponse = this.productTypeList.find(type => type.id === orderItem.productTypeId);
-          this.oldItemDetailsList.push({ "id": orderItem.id, "productType": productTypeDetails, "amount": orderItem.amount });
+          this.oldItemDetailsList.push({ 'id': orderItem.id, 'productType': productTypeDetails, 'amount': orderItem.amount });
           this.productTypeListForSelect = this.productTypeListForSelect.filter(type => type.id !== productTypeDetails.id);
         }
-      })
+      });
     }
   }
 
@@ -228,7 +234,7 @@ export class OrderEditComponent implements OnInit {
   }
 
   private getOrderItemsForSave(): OrderItem[] {
-    let newItemList: OrderItem[] = [];
+    const newItemList: OrderItem[] = [];
     this.newItemDetailsList
       .forEach(itemDetails => {
         const item: OrderItem = new OrderItem(this.order.id, itemDetails.productType.id, itemDetails.amount);
@@ -238,7 +244,7 @@ export class OrderEditComponent implements OnInit {
   }
 
   private getOrderItemsForEdit(): OrderItem[] {
-    let editedItemList: OrderItem[] = [];
+    const editedItemList: OrderItem[] = [];
     this.itemDetailsListForEdit
       .forEach(itemDetails => {
         const item: OrderItem = new OrderItem(
@@ -263,17 +269,17 @@ export class OrderEditComponent implements OnInit {
   }
 
   private resetAddOrderItemForm() {
-    this.form.get("productType").reset();
-    this.form.get("itemAmount").reset();
+    this.form.get('productType').reset();
+    this.form.get('itemAmount').reset();
   }
 
   private setAddOrderItemFormPristine() {
-    this.form.get("productType").markAsPristine();
-    this.form.get("itemAmount").markAsPristine();
+    this.form.get('productType').markAsPristine();
+    this.form.get('itemAmount').markAsPristine();
   }
 
   private isAddOrderItemFormInvalid() {
-    return this.form.get("productType").invalid || this.form.get("itemAmount").invalid;
+    return this.form.get('productType').invalid || this.form.get('itemAmount').invalid;
   }
 
 }

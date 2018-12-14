@@ -8,6 +8,8 @@ import { Order } from '../models/order.model';
 import { formatDate, formatDateServerToBrowser, formatDateBrowserToServer } from '../../../app-utils/app-date-utils';
 import appHeaders from '../../../app-utils/app-headers';
 
+export const FIXED_HEADER_TOP_POSITION = 30;
+
 @Injectable()
 export class OrdersService {
 

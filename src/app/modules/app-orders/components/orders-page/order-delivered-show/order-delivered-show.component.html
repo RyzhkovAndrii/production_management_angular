@@ -1,32 +1,18 @@
-<form [formGroup]="form">
-  <div class="row align-items-center"
-       style="margin-top:0px">
-    <div class="col-6"
-         style="padding-right:0px">
-      <input type="checkbox"
-             class="form-check-input custom-checkbox"
-             (change)="toggleDeliveredOrdersVisible($event)">
-      <span *ngIf="!isDeliveredOrdersVisible"
-            style="font-size: 0.9rem; color: #bbb">
-        Отобразить доставленные заказы
-      </span>
-      <span *ngIf="isDeliveredOrdersVisible"
-            style="font-size: 0.9rem"> Отобразить заказы, доставленные c </span>
-    </div>
-    <div class="col-4"
-         style="padding-left:0px">
-      <input *ngIf="isDeliveredOrdersVisible"
-             type="date"
-             class="form-control form-control-sm"
-             formControlName="startDate"
-             max="{{now}}"
-             [ngClass]="{'is-invalid': form.get('startDate').invalid}">
-    </div>
-    <div class="col-2">
-      <button *ngIf="isDeliveredOrdersVisible"
-              class="btn btn-outline-dark btn-sm"
-              [disabled]="form.invalid"
-              (click)="submit()">Изменить дату</button>
-    </div>
+<form [formGroup]="form" class="form-inline">
+  <div>
+    <input type="checkbox" class="form-check-input custom-checkbox" (change)="toggleDeliveredOrdersVisible($event)">
+    <span *ngIf="!isDeliveredOrdersVisible" style="font-size: 0.9rem; color: #bbb">
+      Отобразить доставленные заказы
+    </span>
+    <span *ngIf="isDeliveredOrdersVisible" style="font-size: 0.9rem"> Отобразить заказы, доставленные c </span>
+  </div>
+  <div>
+    <input *ngIf="isDeliveredOrdersVisible" type="date" class="form-control form-control-sm ml-2" formControlName="startDate"
+      max="{{now}}" [ngClass]="{'is-invalid': form.get('startDate').invalid}">
+  </div>
+  <div>
+    <button *ngIf="isDeliveredOrdersVisible" class="btn btn-outline-dark btn-sm ml-2" [disabled]="form.invalid" (click)="submit()">
+      Изменить дату
+    </button>
   </div>
 </form>

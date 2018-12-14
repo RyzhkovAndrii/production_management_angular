@@ -1,79 +1,65 @@
-<table class="table-bordered table-striped"
-       [contextMenu]="orderMenu"
-       [ngClass]="{'is-delivered': orderDetails.isDelivered}">
-  <thead>
-    <tr>
-      <th>
-        <div class="overflow-text">
-          <span>{{orderDetails.client?.name}}</span>
-        </div>
-      </th>
-    </tr>
-    <tr>
-      <th>
-        <div class="overflow-text">
-          <span>{{orderDetails.city}}</span>
-        </div>
-      </th>
-    </tr>
-    <tr>
-      <th>{{orderDetails.deliveryDate | date: 'dd.MM.yyyy'}}</th>
-    </tr>
-    <tr>
-      <th>
-        <i *ngIf="orderDetails.isImportant"
-           class="material-icons"
-           [ngClass]="{'icon-impotant': !orderDetails.isDelivered,
+<table class="table-bordered table-striped" [contextMenu]="orderMenu" [ngClass]="{'is-delivered': orderDetails.isDelivered}"
+  #table>
+  <ng-template #tableHeader [ngIf]="true">
+    <thead class="fixed-header">
+      <tr>
+        <th>
+          <div class="overflow-text">
+            <span>{{orderDetails.client?.name}}</span>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <div class="overflow-text">
+            <span>{{orderDetails.city}}</span>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th>{{orderDetails.deliveryDate | date: 'dd.MM.yyyy'}}</th>
+      </tr>
+      <tr>
+        <th>
+          <i *ngIf="orderDetails.isImportant" class="material-icons" [ngClass]="{'icon-impotant': !orderDetails.isDelivered,
                        'icon-delivered': orderDetails.isDelivered}">error_outline</i>
-        <i *ngIf="orderDetails.isOverdue && !orderDetails.isDelivered"
-           class="material-icons"
-           [ngClass]="{'icon-overdue': !orderDetails.isDelivered,
+          <i *ngIf="orderDetails.isOverdue && !orderDetails.isDelivered" class="material-icons" [ngClass]="{'icon-overdue': !orderDetails.isDelivered,
                        'icon-delivered': orderDetails.isDelivered}">alarm</i>
-        <span *ngIf="orderDetails.isDelivered"
-              class="is-delivered">{{orderDetails.actualDeliveryDate | date:'dd.MM.yyyy'}}</span>
-      </th>
-    </tr>
-    <tr style="height: 0.2rem;"></tr>
-  </thead>
+          <span *ngIf="orderDetails.isDelivered" class="is-delivered">{{orderDetails.actualDeliveryDate |
+            date:'dd.MM.yyyy'}}</span>
+        </th>
+      </tr>
+      <tr style="height: 0.2rem;"></tr>
+    </thead>
+  </ng-template>
   <tbody>
     <tr *ngFor="let orderItem of orderDetails.orderItemList">
       <td>{{orderItem?.amount | exponent}}</td>
     </tr>
   </tbody>
 </table>
+<table class="table-bordered table-striped" id="header-fixed-table" [style.left.px]="xPos" [hidden]="hideFixedHeader" [ngClass]="{'is-delivered': orderDetails.isDelivered}">
+  <ng-container #fixedContainer></ng-container>
+</table>
 
 
 <!-- Context menu -->
 <context-menu #orderMenu *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']">
   <div>
-    <ng-template *ngIf="!orderDetails.isDelivered"
-                 contextMenuItem
-                 let-item
-                 (execute)="openOrderEditForm()">
+    <ng-template *ngIf="!orderDetails.isDelivered" contextMenuItem let-item (execute)="openOrderEditForm()">
       Редактировать заказ
     </ng-template>
-    <ng-template *ngIf="!orderDetails.isDelivered"
-                 contextMenuItem
-                 divider="true">
+    <ng-template *ngIf="!orderDetails.isDelivered" contextMenuItem divider="true">
     </ng-template>
-    <ng-template contextMenuItem
-                 let-item
-                 (execute)="openOrderDelConfirm()">
+    <ng-template contextMenuItem let-item (execute)="openOrderDelConfirm()">
       Удалить заказ
     </ng-template>
-    <ng-template contextMenuItem
-                 divider="true">
+    <ng-template contextMenuItem divider="true">
     </ng-template>
-    <ng-template *ngIf="!orderDetails.isDelivered"
-                 contextMenuItem
-                 let-item
-                 (execute)="openOrderDeliveryConfirm()">
+    <ng-template *ngIf="!orderDetails.isDelivered" contextMenuItem let-item (execute)="openOrderDeliveryConfirm()">
       Заказ доставлен
     </ng-template>
-    <ng-template *ngIf="orderDetails.isDelivered"
-                 contextMenuItem
-                 let-item
-                 (execute)="returnOrder()">
+    <ng-template *ngIf="orderDetails.isDelivered" contextMenuItem let-item (execute)="returnOrder()">
       Вернуть из доставки
     </ng-template>
   </div>

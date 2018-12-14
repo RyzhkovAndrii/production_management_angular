@@ -1,3 +1,14 @@
+/* #top-menu {
+    position: fixed;
+    top: 64px;
+    z-index: 1000;
+    height: 3.2rem;
+    width: 100%;
+    background-color: #fff;
+    padding: 0.5rem 0;
+    margin-bottom: 0;
+} */
+
 table {
     empty-cells: show;
 }
@@ -10,10 +21,7 @@ table td, table th {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    min-width: 3rem;
-    max-width: 8rem;
+    width: 3rem;
 }
 
 table td:hover, table th:hover {
@@ -25,25 +33,19 @@ table td:hover, table th:hover {
 }
 
 #product-table-container {
-    min-width: 14.5rem;
-    margin-right: 0.2rem;
+    min-width: 16rem;
+    /* margin-right: 0.2rem; */
 }
 
 #orders-table-container {
     overflow-x: auto;
     display: flex;
-    margin: 0 0.2rem;
+    /* margin: 0 0.2rem; */
     min-width: 7rem;
 }
 
 #orders-table-content {
     display: flex;
-}
-
-#orders-table-container, #orders-table-content,
-#orders-leftover-container, #orders-leftover-content,
-#product-table-container, #product-table-content {
-    transform: scaleY(-1);
 }
 
 .row {
@@ -54,4 +56,44 @@ table td:hover, table th:hover {
     padding: 0rem 0.5rem;
     border-width: 0.04rem;
     font-size: 12px;
+}
+
+#header-fixed-table {
+    position: fixed;
+    top: 40px; 
+    background-color:white;
+    z-index: 1000;
+}
+
+#header-fixed-table th {
+    width: 16rem;
+}
+
+#page-name {
+    font-weight: bold;
+    height: 40px;
+    background-color: white;
+    letter-spacing: 0.8rem;
+}
+
+.no-borders {
+    border: none;
+}
+
+#background-filled-container {
+    width: 15px;
+    min-width: 15px;
+    z-index: 1030;
+}
+
+#background-filled-head {
+    background-color: white;
+    height: 7.6rem;
+    width: 15px;
+}
+
+#background-filled-body {
+    background-color: white;
+    height: 1.9rem;
+    width: 15px;
 }
