@@ -23,6 +23,8 @@ import { AuthGuard } from './modules/app-security/guards/auth.guard';
 import { SystemModule } from './modules/app-system/system.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RollsPlanUrlsService } from './modules/app-rolls-plan/services/rolls-plan-urls.service';
+import { RollsPlanService } from './modules/app-rolls-plan/services/rolls-plan.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,6 +47,8 @@ import { AppComponent } from './app.component';
     StandardsService,
     ProductsPlanUrlsService,
     ProductsPlanService,
+    RollsPlanUrlsService,
+    RollsPlanService,
     AuthorizationService,
     AuthenticationService,
     SecurityModuleUrlService,

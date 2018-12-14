@@ -1,0 +1,129 @@
+<div class="container-fluid mt-2">
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+        <tr class="table-header">
+          <th scope="col" class="align-middle" colspan="5">
+            Рулон
+          </th>
+          <th scope="col" class="align-middle">
+          </th>
+          <th scope="col" class="align-middle" [attr.colspan]="isFirstInOneMoth() ? DATE_HEADER_SIZE : secondMonthIndex">
+            <small>{{ firstWeekHeaderDates[0] | moment:'MMM YY' }}</small>
+          </th>
+          <th *ngIf="!isFirstInOneMoth()" scope="col" class="align-middle" [attr.colspan]="DATE_HEADER_SIZE - secondMonthIndex">
+            <small>{{ firstWeekHeaderDates[secondMonthIndex] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle">
+          </th>
+          <th scope="col" class="align-middle">
+            <small>с планом</small>
+          </th>
+          <th *ngIf="!isSecondInOneMoth()" scope="col" class="align-middle" [attr.colspan]="secondMonthIndex - DATE_HEADER_SIZE">
+            <small>{{ secondWeekHeaderDates[secondMonthIndex - DATE_HEADER_SIZE - 1] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle" [attr.colspan]="isSecondInOneMoth() ? DATE_HEADER_SIZE : DATE_HEADER_SIZE - (secondMonthIndex - DATE_HEADER_SIZE)">
+            <small>{{ secondWeekHeaderDates[secondWeekHeaderDates.length - 1] | moment:'MMM YY' }}</small>
+          </th>
+          <th scope="col" class="align-middle">
+          </th>
+          <th scope="col" class="align-middle">
+            <small>c планом</small>
+          </th>
+        </tr>
+        <tr class="table-header">
+          <th scope="col">Примечание</th>
+          <th scope="col">Толщина</th>
+          <th scope="col">Вес</th>
+          <th scope="col">Длина</th>
+          <th scope="col" class="align-middle">Цвет</th>
+          <th scope="col" class="align-middle">
+            Текущий остаток
+          </th>
+          <th scope="col" *ngFor="let item of firstWeekHeaderDates" class="align-middle">
+            {{ item | moment:'DD' }}
+          </th>
+          <th scope="col" class="align-middle">
+            Остаток через неделю
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через неделю
+            </div>
+          </th>
+          <th scope="col" *ngFor="let item of secondWeekHeaderDates" class="align-middle">
+            {{ item | moment:'DD' }}
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через 2 недели
+            </div>
+          </th>
+          <th scope="col" class="align-middle">
+            <div>
+              Остаток через 2 недели
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let info of sortByColorThicknessRollId(rollssPlanInfo)">
+          <th scope="row" class="row-name">{{ info.rollType.note }}</th>
+          <th scope="row" class="row-name">
+            {{ info.rollType.thickness }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ getWeight(info.rollType) }}
+          </th>
+          <th scope="row" class="row-name">
+            {{ info.rollType.length }}
+          </th>
+          <th scope="row" class="row-name">
+            <app-circle [color]="info.rollType.colorCode"></app-circle>
+          </th>
+          <td class="w-8">
+            {{ info.currentRollLeftover.amount }}
+          </td>
+          <td class="w-3" *ngFor="let batch of getBatches(info.planBatches); index as i" [contextMenu]="plansMenu"
+            [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
+            <div *ngIf="batch?.manufacturedAmount != 0 || batch?.usedAmount != 0">
+              {{ batch?.manufacturedAmount }} <span>/</span> {{ batch?.usedAmount }}
+            </div>
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverWithoutPlans.amount }}
+          </td>
+          <td class="w-8">
+            {{ info.weeklyLeftoverTotal.amount }}
+          </td>
+          <td class="w-3" *ngFor="let batch of getBatches(info.planBatches, DATE_HEADER_SIZE); index as i"
+            [contextMenu]="plansMenu" [contextMenuSubject]="{rollType: info.rollType, batch: batch, index: i}">
+            <div *ngIf="batch?.manufacturedAmount != 0 || batch?.usedAmount != 0">
+              {{ batch?.manufacturedAmount }} <span>/</span> {{ batch?.usedAmount }}
+            </div>
+          </td>
+          <td class="w-8">
+            {{ info.inTwoWeeksLeftoverWithoutPlans.amount }}
+          </td>
+          <td class="w-8">
+            {{ info.inTwoWeeksLeftoverTotal.amount }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<context-menu *appCanAccess="['ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" #plansMenu>
+  <ng-template contextMenuItem let-item (execute)="openCreatePlanModal($event.item)">
+    Создать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem (execute)="openSelectEditPlanModal($event.item)" [enabled]="isEmptyBatch">
+    Редактировать
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openSelectDeletePlanModal($event.item)" [enabled]="isEmptyBatch">
+    Удалить
+  </ng-template>
+</context-menu>

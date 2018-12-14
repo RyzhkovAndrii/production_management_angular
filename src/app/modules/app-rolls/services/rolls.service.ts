@@ -9,9 +9,6 @@ import {
   HttpParams
 } from '@angular/common/http';
 import {
-  flatMap
-} from 'rxjs/operators';
-import {
   from
 } from 'rxjs/observable/from';
 import { of
@@ -142,6 +139,15 @@ export class RollsService {
       })
       .map((value: RollTotalLeftOverResponse) => value.total)
       .catch(httpErrorHandle);
+  }
+
+  getLeftovers(date: string): Observable < RollLeftover[] > {
+    const params = new HttpParams()
+      .set('date', date);
+    return this.http.get(this.urls.rollLeftoverUrl, {
+      headers: appHeaders,
+      params: params
+    }).catch(httpErrorHandle);
   }
 
   postRollType(rollType: RollTypeDTO, daysInTable: number, restDate: Date, toDate: Date): Observable < RollInfo > {
