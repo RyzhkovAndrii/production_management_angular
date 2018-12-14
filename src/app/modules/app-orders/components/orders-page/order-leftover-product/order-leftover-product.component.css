@@ -26,8 +26,9 @@ table tr {
 }
 
 #datepicker-container {
-    position: absolute;
-    z-index: 100;
+    position: fixed;
+    z-index: 1035;
+    top: 3rem;
 }
 
 #header-fixed-table {
