@@ -15,4 +15,4 @@ import { RollsReportPageComponent } from './rolls-report-page/rolls-report-page.
         RollsReportPageComponent
     ]
 })
-export class SystemModule { }
+export class RollsReportModule { }
