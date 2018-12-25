@@ -93,3 +93,14 @@ export function compareProductTypes(first: ProductTypeResponse, second: ProductT
   }
   return comparedColor;
 }
+
+export function compareRollTypes(first: RollType, second: RollType): number {
+  const comparedColor = compareColors(first.colorCode, second.colorCode);
+  if (comparedColor === 0) {
+    if (first.thickness === second.thickness) {
+      return first.id - second.id;
+    }
+    return first.thickness - second.thickness;
+  }
+  return comparedColor;
+}
