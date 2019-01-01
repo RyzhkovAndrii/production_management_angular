@@ -22,6 +22,7 @@ interface RollReportTableRow {
 export class RollsReportPageComponent implements OnInit {
 
   reportsTable: RollReportTableRow[] = [];
+  totalReport: RollReport = new RollReport();
 
   readonly now: string = moment(new Date()).format('YYYY-MM-DD');
   from: Date;
@@ -50,6 +51,7 @@ export class RollsReportPageComponent implements OnInit {
     this.rollsReportService
       .getAll(from, to)
       .subscribe(reports => {
+        this.computeTotal(reports);
         Observable.forkJoin(reports.map(report => this.rollService.getRollType(report.rollTypeId)))
           .subscribe(rolls => {
             this.reportsTable = rolls
@@ -86,6 +88,15 @@ export class RollsReportPageComponent implements OnInit {
     this.from = new Date(fromDate);
     this.to = new Date(toDate);
     this.loadData(this.from, this.to);
+  }
+
+  private computeTotal(reports: RollReport[]) {
+    this.totalReport.actualAmount = 0;
+    this.totalReport.planAmount = 0;
+    reports.forEach(report => {
+      this.totalReport.actualAmount += report.actualAmount;
+      this.totalReport.planAmount += report.planAmount;
+    });
   }
 
 }

@@ -69,6 +69,15 @@
             <td *ngIf="tableRow.report.planAmount"> {{ getDeviationInPercent(tableRow.report) }} </td>
             <td *ngIf="!tableRow.report.planAmount"> - </td>
           </tr>
+          <tr style="height: 0.2rem;"></tr>
+          <tr>
+            <td colspan=5><strong>Итого</strong></td>
+            <td><strong>{{ totalReport.planAmount | exponent }}</strong></td>
+            <td><strong>{{ totalReport.actualAmount | exponent }}</strong></td>
+            <td><strong>{{ getDeviation(totalReport) | exponent }}</strong></td>
+            <td *ngIf="totalReport.planAmount"><strong>{{ getDeviationInPercent(totalReport) }}</strong></td>
+            <td *ngIf="!totalReport.planAmount"><strong>-</strong></td>
+          </tr>
         </tbody>
       </table>
     </div>
