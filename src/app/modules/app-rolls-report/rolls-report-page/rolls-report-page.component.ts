@@ -46,6 +46,7 @@ export class RollsReportPageComponent implements OnInit {
   }
 
   private loadData(from: Date, to: Date) {
+    this.reportsTable = [];
     this.rollsReportService
       .getAll(from, to)
       .subscribe(reports => {
