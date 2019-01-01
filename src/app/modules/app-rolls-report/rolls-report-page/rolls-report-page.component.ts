@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import moment = require('moment');
 
 import { RollsService } from '../../app-rolls/services/rolls.service';
@@ -33,8 +34,11 @@ export class RollsReportPageComponent implements OnInit {
 
   constructor(
     private rollService: RollsService,
-    private rollsReportService: RollsReportService
-  ) { }
+    private rollsReportService: RollsReportService,
+    private title: Title
+  ) {
+    this.title.setTitle('Отчет по рулонам');
+  }
 
   ngOnInit() {
     this.from = new Date(new Date().setMonth(new Date().getMonth() - 1));
@@ -79,7 +83,7 @@ export class RollsReportPageComponent implements OnInit {
   }
 
   changeDate() {
-    const { fromDate, toDate} = this.dateForm.value;
+    const { fromDate, toDate } = this.dateForm.value;
     if (new Date(fromDate) > new Date(toDate)) {
       this.dateRangeError = true;
       return;
