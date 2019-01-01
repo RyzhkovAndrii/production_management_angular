@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import moment = require('moment');
 
 import { RollsService } from '../../app-rolls/services/rolls.service';
 import { RollsReportService } from '../services/rolls-report.service';
@@ -22,9 +23,12 @@ export class RollsReportPageComponent implements OnInit {
 
   reportsTable: RollReportTableRow[] = [];
 
+  readonly now: string = moment(new Date()).format('YYYY-MM-DD');
   from: Date;
   to: Date;
   dateForm: FormGroup;
+
+  dateRangeError = false;
 
   constructor(
     private rollService: RollsService,
@@ -73,6 +77,11 @@ export class RollsReportPageComponent implements OnInit {
 
   changeDate() {
     const { fromDate, toDate} = this.dateForm.value;
+    if (new Date(fromDate) > new Date(toDate)) {
+      this.dateRangeError = true;
+      return;
+    }
+    this.dateRangeError = false;
     this.from = new Date(fromDate);
     this.to = new Date(toDate);
     this.loadData(this.from, this.to);

@@ -9,7 +9,7 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">начало:</div>
               </div>
-              <input type="date" class="form-control form-control-sm" formControlName="fromDate">
+              <input type="date" class="form-control form-control-sm" formControlName="fromDate" max="{{now}}" [ngClass]="{'is-invalid': dateForm.get('fromDate').invalid || dateRangeError}">
             </div>
           </div>
           <div class="col-5">
@@ -17,7 +17,7 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">окончание:</div>
               </div>
-              <input type="date" class="form-control form-control-sm" formControlName="toDate">
+              <input type="date" class="form-control form-control-sm" formControlName="toDate" max="{{now}}" [ngClass]="{'is-invalid': dateForm.get('toDate').invalid || dateRangeError}">
             </div>
           </div>
           <div class="col-2">
