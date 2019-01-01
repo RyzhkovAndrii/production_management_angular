@@ -1,3 +1,47 @@
-<p>
-  rolls-report-page works!
-</p>
+<div class="container-fluid">
+  <div id="page-name" class="row text-center sticky-top mt-0">
+    <div class="col-12 align-self-center">
+      <span class="align-middle">
+        Отчёт о выполнении плана по производству рулонов за период с
+        <u>{{ from | moment: 'DD.MM.YY' }}</u> по <u>{{ to | moment: 'DD.MM.YY' }}</u>
+      </span>
+    </div>
+  </div>
+  <div class="row" *ngIf="reportsTable">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <table class="table table-bordered table-striped table-sm mt-1 table-fit">
+        <thead>
+          <tr>
+            <th class="table-header">Примечание</th>
+            <th class="table-header">Толщина</th>
+            <th class="table-header">Вес</th>
+            <th class="table-header">Длина</th>
+            <th class="table-header">Цвет</th>
+            <th class="table-header">План, тыс.шт.</th>
+            <th class="table-header">Факт, тыс.шт.</th>
+            <th class="table-header">Отклонение, тыс.шт.</th>
+            <th class="table-header">Отклонение, %</th>
+          </tr>
+          <tr style="height: 0.2rem;"></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tableRow of reportsTable">
+            <td>{{ tableRow.roll.note }}</td>
+            <td>{{ tableRow.roll.thickness }}</td>
+            <td>{{ getWeight(tableRow.roll) }}</td>
+            <td>{{ tableRow.roll.length }}</td>
+            <td>
+              <app-circle [color]="tableRow.roll.colorCode"></app-circle>
+            </td>
+            <td>{{ tableRow.report.planAmount | exponent }}</td>
+            <td>{{ tableRow.report.actualAmount | exponent }}</td>
+            <td>{{ getDeviation(tableRow.report) | exponent }}</td>
+            <td *ngIf="tableRow.report.planAmount"> {{ getDeviationInPercent(tableRow.report) }} </td>
+            <td *ngIf="!tableRow.report.planAmount"> - </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
