@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { RollsService } from '../../app-rolls/services/rolls.service';
 import { RollsReportService } from '../services/rolls-report.service';
 import { RollReport } from '../models/roll-report.model';
 import { compareRollTypes } from '../../../app-utils/app-comparators';
+import { formatDateServerToBrowser } from '../../../app-utils/app-date-utils';
 
 interface RollReportTableRow {
   roll: RollType;
@@ -22,6 +24,7 @@ export class RollsReportPageComponent implements OnInit {
 
   from: Date;
   to: Date;
+  dateForm: FormGroup;
 
   constructor(
     private rollService: RollsService,
@@ -29,9 +32,12 @@ export class RollsReportPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.from = new Date(new Date().setMonth(new Date().getMonth() - 1));
-    this.from = new Date('2018-01-01');
+    this.from = new Date(new Date().setMonth(new Date().getMonth() - 1));
     this.to = new Date();
+    this.dateForm = new FormGroup({
+      'fromDate': new FormControl(formatDateServerToBrowser(this.from), [Validators.required]),
+      'toDate': new FormControl(formatDateServerToBrowser(this.to), [Validators.required])
+    });
     this.loadData(this.from, this.to);
   }
 
@@ -63,6 +69,13 @@ export class RollsReportPageComponent implements OnInit {
 
   getDeviationInPercent(report: RollReport) {
     return Math.abs(this.getDeviation(report) / report.planAmount * 100).toFixed(1);
+  }
+
+  changeDate() {
+    const { fromDate, toDate} = this.dateForm.value;
+    this.from = new Date(fromDate);
+    this.to = new Date(toDate);
+    this.loadData(this.from, this.to);
   }
 
 }

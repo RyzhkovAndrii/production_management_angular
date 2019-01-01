@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { RollsReportRoutingModule } from './rolls-report-routing.module';
 import { SecurityModule } from '../app-security/security.module';
@@ -13,7 +14,8 @@ import { RollsReportService } from './services/rolls-report.service';
         CommonModule,
         RollsReportRoutingModule,
         SecurityModule,
-        AppSharedModule
+        AppSharedModule,
+        ReactiveFormsModule
     ],
     declarations: [
         RollsReportPageComponent
