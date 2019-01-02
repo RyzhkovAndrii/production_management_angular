@@ -1,3 +1,96 @@
-<p>
-  products-report-page works!
-</p>
+<div class="container-fluid">
+  <div class="row mt-2 mb-0">
+    <div class="col-3"></div>
+    <div class="col-6 align-self-center" style="border-bottom: 1px solid #ddd">
+      <form [formGroup]="dateForm">
+        <div class="form-row align-items-center">
+          <div class="col-5">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">начало:</div>
+              </div>
+              <input type="date" class="form-control form-control-sm" formControlName="fromDate" max="{{now}}" [ngClass]="{'is-invalid': dateForm.get('fromDate').invalid || dateRangeError}">
+            </div>
+          </div>
+          <div class="col-5">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">окончание:</div>
+              </div>
+              <input type="date" class="form-control form-control-sm" formControlName="toDate" max="{{now}}" [ngClass]="{'is-invalid': dateForm.get('toDate').invalid || dateRangeError}">
+            </div>
+          </div>
+          <div class="col-2">
+            <button (click)="changeDate()" [disabled]="dateForm.invalid" class="btn btn-outline-dark btn-sm mb-2">Изменить период</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-3"></div>
+  </div>
+  <div id="page-name" class="row text-center sticky-top mt-0">
+    <div class="col-12 align-self-center">
+      <span class="align-middle">
+        Отчёт о выполнении плана по производству готовой продукции за период с
+        <u>{{ from | moment: 'DD.MM.YY' }}</u> по <u>{{ to | moment: 'DD.MM.YY' }}</u>
+      </span>
+    </div>
+  </div>
+  <div class="row" *ngIf="reportsTable">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <table class="table table-bordered table-striped table-sm table-fit" #table>
+        <thead>
+          <tr>
+            <th class="table-header" #th1>Наименование</th>
+            <th class="table-header" #th2>Вес</th>
+            <th class="table-header" #th3>Цвет</th>
+            <th class="table-header" #th4>План, тыс.шт.</th>
+            <th class="table-header" #th5>Факт, тыс.шт.</th>
+            <th class="table-header" #th6>Отклонение, тыс.шт.</th>
+            <th class="table-header" #th7>Отклонение, %</th>
+          </tr>
+          <tr style="height: 0.2rem;"></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tableRow of reportsTable">
+            <td>{{ tableRow.product.name }}</td>
+            <td>{{ tableRow.product.weight }}</td>
+            <td>
+              <app-circle [color]="tableRow.product.colorCode"></app-circle>
+            </td>
+            <td>{{ tableRow.report.planAmount | exponent }}</td>
+            <td>{{ tableRow.report.actualAmount | exponent }}</td>
+            <td>{{ getDeviation(tableRow.report) | exponent }}</td>
+            <td *ngIf="tableRow.report.planAmount"> {{ getDeviationInPercent(tableRow.report) }}% </td>
+            <td *ngIf="!tableRow.report.planAmount"> - </td>
+          </tr>
+          <tr style="height: 0.2rem;"></tr>
+          <tr>
+            <td colspan=3><strong>Всего за период</strong></td>
+            <td><strong>{{ totalReport.planAmount | exponent }}</strong></td>
+            <td><strong>{{ totalReport.actualAmount | exponent }}</strong></td>
+            <td><strong>{{ getDeviation(totalReport) | exponent }}</strong></td>
+            <td *ngIf="totalReport.planAmount"><strong>{{ getDeviationInPercent(totalReport) }}%</strong></td>
+            <td *ngIf="!totalReport.planAmount"><strong>-</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table-bordered table-striped table-sm table-no-wrap" id="header-fixed-table" *ngIf="!hideFixedHeader" [width]="table.offsetWidth" [style.left.px]="fixedHeaderLeftPosition">
+        <thead>
+          <tr>
+            <th class="table-header" [width]="th1.offsetWidth">Наименование</th>
+            <th class="table-header" [width]="th2.offsetWidth">Вес</th>
+            <th class="table-header" [width]="th3.offsetWidth">Цвет</th>
+            <th class="table-header" [width]="th4.offsetWidth">План, тыс.шт.</th>
+            <th class="table-header" [width]="th5.offsetWidth">Факт, тыс.шт.</th>
+            <th class="table-header" [width]="th6.offsetWidth">Отклонение, тыс.шт.</th>
+            <th class="table-header" [width]="th7.offsetWidth">Отклонение, %</th>
+          </tr>
+          <tr style="height: 0.2rem;"></tr>
+        </thead>
+      </table>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</div>
