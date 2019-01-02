@@ -20,7 +20,7 @@ export class NavigationComponent implements OnInit {
   machinePlansCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
   // todo check roles
   rollsReportCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
-  // productsReportCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
+  productsReportCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
   // standardsReportCanAccess = ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS'];
   usersCanAccess = ['ROLE_ADMIN', 'ROLE_FULL_ACCESS'];
 

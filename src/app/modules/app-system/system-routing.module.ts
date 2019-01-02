@@ -87,16 +87,16 @@ const routes: Routes = [
                     roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
                 }
             },
+            {
+                path: 'products-report',
+                loadChildren: '../app-products-report/products-report.module#ProductsReportModule',
+                canActivate: [RoleGuard],
+                canActivateChild: [RoleGuard],
+                data: {
+                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
+                }
+            },
             // TODO open after modules add
-            // {
-            //     path: 'products-report',
-            //     loadChildren: '../app-products-report/products-report.module#ProductsReportModule',
-            //     canActivate: [RoleGuard],
-            //     canActivateChild: [RoleGuard],
-            //     data: {
-            //         roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
-            //     }
-            // },
             // {
             //     path: 'standards-report',
             //     loadChildren: '../app-standards-report/standards-report.module#StandardsReportModule',
