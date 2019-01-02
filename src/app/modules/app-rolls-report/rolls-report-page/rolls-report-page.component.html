@@ -39,18 +39,18 @@
   <div class="row" *ngIf="reportsTable">
     <div class="col-2"></div>
     <div class="col-8">
-      <table class="table table-bordered table-striped table-sm mt-1 table-fit">
+      <table class="table table-bordered table-striped table-sm table-fit" #table>
         <thead>
           <tr>
-            <th class="table-header">Примечание</th>
-            <th class="table-header">Толщина</th>
-            <th class="table-header">Вес</th>
-            <th class="table-header">Длина</th>
-            <th class="table-header">Цвет</th>
-            <th class="table-header">План, тыс.шт.</th>
-            <th class="table-header">Факт, тыс.шт.</th>
-            <th class="table-header">Отклонение, тыс.шт.</th>
-            <th class="table-header">Отклонение, %</th>
+            <th class="table-header" #th1>Примечание</th>
+            <th class="table-header" #th2>Толщина</th>
+            <th class="table-header" #th3>Вес</th>
+            <th class="table-header" #th4>Длина</th>
+            <th class="table-header" #th5>Цвет</th>
+            <th class="table-header" #th6>План, шт.</th>
+            <th class="table-header" #th7>Факт, шт.</th>
+            <th class="table-header" #th8>Отклонение, шт.</th>
+            <th class="table-header" #th9>Отклонение, %</th>
           </tr>
           <tr style="height: 0.2rem;"></tr>
         </thead>
@@ -63,23 +63,40 @@
             <td>
               <app-circle [color]="tableRow.roll.colorCode"></app-circle>
             </td>
-            <td>{{ tableRow.report.planAmount | exponent }}</td>
-            <td>{{ tableRow.report.actualAmount | exponent }}</td>
-            <td>{{ getDeviation(tableRow.report) | exponent }}</td>
+            <td>{{ tableRow.report.planAmount }}</td>
+            <td>{{ tableRow.report.actualAmount }}</td>
+            <td>{{ getDeviation(tableRow.report) }}</td>
             <td *ngIf="tableRow.report.planAmount"> {{ getDeviationInPercent(tableRow.report) }} </td>
             <td *ngIf="!tableRow.report.planAmount"> - </td>
           </tr>
           <tr style="height: 0.2rem;"></tr>
           <tr>
             <td colspan=5><strong>Итого</strong></td>
-            <td><strong>{{ totalReport.planAmount | exponent }}</strong></td>
-            <td><strong>{{ totalReport.actualAmount | exponent }}</strong></td>
-            <td><strong>{{ getDeviation(totalReport) | exponent }}</strong></td>
+            <td><strong>{{ totalReport.planAmount }}</strong></td>
+            <td><strong>{{ totalReport.actualAmount }}</strong></td>
+            <td><strong>{{ getDeviation(totalReport) }}</strong></td>
             <td *ngIf="totalReport.planAmount"><strong>{{ getDeviationInPercent(totalReport) }}</strong></td>
             <td *ngIf="!totalReport.planAmount"><strong>-</strong></td>
           </tr>
         </tbody>
       </table>
+      <table class="table-bordered table-striped table-sm table-no-wrap" id="header-fixed-table" *ngIf="!hideFixedHeader" [width]="table.offsetWidth" [style.left.px]="fixedHeaderLeftPosition">
+        <thead>
+          <tr>
+            <th class="table-header" [width]="th1.offsetWidth">Примечание</th>
+            <th class="table-header" [width]="th2.offsetWidth">Толщина</th>
+            <th class="table-header" [width]="th3.offsetWidth">Вес</th>
+            <th class="table-header" [width]="th4.offsetWidth">Длина</th>
+            <th class="table-header" [width]="th5.offsetWidth">Цвет</th>
+            <th class="table-header" [width]="th6.offsetWidth">План, шт.</th>
+            <th class="table-header" [width]="th7.offsetWidth">Факт, шт.</th>
+            <th class="table-header" [width]="th8.offsetWidth">Отклонение, шт.</th>
+            <th class="table-header" [width]="th9.offsetWidth">Отклонение, %</th>
+          </tr>
+          <tr style="height: 0.2rem;"></tr>
+        </thead>
+      </table>
     </div>
+    <div class="col-2"></div>
   </div>
 </div>

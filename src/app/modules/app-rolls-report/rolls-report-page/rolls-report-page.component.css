@@ -10,3 +10,14 @@
     white-space: nowrap;
     width: 1%;
 }
+
+.table-no-wrap td, .table-no-wrap th {
+    white-space: nowrap;
+}
+
+#header-fixed-table {
+    position: fixed;
+    top: 40px; 
+    background-color:white;
+    z-index: 900;
+}

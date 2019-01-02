@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -31,6 +31,11 @@ export class RollsReportPageComponent implements OnInit {
   dateForm: FormGroup;
 
   dateRangeError = false;
+
+  @ViewChild('table') table: ElementRef;
+  hideFixedHeader = true;
+  readonly fixedHeaderTopPosition = 40;
+  fixedHeaderLeftPosition: number;
 
   constructor(
     private rollService: RollsService,
@@ -101,6 +106,22 @@ export class RollsReportPageComponent implements OnInit {
       this.totalReport.actualAmount += report.actualAmount;
       this.totalReport.planAmount += report.planAmount;
     });
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.toggleFixedHeader();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.toggleFixedHeader();
+  }
+
+  private toggleFixedHeader() {
+    const tableOffset = this.table.nativeElement.getBoundingClientRect().top;
+    this.hideFixedHeader = (tableOffset > this.fixedHeaderTopPosition);
+    this.fixedHeaderLeftPosition = this.table.nativeElement.getBoundingClientRect().left;
   }
 
 }
