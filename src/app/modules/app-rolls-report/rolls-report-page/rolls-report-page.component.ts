@@ -46,7 +46,7 @@ export class RollsReportPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.from = new Date(new Date().setMonth(new Date().getMonth() - 1));
+    this.from = new Date(new Date().setDate(1));
     this.to = new Date();
     this.dateForm = new FormGroup({
       'fromDate': new FormControl(formatDateServerToBrowser(this.from), [Validators.required]),
