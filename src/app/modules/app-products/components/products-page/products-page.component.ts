@@ -53,6 +53,12 @@ import {
 import {
   Title
 } from '@angular/platform-browser';
+import {
+  ProductOperationType
+} from '../../enums/product-operation-type.enum';
+import {
+  ProductOperationSelectModalComponent
+} from '../product-operation-select-modal/product-operation-select-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -206,7 +212,7 @@ export class ProductsPageComponent implements OnInit {
       .subscribe(standard => {
         func(standard);
       }, error => {
-        if((<string>error[0]).includes('404')) {
+        if (( < string > error[0]).includes('404')) {
           func();
         } else {
           this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
@@ -280,5 +286,108 @@ export class ProductsPageComponent implements OnInit {
           this.productChecks.clear();
         }
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openSelectEditOperationModal(item: ProductOperationsPrefetchData) {
+    this.productsService.getOperations(item.batch.productTypeId, this.daylyDate, this.daylyDate)
+      .subscribe(data => {
+        const operations = data.filter(x => x.operationType == item.operationType);
+        if (operations.length == 1) {
+          this.openEditOperationModal(operations[0]);
+        } else {
+          const options: Partial < IModalDialogOptions < ProductOperationSelectModalData > > = {
+            title: 'Операции для редактирования',
+            childComponent: ProductOperationSelectModalComponent,
+            data: {
+              operations,
+              action: (p: Promise < ProductOperationResponse > ) => {
+                p.then(operation => this.openEditOperationModal(operation));
+              }
+            }
+          }
+          this.ngxModalDialogService.openDialog(this.viewRef, options)
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openEditOperationModal(operation: ProductOperationResponse) {
+    const func = (result: Promise < ProductOperationRequest > ) => {
+      result
+        .then((resolve: ProductOperationRequest) => {
+          this.productsService.putProductOperation(operation.id, resolve)
+            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+        }, reject => {});
+    }
+    const modalOptions: Partial < IModalDialogOptions < ProductOperationModalData >> = {
+      title: 'Редактирование операции',
+      childComponent: ProductOperationModalComponent
+    };
+    this.productsService.getProductLeftover(operation.productTypeId, this.daylyDate)
+      .subscribe(leftover => {
+        modalOptions.data = {
+          productOperationRequest: {
+            operationDate: operation.operationDate,
+            productTypeId: operation.productTypeId,
+            operationType: operation.operationType,
+            amount: operation.amount
+          },
+          productLeftover: leftover,
+          func
+        }
+        this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openSelectDeleteOperationModal(item: ProductOperationsPrefetchData) {
+    this.productsService.getOperations(item.batch.productTypeId, this.daylyDate, this.daylyDate)
+      .subscribe(data => {
+        const operations = data.filter(x => x.operationType == item.operationType);
+        if (operations.length == 1) {
+          this.openDeleteOperationModal(operations[0]);
+        } else {
+          const options: Partial < IModalDialogOptions < ProductOperationSelectModalData > > = {
+            title: 'Операции для удаления',
+            childComponent: ProductOperationSelectModalComponent,
+            data: {
+              operations,
+              action: (p: Promise < ProductOperationResponse > ) => {
+                p.then(operation => this.openDeleteOperationModal(operation));
+              }
+            }
+          }
+          this.ngxModalDialogService.openDialog(this.viewRef, options)
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openDeleteOperationModal(operation: ProductOperationResponse) {
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any > > = {
+      title: 'Подтвердите удаление операции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.productsService.deleteOperation(operation.id)
+              .subscribe(data => {
+                this.fetchData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    }
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+  }
+
+  hasOperations = (item: ProductOperationsPrefetchData): boolean => {
+    return (item.operationType == ProductOperationType.MANUFACTURED && item.batch.manufacturedAmount != 0) ||
+      (item.operationType == ProductOperationType.SOLD && item.batch.soldAmount != 0);
   }
 }

@@ -183,6 +183,17 @@ export class ProductsService {
     }).catch(httpErrorHandle);
   }
 
+  getOperations(typeId: number, fromDate: Date, toDate: Date): Observable < ProductOperationResponse[] > {
+    const params = new HttpParams()
+      .set('id', String(typeId))
+      .set('from', formatDate(fromDate))
+      .set('to', formatDate(toDate));
+    return this.http.get(this.urls.productOperationUrl, {
+      params,
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
   postProductType(type: ProductTypeRequest): Observable < ProductTypeResponse > {
     return this.http.post(this.urls.productTypesUrl, type, {
       headers: appHeaders
@@ -191,6 +202,12 @@ export class ProductsService {
 
   postProductOperation(operation: ProductOperationRequest): Observable < ProductOperationResponse > {
     return this.http.post(this.urls.productOperationUrl, operation, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  putProductOperation(id: number, operation: ProductOperationRequest): Observable < ProductOperationResponse > {
+    return this.http.put(`${this.urls.productOperationUrl}/${id}`, operation, {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }
@@ -219,6 +236,12 @@ export class ProductsService {
   deleteProductType(id: number) {
     const url = `${this.urls.productTypesUrl}/${id}`;
     return this.http.delete(url, {
+      headers: appHeaders
+    }).catch(httpErrorHandle);
+  }
+
+  deleteOperation(id: number): Observable < any > {
+    return this.http.delete(`${this.urls.productOperationUrl}/${id}`, {
       headers: appHeaders
     }).catch(httpErrorHandle);
   }

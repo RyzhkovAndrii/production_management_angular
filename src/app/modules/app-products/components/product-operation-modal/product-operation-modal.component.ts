@@ -21,7 +21,7 @@ import {
   ProductOperationType
 } from '../../enums/product-operation-type.enum';
 import {
-  integerValidator, newDecimalPlacesValidator
+  newDecimalPlacesValidator
 } from '../../../../app-utils/app-validators';
 
 @Component({
@@ -37,6 +37,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
   productOperation: ProductOperationRequest;
   operationType: ProductOperationType;
   leftover: ProductLeftoverResponse;
+  operationEditModifier = 0;
 
   readonly MIN_PRODUCT_AMOUNT = 0.001;
   readonly DECIMAL_PLACES = 3;
@@ -67,12 +68,14 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
     this.leftover = options.data.productLeftover;
     this.productOperation = options.data.productOperationRequest;
     this.operationType = ProductOperationType[this.productOperation.operationType];
+    this.operationEditModifier = options.data.productOperationRequest.operationType == ProductOperationType.MANUFACTURED ?
+      -options.data.productOperationRequest.amount | 0 : options.data.productOperationRequest.amount | 0;
     this.form = new FormGroup({
       operationType: new FormControl({
         value: this.operationType,
         disabled: true
       }),
-      amount: new FormControl(undefined, [
+      amount: new FormControl(this.exponent(this.productOperation.amount), [
         Validators.required,
         Validators.min(this.MIN_PRODUCT_AMOUNT),
         newDecimalPlacesValidator(this.DECIMAL_PLACES),
@@ -105,7 +108,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
   }
 
   validateLeftover(control: FormControl) {
-    if (control.value && this.isSoldOperation() && this.leftover.amount - this.convertValue(control.value) < 0) {
+    if (control.value && this.isSoldOperation() && this.leftover.amount - this.convertValue(control.value) + this.operationEditModifier < 0) {
       return {
         'negativeLeftoverError': true
       };
@@ -119,5 +122,12 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
 
   convertValue(value: number): number {
     return new Decimal(value).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
-  } 
+  }
+
+  exponent(value: number): number {
+    if (!value) {
+      return undefined;
+    }
+    return new Decimal(value).dividedBy(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
+  }
 }
