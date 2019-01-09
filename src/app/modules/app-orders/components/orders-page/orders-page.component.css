@@ -74,6 +74,7 @@ table td:hover, table th:hover {
     height: 40px;
     background-color: white;
     letter-spacing: 0.8rem;
+    z-index: 1035;
 }
 
 .no-borders {
