@@ -16,9 +16,16 @@
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-plan" *appCanAccess="productPlansCanAccess">Планы по продукции</a></li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls-plan" *appCanAccess="rollPlansCanAccess">Планы по рулонам</a></li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/machines" *appCanAccess="machinePlansCanAccess">Планы по машинам</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls-report" *appCanAccess="rollsReportCanAccess">Отчет по рулонам</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-report" *appCanAccess="productsReportCanAccess">Отчет по продукции</a></li>
-      <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/standards-report" *appCanAccess="standardsReportCanAccess">Отчет по нормативам</a></li>
+      <li class="nav-item dropdown" routerLinkActive="active" >
+        <a class="nav-link dropdown-toggle"id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Отчёты
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="z-index: 1050">
+          <a class="dropdown-item" routerLink="/rolls-report">Рулоны</a>
+          <a class="dropdown-item" routerLink="/products-report">Продукция</a>
+          <a class="dropdown-item" routerLink="/standards-report">Нормативы</a>
+        </div>
+      </li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/users" *appCanAccess="usersCanAccess">Пользователи</a></li>
     </ul>
     <ul class="navbar-nav ml-auto">

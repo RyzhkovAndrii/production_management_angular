@@ -7,3 +7,17 @@
     border-radius: 5px;
     padding: 0.2em;
 }
+
+.navbar .dropdown-menu {
+    background-color: rgb(52, 58, 64);
+}
+  
+.navbar .dropdown.show a { 
+    background-color: rgb(52, 58, 64);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar .dropdown.show a:hover { 
+    background-color: rgb(52, 58, 64);
+    color: rgba(255, 255, 255, 0.75);
+}
