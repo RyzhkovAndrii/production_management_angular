@@ -34,12 +34,6 @@ import {
   ProductsRoutingModule
 } from './products-routing.module';
 import {
-  ProductsUrlsService
-} from './services/products-urls.service';
-import {
-  ProductsService
-} from './services/products.service';
-import {
   ProductTypeModalComponent
 } from './components/product-type-modal/product-type-modal.component';
 import {
@@ -48,6 +42,9 @@ import {
 import {
   SecurityModule
 } from '../app-security/security.module';
+import {
+  ProductOperationSelectModalComponent
+} from './components/product-operation-select-modal/product-operation-select-modal.component';
 
 
 @NgModule({
@@ -67,11 +64,12 @@ import {
     SecurityModule
   ],
   declarations: [
-    ProductsPageComponent, ProductTypeModalComponent, ProductOperationModalComponent
+    ProductsPageComponent, ProductTypeModalComponent, ProductOperationModalComponent, ProductOperationSelectModalComponent
   ],
   entryComponents: [
     ProductTypeModalComponent,
-    ProductOperationModalComponent
+    ProductOperationModalComponent,
+    ProductOperationSelectModalComponent
   ]
 })
 export class ProductsModule {}
