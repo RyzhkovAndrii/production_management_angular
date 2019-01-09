@@ -56,6 +56,9 @@ import {
 import {
   ProductOperationType
 } from '../../enums/product-operation-type.enum';
+import {
+  ProductOperationSelectModalComponent
+} from '../product-operation-select-modal/product-operation-select-modal.component';
 
 @Component({
   selector: 'app-products-page',
@@ -286,11 +289,55 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openSelectEditOperationModal(item: ProductOperationsPrefetchData) {
-    console.log(item);
+    this.productsService.getOperations(item.batch.productTypeId, this.daylyDate, this.daylyDate)
+      .subscribe(data => {
+        const operations = data.filter(x => x.operationType == item.operationType);
+        if (operations.length == 1) {
+          this.openEditOperationModal(operations[0]);
+        } else {
+          const options: Partial < IModalDialogOptions < ProductOperationSelectModalData > > = {
+            title: 'Операции для редактирования',
+            childComponent: ProductOperationSelectModalComponent,
+            data: {
+              operations,
+              action: (p: Promise < ProductOperationResponse > ) => {
+                p.then(operation => this.openEditOperationModal(operation));
+              }
+            }
+          }
+          this.ngxModalDialogService.openDialog(this.viewRef, options)
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openEditOperationModal(operation: ProductOperationResponse) {
+    console.log(operation);
   }
 
   openSelectDeleteOperationModal(item: ProductOperationsPrefetchData) {
-    console.log(item);
+    this.productsService.getOperations(item.batch.productTypeId, this.daylyDate, this.daylyDate)
+      .subscribe(data => {
+        const operations = data.filter(x => x.operationType == item.operationType);
+        if (operations.length == 1) {
+          this.openEditOperationModal(operations[0]);
+        } else {
+          const options: Partial < IModalDialogOptions < ProductOperationSelectModalData > > = {
+            title: 'Операции для удаления',
+            childComponent: ProductOperationSelectModalComponent,
+            data: {
+              operations,
+              action: (p: Promise < ProductOperationResponse > ) => {
+                p.then(operation => this.openDeleteOperationModal(operation));
+              }
+            }
+          }
+          this.ngxModalDialogService.openDialog(this.viewRef, options)
+        }
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+  }
+
+  openDeleteOperationModal(operation: ProductOperationResponse) {
+    console.log(operation);
   }
 
   hasOperations = (item: ProductOperationsPrefetchData): boolean => {
