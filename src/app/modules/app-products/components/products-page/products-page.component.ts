@@ -281,4 +281,13 @@ export class ProductsPageComponent implements OnInit {
         }
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
   }
+
+  openSelectEditOperationModal(item: ProductBatchResponse) {
+    console.log(item);
+  }
+
+  openSelectDeleteOperationModal(item: ProductBatchResponse) {
+    console.log(item);
+  }
+
 }

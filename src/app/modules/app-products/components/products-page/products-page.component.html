@@ -1,7 +1,8 @@
 <div class="container-fluid mt-2">
   <div class="row">
     <div class="col-md-1">
-      <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" class="btn btn-outline-dark btn-sm" (click)="openAddProductTypeModal()">
+      <button *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS']" class="btn btn-outline-dark btn-sm"
+        (click)="openAddProductTypeModal()">
         <span class="material-icons">add</span>
       </button>
     </div>
@@ -11,14 +12,16 @@
         <div class="form-row">
           <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
             <div class="input-group">
-              <input type="date" class="form-control form-control-sm" id="daylyDate" formControlName="daylyDate" [ngClass]="{
+              <input type="date" class="form-control form-control-sm" id="daylyDate" formControlName="daylyDate"
+                [ngClass]="{
   'is-invalid': form.get('daylyDate').invalid,
   'is-valid': form.get('daylyDate').valid && form.get('daylyDate').touched
   }">
             </div>
           </div>
           <div class="pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0">
-            <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="form.invalid" (click)="loadTable()">Сменить дату</button>
+            <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="form.invalid" (click)="loadTable()">Сменить
+              дату</button>
           </div>
         </div>
         <div>
@@ -48,7 +51,8 @@
           <th scope="col" rowspan="1" colspan="2">Реализация тыс.шт.</th>
           <th scope="col" rowspan="2" class="align-middle">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>
           <th scope="col" rowspan="1" *ngIf="isCurrentPeriod()">
-            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0" (click)="submitProductChecks()">
+            <button *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" type="button" class="btn btn-outline-dark btn-sm p-0 pl-2 pr-2 m-0"
+              (click)="submitProductChecks()">
               <span class="material-icons">save</span>
             </button>
           </th>
@@ -75,21 +79,25 @@
           <td class="w-12">
             {{ (productInfo.restLeftover.amount) | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')">
+          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')"
+            [contextMenu]="operationsMenu" [contextMenuSubject]="productInfo.dayBatch">
             {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']" class="w-12">
-              {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
-            </td>
+          <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']"
+            class="w-12">
+            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
+          </td>
           <td class="w-12">
             {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')">
+          <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')"
+            [contextMenu]="operationsMenu" [contextMenuSubject]="productInfo.dayBatch">
             {{ productInfo.dayBatch.soldAmount | empty | exponent }}
           </td>
-          <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']" class="w-12">
-              {{ productInfo.dayBatch.soldAmount | empty | exponent }}
-            </td>
+          <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']"
+            class="w-12">
+            {{ productInfo.dayBatch.soldAmount | empty | exponent }}
+          </td>
           <td class="w-12">
             {{ productInfo.monthBatch.soldAmount | empty | exponent }}
           </td>
@@ -97,8 +105,10 @@
             {{ productInfo.currentLeftover.amount | exponent }}
           </td>
           <td *ngIf="isCurrentPeriod()">
-            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
-            <check-select *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']" [disabled]="true" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
+            <check-select *appCanAccess="['ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS']" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus"
+              (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
+            <check-select *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST']"
+              [disabled]="true" [checkStatus]="productInfo.productCheck.productLeftOverCheckStatus" (changeCheckStatus)="onChangeProductCheck($event, productInfo.productCheck)"></check-select>
           </td>
         </tr>
         <tr>
@@ -130,5 +140,15 @@
   <ng-template contextMenuItem divider="true"></ng-template>
   <ng-template contextMenuItem let-item (execute)="openDeleteProductTypeModal($event.item)">
     Удалить продукцию
+  </ng-template>
+</context-menu>
+
+<context-menu *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" #operationsMenu>
+  <ng-template contextMenuItem let-item (execute)="openSelectEditOperationModal($event.item)">
+    Редактировать операцию
+  </ng-template>
+  <ng-template contextMenuItem divider="true"></ng-template>
+  <ng-template contextMenuItem let-item (execute)="openSelectDeleteOperationModal($event.item)">
+    Удалить операцию
   </ng-template>
 </context-menu>
