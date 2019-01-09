@@ -337,7 +337,29 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openDeleteOperationModal(operation: ProductOperationResponse) {
-    console.log(operation);
+    const buttonClass = 'btn btn-outline-dark';
+    const modalOptions: Partial < IModalDialogOptions < any > > = {
+      title: 'Подтвердите удаление операции',
+      childComponent: SimpleConfirmModalComponent,
+      actionButtons: [{
+          text: 'Отменить',
+          buttonClass,
+          onAction: () => true
+        },
+        {
+          text: 'Удалить',
+          buttonClass,
+          onAction: () => {
+            this.productsService.deleteOperation(operation.id)
+              .subscribe(data => {
+                this.fetchData();
+              }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+            return true;
+          }
+        }
+      ]
+    }
+    this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
   }
 
   hasOperations = (item: ProductOperationsPrefetchData): boolean => {
