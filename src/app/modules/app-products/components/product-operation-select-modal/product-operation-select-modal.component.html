@@ -1,13 +1,13 @@
 <div class="container-fluid">
   <table class="table table-bordered table-sm border-0">
     <thead>
-      <th class="border-top-0 border-left-0">
+      <th class="border-top-0 border-left-0 border-right-0">
         Продукции
       </th>
     </thead>
     <tbody>
       <tr *ngFor="let item of data.operations; last as isLast" (click)="onSelect(item)">
-        <td class="text-center t-75 border-left-0" [ngClass]="{'border-bottom-0': isLast}">
+        <td class="text-center t-75 border-left-0 border-right-0" [ngClass]="{'border-bottom-0': isLast}">
           {{ item.amount | exponent }}
         </td>
       </tr>
