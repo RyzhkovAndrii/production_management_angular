@@ -13,6 +13,9 @@ import {
   ModalDialogService,
   IModalDialogOptions
 } from 'ngx-modal-dialog';
+import {
+  ContextMenuComponent
+} from 'ngx-contextmenu';
 
 import {
   ProductsService
@@ -75,6 +78,9 @@ export class ProductsPageComponent implements OnInit {
   ProductCheckResponse > = new Map();
 
   form: FormGroup;
+
+  @ViewChild('productsMenu') productsMenu: ContextMenuComponent;
+  @ViewChild('operationsMenu') operationsMenu: ContextMenuComponent;
 
   @ViewChild('modification') modification;
 
