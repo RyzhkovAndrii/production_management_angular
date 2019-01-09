@@ -1,6 +1,6 @@
 #page-name {
     font-weight: bold;
-    height: 40px;
+    height: 41px;
     background-color: white;
     letter-spacing: 0.2rem;
     z-index: 1040;
@@ -19,5 +19,5 @@
     position: fixed;
     top: 40px; 
     background-color:white;
-    z-index: 900;
+    z-index: 1050;
 }

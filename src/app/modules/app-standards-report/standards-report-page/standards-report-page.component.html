@@ -44,19 +44,19 @@
       <table class="table table-bordered table-striped table-sm table-fit table-hover" #table>
         <thead>
           <tr>
-            <th class="table-header" rowspan=2 #th1>Наименование продукции</th>
+            <th class="table-header" style="vertical-align: middle" rowspan=2 #th1>Наименование продукции</th>
             <th class="table-header" colspan=2 #th2>Использовано рулонов</th>
             <th class="table-header" colspan=2 #th3>Количество произведенной продукции</th>
             <th class="table-header" colspan=2 #th4>Отклонение</th>
             <th class="table-header" style="white-space: normal;" rowspan=2 #th5>Расчетный процент брака</th>
           </tr>
           <tr>
-            <th class="table-header">Наименование рулона</th>
-            <th class="table-header">Количество</th>
-            <th class="table-header">Плановое по нормативам</th>
-            <th class="table-header">Фактическое</th>
-            <th class="table-header">Абсолютное</th>
-            <th class="table-header">Относительное</th>
+            <th class="table-header" #th6>Наименование рулона</th>
+            <th class="table-header" #th7>Количество</th>
+            <th class="table-header" #th8>Плановое по нормативам</th>
+            <th class="table-header" #th9>Фактическое</th>
+            <th class="table-header" #th10>Абсолютное</th>
+            <th class="table-header" #th11>Относительное</th>
           </tr>
           <tr style="height: 0.2rem;"></tr>
         </thead>
@@ -103,20 +103,26 @@
           </tr>
         </tbody>
       </table>
-      <!-- <table class="table-bordered table-striped table-sm table-no-wrap" id="header-fixed-table" *ngIf="!hideFixedHeader" [width]="table.offsetWidth" [style.left.px]="fixedHeaderLeftPosition">
+      <table class="table-bordered table-striped table-sm table-no-wrap" id="header-fixed-table" *ngIf="!hideFixedHeader" [width]="table.offsetWidth" [style.left.px]="fixedHeaderLeftPosition">
         <thead>
           <tr>
-            <th class="table-header" [width]="th1.offsetWidth">Наименование</th>
-            <th class="table-header" [width]="th2.offsetWidth">Вес</th>
-            <th class="table-header" [width]="th3.offsetWidth">Цвет</th>
-            <th class="table-header" [width]="th4.offsetWidth">План, тыс.шт.</th>
-            <th class="table-header" [width]="th5.offsetWidth">Факт, тыс.шт.</th>
-            <th class="table-header" [width]="th6.offsetWidth">Отклонение, тыс.шт.</th>
-            <th class="table-header" [width]="th7.offsetWidth">Отклонение, %</th>
+            <th class="table-header" rowspan=2 [width]="th1.offsetWidth">Наименование продукции</th>
+            <th class="table-header" colspan=2 [width]="th2.offsetWidth">Использовано рулонов</th>
+            <th class="table-header" colspan=2 [width]="th3.offsetWidth">Количество произведенной продукции</th>
+            <th class="table-header" colspan=2 [width]="th4.offsetWidth">Отклонение</th>
+            <th class="table-header" style="white-space: normal;" rowspan=2 [width]="th5.offsetWidth">Расчетный процент брака</th>
+          </tr>
+          <tr>
+            <th class="table-header" [width]="th6.offsetWidth">Наименование рулона</th>
+            <th class="table-header" [width]="th7.offsetWidth">Количество</th>
+            <th class="table-header" [width]="th8.offsetWidth">Плановое по нормативам</th>
+            <th class="table-header" [width]="th9.offsetWidth">Фактическое</th>
+            <th class="table-header" [width]="th10.offsetWidth">Абсолютное</th>
+            <th class="table-header" [width]="th11.offsetWidth">Относительное</th>
           </tr>
           <tr style="height: 0.2rem;"></tr>
         </thead>
-      </table> -->
+      </table>
     </div>
     <div class="col-1"></div>
   </div>

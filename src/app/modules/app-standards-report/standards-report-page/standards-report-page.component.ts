@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import moment = require('moment');
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -35,6 +35,11 @@ export class StandardsReportPageComponent implements OnInit {
   dateForm: FormGroup;
 
   dateRangeError = false;
+
+  @ViewChild('table') table: ElementRef;
+  hideFixedHeader = true;
+  readonly fixedHeaderTopPosition = 40;
+  fixedHeaderLeftPosition: number;
 
   constructor(
     private productService: ProductsService,
@@ -149,6 +154,23 @@ export class StandardsReportPageComponent implements OnInit {
         .reduce((a, b) => a + b);
       this.totalDefect = (summDefect / defectCount).toFixed(1);
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.toggleFixedHeader();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.toggleFixedHeader();
+  }
+
+  private toggleFixedHeader() {
+    const tableOffset = this.table.nativeElement.getBoundingClientRect().top;
+    console.log(tableOffset);
+    this.hideFixedHeader = (tableOffset > this.fixedHeaderTopPosition);
+    this.fixedHeaderLeftPosition = this.table.nativeElement.getBoundingClientRect().left;
   }
 
 }
