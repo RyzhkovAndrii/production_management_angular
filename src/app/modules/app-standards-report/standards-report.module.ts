@@ -8,7 +8,8 @@ import { AppSharedModule } from '../app-shared/app-shared.module';
 import { StandardsReportModuleUrlService } from './services/standards-report-module-url.service';
 import { StandardsReportService } from './services/standards-report.service';
 import { StandardsReportRoutingModule } from './standards-report-routing.module';
-import { MachinesModule } from '../app-machines/machines.module';
+import { RollNameComponent } from './standards-report-page/roll-name/roll-name.component';
+import { ProductNameComponent } from './standards-report-page/product-name/product-name.component';
 
 @NgModule({
     imports: [
@@ -16,11 +17,12 @@ import { MachinesModule } from '../app-machines/machines.module';
         StandardsReportRoutingModule,
         SecurityModule,
         AppSharedModule,
-        ReactiveFormsModule,
-        MachinesModule
+        ReactiveFormsModule
     ],
     declarations: [
-        StandardsReportPageComponent
+        StandardsReportPageComponent,
+        RollNameComponent,
+        ProductNameComponent
     ],
     providers: [
         StandardsReportModuleUrlService,

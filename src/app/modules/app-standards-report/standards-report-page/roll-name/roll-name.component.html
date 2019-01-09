@@ -1,0 +1,9 @@
+<div *ngIf="rollType" class="container-fluid">
+  <div class="row">
+    <div class="col-4">{{ rollType.thickness.toFixed(1) }}</div>
+    <div class="col-3">
+      <i class="filled-circle" [ngStyle]="{ 'background-color': rollType.colorCode }"></i>
+    </div>
+    <div class="col-5">{{ rollType.minWeight }} - {{ rollType.maxWeight }}</div>
+  </div>
+</div>

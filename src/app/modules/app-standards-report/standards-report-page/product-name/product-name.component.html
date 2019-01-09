@@ -1,0 +1,9 @@
+<div *ngIf="productType" class="container-fluid">
+    <div class="row">
+        <div class="col-5">{{ productType.name }}</div>
+        <div class="col-3">
+            <i class="filled-circle" [ngStyle]="{ 'background-color': productType.colorCode }"></i>
+        </div>
+        <div class="col-3">{{ productType.weight.toFixed(1) }}</div>
+    </div>
+</div>
