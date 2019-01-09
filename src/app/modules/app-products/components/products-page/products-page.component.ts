@@ -53,6 +53,9 @@ import {
 import {
   Title
 } from '@angular/platform-browser';
+import {
+  ProductOperationType
+} from '../../enums/product-operation-type.enum';
 
 @Component({
   selector: 'app-products-page',
@@ -206,7 +209,7 @@ export class ProductsPageComponent implements OnInit {
       .subscribe(standard => {
         func(standard);
       }, error => {
-        if((<string>error[0]).includes('404')) {
+        if (( < string > error[0]).includes('404')) {
           func();
         } else {
           this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error)
@@ -282,12 +285,16 @@ export class ProductsPageComponent implements OnInit {
       }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
   }
 
-  openSelectEditOperationModal(item: ProductBatchResponse) {
+  openSelectEditOperationModal(item: ProductOperationsPrefetchData) {
     console.log(item);
   }
 
-  openSelectDeleteOperationModal(item: ProductBatchResponse) {
+  openSelectDeleteOperationModal(item: ProductOperationsPrefetchData) {
     console.log(item);
   }
 
+  hasOperations = (item: ProductOperationsPrefetchData): boolean => {
+    return (item.operationType == ProductOperationType.MANUFACTURED && item.batch.manufacturedAmount != 0) ||
+      (item.operationType == ProductOperationType.SOLD && item.batch.soldAmount != 0);
+  }
 }

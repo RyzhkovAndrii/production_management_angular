@@ -80,7 +80,7 @@
             {{ (productInfo.restLeftover.amount) | exponent }}
           </td>
           <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'MANUFACTURED')"
-            [contextMenu]="operationsMenu" [contextMenuSubject]="productInfo.dayBatch">
+            [contextMenu]="operationsMenu" [contextMenuSubject]="{batch: productInfo.dayBatch, operationType: 'MANUFACTURED'}">
             {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}
           </td>
           <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']"
@@ -91,7 +91,7 @@
             {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}
           </td>
           <td *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" class="w-12" (click)="openAddProductOperation(productInfo.type.id, 'SOLD')"
-            [contextMenu]="operationsMenu" [contextMenuSubject]="productInfo.dayBatch">
+            [contextMenu]="operationsMenu" [contextMenuSubject]="{batch: productInfo.dayBatch, operationType: 'SOLD'}">
             {{ productInfo.dayBatch.soldAmount | empty | exponent }}
           </td>
           <td *appCanAccess="['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER']"
@@ -144,11 +144,11 @@
 </context-menu>
 
 <context-menu *appCanAccess="['ROLE_MANAGER', 'ROLE_FULL_ACCESS']" #operationsMenu>
-  <ng-template contextMenuItem let-item (execute)="openSelectEditOperationModal($event.item)">
+  <ng-template contextMenuItem let-item (execute)="openSelectEditOperationModal($event.item)" [enabled]="hasOperations">
     Редактировать операцию
   </ng-template>
   <ng-template contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem let-item (execute)="openSelectDeleteOperationModal($event.item)">
+  <ng-template contextMenuItem let-item (execute)="openSelectDeleteOperationModal($event.item)" [enabled]="hasOperations">
     Удалить операцию
   </ng-template>
 </context-menu>
