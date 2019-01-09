@@ -63,6 +63,10 @@ import { SecurityModule } from '../app-security/security.module';
         MachineModuleCasheService,
         MachineModuleStoreDataService
     ],
-    entryComponents: []
+    entryComponents: [],
+    exports: [
+        ProductNameComponent,
+        RollNameComponent
+    ]
 })
 export class MachinesModule { }

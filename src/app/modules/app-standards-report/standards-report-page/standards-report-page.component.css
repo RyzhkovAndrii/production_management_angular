@@ -1,0 +1,23 @@
+#page-name {
+    font-weight: bold;
+    height: 40px;
+    background-color: white;
+    letter-spacing: 0.2rem;
+    z-index: 1040;
+}
+
+.table-fit td, .table-fit th {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.table-no-wrap td, .table-no-wrap th {
+    white-space: nowrap;
+}
+
+#header-fixed-table {
+    position: fixed;
+    top: 40px; 
+    background-color:white;
+    z-index: 900;
+}
