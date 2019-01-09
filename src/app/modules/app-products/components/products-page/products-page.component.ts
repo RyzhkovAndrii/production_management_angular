@@ -311,7 +311,31 @@ export class ProductsPageComponent implements OnInit {
   }
 
   openEditOperationModal(operation: ProductOperationResponse) {
-    console.log(operation);
+    const func = (result: Promise < ProductOperationRequest > ) => {
+      result
+        .then((resolve: ProductOperationRequest) => {
+          this.productsService.putProductOperation(operation.id, resolve)
+            .subscribe(data => this.fetchData(), error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
+        }, reject => {});
+    }
+    const modalOptions: Partial < IModalDialogOptions < ProductOperationModalData >> = {
+      title: 'Редактирование операции',
+      childComponent: ProductOperationModalComponent
+    };
+    this.productsService.getProductLeftover(operation.productTypeId, this.daylyDate)
+      .subscribe(leftover => {
+        modalOptions.data = {
+          productOperationRequest: {
+            operationDate: operation.operationDate,
+            productTypeId: operation.productTypeId,
+            operationType: operation.operationType,
+            amount: operation.amount
+          },
+          productLeftover: leftover,
+          func
+        }
+        this.ngxModalDialogService.openDialog(this.viewRef, modalOptions);
+      }, error => this.appModalService.openHttpErrorModal(this.ngxModalDialogService, this.viewRef, error));
   }
 
   openSelectDeleteOperationModal(item: ProductOperationsPrefetchData) {
@@ -319,7 +343,7 @@ export class ProductsPageComponent implements OnInit {
       .subscribe(data => {
         const operations = data.filter(x => x.operationType == item.operationType);
         if (operations.length == 1) {
-          this.openEditOperationModal(operations[0]);
+          this.openDeleteOperationModal(operations[0]);
         } else {
           const options: Partial < IModalDialogOptions < ProductOperationSelectModalData > > = {
             title: 'Операции для удаления',

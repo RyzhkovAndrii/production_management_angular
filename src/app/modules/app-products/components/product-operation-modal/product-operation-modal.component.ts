@@ -72,7 +72,7 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
         value: this.operationType,
         disabled: true
       }),
-      amount: new FormControl(undefined, [
+      amount: new FormControl(this.exponent(this.productOperation.amount), [
         Validators.required,
         Validators.min(this.MIN_PRODUCT_AMOUNT),
         newDecimalPlacesValidator(this.DECIMAL_PLACES),
@@ -119,5 +119,12 @@ export class ProductOperationModalComponent implements OnInit, IModalDialog {
 
   convertValue(value: number): number {
     return new Decimal(value).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
-  } 
+  }
+
+  exponent(value: number): number {
+    if (!value) {
+      return undefined;
+    }
+    return new Decimal(value).dividedBy(Math.pow(10, this.DECIMAL_PLACES)).toNumber();
+  }
 }
