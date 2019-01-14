@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import moment = require('moment');
+import * as moment from 'moment';
 
 import { RollsService } from '../../app-rolls/services/rolls.service';
 import { RollsReportService } from '../services/rolls-report.service';

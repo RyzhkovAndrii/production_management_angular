@@ -3,8 +3,8 @@ import { ProductsReportService } from '../services/products-report.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
-import moment = require('moment');
 import { ProductsService } from '../../app-products/services/products.service';
 import { ProductReport } from '../models/product-report.model';
 import { formatDateServerToBrowser } from '../../../app-utils/app-date-utils';
