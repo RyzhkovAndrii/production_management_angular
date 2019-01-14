@@ -68,7 +68,7 @@ export class UserFormComponent implements OnInit {
     this.userForm.get('username').setValue(username);
     this.userForm.get('firstName').setValue(firstName);
     this.userForm.get('lastName').setValue(lastName);
-    this.userForm.get('roles').setValue(roles);
+    this.userForm.get('roles').setValue(roles[0]);
   }
 
   private uniqueNameValidator(control: AbstractControl) {
