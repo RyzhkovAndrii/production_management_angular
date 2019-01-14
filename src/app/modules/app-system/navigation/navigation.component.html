@@ -16,14 +16,14 @@
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/products-plan" *appCanAccess="productPlansCanAccess">Планы по продукции</a></li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/rolls-plan" *appCanAccess="rollPlansCanAccess">Планы по рулонам</a></li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/machines" *appCanAccess="machinePlansCanAccess">Планы по машинам</a></li>
-      <li class="nav-item dropdown" routerLinkActive="active" >
+      <li class="nav-item dropdown" routerLinkActive="active" *appCanAccess="reportsCanAccess">
         <a class="nav-link dropdown-toggle"id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Отчёты
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="z-index: 1050">
-          <a class="dropdown-item" routerLink="/rolls-report">Рулоны</a>
-          <a class="dropdown-item" routerLink="/products-report">Продукция</a>
-          <a class="dropdown-item" routerLink="/standards-report">Нормативы</a>
+          <a class="dropdown-item" routerLink="/rolls-report" *appCanAccess="rollsReportCanAccess">Рулоны</a>
+          <a class="dropdown-item" routerLink="/products-report" *appCanAccess="productsReportCanAccess">Продукция</a>
+          <a class="dropdown-item" routerLink="/standards-report" *appCanAccess="standardsReportCanAccess">Нормативы</a>
         </div>
       </li>
       <li><a class="nav-item nav-link" routerLinkActive="active" routerLink="/users" *appCanAccess="usersCanAccess">Пользователи</a></li>

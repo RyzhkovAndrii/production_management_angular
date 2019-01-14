@@ -84,7 +84,7 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
+                    roles: ['ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_CEO', 'ROLE_FULL_ACCESS']
                 }
             },
             {
@@ -93,17 +93,16 @@ const routes: Routes = [
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
+                    roles: ['ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_CEO', 'ROLE_FULL_ACCESS']
                 }
             },
-            // TODO check roles
             {
                 path: 'standards-report',
                 loadChildren: '../app-standards-report/standards-report.module#StandardsReportModule',
                 canActivate: [RoleGuard],
                 canActivateChild: [RoleGuard],
                 data: {
-                    roles: ['ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS']
+                    roles: ['ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_CEO', 'ROLE_FULL_ACCESS']
                 }
             },
             {
